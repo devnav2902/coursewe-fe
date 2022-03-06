@@ -4,6 +4,8 @@ import SigninPage from "../pages/signin/page/signin.page";
 import SignupPage from "../pages/signup/page/signup.page";
 import { ROUTES } from "../utils/constants";
 import PurchaseHistoryPage from "../pages/purchase-history/page/purchaseHistory.page";
+import CartPage from "../pages/cart/page/cart.page";
+import CreateCoursePage from "../pages/create-course/page/createCourse.page";
 
 export type Routes = {
   exact?: boolean;
@@ -33,6 +35,15 @@ const routes: Routes[] = [
     path: ROUTES.PURCHASE_HISTORY,
     component: <PurchaseHistoryPage />,
     private: true,
+  },
+  {
+    path: ROUTES.CREATE_COURSE,
+    component: <CreateCoursePage />,
+    private: true,
+  },
+  {
+    path: ROUTES.CART,
+    component: <CartPage />,
   },
   { path: "*", component: <NotFound /> },
 ];
