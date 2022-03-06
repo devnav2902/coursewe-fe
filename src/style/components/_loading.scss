@@ -1,0 +1,40 @@
+.loading {
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    transition: all 0.3s linear;
+}
+
+.loading.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.circle {
+    background-color: rgb(163, 162, 162);
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    margin: 0 5px;
+    animation: loading 0.4s linear infinite;
+}
+
+.circle:nth-of-type(2) {
+    animation-delay: 0.1s;
+}
+
+.circle:nth-of-type(3) {
+    animation-delay: 0.2s;
+}
+
+@keyframes loading {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}

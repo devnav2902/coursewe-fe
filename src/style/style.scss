@@ -1,0 +1,107 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 62.5% !important;
+}
+
+input {
+  outline: none;
+  border: 1px solid #000;
+}
+
+:root {
+  --color-bgr: #f4f4f4;
+  --color-white: #ffffff;
+  --color-dark: #252841;
+  --color-red: #dc3545;
+  --color-muted: #ff5773;
+  --color-blue: #4a90e2;
+  --color-border: #d3dce0;
+  --height-nav: 7rem;
+  --font: "Nunito Sans", sans-serif;
+  --spacing-3: 3rem;
+  --spacing-2: 2rem;
+  --spacing-1: 1rem;
+}
+
+a {
+  text-decoration: none;
+}
+li {
+  list-style: none;
+}
+h6 {
+  font-size: 1.8rem;
+}
+h4 {
+  font-size: 2.2rem;
+}
+body {
+  overflow-x: hidden;
+  background: var(--color-white);
+  font-size: 1.6rem;
+  padding-top: var(--height-nav);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.main {
+  min-height: 100vh;
+  max-width: 120rem;
+  margin: 0 auto;
+  width: 100%;
+}
+.fa-star,
+.fa-star-half {
+  color: #eb8a2f;
+}
+
+@import "./utils/helpers";
+@import "./utils/mixins";
+@import "./components/nav-top";
+@import "./components/header-bar";
+@import "./components/course";
+@import "./components/pagination";
+@import "./components/ratings";
+@import "./components/loading";
+@import "./components/payment";
+
+@import "./layout/curriculum";
+@import "./layout/footer";
+@import "./layout/overview";
+
+@import "./alertBox";
+@import "./pages/courseLesson";
+@import "./pages/create-course";
+@import "./pages/my-learning";
+@import "./pages/learning";
+@import "./pages/review";
+@import "./pages/categories";
+@import "./pages/shopping-cart";
+@import "./pages/checkout";
+@import "./pages/my-course";
+@import "./pages/home-page";
+@import "./pages/instructor_bio";
+@import "./pages/instructor-course";
+@import "./pages/profile";
+@import "./pages/notifications";
+@import "./pages/purchase-history";
+@import "./pages/login";
+
+// @import "./components/loading";
+
+// admin
+@import "./style-admin/admin";

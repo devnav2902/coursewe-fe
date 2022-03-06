@@ -1,0 +1,96 @@
+.adminpage {
+    // overflow: auto;
+    --width-sidebar: 20rem;
+
+    #message-auto-save {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+        .loader,
+        .loader:after {
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+        .loader {
+            margin-right: 1rem;
+            position: relative;
+            border-top: 5px solid rgba(120, 120, 120, 0.2);
+            border-right: 5px solid rgba(120, 120, 120, 0.2);
+            border-bottom: 5px solid rgba(120, 120, 120, 0.2);
+            border-left: 5px solid #787878;
+            transform: translateZ(0);
+            animation: load8 1.1s infinite linear;
+        }
+        @keyframes load8 {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        &.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .footer {
+        padding-left: var(--width-sidebar);
+    }
+    .sec-title {
+        z-index: 1;
+        margin-bottom: var(--spacing-2);
+        display: flex;
+        align-items: center;
+        .pull-right {
+            margin-left: auto;
+        }
+        h4 {
+            position: relative;
+            color: var(--color-dark);
+            font-weight: 700;
+        }
+    }
+    .see-all {
+        position: relative;
+        color: #ff5773;
+        font-size: 1.4rem;
+        font-weight: 600;
+        border-bottom: 1px solid #ff5773;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        &:hover {
+            border-bottom: 1px solid transparent;
+        }
+    }
+}
+
+.main-adminpage {
+    max-width: none;
+    margin: 0;
+    .main-content {
+        background-color: var(--color-white);
+        padding-left: var(--width-sidebar);
+    }
+    @import "./sidebar";
+    @import "./dashboard";
+    @import "./course-section";
+    @import "./table";
+}
+
+// resonsive
+@media only screen and (max-width: 768px) {
+    .adminpage {
+        .footer {
+            padding-left: 0;
+        }
+        .main-content {
+            padding-left: 0;
+        }
+    }
+}

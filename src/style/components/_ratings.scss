@@ -1,0 +1,17 @@
+.ratings {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+    font-size: 1.4rem;
+    span:not(:empty) {
+        color: #be5a0e;
+        font-weight: 700;
+        margin-right: 4px;
+    }
+    .stars {
+        margin-right: 4px;
+        line-height: 0;
+        font-size: 12px;
+    }
+}

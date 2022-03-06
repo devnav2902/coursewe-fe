@@ -1,0 +1,51 @@
+// .notification-wrapper {
+//     position: fixed;
+//     bottom: 30px;
+//     z-index: 200;
+//     left: 50%;
+//     transform: translateX(-50%);
+//     display: none;
+
+//     .popup {
+//         opacity: 0;
+//         visibility: hidden;
+//         height: 58px;
+//         border-left: 3px solid rgb(28, 88, 28);
+//         border-radius: 4px;
+//         box-shadow: 0 4px 10px rgb(45, 43, 54);
+//         background: #fff;
+//         transform: translateY(30px);
+//         transition: 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
+//         &:not(:last-child) {
+//             margin-bottom: 1rem;
+//         }
+//         &.animation {
+//             opacity: 1;
+//             visibility: visible;
+//             transform: translateY(0);
+//         }
+//         > div {
+//             padding: 1rem 2rem;
+//             align-items: center;
+//             justify-content: space-between;
+//             height: 100%;
+//         }
+//     }
+//     i.fa-check-circle {
+//         color: rgb(28, 88, 28);
+//     }
+//     .notification-text {
+//         font-size: 14px;
+//         font-weight: 500;
+//         padding: 0 2rem;
+//     }
+//     i.fa-times {
+//         cursor: pointer;
+//         transition: all 0.2s;
+//         color: var(--dark);
+//         font-size: 19px;
+//         &:hover {
+//             color: rgba(0, 0, 0, 0.7);
+//         }
+//     }
+// }

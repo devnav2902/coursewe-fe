@@ -1,0 +1,71 @@
+.list-courses {
+    width: 100%;
+
+    // .course {
+    //     margin: 0 15px;
+    // }
+
+    .image-course {
+        display: block;
+        overflow: hidden;
+        aspect-ratio: 16/9;
+
+        img {
+            height: 100%;
+            object-fit: cover;
+            width: 100%;
+        }
+    }
+
+    .date {
+        padding-top: 10px;
+        color: var(--color-muted);
+    }
+    .name-course {
+        padding: 10px 0 0;
+        a {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #000;
+            &:hover {
+                color: rgb(63, 60, 60);
+            }
+        }
+    }
+    .rating-price {
+        padding-top: 5px;
+    }
+    .rating {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.6rem;
+        .avg-rating {
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-right: 5px;
+            color: #d88130;
+        }
+        .stars-rating {
+            display: flex;
+            margin-right: 5px;
+            i {
+                &:not(:last-child) {
+                    margin-right: 2px;
+                }
+                font-size: 1rem;
+            }
+        }
+        .count {
+            font-size: 1.4rem;
+            color: rgb(83, 82, 82);
+        }
+    }
+    .price {
+        font-size: 1.8rem;
+    }
+    .author {
+        font-size: 1.3rem;
+        color: var(--color-muted);
+        text-decoration: underline;
+    }
+}
