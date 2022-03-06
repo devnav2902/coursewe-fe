@@ -18,13 +18,6 @@ function App(): JSX.Element {
     dispatch(getCurrentUser());
   }, [dispatch]);
 
-  if (!user.loaded)
-    return (
-      <Loading>
-        <Spin size="large" indicator={<LoadingOutlined />} />
-      </Loading>
-    );
-
   return (
     <>
       <BrowserRouter>
@@ -44,7 +37,15 @@ function App(): JSX.Element {
                 <Route
                   key={idx}
                   path={route.path}
-                  element={<Navigate to={ROUTES.SIGN_IN} />}
+                  element={
+                    !user.loaded ? (
+                      <Loading>
+                        <Spin size="large" indicator={<LoadingOutlined />} />
+                      </Loading>
+                    ) : (
+                      <Navigate to={ROUTES.SIGN_IN} />
+                    )
+                  }
                 />
               );
             }
