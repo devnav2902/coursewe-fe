@@ -31,6 +31,8 @@ function accountReducer(state = initialState, action) {
       return { ...state, loaded: true, profile: action.payload };
     case accountTypes.GET_CURRENT_USER_REQUEST:
       return { ...state, loaded: false };
+    case accountTypes.GET_CURRENT_USER_FAILURE:
+      return { ...state, loaded: true, error: action.payload };
 
     default:
       return state;
