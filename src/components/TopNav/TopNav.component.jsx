@@ -7,7 +7,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { Dropdown } from "antd";
-import { logout } from "../../pages/signin/actions/account.actions";
+import { logout } from "../../redux/actions/account.actions";
 
 const TopNav = () => {
   const user = useSelector((state) => state.user);
