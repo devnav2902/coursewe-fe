@@ -1,10 +1,14 @@
 import React from "react";
 import { Provider } from "react-redux";
 import ReactDOM from "react-dom";
-import "./index.css";
 import App from "./App";
 import store from "./redux/store";
+import "antd/dist/antd.min.css";
+import "./style/style.scss";
+import axios from "axios";
 // import reportWebVitals from "./reportWebVitals";
+
+axios.defaults.withCredentials = true;
 
 ReactDOM.render(
   // <React.StrictMode>
