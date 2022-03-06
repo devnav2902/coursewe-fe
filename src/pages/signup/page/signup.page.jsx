@@ -9,7 +9,7 @@ import { signUp } from "../../../redux/actions/account.actions";
 const SignupPage = () => {
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
-  const { loading } = useSelector((state) => state.user);
+  const { loaded } = useSelector((state) => state.user);
 
   const onSubmit = (data) => {
     dispatch(signUp(data));
@@ -59,7 +59,7 @@ const SignupPage = () => {
                 />
               </div>
               <div className="submit">
-                {loading ? (
+                {!loaded ? (
                   <Spin />
                 ) : (
                   <button type="submit" className="sign-up">

@@ -10,7 +10,7 @@ import { BE_URL, ROUTES } from "../../../utils/constants";
 const SigninPage = () => {
   const dispatch = useDispatch();
   const { handleSubmit, register } = useForm();
-  const { loading } = useSelector((state) => state.user);
+  const { loaded } = useSelector((state) => state.user);
 
   const onSubmit = (data) => {
     const { password, email } = data;
@@ -64,7 +64,7 @@ const SigninPage = () => {
               </div>
 
               <div className="submit">
-                {loading ? (
+                {!loaded ? (
                   <Spin />
                 ) : (
                   <button type="submit" className="sign-in">
