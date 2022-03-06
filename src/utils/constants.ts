@@ -6,6 +6,8 @@ enum ROUTES {
   "SIGN_OUT" = "/sign-out",
   "SIGN_UP" = "/sign-up",
   "PURCHASE_HISTORY" = "/purchase-history",
+  "CART" = "/cart",
+  "CREATE_COURSE" = "/create-course",
 }
 
 export { API_URL, BE_URL, ROUTES };
