@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../actions/account.actions";
+import { login } from "../../../redux/actions/account.actions";
 import { useForm } from "react-hook-form";
 import Input from "../../../components/Input/Input.component";
 import { Link } from "react-router-dom";

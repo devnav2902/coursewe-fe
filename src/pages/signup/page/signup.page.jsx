@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Input from "../../../components/Input/Input.component";
 import { ROUTES } from "../../../utils/constants";
-import { signUp } from "../../signin/actions/account.actions";
+import { signUp } from "../../../redux/actions/account.actions";
 
 const SignupPage = () => {
   const dispatch = useDispatch();
