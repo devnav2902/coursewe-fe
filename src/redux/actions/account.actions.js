@@ -23,13 +23,21 @@ const signUp = (params) => async (dispatch) => {
 
 const getCurrentUser = () => async (dispatch) => {
   dispatch({ type: accountTypes.GET_CURRENT_USER_REQUEST });
-  const { data, status } = await UserApi.getCurrentUser();
 
-  status === 200 &&
+  try {
+    const { data, status } = await UserApi.getCurrentUser();
+
+    status === 200 &&
+      dispatch({
+        type: accountTypes.GET_CURRENT_USER_SUCCESS,
+        payload: data.user,
+      });
+  } catch (error) {
     dispatch({
-      type: accountTypes.GET_CURRENT_USER_SUCCESS,
-      payload: data.user,
+      type: accountTypes.GET_CURRENT_USER_FAILURE,
+      payload: error,
     });
+  }
 };
 
 const login = (params) => async (dispatch) => {
