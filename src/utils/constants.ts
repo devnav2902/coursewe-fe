@@ -8,6 +8,7 @@ enum ROUTES {
   "PURCHASE_HISTORY" = "/purchase-history",
   "CART" = "/cart",
   "CREATE_COURSE" = "/create-course",
+  "INSTRUCTOR_BIO" = "/instructor/profile/:slug",
 }
 
 export { API_URL, BE_URL, ROUTES };

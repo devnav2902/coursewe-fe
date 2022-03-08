@@ -6,6 +6,7 @@ import { ROUTES } from "../utils/constants";
 import PurchaseHistoryPage from "../pages/purchase-history/page/purchaseHistory.page";
 import CartPage from "../pages/cart/page/cart.page";
 import CreateCoursePage from "../pages/create-course/page/createCourse.page";
+import InstructorBioPage from "../pages/instructor-bio/page/instructor-bio.page";
 
 export type Routes = {
   exact?: boolean;
@@ -20,6 +21,11 @@ const routes: Routes[] = [
     exact: true,
     path: "/",
     component: <Home />,
+  },
+  {
+    exact: true,
+    path: ROUTES.INSTRUCTOR_BIO,
+    component: <InstructorBioPage />,
   },
   {
     path: ROUTES.SIGN_IN,
