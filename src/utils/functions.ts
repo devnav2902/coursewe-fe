@@ -8,4 +8,12 @@ const getDataFromLocalStorage = (key: string) => {
   return null;
 };
 
-export { getAccessToken, getDataFromLocalStorage };
+const roundsTheNumber = (value: string | number, fractionDigits: number) => {
+  return typeof value === "string"
+    ? parseFloat(value).toFixed(fractionDigits)
+    : value.toFixed(fractionDigits);
+};
+
+const isUrl = (link: string) => (link.indexOf("http") > -1 ? true : false);
+
+export { getAccessToken, getDataFromLocalStorage, roundsTheNumber, isUrl };
