@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosClient from "../utils/axios";
 
 class Course {
   get = async (limit?: number) => {
@@ -12,6 +13,13 @@ class Course {
         return res;
       });
     }
+  };
+
+  getCourseBySlug = async (slug: string) => {
+    return axiosClient
+      .post("/course", { slug })
+      .then((res) => res)
+      .catch((error) => error.response);
   };
 }
 
