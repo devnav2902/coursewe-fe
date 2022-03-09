@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Rating from "../../../components/Rating/Rating.component";
+import { routesWithParams } from "../../../utils/constants";
 
 const Course = ({ course }) => {
   const { title, slug, thumbnail, rating_avg_rating, rating_count } = course;
@@ -12,7 +13,7 @@ const Course = ({ course }) => {
       </Link>
       <div className="profile-course">
         <div className="name-course truncate">
-          <Link to="/">{title}</Link>
+          <Link to={routesWithParams.detail_course(slug)}>{title}</Link>
         </div>
         {/* <Link
           to="{{ route('instructor', ['slug' => $course->author->slug]) }}"
