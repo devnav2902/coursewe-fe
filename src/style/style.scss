@@ -21,6 +21,7 @@ input {
   --color-muted: #ff5773;
   --color-blue: #4a90e2;
   --color-border: #d3dce0;
+  --color-yellow: #e59819;
   --height-nav: 7rem;
   --font: "Nunito Sans", sans-serif;
   --spacing-3: 3rem;
@@ -64,10 +65,6 @@ button {
   margin: 0 auto;
   width: 100%;
 }
-.fa-star,
-.fa-star-half {
-  color: #eb8a2f;
-}
 
 @import "./utils/helpers";
 @import "./utils/mixins";
@@ -84,7 +81,7 @@ button {
 @import "./layout/overview";
 
 @import "./alertBox";
-@import "./pages/courseLesson";
+@import "./pages/course-lesson";
 @import "./pages/create-course";
 @import "./pages/my-learning";
 @import "./pages/learning";
