@@ -6,8 +6,7 @@ import axiosClient from "../../../utils/axios";
 import { API_URL, BE_URL } from "../../../utils/constants";
 import Course from "../components/Course.component";
 import { Pagination } from "antd";
-
-const isUrl = (link) => (link.indexOf("http") > -1 ? true : false);
+import { isUrl } from "../../../utils/functions";
 
 const InstructorBioPage = () => {
   const { slug } = useParams();
@@ -57,7 +56,7 @@ const InstructorBioPage = () => {
           </div>
 
           <div className="my-course">
-            <h2 className="course-title">My courses&nbsp;({totalCourses})</h2>
+            <h2 className="course-title">Các khóa học&nbsp;({totalCourses})</h2>
 
             <Row gutter={[15, 15]} className="list-courses">
               {dataCourses.data.map((course) => {
@@ -78,7 +77,6 @@ const InstructorBioPage = () => {
               // defaultPageSize={20}
               // defaultCurrent={1}
             />
-            {/* {{ $courses->links() }} */}
           </div>
         </div>
       </div>
