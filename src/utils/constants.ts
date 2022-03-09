@@ -9,6 +9,12 @@ enum ROUTES {
   "CART" = "/cart",
   "CREATE_COURSE" = "/create-course",
   "INSTRUCTOR_BIO" = "/instructor/profile/:slug",
+  "DETAIL_COURSE" = "/course/:slug",
 }
 
-export { API_URL, BE_URL, ROUTES };
+const routesWithParams = {
+  detail_course: (slug: string) => `/course/${slug}`,
+  instructor_bio: (slug: string) => `/instructor/profile/${slug}`,
+};
+
+export { API_URL, BE_URL, ROUTES, routesWithParams };
