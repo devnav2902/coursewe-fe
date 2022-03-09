@@ -17,7 +17,7 @@ const RatingWrapper = styled.div`
   }
 `;
 
-const Rating = ({ value, disabled, size }) => {
+const Rating = ({ value, disabled = true, size }) => {
   return (
     <RatingWrapper size={size}>
       <Rate disabled={disabled} defaultValue={value} />
