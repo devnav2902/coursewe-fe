@@ -50,7 +50,7 @@ const SigninPage = () => {
                 />
               </div>
               <p className="form-login style-space quiz password">
-                <a href="">Quên mật khẩu?</a>
+                <Link to="/">Quên mật khẩu?</Link>
               </p>
 
               <div className="checkbox-container d-flex">
