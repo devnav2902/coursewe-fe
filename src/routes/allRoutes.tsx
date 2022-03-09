@@ -7,6 +7,7 @@ import PurchaseHistoryPage from "../pages/purchase-history/page/purchaseHistory.
 import CartPage from "../pages/cart/page/cart.page";
 import CreateCoursePage from "../pages/create-course/page/createCourse.page";
 import InstructorBioPage from "../pages/instructor-bio/page/instructor-bio.page";
+import DetailCoursePage from "../pages/detail-course/page/detail-course.page";
 
 export type Routes = {
   exact?: boolean;
@@ -26,6 +27,10 @@ const routes: Routes[] = [
     exact: true,
     path: ROUTES.INSTRUCTOR_BIO,
     component: <InstructorBioPage />,
+  },
+  {
+    path: ROUTES.DETAIL_COURSE,
+    component: <DetailCoursePage />,
   },
   {
     path: ROUTES.SIGN_IN,
