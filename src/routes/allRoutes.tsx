@@ -8,6 +8,8 @@ import CartPage from "../pages/cart/page/cart.page";
 import CreateCoursePage from "../pages/create-course/page/createCourse.page";
 import InstructorBioPage from "../pages/instructor-bio/page/instructor-bio.page";
 import DetailCoursePage from "../pages/detail-course/page/detail-course.page";
+import MyLearningPage from "../pages/my-learning/page/my-learning.page";
+import LearningPage from "../pages/learning/page/learning.page";
 
 export type Routes = {
   exact?: boolean;
@@ -22,6 +24,16 @@ const routes: Routes[] = [
     exact: true,
     path: "/",
     component: <Home />,
+  },
+  {
+    exact: true,
+    path: ROUTES.LEARNING,
+    component: <LearningPage />,
+  },
+  {
+    path: ROUTES.MY_LEARNING,
+    component: <MyLearningPage />,
+    private: true,
   },
   {
     exact: true,
