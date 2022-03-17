@@ -11,6 +11,7 @@ import { logout } from "../../redux/actions/account.actions";
 
 const TopNav = () => {
   const user = useSelector((state) => state.user);
+  const { cart } = useSelector((state) => state.cart);
   const { fullname, email, avatar, role } = user.profile ?? {};
   const dispatch = useDispatch();
   const handleLogout = (e) => {
@@ -18,6 +19,17 @@ const TopNav = () => {
 
     dispatch(logout());
   };
+
+  const ShoppingCart = () => (
+    <div className="shopping-cart">
+      <Link to={ROUTES.CART} className="link">
+        <ShoppingOutlined style={{ fontSize: 18 }} />
+        {!cart.length ? null : (
+          <span className="notification-badge">{cart.length}</span>
+        )}
+      </Link>
+    </div>
+  );
 
   return (
     <nav className="nav-top">
@@ -58,12 +70,7 @@ const TopNav = () => {
             <Link className="instructor" to="/instructor">
               Giảng dạy trên Devco
             </Link>
-            <div className="shopping-cart">
-              <Link to="/cart" className="link">
-                <ShoppingOutlined style={{ fontSize: 18 }} />
-                <span className="notification-badge"></span>
-              </Link>
-            </div>
+            <ShoppingCart />
             <Link className="btn-style-two login-button" to={ROUTES.SIGN_IN}>
               Đăng nhập
             </Link>
@@ -74,15 +81,8 @@ const TopNav = () => {
         ) : (
           <div className="user">
             <Link to="/manage-course">Quản lý khóa học</Link>
-            <Link to="/my-learning">My learning</Link>
-
-            <div className="shopping-cart">
-              <Link to="/cart" className="link">
-                <ShoppingOutlined style={{ fontSize: 18 }} />
-                <span className="notification-badge"></span>
-              </Link>
-            </div>
-
+            <Link to={ROUTES.MY_LEARNING}>My learning</Link>
+            <ShoppingCart />
             <div className="notification">
               <div className="icon-notification">
                 {/* <div className="icon-notification @if (count($globalNotificationCourse)) has @endif"> */}
