@@ -3,31 +3,44 @@ import {
   FacebookOutlined,
   GoogleOutlined,
   TwitterOutlined,
+  LoadingOutlined,
+  HeartOutlined,
 } from "@ant-design/icons";
-import { Spin, Tabs, Collapse } from "antd";
-import React, { useEffect, useState } from "react";
+import { Spin, Collapse } from "antd";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import CourseApi from "../../../api/course.api";
 import Loading from "../../../components/Loading/Loading.component";
 import Rating from "../../../components/Rating/Rating.component";
-import { BE_URL, routesWithParams } from "../../../utils/constants";
+import { addToCart, removeFromCart } from "../../../redux/actions/cart.actions";
+import { BE_URL, ROUTES, routesWithParams } from "../../../utils/constants";
 import { isUrl, roundsTheNumber } from "../../../utils/functions";
 import CurriculumItem from "../components/CurriculumItem.component";
+import RatingGraph from "../components/RatingGraph.component";
+import Review from "../components/Review.component";
 
 const { Panel } = Collapse;
 
-function callback(key) {
-  console.log(key);
-}
-
 const DetailCoursePage = () => {
   const [course, setCourse] = useState(null);
+  const [graph, setGraph] = useState(null);
+  const [hasPurchased, setHasPurchased] = useState(false);
+  const [hasCommented, setHasCommented] = useState(false);
+
   const { slug } = useParams();
+
+  const dispatch = useDispatch();
+  const cartData = useSelector((state) => state.cart);
 
   useEffect(() => {
     CourseApi.getCourseBySlug(slug).then((res) => {
-      setCourse(res.data);
+      const { data } = res;
+      setCourse(data.course);
+      setGraph(data.graph);
+      setHasCommented(data.hasCommented);
+      setHasPurchased(data.hasPurchased);
     });
   }, []);
 
@@ -43,6 +56,7 @@ const DetailCoursePage = () => {
     rating_avg_rating,
     rating_count,
     video_demo,
+    rating,
     description,
     thumbnail,
     course_bill_count,
@@ -58,6 +72,15 @@ const DetailCoursePage = () => {
     0
   );
 
+  const handleAddToCart = (id) => dispatch(addToCart(id));
+
+  const handleRemoveFromCart = (id) => {
+    dispatch(removeFromCart(id));
+  };
+
+  const existedCourseInCart = (id) =>
+    cartData.cart.some((course) => course.id === id);
+
   return (
     <div className="detail-course">
       <div className="main-lesson">
@@ -67,17 +90,16 @@ const DetailCoursePage = () => {
               <h1>{title}</h1>
             </div>
 
-            <div className="rating-content">
+            <div className="rating-content d-flex align-items-center">
               {rating_avg_rating && (
                 <span>{roundsTheNumber(rating_avg_rating, 1)}</span>
               )}
 
-              <span className="stars">
-                <Rating
-                  value={roundsTheNumber(rating_avg_rating, 1)}
-                  size="14px"
-                />
-              </span>
+              <Rating
+                value={roundsTheNumber(rating_avg_rating, 1)}
+                size="14px"
+              />
+
               <span className="rating-count">({rating_count} Đánh giá)</span>
               <span>{course_bill_count} Học viên</span>
             </div>
@@ -96,17 +118,17 @@ const DetailCoursePage = () => {
               <div className="pull-right">
                 <ul className="social-box">
                   <li className="share">Chia sẻ khóa học:</li>
-                  <li className="facebook">
+                  <li>
                     <Link to="/" className="">
                       <FacebookOutlined />
                     </Link>
                   </li>
-                  <li className="google">
+                  <li>
                     <Link to="/" className="">
                       <GoogleOutlined />
                     </Link>
                   </li>
-                  <li className="twitter">
+                  <li>
                     <Link to="/" className="">
                       <TwitterOutlined />
                     </Link>
@@ -123,7 +145,7 @@ const DetailCoursePage = () => {
 
               <div className="course-info__item">
                 <p>Nội dung khóa học</p>
-                <Collapse defaultActiveKey={["0"]} onChange={callback}>
+                <Collapse defaultActiveKey={["0"]}>
                   {section.map((sectionItem, i) => {
                     const { title } = sectionItem;
                     return (
@@ -140,9 +162,18 @@ const DetailCoursePage = () => {
               <div className="course-info__item">
                 <p>Đánh giá từ học viên</p>
                 <div className="tab active-tab" id="review-box">
-                  {/* @include('components.student-review',['course'=>$course]) */}
+                  {!graph ? null : (
+                    <RatingGraph
+                      rating_avg_rating={rating_avg_rating}
+                      graph={graph}
+                    />
+                  )}
 
-                  {/* @include('components.review-comment',['course'=>$course]) */}
+                  <Review
+                    reviews={rating}
+                    hasCommented={hasCommented}
+                    hasPurchased={hasPurchased}
+                  />
                 </div>
               </div>
             </div>
@@ -196,11 +227,47 @@ const DetailCoursePage = () => {
               <a href='{{ route('learning', ['url' => $course->slug]) }}' className='theme-btn btn-style-one'>
                 <span className='txt'>Xem</span>
               </a>
-            @elseif (!$isFree && !$isPurchased)
-              <div data-coupon="{{ !empty($couponJSON) ? $couponJSON : '' }}" data-course="{{ $course->id }}"
-                className='addToCart'>Add to cart</div>
-              <button data-course="{{ $course->id }}" className="buy" id="buy">Buy now</button>
-            @else
+            @elseif (!$isFree && !$isPurchased) */}
+                <div className="d-flex align-items-center btn-wrapper">
+                  {cartData.loading ? (
+                    <div className="btn btn-cart">
+                      <Spin
+                        indicator={
+                          <LoadingOutlined style={{ color: "#fff" }} />
+                        }
+                      />
+                    </div>
+                  ) : existedCourseInCart(course.id) ? (
+                    <Link to={ROUTES.CART} className="btn btn-cart">
+                      Xem trong giỏ hàng
+                    </Link>
+                  ) : (
+                    <div
+                      className="btn btn-cart"
+                      onClick={() => handleAddToCart(course.id)}
+                    >
+                      Thêm vào giỏ hàng
+                    </div>
+                  )}
+
+                  <Link
+                    to={"/"}
+                    className="d-flex align-items-center justify-content-center btn-wishlist"
+                  >
+                    <HeartOutlined
+                      style={{ fontSize: "20px", color: "#000" }}
+                    />
+                  </Link>
+                </div>
+
+                <button
+                  data-course="{{ $course->id }}"
+                  className="buy"
+                  id="buy"
+                >
+                  Mua ngay
+                </button>
+                {/* @else
               @if ($isPurchased)
                 <a href='{{ route('learning', ['url' => $course->slug]) }}' className="enroll">
                   Vào học
