@@ -10,11 +10,14 @@ enum ROUTES {
   "CREATE_COURSE" = "/create-course",
   "INSTRUCTOR_BIO" = "/instructor/profile/:slug",
   "DETAIL_COURSE" = "/course/:slug",
+  "MY_LEARNING" = "/my-learning",
+  "LEARNING" = "/learning/:slug",
 }
 
 const routesWithParams = {
   detail_course: (slug: string) => `/course/${slug}`,
   instructor_bio: (slug: string) => `/instructor/profile/${slug}`,
+  learning: (slug: string) => `/learning/${slug}`,
 };
 
 export { API_URL, BE_URL, ROUTES, routesWithParams };
