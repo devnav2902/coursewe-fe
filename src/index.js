@@ -4,8 +4,9 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import store from "./redux/store";
 import "antd/dist/antd.min.css";
-import "./style/style.scss";
 import axios from "axios";
+import "react-quill/dist/quill.snow.css";
+import "./style/style.scss";
 // import reportWebVitals from "./reportWebVitals";
 
 axios.defaults.withCredentials = true;
