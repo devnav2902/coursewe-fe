@@ -28,7 +28,6 @@ const InstructorBioPage = () => {
   } = dataInstructor;
 
   const isInstructor = dataCourses.data.length && true;
-  console.log(dataCourses);
 
   return isInstructor ? (
     <div className="profile">

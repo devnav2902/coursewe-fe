@@ -21,6 +21,13 @@ class Course {
       .then((res) => res)
       .catch((error) => error.response);
   };
+
+  getCourseByCurrentUser = async () => {
+    return axiosClient
+      .get("/user/courses")
+      .then((res) => res)
+      .catch((error) => error);
+  };
 }
 
 const CourseApi = new Course();
