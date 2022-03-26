@@ -1,69 +1,55 @@
-import { FaPencilAlt, FaTrash } from "react-icons/fa";
-import { BsFillCheckCircleFill } from "react-icons/bs";
-import { GoChevronDown, GoChevronUp } from "react-icons/go";
 import { GrFormClose } from "react-icons/gr";
-import { useState } from "react";
 import { FilePond } from "react-filepond";
+import FormEditTitle from "./FormEditTitle.component";
+import LectureTitle from "./LectureTitle.component";
+import CURRICULUM from "../utils/constants";
+import { useSelector } from "react-redux";
 
-const LectureItem = ({ data }) => {
-  const { id, title, order, resource, src, original_filename, updated_at } =
-    data;
-  const [displayResources, setDisplayResources] = useState(false);
-  const [displayUploadResources, setDisplayUploadResources] = useState(false);
-  const [displayMedia, setDisplayMedia] = useState(false);
+const LectureItem = (props) => {
+  const {
+    data,
+    handleFunc,
+    dataDisplay,
+    closeFunc,
+    editTitleFunc,
+    innerRef,
+    ...restProps
+  } = props;
 
-  const handleDisplayUploadResources = () => {
-    setDisplayUploadResources(true);
-    setDisplayResources(false);
-  };
+  const {
+    handleDisplayResources,
+    handleDisplayUploadMedia,
+    handleDisplayUploadResources,
+  } = handleFunc;
+  const { displayMedia, displayResources, displayUploadResources } =
+    dataDisplay;
+  const { closeUploadMedia, closeUploadResources } = closeFunc;
+  const { id, title, resource, src, original_filename, updated_at } = data;
 
-  const handleDisplayResources = () => {
-    setDisplayResources(!displayResources);
-  };
+  const { elementDisplay } = useSelector((state) => state.curriculum);
 
-  const closeUploadResources = () => {
-    setDisplayUploadResources(false);
-  };
+  const isDisplayEditTitle =
+    elementDisplay.id === id && elementDisplay.type === CURRICULUM.LECTURE;
 
-  const closeUploadMedia = () => {
-    setDisplayMedia(false);
-  };
-
-  const handleDisplayUploadMedia = () => {
-    setDisplayMedia(true);
-    setDisplayResources(false);
+  const lectureTitleProps = {
+    data,
+    handleDisplayResources,
+    displayResources,
+    editTitleFunc,
   };
 
   return (
-    <li data-lecture={id} className="curriculum-content lecture-content">
-      <div className="lecture-content__title">
-        <div className="lecture-editor">
-          <span className="lecture">
-            <BsFillCheckCircleFill />
-            <span className="order">Bài giảng {order}:</span>
-          </span>
-          <span className="curriculum-title">{title}</span>
-          <button className="lecture-edit-btn item-icon-button">
-            <FaPencilAlt />
-          </button>
-          <button className="lecture-delete-btn item-icon-button">
-            <FaTrash />
-          </button>
-        </div>
-        {!src && (
-          <div className="add-content">
-            <button className="lecture-add-content">+ Nội dung</button>
-          </div>
-        )}
-        <div className="lecture-collapse">
-          <button
-            onClick={handleDisplayResources}
-            className="lecture-collapse-btn d-flex align-items-center"
-          >
-            {displayResources ? <GoChevronUp /> : <GoChevronDown />}
-          </button>
-        </div>
-      </div>
+    <li
+      ref={innerRef}
+      {...restProps}
+      data-lecture={id}
+      className="curriculum-content lecture-content"
+    >
+      {isDisplayEditTitle ? (
+        <FormEditTitle title={title} type={CURRICULUM.LECTURE} />
+      ) : (
+        <LectureTitle {...lectureTitleProps} />
+      )}
 
       {displayResources && (
         <div className="content-tab content-resources">
