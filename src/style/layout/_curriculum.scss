@@ -87,19 +87,24 @@
     padding-bottom: 40px;
     position: relative;
     .curriculum-add-item {
-      left: -12px;
+      left: -62px;
+    }
+
+    &__handle {
+      position: relative;
     }
   }
+
+  .curriculum-form,
+  .lecture-content__title {
+    border: 1px solid rgb(63, 63, 63);
+    padding: 10px;
+  }
+
   li.lecture-content {
     background: #fff;
     &:not(:last-child) {
       margin-bottom: 20px;
-    }
-
-    .lecture-form,
-    .lecture-content__title {
-      border: 1px solid rgb(63, 63, 63);
-      padding: 10px;
     }
 
     .lecture-add-content,
@@ -131,8 +136,8 @@
     }
   }
 }
-.section-form,
-.lecture-form {
+.curriculum-form {
+  background-color: #fff;
   &-txt {
     font-weight: 700;
     margin-right: 10px;
@@ -164,24 +169,26 @@
       padding: 1rem 1.5rem;
       font-size: 16px;
     }
-    button:last-child {
-      background-color: black;
-      color: #fff;
-      margin-left: 1rem;
-      &:hover {
-        background-color: rgb(37, 37, 37);
-      }
-      &:disabled {
-        pointer-events: none;
-        opacity: 0.5;
-      }
-    }
 
     button:first-child {
       background-color: transparent;
       color: rgb(184, 29, 184);
       &:hover {
         color: rgb(151, 51, 151);
+      }
+    }
+
+    button:last-child {
+      background-color: black;
+      color: #fff;
+      margin-left: 1rem;
+      &:hover {
+        background-color: rgb(37, 37, 37);
+        color: #fff;
+      }
+      &:disabled {
+        pointer-events: none;
+        opacity: 0.5;
       }
     }
   }
@@ -497,9 +504,6 @@
 }
 
 .curriculum-item {
-  .curriculum-add-item {
-    bottom: 20px;
-  }
   &:hover {
     .curriculum-add-item {
       opacity: 1;
@@ -518,12 +522,35 @@
   }
 }
 .curriculum-add-item {
+  top: 50%;
+  transform: translateY(-50%);
   transition: all 0.2s;
   position: absolute;
-  bottom: 0px;
   left: 0;
   opacity: 0;
   visibility: hidden;
+  &.option {
+    left: -90px !important;
+    opacity: 1;
+    visibility: visible;
+  }
+  &.option {
+    button {
+      border: none;
+      background-color: transparent;
+      svg {
+        left: 63px;
+        font-size: 20px;
+        transform: rotate(45deg);
+      }
+      &::before {
+        border-style: solid;
+        border-bottom: none;
+        border-left: none;
+      }
+    }
+  }
+
   button {
     width: 40px;
     height: 27px;
@@ -535,10 +562,15 @@
     align-items: center;
     color: #5624d0;
     justify-content: center;
+    transition: all 0.2s;
+
     svg {
       font-size: 22px;
-      position: relative;
+      position: absolute;
       z-index: 20;
+      transition: all 0.2s;
+      left: 20px;
+      transform: translateX(-50%);
     }
     &::before {
       transition: all 0.5s linear;
@@ -546,13 +578,34 @@
       position: absolute;
       right: -11px;
       top: 2px;
-      height: 21px;
-      width: 21px;
+      height: 22px;
+      width: 22px;
       background: #fff;
       border: 1px dashed #6a6f73;
       border-bottom: none;
       border-left: none;
-      transform: rotate(35deg) skew(-15deg);
+      transform: rotate(39deg) skew(-11deg);
+    }
+  }
+}
+.menu-items {
+  padding: 10px;
+  border-style: dashed;
+  border: 1px dashed #6a6f73;
+  background-color: #fff;
+  height: 55px;
+  .curriculum-option {
+    line-height: 1;
+    margin-right: 20px;
+    width: max-content;
+    color: #5624d0;
+    background-color: transparent;
+    font-weight: bold;
+    svg {
+      margin-right: 7px;
+    }
+    &:hover {
+      color: #4a26a5;
     }
   }
 }
