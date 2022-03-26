@@ -5,6 +5,7 @@ import courseReducer from "../reducers/course.reducer";
 import accountReducer from "../reducers/account.reducer";
 import cartReducer from "../reducers/cart.reducer";
 import _ from "lodash";
+import curriculumReducer from "../reducers/curriculum.reducer";
 
 const logger = createLogger({
   // ...options
@@ -15,6 +16,7 @@ const reducers = combineReducers({
   course: courseReducer,
   user: accountReducer,
   cart: cartReducer,
+  curriculum: curriculumReducer,
 });
 
 const persistedState = localStorage.getItem("shoppingCart:storage")
@@ -36,10 +38,10 @@ const saveState = (state) => {
   }
 };
 
-store.subscribe(
+store.subscribe(() => {
   _.throttle(() => {
     saveState(store.getState());
-  }, 1000)
-);
+  }, 1000);
+});
 
 export default store;
