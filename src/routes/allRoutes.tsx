@@ -14,6 +14,7 @@ import InstructorCourseLayout from "../layouts/instructor-course.layout";
 import BasicsPage from "../pages/edit-course/pages/basics.page";
 import IntendedLearnersPage from "../pages/edit-course/pages/intended-learners.page";
 import CurriculumPage from "../pages/edit-course/pages/curriculum.page";
+import BasicLayout from "../layouts/basic.layout";
 
 export type Routes = {
   exact?: boolean;
@@ -28,7 +29,11 @@ const routes: Routes[] = [
   {
     exact: true,
     path: "/",
-    component: <Home />,
+    component: (
+      <BasicLayout>
+        <Home />
+      </BasicLayout>
+    ),
   },
   {
     exact: true,
@@ -64,35 +69,63 @@ const routes: Routes[] = [
   {
     exact: true,
     path: ROUTES.LEARNING,
-    component: <LearningPage />,
+    component: (
+      <BasicLayout>
+        <LearningPage />
+      </BasicLayout>
+    ),
   },
   {
     path: ROUTES.MY_LEARNING,
-    component: <MyLearningPage />,
+    component: (
+      <BasicLayout>
+        <MyLearningPage />
+      </BasicLayout>
+    ),
     private: true,
   },
   {
     exact: true,
     path: ROUTES.INSTRUCTOR_BIO,
-    component: <InstructorBioPage />,
+    component: (
+      <BasicLayout>
+        <InstructorBioPage />
+      </BasicLayout>
+    ),
   },
   {
     path: ROUTES.DETAIL_COURSE,
-    component: <DetailCoursePage />,
+    component: (
+      <BasicLayout>
+        <DetailCoursePage />
+      </BasicLayout>
+    ),
   },
   {
     path: ROUTES.SIGN_IN,
-    component: <SigninPage />,
+    component: (
+      <BasicLayout>
+        <SigninPage />
+      </BasicLayout>
+    ),
     redirectIfAuthenticated: true,
   },
   {
     path: ROUTES.SIGN_UP,
-    component: <SignupPage />,
+    component: (
+      <BasicLayout>
+        <SignupPage />
+      </BasicLayout>
+    ),
     redirectIfAuthenticated: true,
   },
   {
     path: ROUTES.PURCHASE_HISTORY,
-    component: <PurchaseHistoryPage />,
+    component: (
+      <BasicLayout>
+        <PurchaseHistoryPage />
+      </BasicLayout>
+    ),
     private: true,
   },
   {
@@ -102,9 +135,20 @@ const routes: Routes[] = [
   },
   {
     path: ROUTES.CART,
-    component: <CartPage />,
+    component: (
+      <BasicLayout>
+        <CartPage />
+      </BasicLayout>
+    ),
   },
-  { path: "*", component: <NotFound /> },
+  {
+    path: "*",
+    component: (
+      <BasicLayout>
+        <NotFound />
+      </BasicLayout>
+    ),
+  },
 ];
 
 export default routes;
