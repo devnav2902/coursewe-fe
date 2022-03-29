@@ -11,6 +11,7 @@ import DetailCoursePage from "../pages/detail-course/page/detail-course.page";
 import { InstructorCoursesPage } from "../pages/instructor-courses/page/instructor-courses.page";
 import OverviewPage from "../pages/overview/page/overview.page";
 import ProfilePage from "../pages/profile/page/profile.page";
+import DraftPage from "../pages/draft/page/draft.page";
 
 export type Routes = {
   exact?: boolean;
@@ -69,6 +70,11 @@ const routes: Routes[] = [
   {
     path: ROUTES.PROFILE,
     component: <ProfilePage />,
+    private: true,
+  },
+  {
+    path: ROUTES.COURSE_DRAFT,
+    component: <DraftPage />,
     private: true,
   },
   {

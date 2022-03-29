@@ -21,6 +21,12 @@ class Course {
       .then((res) => res)
       .catch((error) => error.response);
   };
+  getCourseOfAuthorById = async (id: number) => {
+    return axiosClient
+      .get("/instructor/course/" + id)
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
 
   getCourseByCurrentUser = async () => {
     return axiosClient

@@ -15,11 +15,13 @@ enum ROUTES {
   "OVERVIEW" = "/instructor/overview",
   "USER_BIO" = "/user/bio",
   "PROFILE" = "/user/profile",
+  "COURSE_DRAFT" = "/course/draft/:id",
 }
 
 const routesWithParams = {
   detail_course: (slug: string) => `/course/${slug}`,
   instructor_bio: (slug: string) => `/instructor/profile/${slug}`,
+  course_draft: (id: number) => `/course/draft/${id}`,
   home: (slug: string) => `/`,
 };
 
