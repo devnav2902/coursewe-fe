@@ -8,12 +8,10 @@ import CartPage from "../pages/cart/page/cart.page";
 import CreateCoursePage from "../pages/create-course/page/createCourse.page";
 import InstructorBioPage from "../pages/instructor-bio/page/instructor-bio.page";
 import DetailCoursePage from "../pages/detail-course/page/detail-course.page";
-<<<<<<< HEAD
-import { InstructorCoursesPage } from "../pages/instructor-courses/page/instructor-courses.page";
+import InstructorCoursesPage from "../pages/instructor-courses/page/instructor-courses.page";
 import OverviewPage from "../pages/overview/page/overview.page";
 import ProfilePage from "../pages/profile/page/profile.page";
 import DraftPage from "../pages/draft/page/draft.page";
-=======
 import MyLearningPage from "../pages/my-learning/page/my-learning.page";
 import LearningPage from "../pages/learning/page/learning.page";
 import InstructorCourseLayout from "../layouts/instructor-course.layout";
@@ -21,7 +19,6 @@ import BasicsPage from "../pages/edit-course/pages/basics.page";
 import IntendedLearnersPage from "../pages/edit-course/pages/intended-learners.page";
 import CurriculumPage from "../pages/edit-course/pages/curriculum.page";
 import BasicLayout from "../layouts/basic.layout";
->>>>>>> master
 
 export type Routes = {
   exact?: boolean;
