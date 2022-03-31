@@ -5,6 +5,8 @@
   display: flex;
   padding: var(--spacing-2);
   width: 100%;
+  max-width: 1200px;
+  margin: auto;
   .title {
     color: var(--color-dark);
     font-size: 2.4rem;
@@ -39,9 +41,11 @@
       }
       font-weight: 600;
       font-size: 1.6rem;
-      line-height: 1;
       margin-right: 3px;
       display: inline-block;
+    }
+    > div {
+      margin: 0 0.5rem;
     }
     .rating-count {
       color: rgba(67, 78, 80, 0.781) !important;
@@ -282,15 +286,13 @@
   .student-review-box {
     position: relative;
     padding: 3rem;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
 
-    .inner-student-review-box {
-      position: relative;
-      display: flex;
-      flex-wrap: wrap;
-    }
     // rating
     .rating-column {
-      flex: 0 0 25%;
+      flex: 0 0 20%;
     }
     .inner-column {
       text-align: center;
@@ -318,22 +320,21 @@
     .graph-column {
       padding-right: 15px;
       padding-left: 15px;
-      flex: 0 0 75%;
+      flex: 0 0 80%;
     }
     .skill-item {
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
 
     .skill-bar {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
     }
     .bar-inner {
       position: relative;
       flex-grow: 1;
       overflow: hidden;
       height: 8px;
-      border-radius: 2px;
       background: #dcdacb;
     }
     .bar-inner .bar {
@@ -417,8 +418,9 @@
     }
   }
   .review-comments-box {
-    padding: 0px 3rem;
-
+    .comment-box {
+      padding: 0 3rem;
+    }
     .reviewer-comment-box {
       position: relative;
       display: flex;
@@ -473,9 +475,15 @@
       align-items: center;
       justify-content: center;
       border: 1px solid #2896a9;
-      margin-right: var(--spacing-2);
+      margin-right: var(--spacing-1);
       &:hover {
         border-color: #1c6a78;
+      }
+    }
+    .rating {
+      > span {
+        display: inline-block;
+        margin-left: 1rem;
       }
     }
     .report {
@@ -491,11 +499,9 @@
       top: calc(var(--spacing-2) + var(--height-nav));
     }
     .widget-content {
-      border-radius: 5px;
       overflow: hidden;
       background-color: var(--color-white);
       box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-      border: 1px solid var(--color-border);
     }
     .intro-video {
       position: relative;
@@ -680,8 +686,7 @@
   text-align: center;
   padding: 0 2rem 2rem;
   .buy,
-  .addToCart,
-  .goToCart,
+  .btn,
   .enroll {
     width: 100%;
     height: 4.8rem;
@@ -701,13 +706,22 @@
       background-color: rgba(218, 218, 218, 0.31);
     }
   }
-  .addToCart,
-  .goToCart {
+  .btn-wrapper {
+    margin-bottom: 1rem;
+    .btn-wishlist {
+      margin-left: 1rem;
+      max-width: 50px;
+      width: 100%;
+      border: 1px solid #000;
+      height: 4.8rem;
+    }
+  }
+  .btn-cart {
     background-color: #e260f3;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1rem;
+
     color: #fff;
     &:hover {
       background-color: #ce5edd;
