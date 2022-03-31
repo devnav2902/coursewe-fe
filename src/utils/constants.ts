@@ -21,6 +21,8 @@ enum ROUTES {
   "COURSE_BASICS" = "/instructor/course/:id/basics",
   "INTENDED_LEARNERS" = "/instructor/course/:id/goals",
   "CURRICULUM" = "instructor/course/:id/curriculum",
+  "ADMIN_REVIEW" = "/admin/submission-courses-list",
+  "CHECKOUT" = "/cart/checkout",
 }
 
 const routesWithParams = {

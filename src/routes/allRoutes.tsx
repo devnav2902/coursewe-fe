@@ -19,6 +19,9 @@ import BasicsPage from "../pages/edit-course/pages/basics.page";
 import IntendedLearnersPage from "../pages/edit-course/pages/intended-learners.page";
 import CurriculumPage from "../pages/edit-course/pages/curriculum.page";
 import BasicLayout from "../layouts/basic.layout";
+import AdminReviewPage from "../pages/admin-review/page/admin-review.page";
+import CheckoutPage from "../pages/checkout/page/checkout.page";
+import OverviewLayout from "../layouts/overview.layout";
 
 export type Routes = {
   exact?: boolean;
@@ -91,7 +94,11 @@ const routes: Routes[] = [
   {
     exact: true,
     path: ROUTES.INSTRUCTOR_COURSES,
-    component: <InstructorCoursesPage />,
+    component: (
+      <OverviewLayout>
+        <InstructorCoursesPage />
+      </OverviewLayout>
+    ),
     private: true,
   },
   {
@@ -154,9 +161,19 @@ const routes: Routes[] = [
     private: true,
   },
   {
+    path: ROUTES.ADMIN_REVIEW,
+    component: <AdminReviewPage />,
+    private: true,
+  },
+  {
+    path: ROUTES.CHECKOUT,
+    component: <CheckoutPage />,
+    private: true,
+  },
+  {
     path: ROUTES.COURSE_DRAFT,
     component: <DraftPage />,
-    private: true,
+    // private: true,
   },
   {
     path: ROUTES.CART,
