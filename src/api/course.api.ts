@@ -15,6 +15,36 @@ class Course {
       .then((res) => res)
       .catch((error) => error.response);
   };
+
+  updateInformation = async (id: string | number, data: any) => {
+    let dataForm = new FormData();
+    for (const key in data) data[key] && dataForm.append(key, data[key]);
+
+    return axiosClient
+      .post(`/course/update-information/${id}`, dataForm, {
+        headers: {
+          "Content-Type":
+            "multipart/form-data; charset=utf-8; boundary=" +
+            Math.random().toString().substr(2),
+        },
+      })
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
+
+  updateCourseOutcome = async (id: string | number, data: any) => {
+    return axiosClient
+      .patch(`/course/update-course-outcome/${id}`, data)
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
+
+  deleteCourseOutcome = async (id: string | number) => {
+    return axiosClient
+      .delete(`/course/update-course-outcome/${id}`)
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
 }
 
 const CourseApi = new Course();

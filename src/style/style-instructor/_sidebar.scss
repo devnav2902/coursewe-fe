@@ -1,7 +1,7 @@
 .sidebar {
   padding-top: 5rem;
   width: var(--width-sidebar);
-  z-index: 9999;
+  z-index: 1000;
   background: var(--color-white);
   padding-left: 3rem;
   padding-right: 3rem;
@@ -42,6 +42,7 @@
     color: var(--color-dark);
     position: relative;
     z-index: 10;
+    background-color: transparent;
 
     svg {
       font-size: 1.5rem;
@@ -56,9 +57,7 @@
       }
     }
   }
-  a:hover span {
-    transform: translateX(0);
-  }
+
   .submit {
     min-width: 260px;
     width: 100%;
