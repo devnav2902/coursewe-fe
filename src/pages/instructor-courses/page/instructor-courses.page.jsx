@@ -10,7 +10,7 @@ import CourseApi from "../../../api/course.api";
 import { ROUTES, routesWithParams } from "../../../utils/constants";
 import SideBarOverview from "../../../components/SideBarOverview/SideBarOverview.component";
 
-export const InstructorCoursesPage = () => {
+const InstructorCoursesPage = () => {
   const {
     profile: {
       role: { name },
@@ -150,3 +150,4 @@ export const InstructorCoursesPage = () => {
     </div>
   );
 };
+export default InstructorCoursesPage;

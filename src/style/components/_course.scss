@@ -1,15 +1,29 @@
 .list-courses {
   width: 100%;
 
-  // .course {
-  //     margin: 0 15px;
-  // }
+  .course:hover {
+    .image-course {
+      &::before {
+        background-color: rgba(63, 60, 60, 0.267);
+      }
+    }
+  }
 
   .image-course {
     display: block;
     overflow: hidden;
     aspect-ratio: 16/9;
-
+    position: relative;
+    &::before {
+      position: absolute;
+      transition: 0.2s all;
+      top: 0;
+      left: 0;
+      content: "";
+      background-color: transparent;
+      width: 100%;
+      height: 100%;
+    }
     img {
       height: 100%;
       object-fit: cover;

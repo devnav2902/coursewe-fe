@@ -21,7 +21,7 @@ function App(): JSX.Element {
   return (
     <>
       <BrowserRouter>
-        <TopNav />
+        {/* <TopNav /> */}
         <Routes>
           {routes.map((route: IRoutes, idx: number) => {
             if (route.redirectIfAuthenticated && user.profile) {
