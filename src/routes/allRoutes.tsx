@@ -147,12 +147,20 @@ const routes: Routes[] = [
   },
   {
     path: ROUTES.CREATE_COURSE,
-    component: <CreateCoursePage />,
+    component: (
+      <BasicLayout>
+        <CreateCoursePage />
+      </BasicLayout>
+    ),
     private: true,
   },
   {
     path: ROUTES.OVERVIEW,
-    component: <OverviewPage />,
+    component: (
+      <OverviewLayout>
+        <OverviewPage />
+      </OverviewLayout>
+    ),
     private: true,
   },
   {
@@ -162,7 +170,11 @@ const routes: Routes[] = [
   },
   {
     path: ROUTES.ADMIN_REVIEW,
-    component: <AdminReviewPage />,
+    component: (
+      <OverviewLayout>
+        <AdminReviewPage />
+      </OverviewLayout>
+    ),
     private: true,
   },
   {

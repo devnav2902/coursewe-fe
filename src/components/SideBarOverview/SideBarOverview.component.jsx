@@ -67,14 +67,10 @@ const SideBarOverview = () => {
             </div>
             {name === "admin" && (
               <div className="hover__item">
-                <a
-                  href="{{
-                                        route('submission-courses-list')
-                                    }}"
-                >
+                <Link to={ROUTES.ADMIN_REVIEW}>
                   <EyeOutlined style={{ fontSize: "22px" }} />
                   <span>Review courses</span>
-                </a>
+                </Link>
               </div>
             )}
           </div>
