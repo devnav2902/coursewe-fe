@@ -78,11 +78,13 @@
         height: 2.4rem;
         margin-left: 1.5rem;
         text-transform: uppercase;
+        margin-right: auto;
       }
+
       .preview {
-        margin-left: auto;
         background-color: transparent;
         border: 1px solid #fff;
+        margin-right: 1.5rem;
 
         &:hover {
           background-color: rgba(73, 73, 73, 0.534);
@@ -90,9 +92,6 @@
         i {
           padding-left: 1rem;
         }
-      }
-      .save {
-        margin-left: 1.5rem;
       }
     }
   }

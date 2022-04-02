@@ -21,7 +21,7 @@ const InstructorCourseLayout = ({ children }) => {
 
   const {
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
     control,
     watch,
     setValue,
@@ -66,6 +66,12 @@ const InstructorCourseLayout = ({ children }) => {
   ];
   const isRouteWithButtonSave = arrRoutes.includes(pathname);
 
+  const arrRoutesHasPreviewBtn = [
+    routesWithParams.course_basics(id),
+    routesWithParams.curriculum(id),
+  ];
+  const isRouteWithButtonPreview = arrRoutesHasPreviewBtn.includes(pathname);
+
   const handleRedirect = (route) => {
     if (!valueChanged) navigate(route);
     else if (pathname !== route) {
@@ -81,6 +87,37 @@ const InstructorCourseLayout = ({ children }) => {
     }
   };
 
+  function apiIntendedLearners(data) {
+    switch (true) {
+      case !!data?.course_outcome?.length:
+        CourseApi.updateCourseOutcome(id, data).then((res) => {
+          resetState();
+          console.log(res);
+        });
+
+      case !!data?.delete_course_outcome_order?.length:
+        CourseApi.deleteCourseOutcome(id, data).then((res) => {
+          resetState();
+          console.log(res);
+        });
+
+      case !!data?.course_requirements?.length:
+        CourseApi.updateCourseRequirements(id, data).then((res) => {
+          resetState();
+          console.log(res);
+        });
+
+      case !!data?.delete_course_requirements_order?.length:
+        CourseApi.deleteCourseRequirements(id, data).then((res) => {
+          resetState();
+          console.log(res);
+        });
+
+      default:
+        break;
+    }
+  }
+
   const onSubmit = (data) => {
     console.log(data);
 
@@ -88,14 +125,13 @@ const InstructorCourseLayout = ({ children }) => {
       case routesWithParams.course_basics(id):
         CourseApi.updateInformation(id, data).then((res) => {
           resetState();
-          console.log(res);
+          // console.log(res);
         });
         break;
+
       case routesWithParams.intended_learners(id):
-        CourseApi.updateCourseOutcome(id, data).then((res) => {
-          resetState();
-          console.log(res);
-        });
+        apiIntendedLearners(data);
+
         break;
 
       default:
@@ -118,9 +154,11 @@ const InstructorCourseLayout = ({ children }) => {
             {!course.isPublished ? "Draft" : "Published"}
           </span>
 
-          <a target="_blank" href="" className="preview">
-            Xem thử
-          </a>
+          {isRouteWithButtonPreview && (
+            <a target="_blank" href="" className="preview">
+              Xem thử
+            </a>
+          )}
 
           {isRouteWithButtonSave && (
             <button
@@ -166,7 +204,7 @@ const InstructorCourseLayout = ({ children }) => {
               <span>Chương trình học</span>
             </button>
 
-            <Link className="navbar-link" to="/">
+            <Link className="navbar-link" to={routesWithParams.price(id)}>
               <DollarCircleOutlined />
               <span>Giá khóa học</span>
             </Link>
