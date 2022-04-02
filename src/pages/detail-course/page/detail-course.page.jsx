@@ -6,7 +6,7 @@ import {
   LoadingOutlined,
   HeartOutlined,
 } from "@ant-design/icons";
-import { Spin, Collapse } from "antd";
+import { Spin, Collapse, Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -20,6 +20,8 @@ import { isUrl, roundsTheNumber } from "../../../utils/functions";
 import CurriculumItem from "../components/CurriculumItem.component";
 import RatingGraph from "../components/RatingGraph.component";
 import Review from "../components/Review.component";
+import { BiCheck } from "react-icons/bi";
+import { GoPrimitiveDot } from "react-icons/go";
 
 const { Panel } = Collapse;
 
@@ -37,6 +39,7 @@ const DetailCoursePage = () => {
   useEffect(() => {
     CourseApi.getCourseBySlug(slug).then((res) => {
       const { data } = res;
+
       setCourse(data.course);
       setGraph(data.graph);
       setHasCommented(data.hasCommented);
@@ -65,6 +68,8 @@ const DetailCoursePage = () => {
     lecture_count,
     lecture,
     section,
+    course_requirements,
+    course_outcome,
   } = course;
 
   const resource_count = lecture.reduce(
@@ -138,10 +143,21 @@ const DetailCoursePage = () => {
             </div>
 
             <div className="course-info">
-              <div className="course-info__item">
-                <p>Thông tin khóa học</p>
-                <div dangerouslySetInnerHTML={{ __html: description }} />
-              </div>
+              {!course_outcome.length ? null : (
+                <div className="course-info__item pd-2 border">
+                  <p>Bạn sẽ nhận được</p>
+                  <Row gutter={[20, 14]}>
+                    {course_outcome
+                      .sort((a, b) => a.order - b.order)
+                      .map((item) => (
+                        <Col span={12} className="align-items-center d-flex">
+                          <BiCheck className="mr-1" fontSize={18} />
+                          {item.description}
+                        </Col>
+                      ))}
+                  </Row>
+                </div>
+              )}
 
               <div className="course-info__item">
                 <p>Nội dung khóa học</p>
@@ -159,6 +175,28 @@ const DetailCoursePage = () => {
                   })}
                 </Collapse>
               </div>
+
+              {!course_requirements.length ? null : (
+                <div className="course-info__item">
+                  <p>Yêu cầu của khóa học</p>
+                  <Row gutter={[20, 10]}>
+                    {course_requirements
+                      .sort((a, b) => a.order - b.order)
+                      .map((item) => (
+                        <Col span={24} className="align-items-center d-flex">
+                          <GoPrimitiveDot className="mr-1" fontSize={14} />
+                          {item.description}
+                        </Col>
+                      ))}
+                  </Row>
+                </div>
+              )}
+
+              <div className="course-info__item">
+                <p>Thông tin khóa học</p>
+                <div dangerouslySetInnerHTML={{ __html: description }} />
+              </div>
+
               <div className="course-info__item">
                 <p>Đánh giá từ học viên</p>
                 <div className="tab active-tab" id="review-box">
