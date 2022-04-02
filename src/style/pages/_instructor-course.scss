@@ -8,7 +8,7 @@
     height: var(--height-nav);
     background-color: #000;
     width: 100%;
-    z-index: 99999;
+    z-index: 1100;
     .nav-content {
       height: 100%;
       display: flex;
@@ -16,17 +16,38 @@
       max-width: 1440px;
       margin: 0 auto;
       padding: 0px 3rem;
+      .header-status {
+        height: 2.8rem;
+      }
       .preview,
       .header-status,
       .save {
         background-color: rgb(148, 131, 131);
         color: #fff;
         font-weight: 600;
-        height: 2.8rem;
-        padding: 0rem 1rem;
+        padding: 0rem 1.2rem;
         display: flex;
         align-items: center;
         line-height: 1;
+      }
+      .save {
+        background-color: #fff;
+        color: #000;
+        &:hover {
+          background-color: rgb(224, 206, 206);
+        }
+      }
+      .save,
+      .preview {
+        padding: 0 1.5rem;
+        height: 3.2rem;
+      }
+      .save:disabled {
+        cursor: not-allowed;
+        background-color: rgb(148, 131, 131);
+        &:hover {
+          background-color: rgb(148, 131, 131);
+        }
       }
 
       a {
@@ -117,6 +138,12 @@
         .ant-select-selection-item {
           line-height: 42px;
         }
+        .ant-upload-list-item-name {
+          max-width: 250px;
+        }
+        .ant-upload-list-item-card-actions {
+          position: absolute !important;
+        }
       }
       .form-group > span,
       .form-group .ant-select-selector,
@@ -137,6 +164,12 @@
         width: 100%;
       }
       .btn-remove {
+        &:disabled {
+          background-color: transparent;
+        }
+        &:disabled:hover {
+          cursor: not-allowed;
+        }
         svg {
           font-size: 18px;
         }
@@ -153,73 +186,11 @@
         }
       }
 
-      .filepond--root {
-        font-size: 16px;
-        .filepond--label-action {
-          margin-left: 5px;
-          display: inline-block;
-        }
-        .filepond--credits {
-          display: none;
-        }
+      .ql-toolbar.ql-snow {
+        border-color: #9e7e7e;
       }
-      .note-editor {
-        border-radius: 0;
-        &.fullscreen {
-          z-index: 99999999;
-        }
-        &.note-airframe,
-        &.note-frame {
-          border: 1px solid #000;
-        }
-        .note-frame {
-          border-radius: 0;
-        }
-        .note-editable {
-          background-color: #fff;
-        }
-        .note-toolbar {
-          border-color: #000;
-          background-color: transparent;
-        }
-      }
-
-      .gallery {
-        &:not(:empty) {
-          display: flex;
-          flex-wrap: wrap;
-          margin: 0 0 0 -5px;
-          padding-top: 2rem;
-          max-height: 300px;
-          overflow-y: auto;
-          &::-webkit-scrollbar {
-            width: 6px;
-          }
-        }
-
-        .image-item {
-          width: calc(25% - 10px);
-          aspect-ratio: 16/9;
-          margin: 0 5px 10px;
-          overflow: hidden;
-          border-radius: 8px;
-          position: relative;
-          transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
-          .actions {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-          }
-        }
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
+      .ql-container.ql-snow {
+        border-color: #9e7e7e;
       }
 
       .instructor-profile {

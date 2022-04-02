@@ -1,8 +1,8 @@
 const Footer = () => {
   return (
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="col">
+    <footer className="footer">
+      <div className="footer-content">
+        <div className="col">
           <h4>Devco</h4>
           <p>
             <a href="#">Devco Business</a>
@@ -20,7 +20,7 @@ const Footer = () => {
             <a href="#">Contact us</a>
           </p>
         </div>
-        <div class="col">
+        <div className="col">
           <p>
             <a href="#">Careers</a>
           </p>
@@ -34,7 +34,7 @@ const Footer = () => {
             <a href="#">Investors</a>
           </p>
         </div>
-        <div class="col">
+        <div className="col">
           <p>
             <a href="#">Terms</a>
           </p>
