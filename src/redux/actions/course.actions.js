@@ -15,5 +15,15 @@ const getAllCourses = () => {
     }
   };
 };
+const createCourse = (title) => {
+  return async (dispatch) => {
+    dispatch({ type: courseTypes.CREATE_COURSE_REQUEST });
+    const {
+      data: { id },
+    } = await CourseApi.createCourse(title);
 
-export { getAllCourses };
+    dispatch({ type: courseTypes.CREATE_COURSE_SUCCESS, payload: id });
+  };
+};
+
+export { getAllCourses, createCourse };

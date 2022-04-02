@@ -7,6 +7,7 @@ const PurchaseHistoryPage = () => {
   useEffect(() => {
     PurchaseApi.purchaseHistory().then((res) => {
       const { data, status } = res;
+      console.log(data);
       if (status === 200) setCourseBill(data.courseBill);
     });
   }, []);

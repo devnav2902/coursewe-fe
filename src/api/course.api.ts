@@ -7,6 +7,19 @@ class Course {
       .then((res) => res)
       .catch((error) => error.response);
   };
+  getCourseOfAuthorById = async (id: number) => {
+    return axiosClient
+      .get("/instructor/course/" + id)
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
+
+  getCourseByCurrentUser = async () => {
+    return axiosClient
+      .get("/user/courses")
+      .then((res) => res)
+      .catch((error) => error);
+  };
 
   getCourseById = async (id: string | number) => {
     return axiosClient
@@ -14,7 +27,12 @@ class Course {
       .then((res) => res)
       .catch((error) => error.response);
   };
-
+  createCourse = async (title: string) => {
+    return axiosClient
+      .post("/create-course", { title })
+      .then((res) => res)
+      .catch((error) => error);
+  };
   updateInformation = async (id: string | number, data: any) => {
     let dataForm = new FormData();
     for (const key in data) data[key] && dataForm.append(key, data[key]);
