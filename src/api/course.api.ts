@@ -28,6 +28,12 @@ class Course {
       .then((res) => res)
       .catch((error) => error.response);
   };
+  createCourse = async (title: string) => {
+    return axiosClient
+      .post("/create-course", { title })
+      .then((res) => res)
+      .catch((error) => error);
+  };
 }
 
 const CourseApi = new Course();

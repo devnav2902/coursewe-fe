@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { createCourse } from "../../../redux/actions/course.actions";
+import { routesWithParams } from "../../../utils/constants";
 
 const CreateCoursePage = () => {
+  const dispatch = useDispatch();
+  const { register, handleSubmit } = useForm();
+  const onSubmit = (data) => {
+    const { title } = data;
+    dispatch(createCourse(title));
+  };
+  const { idNewCourse } = useSelector((state) => state.course);
+  const navigate = useNavigate();
+  console.log(idNewCourse);
+
+  useEffect(() => {
+    idNewCourse && navigate(routesWithParams.course_basics(idNewCourse));
+  }, [idNewCourse]);
   return (
-    <form method="POST" class="create-course">
+    <form method="POST" class="create-course" onSubmit={handleSubmit(onSubmit)}>
       <div>
         <h1>Nhập tiêu đề cho khóa học</h1>
         <p>Bạn có thể thay đổi tiêu đề ở phần chỉnh sửa khóa học.</p>
@@ -11,10 +30,9 @@ const CreateCoursePage = () => {
       <div class="create-course__input">
         <div class="title">
           <input
-            name="title"
-            type="text"
             placeholder="e.g. Learn Photoshop CS6 from Scratch"
             maxlength="60"
+            {...register("title")}
           />
         </div>
       </div>
