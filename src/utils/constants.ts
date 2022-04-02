@@ -15,6 +15,7 @@ enum ROUTES {
   "COURSE_BASICS" = "/instructor/course/:id/basics",
   "INTENDED_LEARNERS" = "/instructor/course/:id/goals",
   "CURRICULUM" = "instructor/course/:id/curriculum",
+  "PRICE" = "instructor/course/:id/price",
 }
 
 const routesWithParams = {
@@ -24,6 +25,7 @@ const routesWithParams = {
   learning: (slug: string) => `/learning/${slug}`,
   intended_learners: (id: string | number) => `/instructor/course/${id}/goals`,
   curriculum: (id: string | number) => `/instructor/course/${id}/curriculum`,
+  price: (id: string | number) => `/instructor/course/${id}/price`,
 };
 
 export { API_URL, BE_URL, ROUTES, routesWithParams };

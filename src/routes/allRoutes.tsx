@@ -15,6 +15,7 @@ import BasicsPage from "../pages/edit-course/pages/basics.page";
 import IntendedLearnersPage from "../pages/edit-course/pages/intended-learners.page";
 import CurriculumPage from "../pages/edit-course/pages/curriculum.page";
 import BasicLayout from "../layouts/basic.layout";
+import PricePage from "../pages/edit-course/pages/price.page";
 
 export type Routes = {
   exact?: boolean;
@@ -42,6 +43,16 @@ const routes: Routes[] = [
       <InstructorCourseLayout>
         {(props: any) => <BasicsPage {...props} />}
         {/* callback => children() sẽ return <BasicsPage /> */}
+      </InstructorCourseLayout>
+    ),
+    private: true,
+  },
+  {
+    exact: true,
+    path: ROUTES.PRICE,
+    component: (
+      <InstructorCourseLayout>
+        {(props: any) => <PricePage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
