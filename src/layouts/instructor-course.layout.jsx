@@ -7,7 +7,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { FaLaptopHouse } from "react-icons/fa";
 import { RiBookmark3Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { routesWithParams } from "../utils/constants";
+import { ROUTES, routesWithParams } from "../utils/constants";
 import Footer from "../components/Footer/Footer.component";
 import { useForm } from "react-hook-form";
 import CourseApi from "../api/course.api";
@@ -143,7 +143,10 @@ const InstructorCourseLayout = ({ children }) => {
     <form className="wrapper instructor-page" onSubmit={handleSubmit(onSubmit)}>
       <nav className="nav">
         <div className="nav-content">
-          <Link to="" className="d-flex align-items-center">
+          <Link
+            to={ROUTES.INSTRUCTOR_COURSES}
+            className="d-flex align-items-center"
+          >
             <IoIosArrowBack />
             <span className="back">Trở về trang khóa học</span>
           </Link>

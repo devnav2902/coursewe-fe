@@ -128,7 +128,7 @@ const TopNav = () => {
           </>
         ) : (
           <div className="user">
-            <Link to="/manage-course">Quản lý khóa học</Link>
+            <Link to={ROUTES.INSTRUCTOR_COURSES}>Quản lý khóa học</Link>
             <Link to={ROUTES.MY_LEARNING}>My learning</Link>
             <ShoppingCart />
             <div className="notification">
