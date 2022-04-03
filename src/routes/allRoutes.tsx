@@ -24,6 +24,7 @@ import AdminReviewPage from "../pages/admin-review/page/admin-review.page";
 import CheckoutPage from "../pages/checkout/page/checkout.page";
 import OverviewLayout from "../layouts/overview.layout";
 import CategoriesPage from "../pages/categories/pages/categories.page";
+import { Route } from "react-router-dom";
 
 export type Routes = {
   exact?: boolean;
@@ -32,6 +33,7 @@ export type Routes = {
   layout?: JSX.Element;
   redirectIfAuthenticated?: boolean;
   private?: boolean;
+  nested?: JSX.Element;
 };
 
 const routes: Routes[] = [
@@ -46,6 +48,26 @@ const routes: Routes[] = [
   },
   {
     path: ROUTES.CATEGORIES,
+    nested: (
+      <>
+        <Route
+          path={ROUTES.SUBCATEGORIES}
+          element={
+            <BasicLayout>
+              <CategoriesPage />
+            </BasicLayout>
+          }
+        />
+        <Route
+          path={ROUTES.TOPICS}
+          element={
+            <BasicLayout>
+              <CategoriesPage />
+            </BasicLayout>
+          }
+        />
+      </>
+    ),
     component: (
       <BasicLayout>
         <CategoriesPage />
