@@ -1,24 +1,48 @@
 import { useDispatch, useSelector } from "react-redux";
-import { BE_URL, ROUTES } from "../../utils/constants";
-import { Link } from "react-router-dom";
+import { BE_URL, ROUTES, routesWithParams } from "../../utils/constants";
+import { Link, useNavigate } from "react-router-dom";
 import {
   BellOutlined,
   ShoppingOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Dropdown } from "antd";
+import { Cascader, Dropdown } from "antd";
 import { logout } from "../../redux/actions/account.actions";
+import { useEffect, useState } from "react";
+import CategoriesApi from "../../api/categories.api";
 
 const TopNav = () => {
   const user = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
   const { fullname, email, avatar, role } = user.profile ?? {};
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogout = (e) => {
     e.preventDefault();
 
     dispatch(logout());
   };
+
+  const [displayCascader, setDisplayCascader] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [arrSlugCategory, setArrSlugCategory] = useState([]);
+  useEffect(() => {
+    CategoriesApi.get().then((res) => {
+      const {
+        data: { categories },
+      } = res;
+      setCategories(categories);
+    });
+  }, []);
+
+  useEffect(() => {
+    const slug = arrSlugCategory.reduce(
+      (result, cur) => (result += `${cur}/`),
+      ""
+    );
+
+    navigate(routesWithParams.categories(slug));
+  }, [arrSlugCategory]);
 
   const ShoppingCart = () => (
     <div className="shopping-cart">
@@ -31,6 +55,11 @@ const TopNav = () => {
     </div>
   );
 
+  function onChange(value) {
+    setArrSlugCategory(value);
+    setDisplayCascader(false);
+  }
+
   return (
     <nav className="nav-top">
       <div className="nav-content">
@@ -38,7 +67,26 @@ const TopNav = () => {
           <Link to="/">Coursewe</Link>
         </div>
         <div className="category-link">
-          <Link to="/category">Danh mục khóa học</Link>
+          <Cascader
+            changeOnSelect={true}
+            bordered={false}
+            options={categories}
+            expandTrigger="hover"
+            dropdownClassName="categories-dropdown"
+            onChange={onChange}
+            value={null}
+            onMouseEnter={() => setDisplayCascader(true)}
+            onMouseLeave={() => setDisplayCascader(false)}
+            placeholder="Danh mục"
+            suffixIcon={null}
+            open={displayCascader}
+            getPopupContainer={(e) => e}
+            fieldNames={{
+              label: "name",
+              value: "slug",
+              children: "subcategory",
+            }}
+          />
         </div>
         <form action="" className="search-bar">
           <div className="icon">
