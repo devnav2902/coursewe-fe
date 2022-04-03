@@ -117,9 +117,7 @@ const InstructorCoursesPage = () => {
                               {!course.submit_for_review ? (
                                 <Link
                                   className="view"
-                                  to={routesWithParams.detail_course(
-                                    course.slug
-                                  )}
+                                  to={routesWithParams.course_basics(course.id)}
                                 >
                                   Edit / Manage course
                                 </Link>

@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import { createCourse } from "../../../redux/actions/course.actions";
-import { routesWithParams } from "../../../utils/constants";
+import { ROUTES, routesWithParams } from "../../../utils/constants";
 
 const CreateCoursePage = () => {
   const dispatch = useDispatch();
@@ -38,9 +39,9 @@ const CreateCoursePage = () => {
       </div>
 
       <div class="create-course__footer">
-        <a href="{{ route('instructor-courses') }}" class="btn-style-two">
+        <Link to={ROUTES.INSTRUCTOR_COURSES} class="btn-style-two">
           Exit
-        </a>
+        </Link>
         <button type="submit" class="btn-style-two">
           Tạo khóa học
         </button>
