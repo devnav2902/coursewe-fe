@@ -298,10 +298,10 @@ const OverviewPage = () => {
                                     Tổng doanh thu
                                   </div>
                                   <div className="text-midnight">
-                                    {totalRevenue}$
+                                    {totalRevenue}đ
                                   </div>
                                   <div className="text-midnight-lighter">
-                                    {totalRevenueInMonth}$ trong tháng này
+                                    {totalRevenueInMonth}đ trong tháng này
                                   </div>
                                 </div>
                               </div>
