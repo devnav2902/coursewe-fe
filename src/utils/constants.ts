@@ -24,6 +24,9 @@ enum ROUTES {
   "PRICE" = "instructor/course/:id/price",
   "ADMIN_REVIEW" = "/admin/submission-courses-list",
   "CHECKOUT" = "/cart/checkout",
+  "CATEGORIES" = "/courses/:slug",
+  "SUBCATEGORIES" = "/courses/:slug/:sub",
+  "TOPICS" = "/courses/:slug/:sub/:topic",
 }
 
 const routesWithParams = {
@@ -35,6 +38,10 @@ const routesWithParams = {
   intended_learners: (id: string | number) => `/instructor/course/${id}/goals`,
   curriculum: (id: string | number) => `/instructor/course/${id}/curriculum`,
   price: (id: string | number) => `/instructor/course/${id}/price`,
+  categories: (slug: string) => `/courses/${slug}`,
+  subcategories: (slug: string, sub: string) => `/courses/${slug}/${sub}`,
+  topics: (slug: string, sub: string, topic: string) =>
+    `/courses/${slug}/${sub}/${topic}`,
 };
 
 export { API_URL, BE_URL, ROUTES, routesWithParams };

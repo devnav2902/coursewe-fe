@@ -23,6 +23,7 @@ import PricePage from "../pages/edit-course/pages/price.page";
 import AdminReviewPage from "../pages/admin-review/page/admin-review.page";
 import CheckoutPage from "../pages/checkout/page/checkout.page";
 import OverviewLayout from "../layouts/overview.layout";
+import CategoriesPage from "../pages/categories/pages/categories.page";
 
 export type Routes = {
   exact?: boolean;
@@ -40,6 +41,14 @@ const routes: Routes[] = [
     component: (
       <BasicLayout>
         <Home />
+      </BasicLayout>
+    ),
+  },
+  {
+    path: ROUTES.CATEGORIES,
+    component: (
+      <BasicLayout>
+        <CategoriesPage />
       </BasicLayout>
     ),
   },

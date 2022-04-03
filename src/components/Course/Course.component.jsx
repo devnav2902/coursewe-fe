@@ -27,6 +27,25 @@ const StyledQuickViewBox = styled.div`
     line-height: 1.4;
     font-size: 14px;
   }
+  .btn {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .toggle-wishlist {
+    width: 5rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.8rem;
+    border-radius: 50%;
+    border: 1px solid #000;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: #e9e7e7;
+    }
+  }
 `;
 
 const Course = ({ course }) => {
@@ -46,8 +65,8 @@ const Course = ({ course }) => {
         <li>Build your own SQL Server SELECT statements.</li>
         <li>Build your own SQL Server SELECT statements.</li>
       </div>
-      <div className="quick-view-footer">
-        <button>Thêm vào giỏ hàng</button>
+      <div className="quick-view-footer d-flex align-item-center">
+        <button className="btn btn-color-default">Thêm vào giỏ hàng</button>
         <button className="toggle-wishlist">
           <HeartOutlined style={{ fontSize: "20px", color: "#000" }} />
         </button>
@@ -56,7 +75,12 @@ const Course = ({ course }) => {
   );
 
   return (
-    <Popover placement="right" content={quickViewBox}>
+    <Popover
+      className="popover"
+      placement="right"
+      getPopupContainer={(element) => element}
+      content={quickViewBox}
+    >
       <div className="course">
         <Link to="/" className="image-course">
           <img src={thumbnail} alt={title} />
