@@ -1,6 +1,6 @@
 import { Radio, Row, Checkbox, Collapse } from "antd";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Rating from "../../../components/Rating/Rating.component";
 import { routesWithParams } from "../../../utils/constants";
 
@@ -11,6 +11,8 @@ const { Panel } = Collapse;
 const { Option } = Select;
 
 const CategoriesPage = () => {
+  const params = useParams();
+  console.log(params);
   return (
     <div class="main-categories">
       <div class="main-categories__content">
