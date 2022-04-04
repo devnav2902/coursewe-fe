@@ -20,10 +20,10 @@
         margin-bottom: 2rem;
         display: inline-block;
       }
-      &:first-child {
+      &.border {
         border: 1px solid #d1d7dc;
-        padding: 2rem;
       }
+
       &:not(:last-child) {
         margin-bottom: 3rem;
       }

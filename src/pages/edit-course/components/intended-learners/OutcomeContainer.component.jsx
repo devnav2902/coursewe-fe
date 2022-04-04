@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from "react";
 
 const OutcomeContainer = ({ course, formMethod }) => {
   const { course_outcome } = course;
-  const { resetState, setValue, getValues } = formMethod;
+  const { setValue, getValues } = formMethod;
   const minItems = 4;
-  const iniArrOutcome = (() => {
+  const iniArrItems = (() => {
     if (course_outcome.length) {
       return [...course_outcome];
     } else {
@@ -19,105 +19,93 @@ const OutcomeContainer = ({ course, formMethod }) => {
     }
   })();
 
-  const [countOutcome, setCountOutcome] = useState(iniArrOutcome.length);
-  const [allowRemoveOutcome, setAllowRemoveOutcome] = useState(false); // ít nhất 4 items
-  const [outcomeInputFields, setOutcomeInputFields] = useState(iniArrOutcome);
+  const [countItem, setCountItem] = useState(iniArrItems.length);
+  const [allowRemoveItem, setAllowRemoveItem] = useState(false); // ít nhất 1 items
+  const [inputFields, setInputFields] = useState(iniArrItems);
   const allTextInputRef = useRef([]);
 
   useEffect(() => {
-    const handleSetAllowOutcome = (amount) => {
-      const allowOutcome = amount > minItems ? true : false;
-      setAllowRemoveOutcome(allowOutcome);
+    const handleSetAllowRemoveItem = (amount) => {
+      const allowRemoveItem = amount > minItems ? true : false;
+      setAllowRemoveItem(allowRemoveItem);
     };
 
-    handleSetAllowOutcome(countOutcome);
-  }, [countOutcome]);
+    handleSetAllowRemoveItem(countItem);
+  }, [countItem]);
 
-  function onChangeOutcome(e) {
+  function onChangeItem(e) {
     const {
       value,
       dataset: { order },
     } = e.target;
 
-    const outcome = getValues("course_outcome");
-    let dataOutcome = {
+    const items = getValues("course_outcome");
+    let dataItems = {
       description: value,
       order: parseInt(order),
     };
 
-    let updatedOutcome = [];
-    if (!outcome) updatedOutcome.push(dataOutcome);
-    else if (Array.isArray(outcome)) {
-      updatedOutcome = [...outcome];
-      const objIndex = updatedOutcome.findIndex(
+    let updatedItems = [];
+    if (!items) updatedItems.push(dataItems);
+    else if (Array.isArray(items)) {
+      updatedItems = [...items];
+      const objIndex = updatedItems.findIndex(
         (item) => item.order === parseInt(order)
       );
       const existed = objIndex > -1;
 
       if (existed) {
-        updatedOutcome[objIndex].description = value;
+        updatedItems[objIndex].description = value;
       } else {
-        updatedOutcome.push(dataOutcome);
+        updatedItems.push(dataItems);
       }
     }
 
-    setValue("course_outcome", updatedOutcome);
-
-    // su dung object
-    // const dataOutcome = JSON.stringify({
-    //   ...outcome,
-    //   [name]: {
-    //     description: value,
-    //     course_id: id,
-    //     order,
-    //   },
-    // });
-
-    // console.log(outcome);
+    setValue("course_outcome", updatedItems);
   }
 
-  function handleIncreaseOutcome() {
-    setCountOutcome((amount) => amount + 1);
+  function handleIncreaseItem() {
+    setCountItem((amount) => amount + 1);
   }
 
-  function handleDecreaseOutcome() {
-    setCountOutcome((amount) => amount - 1);
+  function handleDecreaseItem() {
+    setCountItem((amount) => amount - 1);
   }
 
-  function onRemoveOutcomeItem(order) {
+  function onRemoveItem(order) {
     const [arr_course_outcome_order, arr_course_outcome] = getValues([
       "delete_course_outcome_order",
       "course_outcome",
     ]);
 
-    // Update lại outcome
+    // Update lại
     if (Array.isArray(arr_course_outcome)) {
-      const filteredOutcome = [...arr_course_outcome].filter(
-        (outcome) => outcome.order !== order
+      const filteredItems = [...arr_course_outcome].filter(
+        (item) => item.order !== order
       );
 
-      setValue("course_outcome", filteredOutcome);
+      setValue("course_outcome", filteredItems);
     }
 
-    let arrOutcomeOrder = [];
-    // Xóa outcome
+    let arrItemsOrder = [];
+    // Xóa
     if (Array.isArray(arr_course_outcome_order)) {
-      arrOutcomeOrder = [...arr_course_outcome_order];
+      arrItemsOrder = [...arr_course_outcome_order];
     }
 
-    arrOutcomeOrder.push(order);
-    setValue("delete_course_outcome_order", arrOutcomeOrder);
+    arrItemsOrder.push(order);
+    setValue("delete_course_outcome_order", arrItemsOrder);
 
-    handleDecreaseOutcome();
+    handleDecreaseItem();
   }
 
-  function addOutcomeInputFields() {
+  function addItemInputFields() {
     const newfield = (order) => ({
       description: "",
       order,
     });
 
-    setOutcomeInputFields((currentState) => {
+    setInputFields((currentState) => {
       console.log(currentState);
       const { order: maxOrder } = _.maxBy(currentState, "order");
       console.log(maxOrder);
@@ -127,35 +115,34 @@ const OutcomeContainer = ({ course, formMethod }) => {
     });
   }
 
-  function handleAddOutcomeItem() {
+  function handleAddItem() {
     const hasEmptyItem = allTextInputRef.current
-      .filter((r) => r) // lọc các ref null(outcome bị xóa)
+      .filter((r) => r) // lọc các ref null(item bị xóa)
       .some((input) => input.state.value === "");
 
     if (!hasEmptyItem) {
       // kiểm tra item mới & cũ not empty => tạo item mới
-      handleIncreaseOutcome();
-      addOutcomeInputFields();
-      console.log(getValues("course_outcome"));
+      handleIncreaseItem();
+      addItemInputFields();
     }
   }
 
   return (
     <div className="goals-wrapper">
       <Row gutter={[0, 15]}>
-        {outcomeInputFields
+        {inputFields
           .sort((a, b) => a.order - b.order)
-          .map((outcome, i) => {
-            const { order, description } = outcome;
+          .map((item, i) => {
+            const { order, description } = item;
             return (
               <OutcomeItem
                 innerRef={(el) => (allTextInputRef.current[i] = el)}
                 key={order}
                 order={order}
-                onChangeItem={onChangeOutcome}
+                onChangeItem={onChangeItem}
                 defaultValue={description}
-                allowRemoveItem={allowRemoveOutcome}
-                onRemoveItem={onRemoveOutcomeItem}
+                allowRemoveItem={allowRemoveItem}
+                onRemoveItem={onRemoveItem}
                 placeholder="Ví dụ: Có kiến thức nền tảng tốt về ngôn ngữ lập trình để có thể học cao lên sau này"
               />
             );
@@ -165,7 +152,7 @@ const OutcomeContainer = ({ course, formMethod }) => {
       <Button
         type="link"
         className="add-response d-flex align-items-center"
-        onClick={() => handleAddOutcomeItem()}
+        onClick={() => handleAddItem()}
       >
         <FiPlus />
         Thêm câu trả lời cho những mục tiêu của khóa học

@@ -1,4 +1,3 @@
-import axios from "axios";
 import axiosClient from "../utils/axios";
 
 class Course {
@@ -57,9 +56,23 @@ class Course {
       .catch((error) => error.response);
   };
 
-  deleteCourseOutcome = async (id: string | number) => {
+  updateCourseRequirements = async (id: string | number, data: any) => {
     return axiosClient
-      .delete(`/course/update-course-outcome/${id}`)
+      .patch(`/course/update-course-requirements/${id}`, data)
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
+
+  deleteCourseOutcome = async (id: string | number, data: any) => {
+    return axiosClient
+      .delete(`/course/delete-course-outcome/${id}`, { data })
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
+
+  deleteCourseRequirements = async (id: string | number, data: any) => {
+    return axiosClient
+      .delete(`/course/delete-course-requirements/${id}`, { data })
       .then((res) => res)
       .catch((error) => error.response);
   };
