@@ -1,3 +1,4 @@
+import { Spin } from "antd";
 import styled from "styled-components";
 
 const LoadingWrapper = styled.div`
@@ -8,6 +9,6 @@ const LoadingWrapper = styled.div`
 `;
 
 const Loading = ({ children }) => {
-  return <LoadingWrapper>{children}</LoadingWrapper>;
+  return <LoadingWrapper>{children ? children : <Spin />}</LoadingWrapper>;
 };
 export default Loading;

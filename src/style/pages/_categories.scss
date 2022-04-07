@@ -1,5 +1,5 @@
 .main-categories {
-  padding: 2rem 0;
+  padding: 3rem;
   &__content {
     display: flex;
   }
@@ -190,53 +190,64 @@
     }
   }
 
-  .left-side {
+  .categories-box {
     flex: 0 0 34rem;
-    padding: 0 var(--spacing-2);
-    .categories-box {
-      // position: sticky;
-      top: calc(var(--spacing-2) + var(--height-nav));
-      .title {
+    padding: 0 var(--spacing-2) 0 0;
+    // position: sticky;
+    top: calc(var(--spacing-2) + var(--height-nav));
+    .title {
+      position: relative;
+      padding: 0 0 1.1rem;
+      display: block;
+      margin-bottom: 0px;
+      border-bottom: 1px solid #dcdacb;
+      h2 {
         position: relative;
-        padding: 0 0 1.1rem;
-        display: block;
-        margin-bottom: 0px;
-        border-bottom: 1px solid #dcdacb;
-        h2 {
-          position: relative;
-          color: var(--color-dark);
-          font-weight: 700;
-          font-size: 3.2rem;
-          font-family: Georgia, "Times New Roman", Times, serif;
-        }
-      }
-      .categories {
-        display: flex;
-        flex-direction: column;
-        padding: var(--spacing-1) 0 var(--spacing-2);
-        a {
-          position: relative;
-          color: var(--color-dark);
-          font-size: 1.4rem;
-          font-weight: 600;
-          padding: 1rem 15px;
-          border-radius: 4px;
-          margin-bottom: 7px;
-        }
-        a:hover,
-        a.active {
-          background-color: #002333;
-          color: #fff;
-        }
-      }
-      .all-category {
-        color: var(--color-muted);
-        font-size: 1.4rem;
-        margin-top: var(--spacing-1);
-        display: inline-block;
-        text-decoration: underline;
+        color: var(--color-dark);
+        font-weight: 700;
+        font-size: 3.2rem;
+        font-family: Georgia, "Times New Roman", Times, serif;
       }
     }
+    .categories {
+      display: flex;
+      flex-direction: column;
+      padding: var(--spacing-1) 0 var(--spacing-2);
+      a {
+        position: relative;
+        color: var(--color-dark);
+        font-size: 1.4rem;
+        font-weight: 600;
+        padding: 1rem 15px;
+        border-radius: 4px;
+        margin-bottom: 7px;
+      }
+      a:hover,
+      a.active {
+        background-color: #002333;
+        color: #fff;
+      }
+    }
+    .all-category {
+      color: var(--color-muted);
+      font-size: 1.4rem;
+      margin-top: var(--spacing-1);
+      display: inline-block;
+      text-decoration: underline;
+    }
+  }
+
+  // custom
+  // .course {
+  //   padding: 10px;
+  // }
+  .slick-list {
+    overflow: visible;
+    overflow-x: hidden;
+  }
+  .slick-slide {
+    padding: 0 8px;
+    box-sizing: border-box;
   }
 }
 

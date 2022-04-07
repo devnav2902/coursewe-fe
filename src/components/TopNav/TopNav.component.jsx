@@ -25,7 +25,7 @@ const TopNav = () => {
 
   const [displayCascader, setDisplayCascader] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [arrSlugCategory, setArrSlugCategory] = useState([]);
+
   useEffect(() => {
     CategoriesApi.get().then((res) => {
       const {
@@ -34,15 +34,6 @@ const TopNav = () => {
       setCategories(categories);
     });
   }, []);
-
-  useEffect(() => {
-    const slug = arrSlugCategory.reduce(
-      (result, cur) => (result += `${cur}/`),
-      ""
-    );
-
-    navigate(routesWithParams.categories(slug));
-  }, [arrSlugCategory]);
 
   const ShoppingCart = () => (
     <div className="shopping-cart">
@@ -56,8 +47,12 @@ const TopNav = () => {
   );
 
   function onChange(value) {
-    setArrSlugCategory(value);
     setDisplayCascader(false);
+
+    const arrParams = value;
+    const slug = arrParams.reduce((result, cur) => (result += `${cur}/`), "");
+
+    slug && navigate(routesWithParams.categories(slug));
   }
 
   return (
