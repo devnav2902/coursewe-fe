@@ -45,7 +45,6 @@ class User {
       .catch((error) => error.response);
   };
 }
-
 const UserApi = new User();
 
 export default UserApi;

@@ -25,6 +25,7 @@ import CheckoutPage from "../pages/checkout/page/checkout.page";
 import OverviewLayout from "../layouts/overview.layout";
 import CategoriesPage from "../pages/categories/pages/categories.page";
 import { Route } from "react-router-dom";
+import ProfileLayout from "../layouts/profile.layout";
 
 export type Routes = {
   exact?: boolean;
@@ -206,8 +207,13 @@ const routes: Routes[] = [
     private: true,
   },
   {
+    exact: true,
     path: ROUTES.PROFILE,
-    component: <ProfilePage />,
+    component: (
+      <ProfileLayout>
+        {(props: any) => <ProfilePage {...props} />}
+      </ProfileLayout>
+    ),
     private: true,
   },
   {
