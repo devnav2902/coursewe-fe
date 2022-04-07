@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Rating from "../../../components/Rating/Rating.component";
-import { routesWithParams } from "../../../utils/constants";
+import { BE_URL, ROUTES, routesWithParams } from "../../../utils/constants";
 import { Popover } from "antd";
 import { HeartOutlined } from "@ant-design/icons";
 import styled from "styled-components";
+import { isUrl, roundsTheNumber } from "../../../utils/functions";
 
 const StyledQuickViewBox = styled.div`
   .goal {
@@ -62,7 +63,20 @@ const quickViewBox = (
   </StyledQuickViewBox>
 );
 
-const CourseCardLarge = () => {
+const CourseCardLarge = ({ course }) => {
+  const {
+    title,
+    slug,
+    thumbnail,
+    rating_avg_rating,
+    rating_count,
+    subtitle,
+    author,
+    price,
+    instructional_level,
+    lecture_count,
+  } = course;
+
   return (
     <Popover
       getPopupContainer={(element) => element}
@@ -70,46 +84,50 @@ const CourseCardLarge = () => {
       content={quickViewBox}
       className="popover"
     >
-      <div>
-        <Link to={""} className="course-block">
+      <div className="course-block">
+        <Link to={routesWithParams.detail_course(slug)}>
           <div className="image">
             <div>
               <img
-                src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t39.30808-6/277248286_508260630778791_5425866134226774706_n.jpg?stp=dst-jpg_p526x296&_nc_cat=106&ccb=1-5&_nc_sid=8bfeb9&_nc_ohc=yrjevg8CcaUAX-ZeFjz&_nc_ht=scontent.fsgn5-6.fna&oh=00_AT9266guIkhWGugNdn683PlTQZuxFLXctSLYBOSlsKDN1A&oe=624C97FB"
-                alt="{{ $course->title }}"
+                src={isUrl(thumbnail) ? thumbnail : BE_URL + "/" + thumbnail}
+                alt={title}
               />
             </div>
           </div>
-          <div className="content d-flex">
-            <div className="content__left">
-              <h3 className="title truncate">
-                2022 Complete Python Bootcamp From Zero to Hero in Python
-              </h3>
-              <p className="subtitle">
-                Guide to Starting and Growing an Online Business
-              </p>
+        </Link>
+        <div className="content d-flex">
+          <div className="content__left">
+            <Link to={routesWithParams.detail_course(slug)}>
+              <h3 className="title truncate">{title}</h3>
+            </Link>
+            <p className="subtitle">{subtitle}</p>
 
-              <div className="author">
-                <Link to={routesWithParams.instructor_bio("...")}>
-                  Nguyen anh vu
-                </Link>
-              </div>
-
-              <div className="rating d-flex align-items-center">
-                <span className="value">5.0</span>
-                <Rating value={5} size={"13px"} />
-                <span className="amount">(200)</span>
-              </div>
-              <div className="course-info">
-                <span className="course-info__row">125 bài giảng</span>
-                <span className="course-info__row">Tất cả trình độ</span>
-              </div>
+            <div className="author">
+              <Link to={routesWithParams.instructor_bio(author.slug)}>
+                {author.fullname}
+              </Link>
             </div>
-            <div className="content__right">
-              <div className="price">1.299.000 đ</div>
+
+            <div className="rating d-flex align-items-center">
+              <span className="value">
+                {roundsTheNumber(rating_avg_rating, 1)}
+              </span>
+              <Rating value={rating_avg_rating} size={"13px"} />
+              <span className="amount">({rating_count})</span>
+            </div>
+            <div className="course-info">
+              <span className="course-info__row">
+                {lecture_count} bài giảng
+              </span>
+              <span className="course-info__row">
+                {instructional_level.level}
+              </span>
             </div>
           </div>
-        </Link>
+          <div className="content__right">
+            <div className="price">{price.format_price} đ</div>
+          </div>
+        </div>
       </div>
     </Popover>
   );
