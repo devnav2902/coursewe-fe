@@ -1,7 +1,6 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Rating from "../../../components/Rating/Rating.component";
-import { BE_URL, ROUTES, routesWithParams } from "../../../utils/constants";
+import { BE_URL, routesWithParams } from "../../../utils/constants";
 import { Popover } from "antd";
 import { HeartOutlined } from "@ant-design/icons";
 import styled from "styled-components";
@@ -108,13 +107,15 @@ const CourseCardLarge = ({ course }) => {
               </Link>
             </div>
 
-            <div className="rating d-flex align-items-center">
-              <span className="value">
-                {roundsTheNumber(rating_avg_rating, 1)}
-              </span>
-              <Rating value={rating_avg_rating} size={"13px"} />
-              <span className="amount">({rating_count})</span>
-            </div>
+            {rating_avg_rating && (
+              <div className="rating d-flex align-items-center">
+                <span className="value">
+                  {roundsTheNumber(rating_avg_rating, 1)}
+                </span>
+                <Rating value={rating_avg_rating} size={"13px"} />
+                <span className="amount">({rating_count})</span>
+              </div>
+            )}
             <div className="course-info">
               <span className="course-info__row">
                 {lecture_count} bài giảng
