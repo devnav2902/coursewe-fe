@@ -1,5 +1,5 @@
-import { Radio, Row, Checkbox, Collapse, Pagination, Spin } from "antd";
-import React, { useEffect, useState } from "react";
+import { Radio, Checkbox, Collapse, Pagination } from "antd";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Rating from "../../../components/Rating/Rating.component";
 import { routesWithParams } from "../../../utils/constants";
@@ -10,31 +10,34 @@ import CoursesBeginner from "../components/CoursesBeginner.component";
 import FeaturedCourses from "../components/FeaturedCourses.component";
 import PopularInstructors from "../components/PopularInstructors.component";
 import CategoriesApi from "../../../api/categories.api";
-import Loading from "../../../components/Loading/Loading.component";
 import { Skeleton } from "antd";
+import FilterItemLevels from "../components/FilterItemLevels.component";
+import { getCategorySlug } from "../utils/functions";
 
 const { Panel } = Collapse;
 const { Option } = Select;
 
 const CategoriesPage = () => {
-  const params = useParams();
+  const { slug, sub, topic } = useParams();
 
   // STATE
   const [dataCategory, setDataCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [displaySkeletonCourses, setDisplaySkeletonCourses] = useState(true);
-  console.log(dataCategory);
+  console.log(displaySkeletonCourses);
   // EFFECT
   useEffect(() => {
-    const keys = Object.keys(params);
+    const params = { slug, sub, topic };
 
-    const categorySlug = params[keys.at(-1)];
+    setDisplaySkeletonCourses(true);
+    const slugCategory = getCategorySlug(params);
 
-    CategoriesApi.getCoursesByCategorySlug(categorySlug).then((res) => {
+    CategoriesApi.getCoursesByCategorySlug(slugCategory).then((res) => {
       setDataCategory(res.data.courses);
       setDisplaySkeletonCourses(false);
+      setCurrentPage(1);
     });
-  }, [params]);
+  }, [slug, sub, topic]);
   // console.log(params);
 
   const SkeletonCourses = function () {
@@ -146,30 +149,7 @@ const CategoriesPage = () => {
                 </Collapse>
               </div>
             </div>
-            <div className="filter-item">
-              <div className="filter-item__content">
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  expandIconPosition="right"
-                  bordered={false}
-                >
-                  <Panel header={<b>Cấp độ</b>} key="1">
-                    <Checkbox>
-                      Tất cả cấp độ <span className="amount">(223)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      Beginner <span className="amount">(23)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      Intermediate <span className="amount">(14)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      Expert <span className="amount">(22)</span>
-                    </Checkbox>
-                  </Panel>
-                </Collapse>
-              </div>
-            </div>
+            <FilterItemLevels />
             <div className="filter-item">
               <div className="filter-item__content">
                 <Collapse
