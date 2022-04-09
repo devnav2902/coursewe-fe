@@ -21,9 +21,15 @@ const CategoriesPage = () => {
 
   // STATE
   const [dataCategory, setDataCategory] = useState(null);
+  const [dataAmountCoursesByTypesPrice, setDataAmountCoursesByTypesPrice] =
+    useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [displaySkeletonCourses, setDisplaySkeletonCourses] = useState(true);
-  console.log(dataCategory);
+  const [
+    getValueAmountCoursesByTypesPrice,
+    setgetValueAmountCoursesByTypesPrice,
+  ] = useState(null);
+  // console.log(dataCategory);
   // EFFECT
   useEffect(() => {
     const keys = Object.keys(params);
@@ -34,9 +40,14 @@ const CategoriesPage = () => {
       setDataCategory(res.data.courses);
       setDisplaySkeletonCourses(false);
     });
+    CategoriesApi.getAmountCoursesByTypesPrice(categorySlug).then((res) => {
+      console.log(res.data);
+      setDataAmountCoursesByTypesPrice(res.data.amountCoursesByTypesPrice);
+    });
   }, [params]);
   // console.log(params);
-
+  if (!dataAmountCoursesByTypesPrice) return null;
+  const { free, paid } = dataAmountCoursesByTypesPrice;
   const SkeletonCourses = function () {
     return Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} active />);
   };
@@ -51,6 +62,16 @@ const CategoriesPage = () => {
         setDataCategory(data.courses);
       });
   }
+  // console.log(dataCategory);
+  function onChange(checkedValues) {
+    console.log("checked = ", checkedValues);
+    setgetValueAmountCoursesByTypesPrice(checkedValues);
+  }
+  const options = [
+    { label: "Miễn phí" + " (" + free.amount + ")", value: 0 },
+    { label: "Trả phí" + " (" + paid.amount + ")", value: "Paid" },
+  ];
+  console.log(options);
 
   return (
     <div className="main-categories">
@@ -178,12 +199,18 @@ const CategoriesPage = () => {
                   bordered={false}
                 >
                   <Panel header={<b>Giá bán</b>} key="1">
-                    <Checkbox>
-                      Trả phí <span className="amount">(14)</span>
+                    <Checkbox.Group
+                      options={options}
+                      defaultValue={["Apple"]}
+                      onChange={onChange}
+                    />
+
+                    {/* <Checkbox>
+                      Trả phí <span className="amount">{free}</span>
                     </Checkbox>
                     <Checkbox>
-                      Miễn phí <span className="amount">(22)</span>
-                    </Checkbox>
+                      Miễn phí <span className="amount">{paid}</span>
+                    </Checkbox> */}
                   </Panel>
                 </Collapse>
               </div>

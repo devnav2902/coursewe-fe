@@ -14,6 +14,12 @@ class Categories {
       .then((res) => res)
       .catch((error) => error.response);
   };
+  getAmountCoursesByTypesPrice = async (slug: string) => {
+    return axiosClient
+      .get(`/categories/types-price/${slug}`)
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
 }
 const CategoriesApi = new Categories();
 export default CategoriesApi;
