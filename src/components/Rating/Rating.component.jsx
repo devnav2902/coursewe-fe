@@ -13,6 +13,12 @@ const RatingWrapper = styled.div`
       margin-right: 3px;
     }
   }
+  .ant-rate-star-zero {
+    .ant-rate-star-first,
+    .ant-rate-star-second {
+      color: #e7c9c9;
+    }
+  }
 `;
 
 const Rating = ({ value, disabled = true, size }) => {

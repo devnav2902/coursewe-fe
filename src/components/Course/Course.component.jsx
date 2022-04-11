@@ -1,14 +1,25 @@
 import { Link } from "react-router-dom";
 import Rating from "../Rating/Rating.component";
 import { routesWithParams } from "../../utils/constants";
-import { Popover } from "antd";
+import { Col, Popover } from "antd";
 import { HeartOutlined } from "@ant-design/icons";
 import styled from "styled-components";
+import { roundsTheNumber } from "../../utils/functions";
+import { BiCheck } from "react-icons/bi";
 
 const StyledQuickViewBox = styled.div`
+  max-width: 340px;
+  width: 100%;
   .title {
     font-size: 22px;
     font-weight: bold;
+    color: #1c1d1f;
+    line-height: 1;
+    margin-bottom: 1rem;
+    display: block;
+    &:hover {
+      color: #401b9c;
+    }
   }
   .level {
     color: #6a6f73;
@@ -23,7 +34,6 @@ const StyledQuickViewBox = styled.div`
   }
   .desc,
   .list-items {
-    width: 340px;
     line-height: 1.4;
     font-size: 14px;
   }
@@ -65,6 +75,7 @@ const StyledCourse = styled.div`
     overflow: hidden;
     aspect-ratio: 16/9;
     position: relative;
+    border-radius: 5px;
     &::before {
       position: absolute;
       transition: 0.2s all;
@@ -97,11 +108,11 @@ const StyledCourse = styled.div`
       }
     }
   }
-  .course-info {
+  /* .course-info {
     padding-top: 5px;
-  }
+  } */
   .rating {
-    margin-bottom: 0.6rem;
+    /* margin-bottom: 0.6rem; */
     color: #b4690e;
     .avg-rating {
       vertical-align: middle;
@@ -117,31 +128,42 @@ const StyledCourse = styled.div`
     }
   }
   .price {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
   .author {
     font-size: 1.3rem;
     color: var(--color-muted);
-    text-decoration: underline;
   }
 `;
 
 const Course = ({ course }) => {
-  const { title, slug, thumbnail, rating_avg_rating, rating_count } = course;
-
+  const {
+    title,
+    slug,
+    thumbnail,
+    rating_avg_rating,
+    rating_count,
+    author,
+    price,
+    instructional_level,
+    subtitle,
+    course_outcome,
+  } = course;
+  // console.log(course);
   const quickViewBox = (
     <StyledQuickViewBox>
-      <div className="title">{title}</div>
-      <div className="level">Beginner Level</div>
-      <div className="desc">
-        Learn how to use SELECT, FROM, WHERE, GROUP BY, HAVING and ORDER in SQL
-        Server. Create views+procedures. Export in Excel
-      </div>
+      <Link to={routesWithParams.detail_course(slug)} className="title">
+        {title}
+      </Link>
+      <div className="level">{instructional_level.level}</div>
+      <div className="desc">{subtitle}</div>
       <div className="list-items">
-        <li>Build your own SQL Server SELECT statements.</li>
-        <li>Build your own SQL Server SELECT statements.</li>
-        <li>Build your own SQL Server SELECT statements.</li>
-        <li>Build your own SQL Server SELECT statements.</li>
+        {course_outcome.map((outcome) => (
+          <Col key={outcome.id} className="align-items-center d-flex">
+            <BiCheck className="mr-1" fontSize={18} />
+            <span>{outcome.description}</span>
+          </Col>
+        ))}
       </div>
       <div className="quick-view-footer d-flex align-item-center">
         <button className="btn btn-color-default">Thêm vào giỏ hàng</button>
@@ -168,35 +190,32 @@ const Course = ({ course }) => {
             <div className="name-course truncate">
               <Link to={routesWithParams.detail_course(slug)}>{title}</Link>
             </div>
-            {/* <Link
-          to="{{ route('instructor', ['slug' => $course->author->slug]) }}"
-          className="author"
-        >
-          { $course->author->fullname }
-        </Link> */}
+            <Link
+              to={routesWithParams.instructor_bio(author.slug)}
+              className="author"
+            >
+              {author.fullname}
+            </Link>
             <div className="course-info">
               {rating_avg_rating && (
                 <div className="rating">
                   <span className="avg-rating">
-                    {parseFloat(rating_avg_rating).toFixed(1)}
+                    {roundsTheNumber(rating_avg_rating, 1)}
                   </span>
                   <Rating
                     size="12px"
                     value={rating_avg_rating}
                     disabled={true}
                   />
-                  {/* @if (!empty($course->rating_count)) */}
+
                   <span className="count">({rating_count})</span>
-                  {/* @endif */}
                 </div>
               )}
 
-              <h4 className="price ">
-                {/* @if ($course->price->price == 0.0)
-          Free
-        @else
-          ${{ $course->price->price }}
-        @endif */}
+              <h4 className="price">
+                {parseInt(price.original_price) === 0
+                  ? "Miễn phí"
+                  : `${price.format_price} đ`}
               </h4>
             </div>
           </div>
