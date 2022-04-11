@@ -1,20 +1,17 @@
-import { Checkbox, Col, Collapse, Skeleton } from "antd";
+import { Checkbox, Col, Collapse, Empty, Skeleton } from "antd";
 import { memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import InstructionalLevelApi from "../../../api/instructionalLevel.api";
+import CategoriesApi from "../../../api/categories.api";
 import { getCategorySlug } from "../utils/functions";
 
 const { Panel } = Collapse;
 
-const FilterItemLevels = () => {
+const FilterItemTopics = () => {
   const { slug, sub, topic } = useParams();
   console.log(slug, sub, topic);
 
   // STATE
-  const [
-    amountCoursesByInstructionalLevel,
-    setAmountCoursesByInstructionalLevel,
-  ] = useState([]);
+  const [amountCoursesInTopics, setAmountCoursesInTopics] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
   // EFFECT
@@ -23,12 +20,10 @@ const FilterItemLevels = () => {
     const categorySlug = getCategorySlug(params);
 
     setLoaded(false);
-    InstructionalLevelApi.amountCoursesByInstructionalLevel(categorySlug).then(
-      (res) => {
-        setAmountCoursesByInstructionalLevel(res.data);
-        setLoaded(true);
-      }
-    );
+    CategoriesApi.amountCoursesInTopics(categorySlug).then((res) => {
+      setAmountCoursesInTopics(res.data.topicsWithCourses);
+      setLoaded(true);
+    });
   }, [slug, sub, topic]);
 
   return (
@@ -39,14 +34,16 @@ const FilterItemLevels = () => {
           expandIconPosition="right"
           bordered={false}
         >
-          <Panel header={<b>Cấp độ</b>} key="1">
+          <Panel header={<b>Chủ đề</b>} key="1">
             {!loaded ? (
               <Skeleton active />
+            ) : !amountCoursesInTopics.length ? (
+              <Empty description="Chưa có chủ đề" />
             ) : (
-              amountCoursesByInstructionalLevel.map((item) => (
-                <Col key={item.id} className="mb-1">
+              amountCoursesInTopics.map((item) => (
+                <Col key={item.category_id} className="mb-1">
                   <Checkbox>
-                    {item.name} <span className="amount">({item.amount})</span>
+                    {item.title} <span className="amount">({item.amount})</span>
                   </Checkbox>
                 </Col>
               ))
@@ -58,4 +55,4 @@ const FilterItemLevels = () => {
   );
 };
 
-export default memo(FilterItemLevels);
+export default memo(FilterItemTopics);

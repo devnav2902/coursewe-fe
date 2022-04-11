@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import Rating from "../../../components/Rating/Rating.component";
 import { BE_URL, routesWithParams } from "../../../utils/constants";
-import { Popover } from "antd";
+import { Col, Popover } from "antd";
 import { HeartOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { isUrl, roundsTheNumber } from "../../../utils/functions";
+import { BiCheck } from "react-icons/bi";
 
 const StyledQuickViewBox = styled.div`
   .goal {
@@ -42,26 +43,6 @@ const StyledQuickViewBox = styled.div`
   }
 `;
 
-const quickViewBox = (
-  <StyledQuickViewBox>
-    <div className="goal">Bạn sẽ nhận được</div>
-    <div className="list-items">
-      <li>Build your own SQL Server SELECT statements.</li>
-      <li>Build your own SQL Server SELECT statements.</li>
-      <li>Build your own SQL Server SELECT statements.</li>
-      <li>Build your own SQL Server SELECT statements.</li>
-    </div>
-    <div className="quick-view-footer d-flex align-item-center">
-      <button className="btn-color-default add-to-cart btn">
-        Thêm vào giỏ hàng
-      </button>
-      <button className="toggle-wishlist">
-        <HeartOutlined style={{ fontSize: "20px", color: "#000" }} />
-      </button>
-    </div>
-  </StyledQuickViewBox>
-);
-
 const CourseCardLarge = ({ course }) => {
   const {
     title,
@@ -74,7 +55,30 @@ const CourseCardLarge = ({ course }) => {
     price,
     instructional_level,
     lecture_count,
+    course_outcome,
   } = course;
+
+  const quickViewBox = (
+    <StyledQuickViewBox>
+      <div className="goal">Lợi ích từ khoá học</div>
+      <div className="list-items">
+        {course_outcome.map((outcome) => (
+          <Col key={outcome.id} className="align-items-center d-flex">
+            <BiCheck className="mr-1" fontSize={18} />
+            <span>{outcome.description}</span>
+          </Col>
+        ))}
+      </div>
+      <div className="quick-view-footer d-flex align-item-center">
+        <button className="btn-color-default add-to-cart btn">
+          Thêm vào giỏ hàng
+        </button>
+        <button className="toggle-wishlist">
+          <HeartOutlined style={{ fontSize: "20px", color: "#000" }} />
+        </button>
+      </div>
+    </StyledQuickViewBox>
+  );
 
   return (
     <Popover
@@ -86,12 +90,10 @@ const CourseCardLarge = ({ course }) => {
       <div className="course-block">
         <Link to={routesWithParams.detail_course(slug)}>
           <div className="image">
-            <div>
-              <img
-                src={isUrl(thumbnail) ? thumbnail : BE_URL + "/" + thumbnail}
-                alt={title}
-              />
-            </div>
+            <img
+              src={isUrl(thumbnail) ? thumbnail : BE_URL + "/" + thumbnail}
+              alt={title}
+            />
           </div>
         </Link>
         <div className="content d-flex">
