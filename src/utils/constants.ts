@@ -25,8 +25,8 @@ enum ROUTES {
   "ADMIN_REVIEW" = "/admin/submission-courses-list",
   "CHECKOUT" = "/cart/checkout",
   "CATEGORIES" = "/courses/:slug",
-  "SUBCATEGORIES" = ":sub",
-  "TOPICS" = ":sub/:topic",
+  "SUBCATEGORIES" = "/courses/:slug/:sub",
+  "TOPICS" = "/courses/:slug/:sub/:topic",
 }
 
 const routesWithParams = {
