@@ -1,6 +1,13 @@
 import axiosClient from "../utils/axios";
 
 class Course {
+  getLatestCourses = async () => {
+    return axiosClient
+      .get("/course/latest")
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
+
   getCourseBySlug = async (slug: string) => {
     return axiosClient
       .post("/course", { slug })
