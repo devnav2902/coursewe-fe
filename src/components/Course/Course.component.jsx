@@ -6,15 +6,15 @@ import { HeartOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { roundsTheNumber } from "../../utils/functions";
 import { BiCheck } from "react-icons/bi";
+import { useState } from "react";
 
 const StyledQuickViewBox = styled.div`
-  max-width: 340px;
-  width: 100%;
+  width: 340px;
   .title {
     font-size: 22px;
     font-weight: bold;
     color: #1c1d1f;
-    line-height: 1;
+    line-height: 1.4;
     margin-bottom: 1rem;
     display: block;
     &:hover {
@@ -62,7 +62,8 @@ const StyledCourse = styled.div`
   .course {
     position: relative;
   }
-  .course:hover {
+  .course:hover,
+  .course.hovered {
     .image-course {
       &::before {
         background-color: rgba(63, 60, 60, 0.267);
@@ -149,7 +150,7 @@ const Course = ({ course }) => {
     subtitle,
     course_outcome,
   } = course;
-  // console.log(course);
+
   const quickViewBox = (
     <StyledQuickViewBox>
       <Link to={routesWithParams.detail_course(slug)} className="title">
@@ -174,16 +175,24 @@ const Course = ({ course }) => {
     </StyledQuickViewBox>
   );
 
+  const [mouseEnter, setMouseEnter] = useState(false);
+
   return (
     <Popover
       className="popover"
       placement="right"
-      getPopupContainer={(element) => element}
       content={quickViewBox}
+      onVisibleChange={(visible) => {
+        if (visible) setMouseEnter(true);
+        else setMouseEnter(false);
+      }}
     >
       <StyledCourse>
-        <div className="course">
-          <Link to="/" className="image-course">
+        <div className={`course${mouseEnter ? " hovered" : ""}`}>
+          <Link
+            to={routesWithParams.detail_course(slug)}
+            className="image-course"
+          >
             <img src={thumbnail} alt={title} />
           </Link>
           <div className="profile-course">
