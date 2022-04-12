@@ -9,7 +9,7 @@ enum ROUTES {
   "CART" = "/cart",
   "CREATE_COURSE" = "/create-course",
   "INSTRUCTOR_BIO" = "/instructor/profile/:slug",
-  "DETAIL_COURSE" = "/course/:slug",
+  "DETAIL_COURSE" = "/khoa-hoc/:slug",
   "INSTRUCTOR_COURSES" = "/instructor/courses",
   "USER_COURSES" = "/user/courses",
   "OVERVIEW" = "/instructor/overview",
@@ -30,7 +30,7 @@ enum ROUTES {
 }
 
 const routesWithParams = {
-  detail_course: (slug: string) => `/course/${slug}`,
+  detail_course: (slug: string) => `/khoa-hoc/${slug}`,
   instructor_bio: (slug: string) => `/instructor/profile/${slug}`,
   course_draft: (id: number) => `/course/draft/${id}`,
   course_basics: (id: string) => `/instructor/course/${id}/basics`,
