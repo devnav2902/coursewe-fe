@@ -7,7 +7,6 @@ import { Col, Collapse, Row, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { BiCheck } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import CourseApi from "../../../api/course.api";
 import Loading from "../../../components/Loading/Loading.component";
