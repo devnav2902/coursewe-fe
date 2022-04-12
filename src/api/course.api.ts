@@ -1,6 +1,13 @@
 import axiosClient from "../utils/axios";
 
 class Course {
+  bestSellingCourses = async () => {
+    return axiosClient
+      .get("/course/best-selling")
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
+
   getLatestCourses = async () => {
     return axiosClient
       .get("/course/latest")
