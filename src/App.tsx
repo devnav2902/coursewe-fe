@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import routes from "./routes/allRoutes";
 import { Routes as IRoutes } from "./routes/allRoutes";
-import TopNav from "./components/TopNav/TopNav.component";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getCurrentUser, login } from "./redux/actions/account.actions";
@@ -21,7 +20,6 @@ function App(): JSX.Element {
   return (
     <>
       <BrowserRouter>
-        {/* <TopNav /> */}
         <Routes>
           {routes.map((route: IRoutes, idx: number) => {
             if (route.redirectIfAuthenticated && user.profile) {

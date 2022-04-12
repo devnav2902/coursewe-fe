@@ -7,6 +7,13 @@ class InstructionalLevel {
       .then((res) => res)
       .catch((error) => error.response);
   };
+
+  amountCoursesByInstructionalLevel = async (slug: string) => {
+    return axiosClient
+      .get(`/instructional-level/amount-courses/${slug}`)
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
 }
 
 const InstructionalLevelApi = new InstructionalLevel();

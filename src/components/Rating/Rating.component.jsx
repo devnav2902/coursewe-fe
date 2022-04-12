@@ -13,12 +13,23 @@ const RatingWrapper = styled.div`
       margin-right: 3px;
     }
   }
+  .ant-rate-star-zero {
+    .ant-rate-star-first,
+    .ant-rate-star-second {
+      color: #e7c9c9;
+    }
+  }
+  .ant-rate-star-half {
+    .ant-rate-star-second {
+      color: #e7c9c9;
+    }
+  }
 `;
 
 const Rating = ({ value, disabled = true, size }) => {
   return (
     <RatingWrapper size={size}>
-      <Rate allowHalf disabled={disabled} defaultValue={value} />
+      <Rate allowHalf disabled={disabled} defaultValue={parseFloat(value)} />
     </RatingWrapper>
   );
 };

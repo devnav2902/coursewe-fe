@@ -1,7 +1,6 @@
-import { Radio, Row, Checkbox, Collapse, Pagination, Spin } from "antd";
-import React, { useEffect, useState } from "react";
+import { Checkbox, Collapse, Pagination, Empty, Row } from "antd";
+import { memo, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Rating from "../../../components/Rating/Rating.component";
 import { routesWithParams } from "../../../utils/constants";
 
 import { Select } from "antd";
@@ -10,14 +9,17 @@ import CoursesBeginner from "../components/CoursesBeginner.component";
 import FeaturedCourses from "../components/FeaturedCourses.component";
 import PopularInstructors from "../components/PopularInstructors.component";
 import CategoriesApi from "../../../api/categories.api";
-import Loading from "../../../components/Loading/Loading.component";
 import { Skeleton } from "antd";
+import FilterItemLevels from "../components/FilterItemLevels.component";
+import { getCategorySlug } from "../utils/functions";
+import FilterItemTopics from "../components/FilterItemTopics.component";
+import FilterItemRating from "../components/FilterItemRating.component";
 
 const { Panel } = Collapse;
 const { Option } = Select;
 
 const CategoriesPage = () => {
-  const params = useParams();
+  const { slug, sub, topic } = useParams();
 
   // STATE
   const [dataCategory, setDataCategory] = useState(null);
@@ -30,15 +32,18 @@ const CategoriesPage = () => {
     setgetValueAmountCoursesByTypesPrice,
   ] = useState(null);
   // console.log(dataCategory);
+  console.log("categories page render");
   // EFFECT
   useEffect(() => {
-    const keys = Object.keys(params);
+    const params = { slug, sub, topic };
 
-    const categorySlug = params[keys.at(-1)];
+    setDisplaySkeletonCourses(true);
+    const slugCategory = getCategorySlug(params);
 
-    CategoriesApi.getCoursesByCategorySlug(categorySlug).then((res) => {
+    CategoriesApi.getCoursesByCategorySlug(slugCategory).then((res) => {
       setDataCategory(res.data.courses);
       setDisplaySkeletonCourses(false);
+      setCurrentPage(1);
     });
     CategoriesApi.getAmountCoursesByTypesPrice(categorySlug).then((res) => {
       console.log(res.data);
@@ -48,6 +53,8 @@ const CategoriesPage = () => {
   // console.log(params);
   if (!dataAmountCoursesByTypesPrice) return null;
   const { free, paid } = dataAmountCoursesByTypesPrice;
+  // }, [slug, sub, topic]);
+
   const SkeletonCourses = function () {
     return Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} active />);
   };
@@ -87,110 +94,9 @@ const CategoriesPage = () => {
       <div className="main-categories__content">
         <div className="categories-box">
           <div className="categories-filter">
-            <div className="filter-item">
-              <div className="filter-item__content">
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  expandIconPosition="right"
-                  bordered={false}
-                >
-                  <Panel header={<b>Đánh giá</b>} key="1">
-                    <Radio value={1}>
-                      <Rating value={4.5} size={"13px"} />
-                      4.5 trở lên
-                      <span className="amount">(446)</span>
-                    </Radio>
-                    <Radio value={1}>
-                      <Rating value={4} size={"13px"} />
-                      4.0 trở lên
-                      <span className="amount">(446)</span>
-                    </Radio>
-                    <Radio value={1}>
-                      <Rating value={3.5} size={"13px"} />
-                      3.5 trở lên
-                      <span className="amount">(446)</span>
-                    </Radio>
-                    <Radio value={1}>
-                      <Rating value={3} size={"13px"} />
-                      3.0 trở lên
-                      <span className="amount">(446)</span>
-                    </Radio>
-                  </Panel>
-                </Collapse>
-              </div>
-            </div>
-            <div className="filter-item">
-              <div className="filter-item__content">
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  expandIconPosition="right"
-                  bordered={false}
-                >
-                  <Panel header={<b>Chủ đề</b>} key="1">
-                    <Checkbox>
-                      Javascript <span className="amount">(223)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      HTML/CSS <span className="amount">(23)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      REACTJS <span className="amount">(14)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      LARAVEL <span className="amount">(22)</span>
-                    </Checkbox>
-                  </Panel>
-                </Collapse>
-              </div>
-            </div>
-            <div className="filter-item">
-              <div className="filter-item__content">
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  expandIconPosition="right"
-                  bordered={false}
-                >
-                  <Panel header={<b>Danh mục</b>} key="1">
-                    <Checkbox>
-                      Lập trình web <span className="amount">(223)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      Data science <span className="amount">(23)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      Game development <span className="amount">(14)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      Software engineering <span className="amount">(22)</span>
-                    </Checkbox>
-                  </Panel>
-                </Collapse>
-              </div>
-            </div>
-            <div className="filter-item">
-              <div className="filter-item__content">
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  expandIconPosition="right"
-                  bordered={false}
-                >
-                  <Panel header={<b>Cấp độ</b>} key="1">
-                    <Checkbox>
-                      Tất cả cấp độ <span className="amount">(223)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      Beginner <span className="amount">(23)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      Intermediate <span className="amount">(14)</span>
-                    </Checkbox>
-                    <Checkbox>
-                      Expert <span className="amount">(22)</span>
-                    </Checkbox>
-                  </Panel>
-                </Collapse>
-              </div>
-            </div>
+            <FilterItemRating />
+            <FilterItemTopics />
+            <FilterItemLevels />
             <div className="filter-item">
               <div className="filter-item__content">
                 <Collapse
@@ -219,17 +125,21 @@ const CategoriesPage = () => {
         </div>
 
         <div className="category-page-container">
-          <div className="all-courses">
-            {displaySkeletonCourses ? (
-              <SkeletonCourses />
-            ) : (
-              dataCategory.data.map((course) => (
+          {displaySkeletonCourses ? (
+            <SkeletonCourses />
+          ) : !dataCategory.total ? (
+            <Row justify="center">
+              <Empty description="Hiện chưa có khóa học nào!" />
+            </Row>
+          ) : (
+            <div className="all-courses">
+              {dataCategory.data.map((course) => (
                 <CourseCardLarge key={course.id} course={course} />
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
 
-          {dataCategory && (
+          {!dataCategory?.total ? null : (
             <Pagination
               className="mt-auto ml-auto"
               pageSize={dataCategory.per_page}
@@ -244,4 +154,4 @@ const CategoriesPage = () => {
   );
 };
 
-export default CategoriesPage;
+export default memo(CategoriesPage);

@@ -39,7 +39,6 @@ export type Routes = {
 
 const routes: Routes[] = [
   {
-    exact: true,
     path: "/",
     component: (
       <BasicLayout>
@@ -48,35 +47,30 @@ const routes: Routes[] = [
     ),
   },
   {
-    path: ROUTES.CATEGORIES,
-    nested: (
-      <>
-        <Route
-          path={ROUTES.SUBCATEGORIES}
-          element={
-            <BasicLayout>
-              <CategoriesPage />
-            </BasicLayout>
-          }
-        />
-        <Route
-          path={ROUTES.TOPICS}
-          element={
-            <BasicLayout>
-              <CategoriesPage />
-            </BasicLayout>
-          }
-        />
-      </>
-    ),
+    path: ROUTES.SUBCATEGORIES,
     component: (
-      <BasicLayout>
+      <BasicLayout key={ROUTES.SUBCATEGORIES}>
         <CategoriesPage />
       </BasicLayout>
     ),
   },
   {
-    exact: true,
+    path: ROUTES.TOPICS,
+    component: (
+      <BasicLayout key={ROUTES.TOPICS}>
+        <CategoriesPage />
+      </BasicLayout>
+    ),
+  },
+  {
+    path: ROUTES.CATEGORIES,
+    component: (
+      <BasicLayout key={ROUTES.CATEGORIES}>
+        <CategoriesPage />
+      </BasicLayout>
+    ),
+  },
+  {
     path: ROUTES.COURSE_BASICS,
     component: (
       <InstructorCourseLayout>
@@ -87,7 +81,6 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    exact: true,
     path: ROUTES.PRICE,
     component: (
       <InstructorCourseLayout>
@@ -97,7 +90,6 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    exact: true,
     path: ROUTES.INTENDED_LEARNERS,
     component: (
       <InstructorCourseLayout>
@@ -107,7 +99,6 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    exact: true,
     path: ROUTES.CURRICULUM,
     component: (
       <InstructorCourseLayout>
@@ -117,7 +108,6 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    exact: true,
     path: ROUTES.LEARNING,
     component: (
       <BasicLayout>
@@ -135,7 +125,6 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    exact: true,
     path: ROUTES.INSTRUCTOR_COURSES,
     component: (
       <OverviewLayout>
@@ -145,7 +134,6 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    exact: true,
     path: ROUTES.INSTRUCTOR_BIO,
     component: (
       <BasicLayout>

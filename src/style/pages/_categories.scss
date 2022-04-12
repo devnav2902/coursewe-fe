@@ -122,6 +122,7 @@
       flex-grow: 1;
       &__right {
         margin-left: auto;
+        flex-shrink: 0;
       }
       &__left {
         margin-right: 2rem;

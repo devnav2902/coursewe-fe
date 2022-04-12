@@ -1,3 +1,5 @@
+import { BE_URL } from "./constants";
+
 const getAccessToken = (): string | null => {
   return localStorage.getItem("access_token");
 };
@@ -16,4 +18,13 @@ const roundsTheNumber = (value: string | number, fractionDigits: number) => {
 
 const isUrl = (link: string) => (link.indexOf("http") > -1 ? true : false);
 
-export { getAccessToken, getDataFromLocalStorage, roundsTheNumber, isUrl };
+const linkThumbnail = (link: string) =>
+  isUrl(link) ? link : BE_URL + "/" + link;
+
+export {
+  getAccessToken,
+  getDataFromLocalStorage,
+  roundsTheNumber,
+  isUrl,
+  linkThumbnail,
+};

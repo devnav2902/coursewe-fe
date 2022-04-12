@@ -1,5 +1,322 @@
+.detail-course {
+  position: relative;
+}
 .course-content {
   width: 100%;
+  position: relative;
+  max-width: calc(100% - 40rem);
+}
+.main-lesson {
+  &__content {
+    background: linear-gradient(to right, #fcd8a8, #f3dabb, #fde9d0);
+  }
+  &__head {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: auto;
+    // overflow: hidden;
+  }
+
+  .nav-top {
+    display: none;
+    background-color: #000;
+    color: #fff;
+    &.nav-top-fixed {
+      display: block;
+    }
+  }
+  .info-course {
+    .title {
+      font-weight: bold;
+    }
+    .rating-content {
+      margin-top: 0.5rem;
+      > span:not(:last-child) {
+        color: #b9770b !important;
+      }
+      span {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  .head-content {
+    flex-grow: 1;
+    padding-right: 4rem;
+    position: relative;
+    z-index: 20;
+    &::after,
+    &::before {
+      position: absolute;
+      content: "";
+      border-radius: 50%;
+      z-index: -1;
+    }
+    &::after {
+      top: 32%;
+      left: 56%;
+      width: 115px;
+      height: 115px;
+      background-color: #f5d7b2;
+    }
+    &::before {
+      width: 256px;
+      height: 256px;
+      top: -100px;
+      left: 70%;
+      background-color: #f3d6b1;
+    }
+  }
+
+  .title {
+    h1 {
+      margin-bottom: 1rem;
+      color: #77562b;
+      line-height: 1.3;
+      font-size: 3.8rem;
+    }
+  }
+
+  .rating-content {
+    margin-top: 1.5rem;
+    line-height: 1;
+    > span {
+      &:not(:last-child) {
+        color: #b9770b;
+      }
+      font-weight: bold;
+      font-size: 1.6rem;
+      margin-right: 3px;
+      display: inline-block;
+    }
+    > div {
+      margin: 0 0.5rem;
+    }
+    .rating-count {
+      color: #8e7557 !important;
+      margin-right: 1rem;
+    }
+
+    span i {
+      font-size: 1.3rem;
+      transform: translateY(-1px);
+    }
+  }
+
+  // video info boxed
+  .video-info-boxed {
+    position: relative;
+    padding-top: 25px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h6 {
+      position: relative;
+      color: #000;
+      font-weight: 700;
+      margin-bottom: var(--spacing-1);
+    }
+    .info-author {
+      display: flex;
+      align-items: center;
+    }
+    .authors {
+      a {
+        color: var(--color-dark);
+        font-size: 1.4rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .follow {
+      position: relative;
+      margin-left: 1.6rem;
+    }
+    .follow a {
+      position: relative;
+      color: var(--color-blue);
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .social-box .share {
+      position: relative;
+      color: #000;
+      font-size: 1.6rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: var(--spacing-1);
+    }
+    .social-box li {
+      position: relative;
+      margin: 0px 4px;
+      display: inline-block;
+    }
+    .social-box svg {
+      position: relative;
+      font-size: 24px;
+      color: var(--color-blue);
+      text-align: center;
+    }
+  }
+
+  .head-sidebar {
+    flex: 0 0 36rem;
+    &.fixed {
+      .widget-content {
+        position: fixed !important;
+        top: 2rem;
+        z-index: 201;
+        .intro-video {
+          display: none;
+        }
+      }
+    }
+    .widget-content {
+      transition: all 0.2s;
+      border-radius: 15px;
+      width: 36rem;
+      z-index: 23;
+      position: absolute;
+      overflow: hidden;
+      background-color: var(--color-white);
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    }
+    .intro-video {
+      position: relative;
+      text-align: center;
+      display: block;
+      overflow: hidden;
+      padding: 6rem 0px 3rem;
+      background-repeat: no-repeat;
+      background-size: cover;
+      cursor: pointer;
+    }
+    .intro-video-play {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .intro-video h4 {
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.5rem;
+      margin-top: var(--spacing-2);
+      text-transform: capitalize;
+      position: relative;
+      z-index: 11;
+    }
+    .intro-video-box {
+      background-color: #fff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 20;
+      font-size: 24px;
+
+      svg {
+        padding-left: 3px;
+        color: black;
+      }
+    }
+    .intro-video:before {
+      position: absolute;
+      content: "";
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      bottom: 0px;
+      background-color: rgba(95, 32, 32, 0.6);
+    }
+    .media-play-symbol {
+      position: static;
+      transform: translate(0);
+    }
+    .media-play-symbol,
+    .media-play-symbol::after,
+    .media-play-symbol::before {
+      width: 4rem;
+      height: 4rem;
+      background: #fff;
+    }
+    .media-play-symbol::after,
+    .media-play-symbol::before {
+      animation: ripple2 3s infinite;
+    }
+    .media-play-symbol::after {
+      animation-delay: 0.3s;
+    }
+    .media-play-symbol::before {
+      animation-delay: 0.6s;
+    }
+    .media-icon {
+      font-size: 1.4rem;
+      color: var(--color-red);
+      z-index: 12;
+    }
+    @keyframes ripple2 {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 40%);
+      }
+      50% {
+        box-shadow: 0 0 0 70px rgba(255, 255, 255, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+      }
+    }
+    .infor-course {
+      padding: 1.5rem 2rem;
+      h4 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      li {
+        font-size: 14px;
+        padding: 5px 10px 5px;
+      }
+    }
+    .widget-content .price {
+      position: relative;
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      font-size: 3.2rem;
+      color: #3c3b37;
+      padding: 1.5rem 2rem;
+    }
+    .sale-off {
+      text-decoration: line-through;
+      margin: 0 10px;
+      color: rgb(99, 98, 98);
+    }
+    .original-price.sale-off,
+    .discount {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .time-left {
+      position: relative;
+      color: var(--color-muted);
+      font-size: 1.4rem;
+      margin-top: var(--spacing-1);
+      margin-bottom: var(--spacing-2);
+      text-align: center;
+      font-weight: 500;
+    }
+  }
 }
 .main-lesson .main-content {
   display: flex;
@@ -7,10 +324,6 @@
   width: 100%;
   max-width: 1200px;
   margin: auto;
-  .title {
-    color: var(--color-dark);
-    font-size: 2.4rem;
-  }
 
   .course-info {
     &__item {
@@ -33,30 +346,6 @@
     }
   }
 
-  .rating-content {
-    margin-top: 1.5rem;
-    > span {
-      &:not(:last-child) {
-        color: var(--color-yellow);
-      }
-      font-weight: 600;
-      font-size: 1.6rem;
-      margin-right: 3px;
-      display: inline-block;
-    }
-    > div {
-      margin: 0 0.5rem;
-    }
-    .rating-count {
-      color: rgba(67, 78, 80, 0.781) !important;
-      margin-right: 1rem;
-    }
-
-    span i {
-      font-size: 1.3rem;
-      transform: translateY(-1px);
-    }
-  }
   .video-box {
     position: relative;
     overflow: hidden;
@@ -92,73 +381,6 @@
     bottom: 0px;
     z-index: 10;
     background-color: rgba(0, 0, 0, 0.02);
-  }
-
-  // video info boxed
-  .video-info-boxed {
-    position: relative;
-    padding-top: 25px;
-    margin-bottom: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    h6 {
-      position: relative;
-      color: var(--color-dark);
-      font-weight: 700;
-      margin-bottom: var(--spacing-1);
-    }
-    .info-author {
-      display: flex;
-      align-items: center;
-    }
-    .authors {
-      a {
-        color: var(--color-red);
-        font-size: 1.4rem;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-      }
-    }
-    .user-image {
-      margin-right: var(--spacing-1);
-      width: 3rem;
-      height: 3rem;
-      overflow: hidden;
-      border-radius: 50%;
-      border: 2px solid var(--color-white);
-    }
-    .follow {
-      position: relative;
-      margin-left: 1.6rem;
-    }
-    .follow a {
-      position: relative;
-      color: var(--color-blue);
-      font-size: 1.4rem;
-      font-weight: 700;
-    }
-    .social-box .share {
-      position: relative;
-      color: var(--color-muted);
-      font-size: 1.6rem;
-      font-weight: 700;
-      display: block;
-      margin-bottom: var(--spacing-1);
-    }
-    .social-box li {
-      position: relative;
-      margin: 0px 4px;
-      display: inline-block;
-    }
-    .social-box svg {
-      position: relative;
-      font-size: 24px;
-      color: var(--color-blue);
-      text-align: center;
-    }
   }
 
   .class-detail-content {
@@ -491,151 +713,6 @@
     }
   }
 
-  &__sidebar {
-    flex: 0 0 360px;
-    margin-left: 4rem;
-    .sticky-top {
-      position: sticky;
-      top: calc(var(--spacing-2) + var(--height-nav));
-    }
-    .widget-content {
-      overflow: hidden;
-      background-color: var(--color-white);
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-    }
-    .intro-video {
-      position: relative;
-      text-align: center;
-      display: block;
-      overflow: hidden;
-      padding: 6rem 0px 3rem;
-      background-repeat: no-repeat;
-      background-size: cover;
-      cursor: pointer;
-    }
-    .intro-video-play {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .intro-video h4 {
-      color: #fff;
-      font-weight: 800;
-      font-size: 1.5rem;
-      margin-top: var(--spacing-2);
-      text-transform: capitalize;
-      position: relative;
-      z-index: 11;
-    }
-    .intro-video-box {
-      background-color: #fff;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 20;
-      font-size: 24px;
-
-      svg {
-        padding-left: 3px;
-        color: black;
-      }
-    }
-    .intro-video:before {
-      position: absolute;
-      content: "";
-      left: 0px;
-      top: 0px;
-      right: 0px;
-      z-index: 10;
-      width: 100%;
-      height: 100%;
-      bottom: 0px;
-      background-color: rgba(95, 32, 32, 0.6);
-    }
-    .media-play-symbol {
-      position: static;
-      transform: translate(0);
-    }
-    .media-play-symbol,
-    .media-play-symbol::after,
-    .media-play-symbol::before {
-      width: 4rem;
-      height: 4rem;
-      background: #fff;
-    }
-    .media-play-symbol::after,
-    .media-play-symbol::before {
-      animation: ripple2 3s infinite;
-    }
-    .media-play-symbol::after {
-      animation-delay: 0.3s;
-    }
-    .media-play-symbol::before {
-      animation-delay: 0.6s;
-    }
-    .media-icon {
-      font-size: 1.4rem;
-      color: var(--color-red);
-      z-index: 12;
-    }
-    @keyframes ripple2 {
-      0% {
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 40%);
-      }
-      50% {
-        box-shadow: 0 0 0 70px rgba(255, 255, 255, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-      }
-    }
-    .infor-course {
-      padding: 1.5rem 2rem;
-      h4 {
-        font-size: 16px;
-        font-weight: 700;
-        margin-bottom: 1rem;
-      }
-      li {
-        font-size: 14px;
-        padding: 5px 10px 5px;
-      }
-    }
-    .widget-content .price {
-      position: relative;
-      display: flex;
-      align-items: center;
-      font-weight: 700;
-      font-size: 3.2rem;
-      color: #3c3b37;
-      padding: 1.5rem 2rem;
-    }
-    .sale-off {
-      text-decoration: line-through;
-      margin: 0 10px;
-      color: rgb(99, 98, 98);
-    }
-    .original-price.sale-off,
-    .discount {
-      font-size: 18px;
-      font-weight: 500;
-    }
-
-    .time-left {
-      position: relative;
-      color: var(--color-muted);
-      font-size: 1.4rem;
-      margin-top: var(--spacing-1);
-      margin-bottom: var(--spacing-2);
-      text-align: center;
-      font-weight: 500;
-    }
-  }
-
   .coupon {
     margin-bottom: 2rem;
     &-wrapper {
@@ -782,6 +859,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    .react-player {
+      aspect-ratio: 16/9;
+    }
     .video {
       max-width: 600px;
       width: 100%;
@@ -798,71 +878,20 @@
           }
         }
         .video-top-right {
-          i {
-            padding: 1rem;
+          svg {
+            font-size: 18px;
             cursor: pointer;
             color: #fff;
+            &:hover {
+              color: rgb(228, 217, 217);
+            }
           }
         }
       }
       h4 {
-        padding-bottom: 5rem;
+        margin-bottom: 2rem;
         font-size: 2rem;
-
         color: #fff;
-      }
-      .video-js {
-        text-align: center;
-        width: 100%;
-        height: 250px;
-        margin-bottom: 2rem;
-      }
-      h3 {
-        color: #fff;
-        margin-bottom: 2rem;
-      }
-      .list-video {
-        color: #fff;
-        width: 100%;
-        li {
-          padding: 1rem;
-          width: 600px;
-          display: flex;
-          margin-bottom: 2rem;
-          align-items: center;
-          width: 100%;
-          height: 60px;
-          .image-video {
-            flex: 1rem;
-            img {
-              object-fit: cover;
-              height: 100%;
-              width: 90px;
-              height: 60px;
-            }
-          }
-          .li-mid {
-            flex-grow: 3;
-            font-size: 1.6rem;
-            text-align: center;
-            font-weight: 700;
-            i {
-              margin-right: 0.5rem;
-
-              text-align: center;
-            }
-          }
-          .duration {
-            flex: 1;
-            text-align: end;
-            font-size: 1.3rem;
-            font-weight: 700;
-          }
-        }
-        .focus-li-video {
-          background-color: #3e4143;
-          height: 73px;
-        }
       }
     }
   }
