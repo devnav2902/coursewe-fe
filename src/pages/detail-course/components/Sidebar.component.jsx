@@ -2,19 +2,16 @@ import {
   CaretRightOutlined,
   CloseOutlined,
   DesktopOutlined,
-  HeartOutlined,
-  LoadingOutlined,
   StarFilled,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Col, Rate, Row, Spin } from "antd";
+import { Row } from "antd";
 import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player/lazy";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import Rating from "../../../components/Rating/Rating.component";
+import CartButton from "../../../components/CartButton/CartButton.component";
+import WishlistButton from "../../../components/WishlistButton/WishlistButton.component";
 import { addToCart, removeFromCart } from "../../../redux/actions/cart.actions";
-import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail, roundsTheNumber } from "../../../utils/functions";
 
 const Sidebar = ({ course }) => {
@@ -45,8 +42,6 @@ const Sidebar = ({ course }) => {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  console.log(offset);
 
   const resource_count = lecture.reduce(
     (total, item) => (total += item.resource_count),
@@ -148,31 +143,8 @@ const Sidebar = ({ course }) => {
               </a>
             @elseif (!$isFree && !$isPurchased) */}
             <div className="d-flex align-items-center btn-wrapper">
-              {cartData.loading ? (
-                <div className="btn btn-cart">
-                  <Spin
-                    indicator={<LoadingOutlined style={{ color: "#fff" }} />}
-                  />
-                </div>
-              ) : existedCourseInCart(course.id) ? (
-                <Link to={ROUTES.CART} className="btn btn-cart">
-                  Xem trong giỏ hàng
-                </Link>
-              ) : (
-                <div
-                  className="btn btn-cart"
-                  onClick={() => handleAddToCart(course.id)}
-                >
-                  Thêm vào giỏ hàng
-                </div>
-              )}
-
-              <Link
-                to={"/"}
-                className="d-flex align-items-center justify-content-center btn-wishlist"
-              >
-                <HeartOutlined style={{ fontSize: "20px", color: "#000" }} />
-              </Link>
+              <CartButton course={course} />
+              <WishlistButton course={course} />
             </div>
 
             <button data-course="{{ $course->id }}" className="buy" id="buy">
