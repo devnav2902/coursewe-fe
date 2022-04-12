@@ -1,24 +1,24 @@
-import { Skeleton } from "antd";
 import { useEffect, useState } from "react";
-import Slider from "react-slick";
-import CourseApi from "../../../api/course.api";
 import Course from "../../../components/Course/Course.component";
+import Slider from "react-slick";
 import { settings } from "../utils/slick.utils";
+import { Skeleton } from "antd";
+import CourseApi from "../../../api/course.api";
 
-const LatestCourses = () => {
+const BestSellingCourses = () => {
   const [courses, setCourses] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    CourseApi.getLatestCourses().then((res) => {
-      setCourses(res.data.latestCourses);
+    CourseApi.bestSellingCourses().then((res) => {
+      setCourses(res.data.courses);
       setLoaded(true);
     });
   }, []);
 
   return (
-    <div className="list-courses mb-3">
-      <h2 className="fw-bold">Mới ra mắt</h2>
+    <div className="list-courses">
+      <h2 className="fw-bold">Bán chạy nhất</h2>
 
       <div className="data">
         {!loaded ? (
@@ -35,4 +35,4 @@ const LatestCourses = () => {
   );
 };
 
-export default LatestCourses;
+export default BestSellingCourses;
