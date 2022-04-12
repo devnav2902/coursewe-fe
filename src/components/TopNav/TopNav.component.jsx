@@ -1,15 +1,42 @@
-import { useDispatch, useSelector } from "react-redux";
-import { BE_URL, ROUTES, routesWithParams } from "../../utils/constants";
-import { Link, useNavigate } from "react-router-dom";
 import {
   BellOutlined,
-  ShoppingOutlined,
   SearchOutlined,
+  ShoppingOutlined,
 } from "@ant-design/icons";
-import { Cascader, Dropdown } from "antd";
-import { logout } from "../../redux/actions/account.actions";
+import { Avatar, Badge, Cascader, Dropdown, List, Popover } from "antd";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import CategoriesApi from "../../api/categories.api";
+import { logout } from "../../redux/actions/account.actions";
+import { BE_URL, ROUTES, routesWithParams } from "../../utils/constants";
+import { linkThumbnail } from "../../utils/functions";
+
+const StyledCart = styled.div`
+  .notification-badge {
+    background-color: #e260f3;
+  }
+`;
+
+const StyledListItems = styled.div`
+  width: 32rem;
+
+  .ant-spin-nested-loading {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+
+  .price,
+  .author {
+    color: #000;
+  }
+
+  .author {
+    color: #a08c8c;
+    font-size: 1.3rem;
+  }
+`;
 
 const TopNav = () => {
   const user = useSelector((state) => state.user);
@@ -35,14 +62,75 @@ const TopNav = () => {
     });
   }, []);
 
-  const ShoppingCart = () => (
-    <div className="shopping-cart">
-      <Link to={ROUTES.CART} className="link">
-        <ShoppingOutlined style={{ fontSize: 18 }} />
-        {!cart.length ? null : (
-          <span className="notification-badge">{cart.length}</span>
+  const content = (
+    <StyledListItems>
+      <List
+        footer={
+          <div>
+            <div className="total fw-bold mb-1">Tổng cộng: 200</div>
+            <Link to={ROUTES.CART} className="btn btn-color-default w-100">
+              Xem trong giỏ hàng
+            </Link>
+          </div>
+        }
+        dataSource={cart}
+        itemLayout="horizontal"
+        renderItem={(item) => (
+          <List.Item>
+            <List.Item.Meta
+              avatar={
+                <a href={routesWithParams.detail_course(item.slug)}>
+                  <Avatar
+                    size={70}
+                    shape="square"
+                    src={linkThumbnail(item.thumbnail)}
+                  />
+                </a>
+              }
+              title={
+                <a
+                  className="fw-bold"
+                  href={routesWithParams.detail_course(item.slug)}
+                >
+                  {item.title}
+                </a>
+              }
+              description={
+                <a href={routesWithParams.detail_course(item.slug)}>
+                  <span className="d-block author">{item.author.fullname}</span>
+                  <span className="fw-bold d-block price">
+                    <span className="original-price"> 156.000 đ</span>
+                    {/* <span className="discount"></span> */}
+                  </span>
+                </a>
+              }
+            />
+          </List.Item>
         )}
-      </Link>
+      />
+    </StyledListItems>
+  );
+
+  const ShoppingCart = () => (
+    <div className="shopping-cart mr-3">
+      <Popover
+        placement="bottom"
+        content={content}
+        getPopupContainer={(e) => e}
+      >
+        <StyledCart>
+          <Link to={ROUTES.CART} className="link">
+            <Badge
+              color="#e260f3"
+              count={cart.length}
+              offset={[5, 2]}
+              title={`${cart.length} khóa học trong giỏ hàng`}
+            >
+              <ShoppingOutlined style={{ fontSize: 20 }} />
+            </Badge>
+          </Link>
+        </StyledCart>
+      </Popover>
     </div>
   );
 
