@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import Course from "../../../components/Course/Course.component";
 import Slider from "react-slick";
-import { settings } from "../utils/slick.utils";
-import { Skeleton } from "antd";
 import CourseApi from "../../../api/course.api";
+import Course from "../../../components/Course/Course.component";
+import { SkeletonCourses } from "../../../components/SkeletonCourses/SkeletonCourses.component";
+import { settings } from "../utils/slick.utils";
 
 const BestSellingCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -22,7 +22,7 @@ const BestSellingCourses = () => {
 
       <div className="data">
         {!loaded ? (
-          <Skeleton active />
+          <SkeletonCourses amount={5} />
         ) : (
           <Slider {...settings}>
             {courses.map((course) => (

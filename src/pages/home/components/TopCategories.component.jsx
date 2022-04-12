@@ -1,13 +1,12 @@
-import { Skeleton } from "antd";
+import { Tabs } from "antd";
 import { useEffect, useState } from "react";
 import Slider from "react-slick";
-import Course from "../../../components/Course/Course.component";
 import styled from "styled-components";
-import { Tabs } from "antd";
 import CategoriesApi from "../../../api/categories.api";
-import FeaturedCourseTab from "./FeaturedCourseTab.component";
+import Course from "../../../components/Course/Course.component";
+import { SkeletonCourses } from "../../../components/SkeletonCourses/SkeletonCourses.component";
 import { settings } from "../utils/slick.utils";
-import { SkeletonCourses } from "../utils/component.utils";
+import FeaturedCourseTab from "./FeaturedCourseTab.component";
 
 const StyledTabs = styled.div`
   .ant-tabs {
@@ -95,13 +94,13 @@ const TopCategories = () => {
       <h2 className="fw-bold">Khóa học nổi bật</h2>
 
       {!loadedFeaturedCategories ? (
-        <Skeleton active />
+        <SkeletonCourses amount={5} />
       ) : (
         <StyledTabs>
           <Tabs defaultActiveKey="all" onChange={onChangeTab}>
             <TabPane tab="Tất cả" key="all">
               {!loadedFeaturedCourses ? (
-                <SkeletonCourses />
+                <SkeletonCourses amount={5} />
               ) : (
                 <Slider {...settings}>
                   {featuredCourses.map((course) => (
