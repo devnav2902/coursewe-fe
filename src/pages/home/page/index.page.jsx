@@ -1,5 +1,3 @@
-import { Col, Row } from "antd";
-import Course from "../../../components/Course/Course.component";
 import BestSellingCourses from "../components/BestSellingCourses.component";
 import LatestCourses from "../components/LatestCourses.component";
 import TopCategories from "../components/TopCategories.component";
