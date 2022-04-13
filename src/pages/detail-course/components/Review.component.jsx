@@ -3,11 +3,12 @@ import Rating from "../../../components/Rating/Rating.component";
 import { BE_URL } from "../../../utils/constants";
 import { isUrl } from "../../../utils/functions";
 
-const Review = ({ reviews, hasPurchased, hasCommented }) => {
+const Review = ({ reviews }) => {
   return (
     <div className="review-comments-box">
       {/* && $course->count_progress */}
-      {!hasCommented && hasPurchased && (
+
+      {/* {!hasCommented && hasPurchased && (
         <>
           <div id="message-comment"></div>
           <form
@@ -42,7 +43,7 @@ const Review = ({ reviews, hasPurchased, hasCommented }) => {
             </div>
           </form>
         </>
-      )}
+      )} */}
 
       {reviews && (
         <>
@@ -90,8 +91,6 @@ const Review = ({ reviews, hasPurchased, hasCommented }) => {
               );
             })}
           </div>
-
-          {/* $course->rating->links()  */}
         </>
       )}
     </div>
