@@ -171,7 +171,12 @@
 .circle-img {
   border-radius: 50%;
 }
-
+.cursor-pointer {
+  cursor: pointer;
+}
+.underline {
+  text-decoration: underline;
+}
 .pd-2 {
   padding: var(--spacing-2);
 }
