@@ -66,12 +66,14 @@ const TopNav = () => {
     <StyledListItems>
       <List
         footer={
-          <div>
-            <div className="total fw-bold mb-1">Tổng cộng: 200</div>
-            <Link to={ROUTES.CART} className="btn btn-color-default w-100">
-              Xem trong giỏ hàng
-            </Link>
-          </div>
+          !cart.length ? null : (
+            <div>
+              <div className="total fw-bold mb-1">Tổng cộng: 200</div>
+              <Link to={ROUTES.CART} className="btn btn-color-default w-100">
+                Xem trong giỏ hàng
+              </Link>
+            </div>
+          )
         }
         dataSource={cart}
         itemLayout="horizontal"
