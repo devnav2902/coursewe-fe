@@ -23,8 +23,6 @@ const { Panel } = Collapse;
 const DetailCoursePage = () => {
   const [course, setCourse] = useState(null);
   const [graph, setGraph] = useState(null);
-  const [hasPurchased, setHasPurchased] = useState(false);
-  const [hasCommented, setHasCommented] = useState(false);
 
   const { slug } = useParams();
 
@@ -34,8 +32,6 @@ const DetailCoursePage = () => {
 
       setCourse(data.course);
       setGraph(data.graph);
-      setHasCommented(data.hasCommented);
-      setHasPurchased(data.hasPurchased);
     });
   }, []);
 
@@ -199,11 +195,7 @@ const DetailCoursePage = () => {
                     />
                   )}
 
-                  <Review
-                    reviews={rating}
-                    hasCommented={hasCommented}
-                    hasPurchased={hasPurchased}
-                  />
+                  <Review reviews={rating} />
                 </div>
               </div>
             </div>
