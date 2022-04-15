@@ -169,7 +169,7 @@
       .widget-content {
         position: fixed !important;
         top: 2rem;
-        z-index: 201;
+        z-index: 9901;
         .intro-video {
           display: none;
         }
@@ -284,7 +284,7 @@
       }
       li {
         font-size: 14px;
-        padding: 5px 10px 5px;
+        padding: 5px 0;
       }
     }
     .widget-content .price {
@@ -712,58 +712,12 @@
       color: var(--color-red);
     }
   }
-
-  .coupon {
-    margin-bottom: 2rem;
-    &-wrapper {
-      display: flex;
-      align-items: center;
-      height: 40px;
-      padding: 20px;
-      input {
-        height: inherit;
-        outline: none;
-        flex-grow: 1;
-        border: 1px solid #000;
-        padding: 0 2rem;
-      }
-      button {
-        background-color: rgba(0, 0, 0, 0.836);
-        color: #fff;
-        padding: 0 3rem;
-        border: none;
-        height: inherit;
-        &:hover {
-          background-color: #000;
-        }
-      }
-    }
-
-    .coupon-code {
-      align-items: center;
-      padding: 1rem 2rem;
-    }
-    button#remove {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: transparent;
-      font-size: 17px;
-      margin-right: 1em;
-    }
-    .warning {
-      font-size: 14px;
-      padding: 1rem 2rem;
-      color: rgb(253, 80, 80);
-    }
-  }
 }
 
 .buttons-box {
   text-align: center;
   padding: 0 2rem 2rem;
   .buy,
-  .btn,
   .enroll {
     width: 100%;
     height: 4.8rem;
@@ -785,25 +739,8 @@
   }
   .btn-wrapper {
     margin-bottom: 1rem;
-    .btn-wishlist {
-      margin-left: 1rem;
-      max-width: 50px;
-      width: 100%;
-      border: 1px solid #000;
-      height: 4.8rem;
-    }
   }
-  .btn-cart {
-    background-color: #e260f3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
-    color: #fff;
-    &:hover {
-      background-color: #ce5edd;
-    }
-  }
   .purchase-course {
     .txt {
       display: inline-block;

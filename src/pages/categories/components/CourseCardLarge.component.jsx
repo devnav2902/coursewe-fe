@@ -1,11 +1,12 @@
-import { Link } from "react-router-dom";
-import Rating from "../../../components/Rating/Rating.component";
-import { BE_URL, routesWithParams } from "../../../utils/constants";
 import { Col, Popover } from "antd";
-import { HeartOutlined } from "@ant-design/icons";
-import styled from "styled-components";
-import { isUrl, roundsTheNumber } from "../../../utils/functions";
 import { BiCheck } from "react-icons/bi";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import CartButton from "../../../components/CartButton/CartButton.component";
+import Rating from "../../../components/Rating/Rating.component";
+import WishlistButton from "../../../components/WishlistButton/WishlistButton.component";
+import { BE_URL, routesWithParams } from "../../../utils/constants";
+import { isUrl, roundsTheNumber } from "../../../utils/functions";
 
 const StyledQuickViewBox = styled.div`
   .goal {
@@ -70,12 +71,8 @@ const CourseCardLarge = ({ course }) => {
         ))}
       </div>
       <div className="quick-view-footer d-flex align-item-center">
-        <button className="btn-color-default add-to-cart btn">
-          Thêm vào giỏ hàng
-        </button>
-        <button className="toggle-wishlist">
-          <HeartOutlined style={{ fontSize: "20px", color: "#000" }} />
-        </button>
+        <CartButton course={course} />
+        <WishlistButton course={course} />
       </div>
     </StyledQuickViewBox>
   );

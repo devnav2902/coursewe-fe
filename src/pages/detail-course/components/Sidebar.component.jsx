@@ -2,20 +2,29 @@ import {
   CaretRightOutlined,
   CloseOutlined,
   DesktopOutlined,
-  HeartOutlined,
-  LoadingOutlined,
   StarFilled,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Col, Rate, Row, Spin } from "antd";
-import React, { useEffect, useState } from "react";
+import { Row } from "antd";
+import { useEffect, useState } from "react";
+import { BiInfinite } from "react-icons/bi";
 import ReactPlayer from "react-player/lazy";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import Rating from "../../../components/Rating/Rating.component";
-import { addToCart, removeFromCart } from "../../../redux/actions/cart.actions";
-import { ROUTES } from "../../../utils/constants";
+import CourseApi from "../../../api/course.api";
+import CartButton from "../../../components/CartButton/CartButton.component";
+import WishlistButton from "../../../components/WishlistButton/WishlistButton.component";
 import { linkThumbnail, roundsTheNumber } from "../../../utils/functions";
+import styled from "styled-components";
+import CouponAndGift from "./CouponAndGift.component";
+
+const StyledGoToCourseBtn = styled.div`
+  .btn {
+    color: #fff;
+    background-color: var(--color-blue);
+    &:hover {
+      background-color: #4082cf;
+    }
+  }
+`;
 
 const Sidebar = ({ course }) => {
   const {
@@ -28,15 +37,13 @@ const Sidebar = ({ course }) => {
     rating_count,
     course_bill_count,
   } = course;
-
-  const dispatch = useDispatch();
-  const cartData = useSelector((state) => state.cart);
-
+  console.log(course);
   const [handleVideo, setHandleVideo] = useState({
     displayVideo: false,
     playingVideo: false,
   });
   const [offset, setOffset] = useState(0);
+  const [hasPurchased, setHasPurchased] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setOffset(window.pageYOffset);
@@ -46,24 +53,16 @@ const Sidebar = ({ course }) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  console.log(offset);
+  useEffect(() => {
+    CourseApi.userHasPurchased(course.id).then((res) => {
+      setHasPurchased(res.data.hasPurchased);
+    });
+  }, []);
 
   const resource_count = lecture.reduce(
     (total, item) => (total += item.resource_count),
     0
   );
-
-  function handleAddToCart(id) {
-    dispatch(addToCart(id));
-  }
-
-  function handleRemoveFromCart(id) {
-    dispatch(removeFromCart(id));
-  }
-
-  function existedCourseInCart(id) {
-    cartData.cart.some((course) => course.id === id);
-  }
 
   function hideVideoDemo() {
     setHandleVideo((state) => ({ ...state, displayVideo: false }));
@@ -79,7 +78,11 @@ const Sidebar = ({ course }) => {
 
   return (
     <>
-      <nav className={`nav-top${offset >= 400 ? " nav-top-fixed" : ""}`}>
+      <nav
+        className={`nav-top${
+          offset >= 400 && !hasPurchased ? " nav-top-fixed" : ""
+        }`}
+      >
         <Row align="middle" className="h-100">
           <div className="info-course">
             <div className="title">{title}</div>
@@ -97,7 +100,11 @@ const Sidebar = ({ course }) => {
           </div>
         </Row>
       </nav>
-      <div className={`head-sidebar${offset >= 400 ? " fixed" : ""}`}>
+      <div
+        className={`head-sidebar${
+          offset >= 400 && !hasPurchased ? " fixed" : ""
+        }`}
+      >
         <div className="widget-content">
           <div
             onClick={displayVideoDemo}
@@ -114,9 +121,15 @@ const Sidebar = ({ course }) => {
             <h4>Xem thử</h4>
           </div>
 
-          <div className="price">
-            <span className="original-price">150.000 đ</span>
-            {/* @if (empty($coupon))
+          {hasPurchased ? (
+            <StyledGoToCourseBtn className="pd-2">
+              <div className="btn w-100">Đi đến khóa học</div>
+            </StyledGoToCourseBtn>
+          ) : (
+            <>
+              <div className="price">
+                <span className="original-price">150.000 đ</span>
+                {/* @if (empty($coupon))
               <span className="original-price">
                 @if ($course->price->price == 0.0)
                   Free
@@ -139,46 +152,23 @@ const Sidebar = ({ course }) => {
                 <span className="discount">{{ $saleOff }}% off</span>
               @endif
             @endif */}
-          </div>
+              </div>
 
-          <div className="buttons-box">
-            {/* @if (Auth::check() && ($globalUser->role->name === 'admin' || $globalUser->id === $course->author_id))
+              <div className="buttons-box">
+                {/* @if (Auth::check() && ($globalUser->role->name === 'admin' || $globalUser->id === $course->author_id))
               <a href='{{ route('learning', ['url' => $course->slug]) }}' className='theme-btn btn-style-one'>
                 <span className='txt'>Xem</span>
               </a>
             @elseif (!$isFree && !$isPurchased) */}
-            <div className="d-flex align-items-center btn-wrapper">
-              {cartData.loading ? (
-                <div className="btn btn-cart">
-                  <Spin
-                    indicator={<LoadingOutlined style={{ color: "#fff" }} />}
-                  />
+                <div className="d-flex align-items-center btn-wrapper">
+                  <CartButton course={course} />
+                  <WishlistButton course={course} />
                 </div>
-              ) : existedCourseInCart(course.id) ? (
-                <Link to={ROUTES.CART} className="btn btn-cart">
-                  Xem trong giỏ hàng
-                </Link>
-              ) : (
-                <div
-                  className="btn btn-cart"
-                  onClick={() => handleAddToCart(course.id)}
-                >
-                  Thêm vào giỏ hàng
-                </div>
-              )}
 
-              <Link
-                to={"/"}
-                className="d-flex align-items-center justify-content-center btn-wishlist"
-              >
-                <HeartOutlined style={{ fontSize: "20px", color: "#000" }} />
-              </Link>
-            </div>
-
-            <button data-course="{{ $course->id }}" className="buy" id="buy">
-              Mua ngay
-            </button>
-            {/* @else
+                <button className="buy" id="buy">
+                  Mua ngay
+                </button>
+                {/* @else
               @if ($isPurchased)
                 <a href='{{ route('learning', ['url' => $course->slug]) }}' className="enroll">
                   Vào học
@@ -198,53 +188,36 @@ const Sidebar = ({ course }) => {
                 @endif
               @endif
             @endif */}
-          </div>
+              </div>
 
-          <div className="infor-course">
-            <h4>Khóa học gồm có:</h4>
-            {!resource_count ? null : (
-              <li>{resource_count}&nbsp;tài liệu học tập</li>
-            )}
-            <li>
-              <VideoCameraOutlined className="mr-1" /> {section_count} chương
-              học
-            </li>
-            <li>
-              <DesktopOutlined className="mr-1" /> {lecture_count} bài giảng
-            </li>
-          </div>
+              <div className="infor-course">
+                <h4>Khóa học này bao gồm:</h4>
+                {!resource_count ? null : (
+                  <li className="d-flex align-items-center">
+                    {resource_count}&nbsp;tài liệu học tập
+                  </li>
+                )}
+                <li className="d-flex align-items-center">
+                  <VideoCameraOutlined className="mr-1" /> {section_count}{" "}
+                  chương học
+                </li>
+                <li className="d-flex align-items-center">
+                  <DesktopOutlined className="mr-1" /> {lecture_count} bài giảng
+                </li>
+                <li className="d-flex align-items-center">
+                  <BiInfinite className="mr-1" /> Học online trọn đời
+                </li>
+              </div>
+
+              <CouponAndGift />
+            </>
+          )}
 
           {/* @if ($course->price->price !== 0.0)
             <form action="" id="coupon-form" method="POST" className="coupon">
               @csrf
 
-              @if (empty($globalUser))
-                <div className="coupon-wrapper">
-                  <input name="coupon-input" placeholder="Enter Coupon" type="text">
-                  <button id="apply" type="submit">Apply</button>
-                </div>
-              @else
-                @if (!$isPurchased && $globalUser->id !== $course->author_id)
-                  <div className="coupon-wrapper">
-                    <input name="coupon-input" placeholder="Enter Coupon" type="text">
-                    <button id="apply" type="submit">Apply</button>
-                  </div>
-                @endif
-              @endif
-
-              @if (Request::method() == 'POST')
-                @if (empty($coupon))
-                  <p className="warning">Mã code vừa nhập không chính xác, vui lòng thử lại.
-                  </p>
-                @else
-                  <div className="coupon-code d-flex">
-                    <button id="remove" type="button" onclick="location.href = location.href">
-                      <i className="fas fa-times"></i>
-                    </button>
-                    <p><b>{{ $coupon->code }}</b> đã được áp dụng</p>
-                  </div>
-                @endif
-              @endif
+              
             </form>
           @endif */}
         </div>

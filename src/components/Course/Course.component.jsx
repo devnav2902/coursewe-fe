@@ -1,12 +1,13 @@
-import { Link } from "react-router-dom";
-import Rating from "../Rating/Rating.component";
-import { routesWithParams } from "../../utils/constants";
 import { Col, Popover } from "antd";
-import { HeartOutlined } from "@ant-design/icons";
-import styled from "styled-components";
-import { roundsTheNumber } from "../../utils/functions";
-import { BiCheck } from "react-icons/bi";
 import { useState } from "react";
+import { BiCheck } from "react-icons/bi";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { routesWithParams } from "../../utils/constants";
+import { roundsTheNumber } from "../../utils/functions";
+import CartButton from "../CartButton/CartButton.component";
+import Rating from "../Rating/Rating.component";
+import WishlistButton from "../WishlistButton/WishlistButton.component";
 
 const StyledQuickViewBox = styled.div`
   width: 340px;
@@ -36,25 +37,6 @@ const StyledQuickViewBox = styled.div`
   .list-items {
     line-height: 1.4;
     font-size: 14px;
-  }
-  .btn {
-    font-weight: bold;
-    font-size: 16px;
-  }
-  .toggle-wishlist {
-    width: 5rem;
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 0.8rem;
-    border-radius: 50%;
-    border: 1px solid #000;
-    flex-shrink: 0;
-
-    &:hover {
-      background-color: #e9e7e7;
-    }
   }
 `;
 
@@ -167,10 +149,12 @@ const Course = ({ course }) => {
         ))}
       </div>
       <div className="quick-view-footer d-flex align-item-center">
-        <button className="btn btn-color-default">Thêm vào giỏ hàng</button>
-        <button className="toggle-wishlist">
+        <CartButton course={course} />
+        <WishlistButton course={course} />
+
+        {/* <button className="toggle-wishlist">
           <HeartOutlined style={{ fontSize: "20px", color: "#000" }} />
-        </button>
+        </button> */}
       </div>
     </StyledQuickViewBox>
   );
@@ -207,7 +191,7 @@ const Course = ({ course }) => {
             </Link>
             <div className="course-info">
               {rating_avg_rating && (
-                <div className="rating">
+                <div className="rating d-flex align-items-center">
                   <span className="avg-rating">
                     {roundsTheNumber(rating_avg_rating, 1)}
                   </span>

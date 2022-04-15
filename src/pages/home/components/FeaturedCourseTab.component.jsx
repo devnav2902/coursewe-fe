@@ -3,7 +3,7 @@ import CategoriesApi from "../../../api/categories.api";
 import Course from "../../../components/Course/Course.component";
 import Slider from "react-slick";
 import { settings } from "../utils/slick.utils";
-import { SkeletonCourses } from "../utils/component.utils";
+import { SkeletonCourses } from "../../../components/SkeletonCourses/SkeletonCourses.component";
 
 const FeaturedCourseTab = ({ categoryId }) => {
   const [featuredCourses, setFeaturedCourses] = useState([]);
@@ -18,7 +18,7 @@ const FeaturedCourseTab = ({ categoryId }) => {
   }, [categoryId]);
 
   return !loadedFeaturedCourses ? (
-    <SkeletonCourses />
+    <SkeletonCourses amount={5} />
   ) : (
     <Slider {...settings}>
       {featuredCourses.map((course) => (

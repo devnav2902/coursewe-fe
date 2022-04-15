@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import CartEmpty from "../components/CartEmpty.component";
 import CouponItem from "../components/CouponItem.component";
 import CourseItem from "../components/CourseItem.component";
@@ -15,7 +15,7 @@ const CartPage = () => {
   return (
     <div className="shopping-cart-section">
       <div className="header-bar">
-        <h1 className="shopping-cart-title">Shopping Cart</h1>
+        <h1 className="shopping-cart-title">Giỏ hàng</h1>
       </div>
 
       {!countCart ? (
@@ -57,7 +57,9 @@ const CartPage = () => {
 
             {!countSavedForLater ? null : (
               <div className="shopping-list s4L">
-                <div className="shopping-list__title">Saved for later</div>
+                <div className="shopping-list__title">
+                  Danh sách thanh toán sau
+                </div>
                 <div className="shopping-list__course" id="saved_for_later">
                   {shoppingCart.saved_for_later.map((courseItem) => (
                     <CourseItem

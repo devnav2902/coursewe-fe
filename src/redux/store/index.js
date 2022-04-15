@@ -20,7 +20,7 @@ const reducers = combineReducers({
 });
 
 const persistedState = localStorage.getItem("shoppingCart:storage")
-  ? JSON.parse(localStorage.getItem("shoppingCart:storage"))
+  ? { cart: JSON.parse(localStorage.getItem("shoppingCart:storage")) }
   : {};
 
 const store = createStore(
@@ -38,10 +38,11 @@ const saveState = (state) => {
   }
 };
 
-store.subscribe(() => {
+store.subscribe(
   _.throttle(() => {
-    saveState(store.getState());
-  }, 1000);
-});
+    const cart = store.getState().cart;
+    saveState(cart);
+  }, 1000)
+);
 
 export default store;

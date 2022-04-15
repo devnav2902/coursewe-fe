@@ -6,7 +6,7 @@ const addToCart = (id) => async (dispatch) => {
   dispatch({ type: cartTypes.ADD_TO_CART_REQUEST });
 
   const { data, status } = await CourseApi.getCourseById(id);
-  console.log(data);
+
   if (status === 200) {
     const {
       id,

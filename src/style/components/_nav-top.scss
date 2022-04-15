@@ -4,7 +4,7 @@
   padding: 0 var(--spacing-2);
   position: fixed;
   top: 0;
-  z-index: 200;
+  z-index: 9900;
   left: 0;
   width: 100%;
   height: var(--height-nav);
@@ -99,32 +99,6 @@
     color: #000;
     &:hover {
       color: --color-hover;
-    }
-  }
-  .shopping-cart {
-    cursor: pointer;
-    position: relative;
-    margin-right: 3rem;
-    .notification-badge:not(:empty) {
-      position: absolute;
-      background-color: #e260f3;
-      color: #fff;
-      border-radius: 50%;
-      width: 2.4rem;
-      height: 2.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      top: -50%;
-      left: 70%;
-      font-size: 12px;
-      font-weight: 500;
-    }
-    svg {
-      fill: #000;
-      &:hover {
-        fill: var(--color-hover) !important;
-      }
     }
   }
 
