@@ -15,9 +15,8 @@ class Categories {
       .catch((error) => error.response);
   };
   getAmountCoursesByTypesPrice = async (slug: string) => {
-    return axiosClient
-      .get(`/categories/types-price/${slug}`)
-  }
+    return axiosClient.get(`/categories/types-price/${slug}`);
+  };
   amountCoursesInTopics = async (slug: string) => {
     return axiosClient
       .get(`/categories/amount-courses-in-topics/${slug}`)
@@ -44,6 +43,12 @@ class Categories {
       .get(`/category/featured-courses/${topLevelCategoryId}`)
       .then((res) => res)
       .catch((error) => error.response);
+  };
+  getPopularInstructors = async (slug: string) => {
+    return axiosClient
+      .get(`/categories/popular-instructors/${slug}`)
+      .then((res) => res)
+      .catch((error) => error);
   };
 }
 const CategoriesApi = new Categories();

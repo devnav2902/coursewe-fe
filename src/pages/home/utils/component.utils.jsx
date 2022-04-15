@@ -11,5 +11,5 @@ const SkeletonCourses = function () {
     </Row>
   );
 };
-
+export default SkeletonCourses;
 export { SkeletonCourses };

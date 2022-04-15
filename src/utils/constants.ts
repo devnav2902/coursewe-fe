@@ -27,6 +27,7 @@ enum ROUTES {
   "CATEGORIES" = "/courses/:slug",
   "SUBCATEGORIES" = "/courses/:slug/:sub",
   "TOPICS" = "/courses/:slug/:sub/:topic",
+ 
 }
 
 const routesWithParams = {

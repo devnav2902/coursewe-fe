@@ -32,11 +32,11 @@ const CategoriesPage = () => {
     setgetValueAmountCoursesByTypesPrice,
   ] = useState(null);
   // console.log(dataCategory);
-  console.log("categories page render");
+  // console.log("categories page render");
   // EFFECT
+  // console.log(slug, sub, topic);
   useEffect(() => {
     const params = { slug, sub, topic };
-
     setDisplaySkeletonCourses(true);
     const slugCategory = getCategorySlug(params);
 
@@ -45,15 +45,15 @@ const CategoriesPage = () => {
       setDisplaySkeletonCourses(false);
       setCurrentPage(1);
     });
-    CategoriesApi.getAmountCoursesByTypesPrice(categorySlug).then((res) => {
-      console.log(res.data);
+    CategoriesApi.getAmountCoursesByTypesPrice(slugCategory).then((res) => {
+      // console.log(res.data);
       setDataAmountCoursesByTypesPrice(res.data.amountCoursesByTypesPrice);
     });
-  }, [params]);
+  }, [slug, sub, topic]);
   // console.log(params);
   if (!dataAmountCoursesByTypesPrice) return null;
   const { free, paid } = dataAmountCoursesByTypesPrice;
-  // }, [slug, sub, topic]);
+  // }, [slug,]);
 
   const SkeletonCourses = function () {
     return Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} active />);
@@ -78,18 +78,18 @@ const CategoriesPage = () => {
     { label: "Miễn phí" + " (" + free.amount + ")", value: 0 },
     { label: "Trả phí" + " (" + paid.amount + ")", value: "Paid" },
   ];
-  console.log(options);
+  // console.log(options);
 
   return (
     <div className="main-categories">
       <div className="main-categories__header">
+        <PopularInstructors />
         <div className="sec-title">
           <h1>Khóa học: {dataCategory?.title}</h1>
         </div>
 
         {/* <CoursesBeginner />
-        <FeaturedCourses />
-        <PopularInstructors /> */}
+        <FeaturedCourses /> */}
       </div>
       <div className="main-categories__content">
         <div className="categories-box">
