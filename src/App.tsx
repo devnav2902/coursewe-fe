@@ -1,12 +1,12 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import routes from "./routes/allRoutes";
-import { Routes as IRoutes } from "./routes/allRoutes";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { getCurrentUser, login } from "./redux/actions/account.actions";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Loading from "./components/Loading/Loading.component";
+import { getCurrentUser } from "./redux/actions/account.actions";
+import { getCartFromDTB } from "./redux/actions/cart.actions";
+import routes, { Routes as IRoutes } from "./routes/allRoutes";
 import { ROUTES } from "./utils/constants";
 
 function App(): JSX.Element {
@@ -16,6 +16,10 @@ function App(): JSX.Element {
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user.profile) dispatch(getCartFromDTB());
+  }, [user.profile, dispatch]);
 
   return (
     <>
