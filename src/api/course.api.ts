@@ -31,7 +31,7 @@ class Course {
 
   getCourseBySlug = async (slug: string) => {
     return axiosClient
-      .post("/course", { slug })
+      .get(`/course/get/${slug}`)
       .then((res) => res)
       .catch((error) => error.response);
   };
