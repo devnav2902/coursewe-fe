@@ -4,13 +4,13 @@ import {
   ShoppingOutlined,
 } from "@ant-design/icons";
 import { Avatar, Badge, Cascader, Dropdown, List, Popover } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CategoriesApi from "../../api/categories.api";
 import { logout } from "../../redux/actions/account.actions";
-import { BE_URL, ROUTES, routesWithParams } from "../../utils/constants";
+import { ROUTES, routesWithParams } from "../../utils/constants";
 import { linkThumbnail } from "../../utils/functions";
 
 const StyledCart = styled.div`
@@ -62,13 +62,23 @@ const TopNav = () => {
     });
   }, []);
 
+  const total = useMemo(
+    () =>
+      cart
+        .reduce((total, current) => {
+          return (total += parseFloat(current.price.original_price));
+        }, 0)
+        .toLocaleString("vi-VN"),
+    [cart]
+  );
+
   const content = (
     <StyledListItems>
       <List
         footer={
           !cart.length ? null : (
             <div>
-              <div className="total fw-bold mb-1">Tổng cộng: 200</div>
+              <div className="total fw-bold mb-1">Tổng cộng: {total} đ</div>
               <Link to={ROUTES.CART} className="btn btn-color-default w-100">
                 Xem trong giỏ hàng
               </Link>
@@ -101,7 +111,9 @@ const TopNav = () => {
                 <a href={routesWithParams.detail_course(item.slug)}>
                   <span className="d-block author">{item.author.fullname}</span>
                   <span className="fw-bold d-block price">
-                    <span className="original-price"> 156.000 đ</span>
+                    <span className="original-price">
+                      {item.price.format_price} đ
+                    </span>
                     {/* <span className="discount"></span> */}
                   </span>
                 </a>
@@ -256,7 +268,7 @@ const TopNav = () => {
                     <div className="profile-info">
                       <Link to="/profile">
                         <div className="user-img">
-                          <img src={BE_URL + "/" + avatar} alt={fullname} />
+                          <img src={linkThumbnail(avatar)} alt={fullname} />
                         </div>
                         <div className="account">
                           <p>{fullname}</p>
@@ -296,7 +308,7 @@ const TopNav = () => {
                 }
               >
                 <span className="profile-img">
-                  <img src={BE_URL + "/" + avatar} alt={fullname} />
+                  <img src={linkThumbnail(avatar)} alt={fullname} />
                 </span>
               </Dropdown>
             </div>
