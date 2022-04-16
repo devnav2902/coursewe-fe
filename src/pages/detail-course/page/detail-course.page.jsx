@@ -16,7 +16,7 @@ import { roundsTheNumber } from "../../../utils/functions";
 import CurriculumItem from "../components/CurriculumItem.component";
 import RatingGraph from "../components/RatingGraph.component";
 import Review from "../components/Review.component";
-import Sidebar from "../components/Sidebar.component";
+import Sidebar from "../components/Sidebar/Sidebar.component";
 
 const { Panel } = Collapse;
 
@@ -33,7 +33,7 @@ const DetailCoursePage = () => {
       setCourse(data.course);
       setGraph(data.graph);
     });
-  }, []);
+  }, [slug]);
 
   if (!course)
     return (
@@ -42,19 +42,9 @@ const DetailCoursePage = () => {
       </Loading>
     );
 
-  const {
-    title,
-    rating_avg_rating,
-    rating_count,
-    rating,
-    description,
-    course_bill_count,
-    author,
-    subtitle,
-    section,
-    course_requirements,
-    course_outcome,
-  } = course;
+  const { title, description, author, subtitle, section } = course;
+  const { course_requirements, course_outcome } = course;
+  const { rating_count, course_bill_count, rating_avg_rating, rating } = course;
 
   return (
     <div className="detail-course">

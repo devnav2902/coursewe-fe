@@ -30,7 +30,7 @@ const RatingGraph = ({ rating_avg_rating, graph }) => {
                   <div className="bar-inner">
                     <div
                       className="bar progress-line"
-                      style={{ width: percent + "%" }}
+                      style={{ width: roundsTheNumber(percent, 1) + "%" }}
                     />
                   </div>
 
@@ -38,7 +38,7 @@ const RatingGraph = ({ rating_avg_rating, graph }) => {
                     <div className="stars">
                       <Rating value={rating} size="16px" />
                     </div>
-                    <span>{percent}%</span>
+                    <span>{roundsTheNumber(percent, 1)}%</span>
                   </div>
                 </div>
               </div>
