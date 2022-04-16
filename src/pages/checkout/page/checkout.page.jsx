@@ -1,19 +1,22 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 const CheckoutPage = () => {
+  const location = useLocation();
+  console.log(location);
   return (
-    <div class="checkout-page">
-      <div class="checkout-page__container d-flex">
-        <div class="checkout-page-left">
-          <div class="title">Checkout</div>
-          <div class="address-container">
+    <div className="checkout-page">
+      <div className="checkout-page__container d-flex">
+        <div className="checkout-page-left">
+          <div className="title">Checkout</div>
+          <div className="address-container">
             <label for="">Billing Address</label>
-            <div class="address-select">
+            <div className="address-select">
               <select
                 data-purpose="billing-address-country"
                 autocomplete="off"
                 id="billingAddressCountry"
-                class="form-control"
+                className="form-control"
               >
                 <option value="" disabled="">
                   Please select...
@@ -39,36 +42,36 @@ const CheckoutPage = () => {
                 <option value="VN">Vietnam</option>
               </select>
             </div>
-            <div class="checkout-selection">
-              <div class="radio">
-                <div class="radio-label d-flex align-items-center">
+            <div className="checkout-selection">
+              <div className="radio">
+                <div className="radio-label d-flex align-items-center">
                   <input type="radio" name="payment-methods" checked />
-                  <span class="label">PayPal</span>
+                  <span className="label">PayPal</span>
                   <img
                     src="https://s3.amazonaws.com/growth-prototypes/pp_cc_mark_111x69.jpg"
                     alt="PayPal Icon"
-                    class=""
+                    className=""
                     width="74"
                     height="20"
                   />
                 </div>
               </div>
             </div>
-            <div class="order-details">
-              <div class="title">Danh sách khóa học:</div>
-              <div class="shopping-list">
-                <div class="shopping-list__item">
-                  <div class="course d-flex">
+            <div className="order-details">
+              <div className="title">Danh sách khóa học:</div>
+              <div className="shopping-list">
+                <div className="shopping-list__item">
+                  <div className="course d-flex">
                     <img
                       src="https://img-c.udemycdn.com/course/100x100/1247828_32bb.jpg"
                       alt=""
                     />
-                    <div class="card-title">
+                    <div className="card-title">
                       The Complete Angular Course: Beginner to Advanced
                     </div>
-                    <div class="card-price">
-                      <div class="discount-price">$129</div>
-                      <div class="line-through original-price">$135</div>
+                    <div className="card-price">
+                      <div className="discount-price">$129</div>
+                      <div className="line-through original-price">$135</div>
                     </div>
                   </div>
                 </div>
@@ -76,25 +79,25 @@ const CheckoutPage = () => {
             </div>
           </div>
         </div>
-        <div class="checkout-page-right">
-          <div class="title">Summary</div>
+        <div className="checkout-page-right">
+          <div className="title">Summary</div>
 
-          <div class="checkout-page-right__price">
-            <div class="original-price d-flex align-items-center">
-              <div class="title">Giá bán</div>
-              <div class="price">$39.87</div>
+          <div className="checkout-page-right__price">
+            <div className="original-price d-flex align-items-center">
+              <div className="title">Giá bán</div>
+              <div className="price">$39.87</div>
             </div>
-            <div class="discount-price d-flex align-items-center">
-              <div class="title">Áp dụng mã giảm giá</div>
-              <div class="price">-$39.87</div>
+            <div className="discount-price d-flex align-items-center">
+              <div className="title">Áp dụng mã giảm giá</div>
+              <div className="price">-$39.87</div>
             </div>
-            <div class="total d-flex align-items-center">
-              <div class="title">Tổng cộng</div>
-              <div class="price">$19.99</div>
+            <div className="total d-flex align-items-center">
+              <div className="title">Tổng cộng</div>
+              <div className="price">$19.99</div>
             </div>
           </div>
 
-          <button class="complete-payment">Thanh toán</button>
+          <button className="complete-payment">Thanh toán</button>
         </div>
       </div>
     </div>
