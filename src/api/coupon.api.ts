@@ -10,6 +10,16 @@ class Coupon {
       .then((res) => res)
       .catch((error) => error.response);
   };
+
+  applyCouponWithCourses = async (code: string, courses: number[]) => {
+    return axiosClient
+      .post(`/coupon/courses/apply-coupon`, {
+        coupon_code: code,
+        courses,
+      })
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
 }
 const CouponApi = new Coupon();
 export default CouponApi;
