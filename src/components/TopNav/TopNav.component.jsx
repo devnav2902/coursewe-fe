@@ -3,7 +3,7 @@ import {
   SearchOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
-import { Avatar, Badge, Cascader, Dropdown, List, Popover } from "antd";
+import { Avatar, Badge, Cascader, Dropdown, List, Popover, Spin } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -40,7 +40,7 @@ const StyledListItems = styled.div`
 
 const TopNav = () => {
   const user = useSelector((state) => state.user);
-  const { cart } = useSelector((state) => state.cart);
+  const { cart, loadedCart } = useSelector((state) => state.cart);
   const { fullname, email, avatar, role } = user.profile ?? {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -125,28 +125,29 @@ const TopNav = () => {
     </StyledListItems>
   );
 
-  const ShoppingCart = () => (
-    <div className="shopping-cart mr-3">
-      <Popover
-        placement="bottom"
-        content={content}
-        getPopupContainer={(e) => e}
-      >
-        <StyledCart>
-          <Link to={ROUTES.CART} className="link">
-            <Badge
-              color="#e260f3"
-              count={cart.length}
-              offset={[5, 2]}
-              title={`${cart.length} khóa học trong giỏ hàng`}
-            >
-              <ShoppingOutlined style={{ fontSize: 20 }} />
-            </Badge>
-          </Link>
-        </StyledCart>
-      </Popover>
-    </div>
-  );
+  const ShoppingCart = () =>
+    !loadedCart ? null : (
+      <div className="shopping-cart mr-3">
+        <Popover
+          placement="bottom"
+          content={content}
+          getPopupContainer={(e) => e}
+        >
+          <StyledCart>
+            <Link to={ROUTES.CART} className="link">
+              <Badge
+                color="#e260f3"
+                count={cart.length}
+                offset={[5, 2]}
+                title={`${cart.length} khóa học trong giỏ hàng`}
+              >
+                <ShoppingOutlined style={{ fontSize: 20 }} />
+              </Badge>
+            </Link>
+          </StyledCart>
+        </Popover>
+      </div>
+    );
 
   function onChange(value) {
     setDisplayCascader(false);
@@ -211,18 +212,22 @@ const TopNav = () => {
         </form>
 
         {!user.profile ? (
-          <>
-            <Link className="instructor" to="/instructor">
-              Giảng dạy trên Devco
-            </Link>
-            <ShoppingCart />
-            <Link className="btn-style-two login-button" to={ROUTES.SIGN_IN}>
-              Đăng nhập
-            </Link>
-            <Link className="btn-style-two signup-button" to={ROUTES.SIGN_UP}>
-              Đăng ký
-            </Link>
-          </>
+          !user.loaded ? (
+            <Spin />
+          ) : (
+            <>
+              <Link className="instructor" to="/instructor">
+                Giảng dạy trên Devco
+              </Link>
+              <ShoppingCart />
+              <Link className="btn-style-two login-button" to={ROUTES.SIGN_IN}>
+                Đăng nhập
+              </Link>
+              <Link className="btn-style-two signup-button" to={ROUTES.SIGN_UP}>
+                Đăng ký
+              </Link>
+            </>
+          )
         ) : (
           <div className="user">
             <Link to={ROUTES.INSTRUCTOR_COURSES}>Quản lý khóa học</Link>
