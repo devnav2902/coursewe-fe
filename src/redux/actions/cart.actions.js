@@ -12,12 +12,12 @@ const getItemsByCartType = (type, arr) => {
   return cartItems;
 };
 
-const addToCart = (course) => async (dispatch) => {
+const addToCart = (id) => async (dispatch) => {
   dispatch({ type: cartTypes.ADD_TO_CART_REQUEST });
 
   // Giỏ hàng database
   const { status, data } = await CartApi.addToCart({
-    course_id: course.id,
+    course_id: id,
   });
 
   if (status === 200) {
