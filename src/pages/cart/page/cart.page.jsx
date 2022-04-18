@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import { useSelector } from "react-redux";
+import CouponApi from "../../../api/coupon.api";
 import CartContainer from "../components/CartContainer.component";
 import CartEmpty from "../components/CartEmpty.component";
 import CouponItem from "../components/CouponItem.component";
@@ -15,6 +17,19 @@ const CartPage = () => {
       return (total += parseFloat(current.price.original_price));
     }, 0)
     .toLocaleString("vi-VN");
+
+  const refCoupon = useRef();
+
+  function applyCoupon() {
+    const coursesId = shoppingCart.cart.map((course) => course.id);
+
+    const code = refCoupon.current.value;
+    if (code?.trim()) {
+      CouponApi.applyCouponWithCourses(code, coursesId).then((res) => {
+        console.log(res);
+      });
+    }
+  }
 
   return (
     <div className="shopping-cart-section">
@@ -58,9 +73,13 @@ const CartPage = () => {
                         type="text"
                         id="coupon-input"
                         className="form-control"
-                        defaultValue=""
+                        ref={refCoupon}
                       />
-                      <button type="button" className="btn btn-apply-coupon">
+                      <button
+                        onClick={applyCoupon}
+                        type="button"
+                        className="btn btn-apply-coupon"
+                      >
                         Áp dụng
                       </button>
                     </div>
