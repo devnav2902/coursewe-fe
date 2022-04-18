@@ -1,7 +1,6 @@
-import CourseApi from "../../api/course.api";
-import cartTypes from "../types/cart.types";
 import _ from "lodash";
 import CartApi from "../../api/cart.api";
+import cartTypes from "../types/cart.types";
 
 // utils
 const getItemsByCartType = (type, arr) => {
@@ -13,131 +12,63 @@ const getItemsByCartType = (type, arr) => {
   return cartItems;
 };
 
-const addToCart = (id) => async (dispatch, getState) => {
+const addToCart = (course) => async (dispatch) => {
   dispatch({ type: cartTypes.ADD_TO_CART_REQUEST });
 
   // Giỏ hàng database
-  const user = getState().user;
-  if (user.profile) {
-    const { id: user_id } = user.profile;
-    const { status, data } = await CartApi.addToCart({
-      course_id: id,
-      user_id,
-    });
+  const { status, data } = await CartApi.addToCart({
+    course_id: course.id,
+  });
 
-    if (status === 200) {
-      dispatch({ type: cartTypes.ADD_TO_CART_SUCCESS, payload: data.course });
-    }
-  } else {
-    const { data, status } = await CourseApi.getCourseById(id);
-    // Giỏ hàng localstorage, Lưu để giữ thông tin cần thiết thay vì lấy data từ dtb
-    if (status === 200) {
-      const {
-        id,
-        title,
-        // author: { fullname },
-        // thumbnail,
-        // slug,
-        // rating_avg_rating,
-      } = data;
-
-      const course = {
-        id,
-        title,
-        // author: { fullname },
-        // thumbnail,
-        // slug,
-        // rating_avg_rating,
-      };
-
-      dispatch({ type: cartTypes.ADD_TO_CART_SUCCESS, payload: course });
-    }
+  if (status === 200) {
+    dispatch({ type: cartTypes.ADD_TO_CART_SUCCESS, payload: data.course });
   }
 };
 
-const removeFromCart = (id) => async (dispatch, getState) => {
+const removeFromCart = (id) => async (dispatch) => {
   dispatch({ type: cartTypes.REMOVE_FROM_CART_REQUEST });
 
-  const cartReducer = getState().cart;
-  const userReducer = getState().user;
+  const { status, data } = await CartApi.delete(id);
 
-  if (!userReducer.profile) {
-    const cartItems = cartReducer.cart.filter((course) => course.id !== id);
-    dispatch({ type: cartTypes.REMOVE_FROM_CART_SUCCESS, payload: cartItems });
-  } else {
-    const { status, data } = await CartApi.delete(id);
+  if (status === 200) {
+    const cartItems = getItemsByCartType("cart", data.shoppingCart);
 
-    if (status === 200) {
-      const cartItems = getItemsByCartType("cart", data.shoppingCart);
-
-      dispatch({
-        type: cartTypes.REMOVE_FROM_CART_SUCCESS,
-        payload: cartItems,
-      });
-    }
+    dispatch({
+      type: cartTypes.REMOVE_FROM_CART_SUCCESS,
+      payload: cartItems,
+    });
   }
 };
 
-const removeFromSavedForLater = (id) => async (dispatch, getState) => {
+const removeFromSavedForLater = (id) => async (dispatch) => {
   dispatch({ type: cartTypes.REMOVE_FROM_SAVE_FOR_LATER_REQUEST });
 
-  const userReducer = getState().user;
-  const cartReducer = getState().cart;
+  const { data, status } = await CartApi.delete(id);
 
-  if (!userReducer.profile) {
-    const cartItems = cartReducer.saved_for_later.filter(
-      (course) => course.id !== id
-    );
+  if (status === 200) {
+    const cartItems = getItemsByCartType("saved_for_later", data.shoppingCart);
 
     dispatch({
       type: cartTypes.REMOVE_FROM_SAVE_FOR_LATER_SUCCESS,
       payload: cartItems,
     });
-  } else {
-    const { data, status } = await CartApi.delete(id);
-
-    if (status === 200) {
-      const cartItems = getItemsByCartType(
-        "saved_for_later",
-        data.shoppingCart
-      );
-
-      dispatch({
-        type: cartTypes.REMOVE_FROM_SAVE_FOR_LATER_SUCCESS,
-        payload: cartItems,
-      });
-    }
   }
 };
 
-const moveToSavedForLater = (id) => async (dispatch, getState) => {
+const moveToSavedForLater = (id) => async (dispatch) => {
   dispatch({ type: cartTypes.SAVE_FOR_LATER_REQUEST });
 
-  const cartReducer = getState().cart;
-  const userReducer = getState().user;
+  const { data, status } = await CartApi.savedForLater(id);
 
-  if (!userReducer.profile) {
-    const cartItems = cartReducer.cart.filter((course) => course.id !== id);
-
-    const course = cartReducer.cart.find((course) => course.id === id);
-    const savedForLaterItems = _.cloneDeep(cartReducer.saved_for_later);
-    course && savedForLaterItems.push(course);
+  if (status === 200) {
+    const cartItems = getItemsByCartType("cart", data.shoppingCart);
+    const savedForLaterItems = getItemsByCartType(
+      "saved_for_later",
+      data.shoppingCart
+    );
 
     const payload = { saved_for_later: savedForLaterItems, cart: cartItems };
     dispatch({ type: cartTypes.SAVE_FOR_LATER_SUCCESS, payload });
-  } else {
-    const { data, status } = await CartApi.savedForLater(id);
-
-    if (status === 200) {
-      const cartItems = getItemsByCartType("cart", data.shoppingCart);
-      const savedForLaterItems = getItemsByCartType(
-        "saved_for_later",
-        data.shoppingCart
-      );
-
-      const payload = { saved_for_later: savedForLaterItems, cart: cartItems };
-      dispatch({ type: cartTypes.SAVE_FOR_LATER_SUCCESS, payload });
-    }
   }
 };
 
@@ -214,7 +145,6 @@ const applyCouponCourses = (id, coupon) => async (dispatch, getState) => {
 
 // GET CART TỪ DATABASE
 const getCartFromDTB = () => async (dispatch) => {
-  // User phải đăng nhập trước
   dispatch({ type: cartTypes.GET_CART_FROM_DATABASE_REQUEST });
 
   try {

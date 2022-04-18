@@ -19,30 +19,30 @@ const reducers = combineReducers({
   curriculum: curriculumReducer,
 });
 
-const persistedState = localStorage.getItem("shoppingCart:storage")
-  ? { cart: JSON.parse(localStorage.getItem("shoppingCart:storage")) }
-  : {};
+// const persistedState = localStorage.getItem("shoppingCart:storage")
+//   ? { cart: JSON.parse(localStorage.getItem("shoppingCart:storage")) }
+//   : {};
 
 const store = createStore(
   reducers,
-  persistedState,
+  // persistedState,
   applyMiddleware(...middleware)
 );
 
-const saveState = (state) => {
-  try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem("shoppingCart:storage", serializedState);
-  } catch {
-    // ignore write errors
-  }
-};
+// const saveState = (state) => {
+//   try {
+//     const serializedState = JSON.stringify(state);
+//     localStorage.setItem("shoppingCart:storage", serializedState);
+//   } catch {
+//     // ignore write errors
+//   }
+// };
 
-store.subscribe(
-  _.throttle(() => {
-    const cart = store.getState().cart;
-    saveState(cart);
-  }, 1000)
-);
+// store.subscribe(
+//   _.throttle(() => {
+//     const cart = store.getState().cart;
+//     saveState(cart);
+//   }, 1000)
+// );
 
 export default store;
