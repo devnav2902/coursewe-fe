@@ -18,8 +18,10 @@ function App(): JSX.Element {
   }, [dispatch]);
 
   useEffect(() => {
-    if (user.profile) dispatch(getCartFromDTB());
-  }, [user.profile, dispatch]);
+    if (user.loaded) {
+      dispatch(getCartFromDTB());
+    }
+  }, [user.loaded, dispatch]);
 
   return (
     <>
