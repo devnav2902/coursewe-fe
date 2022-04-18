@@ -1,13 +1,14 @@
 import { Progress } from "antd";
-import React from "react";
 import { Link } from "react-router-dom";
 import Rating from "../../../components/Rating/Rating.component";
 import { BE_URL, routesWithParams } from "../../../utils/constants";
 import { isUrl } from "../../../utils/functions";
+import { StyledCourse } from "../styles/my-learning.styles";
+
 const Course = ({ course }) => {
   const { author, count_progress, slug, thumbnail, title, rating } = course;
   return (
-    <div className="course">
+    <StyledCourse className="course">
       <Link to={routesWithParams.learning(slug)} className="image-course">
         <img
           src={isUrl(thumbnail) ? thumbnail : BE_URL + "/" + thumbnail}
@@ -66,7 +67,7 @@ const Course = ({ course }) => {
           </div>
         )}
       </div>
-    </div>
+    </StyledCourse>
   );
 };
 
