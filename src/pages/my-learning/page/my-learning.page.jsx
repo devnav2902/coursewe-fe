@@ -1,3 +1,4 @@
+import { Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LearningApi from "../../../api/learning.api";
@@ -39,11 +40,13 @@ const MyLearningPage = () => {
             </div>
           ) : (
             <div className="my-learning-section__courses">
-              <div className="list-courses">
+              <Row gutter={[15, 15]}>
                 {courses.map((course) => (
-                  <Course key={course.id} course={course} />
+                  <Col span={6}>
+                    <Course key={course.id} course={course} />
+                  </Col>
                 ))}
-              </div>
+              </Row>
             </div>
           )
           // $courses->links()
