@@ -4,8 +4,9 @@ import { createLogger } from "redux-logger";
 import courseReducer from "../reducers/course.reducer";
 import accountReducer from "../reducers/account.reducer";
 import cartReducer from "../reducers/cart.reducer";
-import _ from "lodash";
+// import _ from "lodash";
 import curriculumReducer from "../reducers/curriculum.reducer";
+import learningReducer from "../reducers/learning.reducer";
 
 const logger = createLogger({
   // ...options
@@ -17,6 +18,7 @@ const reducers = combineReducers({
   user: accountReducer,
   cart: cartReducer,
   curriculum: curriculumReducer,
+  learning: learningReducer,
 });
 
 // const persistedState = localStorage.getItem("shoppingCart:storage")
