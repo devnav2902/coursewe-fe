@@ -5,16 +5,22 @@ const StyledCourse = styled.div`
     display: flex;
     flex-direction: column;
     border: 1px solid rgb(207, 207, 207);
-
+    height: 100%;
     .profile-course {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      padding: 1rem 2rem 2rem;
+      padding: 1rem 1.2rem 2rem;
     }
     .name-course {
-      margin-bottom: 10px;
-      line-height: 1;
+      margin-bottom: 6px;
+      font-size: 1.6rem;
+      a {
+        color: #1c1d1f;
+        &:hover {
+          color: #54555a;
+        }
+      }
     }
     .course-footer {
       margin-top: auto;
@@ -28,6 +34,9 @@ const StyledCourse = styled.div`
       }
       .progress-wrapper {
         margin-bottom: 1rem;
+        .count-progress {
+          color: #5959ff;
+        }
       }
       .course-rating {
         display: flex;
@@ -44,6 +53,11 @@ const StyledCourse = styled.div`
         width: 100%;
         height: 100%;
       }
+    }
+
+    .author {
+      font-size: 1.3rem;
+      color: #1c1d1f;
     }
   }
 `;
