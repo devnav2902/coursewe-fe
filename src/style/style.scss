@@ -46,9 +46,13 @@ body {
   overflow-x: hidden;
   background: var(--color-white);
   font-size: 1.6rem;
-  padding-top: var(--height-nav);
   font-family: var(--font);
 }
+
+.spacing-top-nav {
+  padding-top: var(--height-nav);
+}
+
 button {
   outline: none;
   border: none;

@@ -5,7 +5,7 @@ const BasicLayout = ({ children }) => {
   return (
     <>
       <TopNav />
-      <main>{children}</main>
+      <main className="spacing-top-nav">{children}</main>
       <Footer />
     </>
   );
