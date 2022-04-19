@@ -1,9 +1,16 @@
 import axiosClient from "../utils/axios";
 
 class Learning {
-  getCourses = async () => {
+  getCourseBySlug = async (slug: string) => {
     return axiosClient
-      .get("/my-learning")
+      .get(`/learning/${slug}`)
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
+
+  getSections = async (courseId: number) => {
+    return axiosClient
+      .get(`/sections/${courseId}`)
       .then((res) => res)
       .catch((error) => error.response);
   };
