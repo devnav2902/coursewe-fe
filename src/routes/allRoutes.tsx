@@ -24,6 +24,7 @@ import AdminReviewPage from "../pages/admin-review/page/admin-review.page";
 import CheckoutPage from "../pages/checkout/page/checkout.page";
 import OverviewLayout from "../layouts/overview.layout";
 import CategoriesPage from "../pages/categories/pages/categories.page";
+import LearningLayout from "../layouts/learning.layout";
 
 export type Routes = {
   exact?: boolean;
@@ -108,9 +109,9 @@ const routes: Routes[] = [
   {
     path: ROUTES.LEARNING,
     component: (
-      <BasicLayout>
+      <LearningLayout>
         <LearningPage />
-      </BasicLayout>
+      </LearningLayout>
     ),
   },
   {
