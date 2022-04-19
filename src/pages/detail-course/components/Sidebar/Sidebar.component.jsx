@@ -2,10 +2,11 @@ import { DesktopOutlined, VideoCameraOutlined } from "@ant-design/icons";
 import { Skeleton } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { BiInfinite } from "react-icons/bi";
+import { Link } from "react-router-dom";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import CouponApi from "../../../../api/coupon.api";
 import CourseApi from "../../../../api/course.api";
-import { ROUTES } from "../../../../utils/constants";
+import { ROUTES, routesWithParams } from "../../../../utils/constants";
 import { StyledGoToCourseBtn } from "../../styles/detail-course.styles";
 import ButtonContainer from "./ButtonContainer.component";
 import CouponAndGift from "./CouponAndGift.component";
@@ -14,7 +15,8 @@ import Price from "./Price.component";
 import Video from "./Video.component";
 
 const Sidebar = ({ course }) => {
-  const { id, title, lecture, rating_avg_rating, price, thumbnail } = course;
+  const { id, title, lecture, rating_avg_rating, price, thumbnail, slug } =
+    course;
   const { rating_count, section_count, lecture_count, course_bill_count } =
     course;
 
@@ -159,7 +161,9 @@ const Sidebar = ({ course }) => {
             <Skeleton active className="pd-2" />
           ) : dataCheckPurchase.hasPurchased ? (
             <StyledGoToCourseBtn className="pd-2">
-              <div className="btn w-100">Đi đến khóa học</div>
+              <Link to={routesWithParams.learning(slug)} className="btn w-100">
+                Đi đến khóa học
+              </Link>
             </StyledGoToCourseBtn>
           ) : (
             <>
