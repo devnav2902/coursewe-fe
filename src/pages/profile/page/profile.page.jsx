@@ -10,6 +10,7 @@ import Input from "../../../components/Input/Input.component";
 import ReactQuill from "react-quill";
 import { Controller } from "react-hook-form";
 import CustomQuill from "../../../utils/quill";
+import { linkThumbnail } from "../../../utils/functions";
 const ProfilePage = ({ register, control }) => {
   const {
     profile: { avatar, created_at, fullname },
@@ -32,15 +33,6 @@ const ProfilePage = ({ register, control }) => {
       },
     ],
   });
-  // useEffect(() => {
-  //   ProfileApi.getBio().then((res) => {
-  //     setUserBio(res.data.bio);
-  //   });
-  // }, []);
-  // if (!userBio) return null;
-
-  // const { headline, bio, website, facebook, youtobe, linkedin, twitter } =
-  //   userBio;
 
   function getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -65,19 +57,6 @@ const ProfilePage = ({ register, control }) => {
   };
   const handleCancel = () => setState({ previewVisible: false });
 
-  const handleOnChange = (e) => {
-    setUploadAvatar(e);
-  };
-  console.log(uploadAvatar);
-  const save = () => {
-    setLoading(true);
-
-    ProfileApi.uploadAvatar(uploadAvatar.file).then((e) => {
-      setLoading(false);
-      console.log(e);
-    });
-  };
-
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -97,45 +76,51 @@ const ProfilePage = ({ register, control }) => {
         <div className="main-wrap">
           <div className="bar">
             <div className="user">
-              <form className="profile-avatar">
-                <div className="edit-avatar">
-                  <Upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    listType="picture-card"
-                    maxCount={1}
-                    beforeUpload={() => false}
-                    showUploadList={{ showRemoveIcon: false }}
-                    defaultFileList={[
-                      {
-                        uid: "1",
-                        name: avatar,
-                        url: BE_URL + "/" + avatar,
-                      },
-                    ]}
-                    onPreview={handlePreview}
-                    onChange={handleOnChange}
-                  >
-                    {uploadButton}
-                  </Upload>
-                  <Modal
-                    visible={previewVisible}
-                    title={previewTitle}
-                    footer={null}
-                    onCancel={handleCancel}
-                  >
-                    <img
-                      alt="example"
-                      style={{ width: "100%" }}
-                      src={previewImage}
-                    />
-                  </Modal>
-                </div>
+              <div className="edit-avatar">
+                <Controller
+                  control={control}
+                  name="image"
+                  render={({ field }) => (
+                    <Upload
+                      accept=".png, .jpg, .jpeg"
+                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                      listType="picture-card"
+                      maxCount={1}
+                      beforeUpload={() => false}
+                      showUploadList={{ showRemoveIcon: false }}
+                      defaultFileList={[
+                        {
+                          uid: "1",
+                          name: avatar,
+                          url: linkThumbnail(avatar),
+                        },
+                      ]}
+                      onPreview={handlePreview}
+                      {...field}
+                      // onChange={field.onChange(handleOnChange)}
+                    >
+                      {uploadButton}
+                    </Upload>
+                  )}
+                />
+                <Modal
+                  visible={previewVisible}
+                  title={previewTitle}
+                  footer={null}
+                  onCancel={handleCancel}
+                >
+                  <img
+                    alt="example"
+                    style={{ width: "100%" }}
+                    src={previewImage}
+                  />
+                </Modal>
+              </div>
 
-                <div className="meta">
-                  <span id="name">{fullname}</span>
-                  <span id="create_at">Ngày tạo: {created_at}</span>
-                </div>
-              </form>
+              <div className="meta">
+                <span id="name">{fullname}</span>
+                <span id="create_at">Ngày tạo: {created_at}</span>
+              </div>
             </div>
           </div>
 
