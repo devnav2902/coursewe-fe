@@ -46,12 +46,6 @@ function App(): JSX.Element {
                   }
                 />
               );
-            } else if (route.nested) {
-              return (
-                <Route key={idx} path={route.path} element={route.component}>
-                  {route.nested}
-                </Route>
-              );
             }
             return (
               <Route key={idx} path={route.path} element={route.component} />

@@ -34,7 +34,6 @@ export type Routes = {
   layout?: JSX.Element;
   redirectIfAuthenticated?: boolean;
   private?: boolean;
-  nested?: JSX.Element;
 };
 
 const routes: Routes[] = [
