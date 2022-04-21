@@ -4,13 +4,18 @@ const initialState = {
   cart: [],
   saved_for_later: [],
   wishlist: [],
-  // loaded: false,
   loading: false,
   error: null,
+  loadedCart: false, // load từ dtb hoặc load từ localstorage
 };
 
 function cartReducer(state = initialState, action) {
   switch (action.type) {
+    case cartTypes.GET_CART_FROM_DATABASE_REQUEST:
+      return { ...state };
+    case cartTypes.GET_CART_FROM_DATABASE_SUCCESS:
+      return { ...initialState, loadedCart: true, ...action.payload };
+
     case cartTypes.ADD_TO_CART_REQUEST:
     case cartTypes.REMOVE_FROM_CART_REQUEST:
     case cartTypes.MOVE_TO_CART_REQUEST:
@@ -41,8 +46,7 @@ function cartReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        cart: action.payload.cart,
-        saved_for_later: action.payload.saved_for_later,
+        ...action.payload,
       };
 
     default:

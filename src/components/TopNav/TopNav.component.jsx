@@ -3,14 +3,14 @@ import {
   SearchOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
-import { Avatar, Badge, Cascader, Dropdown, List, Popover } from "antd";
-import { useEffect, useState } from "react";
+import { Avatar, Badge, Cascader, Dropdown, List, Popover, Spin } from "antd";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CategoriesApi from "../../api/categories.api";
 import { logout } from "../../redux/actions/account.actions";
-import { BE_URL, ROUTES, routesWithParams } from "../../utils/constants";
+import { ROUTES, routesWithParams } from "../../utils/constants";
 import { linkThumbnail } from "../../utils/functions";
 
 const StyledCart = styled.div`
@@ -40,7 +40,7 @@ const StyledListItems = styled.div`
 
 const TopNav = () => {
   const user = useSelector((state) => state.user);
-  const { cart } = useSelector((state) => state.cart);
+  const { cart, loadedCart } = useSelector((state) => state.cart);
   const { fullname, email, avatar, role } = user.profile ?? {};
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -62,13 +62,23 @@ const TopNav = () => {
     });
   }, []);
 
+  const total = useMemo(
+    () =>
+      cart
+        .reduce((total, current) => {
+          return (total += parseFloat(current.price.original_price));
+        }, 0)
+        .toLocaleString("vi-VN"),
+    [cart]
+  );
+
   const content = (
     <StyledListItems>
       <List
         footer={
           !cart.length ? null : (
             <div>
-              <div className="total fw-bold mb-1">Tổng cộng: 200</div>
+              <div className="total fw-bold mb-1">Tổng cộng: {total} đ</div>
               <Link to={ROUTES.CART} className="btn btn-color-default w-100">
                 Xem trong giỏ hàng
               </Link>
@@ -101,7 +111,9 @@ const TopNav = () => {
                 <a href={routesWithParams.detail_course(item.slug)}>
                   <span className="d-block author">{item.author.fullname}</span>
                   <span className="fw-bold d-block price">
-                    <span className="original-price"> 156.000 đ</span>
+                    <span className="original-price">
+                      {item.price.format_price} đ
+                    </span>
                     {/* <span className="discount"></span> */}
                   </span>
                 </a>
@@ -113,28 +125,29 @@ const TopNav = () => {
     </StyledListItems>
   );
 
-  const ShoppingCart = () => (
-    <div className="shopping-cart mr-3">
-      <Popover
-        placement="bottom"
-        content={content}
-        getPopupContainer={(e) => e}
-      >
-        <StyledCart>
-          <Link to={ROUTES.CART} className="link">
-            <Badge
-              color="#e260f3"
-              count={cart.length}
-              offset={[5, 2]}
-              title={`${cart.length} khóa học trong giỏ hàng`}
-            >
-              <ShoppingOutlined style={{ fontSize: 20 }} />
-            </Badge>
-          </Link>
-        </StyledCart>
-      </Popover>
-    </div>
-  );
+  const ShoppingCart = () =>
+    !loadedCart ? null : (
+      <div className="shopping-cart mr-3">
+        <Popover
+          placement="bottom"
+          content={content}
+          getPopupContainer={(e) => e}
+        >
+          <StyledCart>
+            <Link to={ROUTES.CART} className="link">
+              <Badge
+                color="#e260f3"
+                count={cart.length}
+                offset={[5, 2]}
+                title={`${cart.length} khóa học trong giỏ hàng`}
+              >
+                <ShoppingOutlined style={{ fontSize: 20 }} />
+              </Badge>
+            </Link>
+          </StyledCart>
+        </Popover>
+      </div>
+    );
 
   function onChange(value) {
     setDisplayCascader(false);
@@ -199,18 +212,22 @@ const TopNav = () => {
         </form>
 
         {!user.profile ? (
-          <>
-            <Link className="instructor" to="/instructor">
-              Giảng dạy trên Devco
-            </Link>
-            <ShoppingCart />
-            <Link className="btn-style-two login-button" to={ROUTES.SIGN_IN}>
-              Đăng nhập
-            </Link>
-            <Link className="btn-style-two signup-button" to={ROUTES.SIGN_UP}>
-              Đăng ký
-            </Link>
-          </>
+          !user.loaded ? (
+            <Spin />
+          ) : (
+            <>
+              <Link className="instructor" to="/instructor">
+                Giảng dạy trên Devco
+              </Link>
+              <ShoppingCart />
+              <Link className="btn-style-two login-button" to={ROUTES.SIGN_IN}>
+                Đăng nhập
+              </Link>
+              <Link className="btn-style-two signup-button" to={ROUTES.SIGN_UP}>
+                Đăng ký
+              </Link>
+            </>
+          )
         ) : (
           <div className="user">
             <Link to={ROUTES.INSTRUCTOR_COURSES}>Quản lý khóa học</Link>
@@ -256,7 +273,7 @@ const TopNav = () => {
                     <div className="profile-info">
                       <Link to="/profile">
                         <div className="user-img">
-                          <img src={BE_URL + "/" + avatar} alt={fullname} />
+                          <img src={linkThumbnail(avatar)} alt={fullname} />
                         </div>
                         <div className="account">
                           <p>{fullname}</p>
@@ -296,7 +313,7 @@ const TopNav = () => {
                 }
               >
                 <span className="profile-img">
-                  <img src={BE_URL + "/" + avatar} alt={fullname} />
+                  <img src={linkThumbnail(avatar)} alt={fullname} />
                 </span>
               </Dropdown>
             </div>

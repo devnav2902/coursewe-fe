@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const CartEmpty = () => {
   return (
     <div className="shopping-list-empty">
@@ -7,9 +9,9 @@ const CartEmpty = () => {
       />
       <p>
         Giỏ hàng của bạn trống, khám phá kiến thức{" "}
-        <a href="/" className="keep-shopping-action">
+        <Link to="/" className="keep-shopping-action">
           tại đây
-        </a>
+        </Link>
         .
       </p>
     </div>

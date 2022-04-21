@@ -7,7 +7,6 @@ import { routesWithParams } from "../../utils/constants";
 import { roundsTheNumber } from "../../utils/functions";
 import CartButton from "../CartButton/CartButton.component";
 import Rating from "../Rating/Rating.component";
-import WishlistButton from "../WishlistButton/WishlistButton.component";
 
 const StyledQuickViewBox = styled.div`
   width: 340px;
@@ -150,11 +149,7 @@ const Course = ({ course }) => {
       </div>
       <div className="quick-view-footer d-flex align-item-center">
         <CartButton course={course} />
-        <WishlistButton course={course} />
-
-        {/* <button className="toggle-wishlist">
-          <HeartOutlined style={{ fontSize: "20px", color: "#000" }} />
-        </button> */}
+        {/* <WishlistButton course={course} /> */}
       </div>
     </StyledQuickViewBox>
   );

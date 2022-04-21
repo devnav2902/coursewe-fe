@@ -4,8 +4,9 @@ import { createLogger } from "redux-logger";
 import courseReducer from "../reducers/course.reducer";
 import accountReducer from "../reducers/account.reducer";
 import cartReducer from "../reducers/cart.reducer";
-import _ from "lodash";
+// import _ from "lodash";
 import curriculumReducer from "../reducers/curriculum.reducer";
+import learningReducer from "../reducers/learning.reducer";
 
 const logger = createLogger({
   // ...options
@@ -17,32 +18,33 @@ const reducers = combineReducers({
   user: accountReducer,
   cart: cartReducer,
   curriculum: curriculumReducer,
+  learning: learningReducer,
 });
 
-const persistedState = localStorage.getItem("shoppingCart:storage")
-  ? { cart: JSON.parse(localStorage.getItem("shoppingCart:storage")) }
-  : {};
+// const persistedState = localStorage.getItem("shoppingCart:storage")
+//   ? { cart: JSON.parse(localStorage.getItem("shoppingCart:storage")) }
+//   : {};
 
 const store = createStore(
   reducers,
-  persistedState,
+  // persistedState,
   applyMiddleware(...middleware)
 );
 
-const saveState = (state) => {
-  try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem("shoppingCart:storage", serializedState);
-  } catch {
-    // ignore write errors
-  }
-};
+// const saveState = (state) => {
+//   try {
+//     const serializedState = JSON.stringify(state);
+//     localStorage.setItem("shoppingCart:storage", serializedState);
+//   } catch {
+//     // ignore write errors
+//   }
+// };
 
-store.subscribe(
-  _.throttle(() => {
-    const cart = store.getState().cart;
-    saveState(cart);
-  }, 1000)
-);
+// store.subscribe(
+//   _.throttle(() => {
+//     const cart = store.getState().cart;
+//     saveState(cart);
+//   }, 1000)
+// );
 
 export default store;

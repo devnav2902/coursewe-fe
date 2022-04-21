@@ -1,10 +1,10 @@
-import React from "react";
+import { FaTimes } from "react-icons/fa";
 
 const CouponItem = () => {
   return (
-    <div className="coupon-item">
-      <button type="button" data-coupon="${code}" className="btn remove-coupon">
-        <i className="fas fa-times"></i>
+    <div className="coupon-item d-flex align-items-center">
+      <button type="button" className="remove-coupon d-flex align-items-center">
+        <FaTimes />
       </button>
       <span className="coupon-code">
         <b>$code</b>&nbsp;đã được áp dụng

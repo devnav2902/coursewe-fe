@@ -14,6 +14,7 @@ const StyledCartButton = styled.div`
 const CartButton = ({ course }) => {
   const dispatch = useDispatch();
   const cartData = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.user);
 
   function handleAddToCart(id) {
     dispatch(addToCart(id));
@@ -25,7 +26,8 @@ const CartButton = ({ course }) => {
 
   return (
     <StyledCartButton>
-      {cartData.loading ? (
+      {/* Kiểm tra user đăng nhập, nếu đăng nhập sẽ sử dụng giỏ hàng từ database */}
+      {!user.loaded || cartData.loading ? (
         <button className="btn btn-color-default w-100" disabled>
           <Spin indicator={<LoadingOutlined style={{ color: "#fff" }} />} />
         </button>

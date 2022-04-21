@@ -1,13 +1,14 @@
 import { Progress } from "antd";
-import React from "react";
 import { Link } from "react-router-dom";
 import Rating from "../../../components/Rating/Rating.component";
 import { BE_URL, routesWithParams } from "../../../utils/constants";
 import { isUrl } from "../../../utils/functions";
+import { StyledCourse } from "../styles/my-learning.styles";
+
 const Course = ({ course }) => {
   const { author, count_progress, slug, thumbnail, title, rating } = course;
   return (
-    <div className="course">
+    <StyledCourse className="course">
       <Link to={routesWithParams.learning(slug)} className="image-course">
         <img
           src={isUrl(thumbnail) ? thumbnail : BE_URL + "/" + thumbnail}
@@ -31,20 +32,18 @@ const Course = ({ course }) => {
         ) : (
           <div className="course-footer">
             <div className="progress-wrapper">
-              {/* <div
-                data-progress="{{ $course->count_progress }}"
-                className="progress"
-              ></div> */}
               <Progress
+                strokeColor="#5959ff"
+                trailColor="#dedee9"
                 percent={count_progress * 100}
                 size="small"
                 showInfo={false}
               />
 
               <div className="progress-info">
-                <span className="count-progress">{count_progress * 100}%</span>
+                <span>Tiến độ học tập</span>
                 &nbsp;
-                <span>Complete</span>
+                <b className="count-progress">{count_progress * 100}%</b>
               </div>
             </div>
 
@@ -52,7 +51,7 @@ const Course = ({ course }) => {
               {rating.length ? (
                 <>
                   <Rating value={rating[0].rating} size="14px" />
-                  <a href="javascript:void(0)">Bạn đã đánh giá</a>
+                  <a href="#">Bạn đã đánh giá</a>
                 </>
               ) : (
                 <>
@@ -66,7 +65,7 @@ const Course = ({ course }) => {
           </div>
         )}
       </div>
-    </div>
+    </StyledCourse>
   );
 };
 

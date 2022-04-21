@@ -1,17 +1,27 @@
+import { Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import LearningApi from "../../../api/learning.api";
+import MyLearningApi from "../../../api/my-learning.api";
+import Loading from "../../../components/Loading/Loading.component";
 import Course from "../components/Course.component";
 
 const MyLearningPage = () => {
-  const [courses, setCourses] = useState([]);
+  const [dataLearning, setDataLearning] = useState({
+    loadedCourses: false,
+    courses: [],
+  });
 
   useEffect(() => {
-    LearningApi.getCourses().then((res) => {
+    MyLearningApi.getCourses().then((res) => {
       const {
         data: { courses },
       } = res;
-      setCourses(courses.data);
+
+      setDataLearning((state) => ({
+        ...state,
+        loadedCourses: true,
+        courses: courses.data,
+      }));
       // console.log(data.courses);
     });
   }, []);
@@ -29,7 +39,9 @@ const MyLearningPage = () => {
           </div>
         </div>
         {
-          !courses.length ? (
+          !dataLearning.loadedCourses ? (
+            <Loading />
+          ) : !dataLearning.courses.length ? (
             <div className="txt">
               <p>Start learning from over 183,000 courses today.</p>
               <p>
@@ -39,11 +51,13 @@ const MyLearningPage = () => {
             </div>
           ) : (
             <div className="my-learning-section__courses">
-              <div className="list-courses">
-                {courses.map((course) => (
-                  <Course key={course.id} course={course} />
+              <Row gutter={[15, 15]}>
+                {dataLearning.courses.map((course) => (
+                  <Col key={course.id} span={6}>
+                    <Course key={course.id} course={course} />
+                  </Col>
                 ))}
-              </div>
+              </Row>
             </div>
           )
           // $courses->links()

@@ -7,11 +7,14 @@ import {
   removeFromCart,
   removeFromSavedForLater,
 } from "../../../redux/actions/cart.actions";
-import { BE_URL, routesWithParams } from "../../../utils/constants";
-import { isUrl } from "../../../utils/functions";
+import { routesWithParams } from "../../../utils/constants";
+import { linkThumbnail, roundsTheNumber } from "../../../utils/functions";
 
 const CourseItem = ({ course, actionType }) => {
   const { thumbnail, author, title, slug, id, rating_avg_rating } = course;
+  const { price, rating_count, instructional_level } = course;
+  const discount = "";
+
   const dispatch = useDispatch();
 
   const handleRemoveFromCart = (id) => {
@@ -66,22 +69,33 @@ const CourseItem = ({ course, actionType }) => {
     <div className="course-item">
       <Link to={routesWithParams.detail_course(slug)} className="">
         <div className="card-thumbnail">
-          <img
-            alt={title}
-            src={isUrl(thumbnail) ? thumbnail : BE_URL + "/" + thumbnail}
-          />
+          <img alt={title} src={linkThumbnail(thumbnail)} />
         </div>
         <div className="card-info">
           <div className="card-info__title">{title}</div>
           <div className="card-info__instructor">by&nbsp;{author.fullname}</div>
           <div className="card-info__rating">
-            <Rating value={rating_avg_rating} size="14px" />
+            <div className="rating-content d-flex align-items-center">
+              {rating_avg_rating && (
+                <span>{roundsTheNumber(rating_avg_rating, 1)}</span>
+              )}
+
+              <Rating
+                value={roundsTheNumber(rating_avg_rating, 1)}
+                size="12px"
+              />
+
+              <span className="rating-count">({rating_count} Đánh giá)</span>
+            </div>
+          </div>
+          <div className="card-info__basic">
+            <div className="level">{instructional_level.level}</div>
           </div>
         </div>
       </Link>
       <Actions />
       <div className="card-price">
-        {/* ${
+        {/* {
                   discount === "Free"
                     ? `<span title="${coupon.code}" className='discount d-flex align-items-center'>Free<i className='fas fa-tag'></i>
                         </span>`
@@ -92,9 +106,9 @@ const CourseItem = ({ course, actionType }) => {
                     : ""
                 } */}
 
-        {/* <span className="${
-                  discount ? "original-price line-through" : ""
-                }">$<span>${price.price}</span></span> */}
+        <span className={discount ? "original-price line-through" : ""}>
+          <span>{price.format_price} đ</span>
+        </span>
       </div>
     </div>
   );
