@@ -26,10 +26,15 @@ const RatingWrapper = styled.div`
   }
 `;
 
-const Rating = ({ value, disabled = true, size }) => {
+const Rating = ({ value, disabled = true, size, count = 5 }) => {
   return (
     <RatingWrapper size={size}>
-      <Rate allowHalf disabled={disabled} defaultValue={parseFloat(value)} />
+      <Rate
+        allowHalf
+        disabled={disabled}
+        defaultValue={parseFloat(value)}
+        count={count}
+      />
     </RatingWrapper>
   );
 };
