@@ -7,6 +7,12 @@ class Purchase {
       .then((res) => res)
       .catch((error) => error.response);
   };
+  purchase = async () => {
+    return axiosClient
+      .post(`/purchase`)
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
 }
 
 const PurchaseApi = new Purchase();
