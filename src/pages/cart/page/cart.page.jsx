@@ -1,5 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { ROUTES } from "../../../utils/constants";
 import CartEmpty from "../components/CartEmpty.component";
 import CouponItem from "../components/CouponItem.component";
 import CourseItem from "../components/CourseItem.component";
@@ -79,7 +81,9 @@ const CartPage = () => {
                 <div className="total-price">
                   $<span className="price">${total}</span>
                 </div>
-                <div className="btn-checkout">Checkout</div>
+                <Link to={ROUTES.CHECKOUT}>
+                  <div className="btn-checkout">Checkout</div>
+                </Link>
                 <div className="promotions">
                   <label>Promotions</label>
 

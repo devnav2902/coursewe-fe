@@ -15,10 +15,12 @@ const addToCart = (id) => async (dispatch) => {
       thumbnail,
       slug,
       rating_avg_rating,
+      price,
+
       // current_discount:{}
     } = data;
 
-    const course = {
+    const courses = {
       id,
       title,
       author: { fullname },
@@ -26,9 +28,10 @@ const addToCart = (id) => async (dispatch) => {
       thumbnail,
       slug,
       rating_avg_rating,
+      price,
     };
 
-    dispatch({ type: cartTypes.ADD_TO_CART_SUCCESS, payload: course });
+    dispatch({ type: cartTypes.ADD_TO_CART_SUCCESS, payload: courses });
   }
 };
 
