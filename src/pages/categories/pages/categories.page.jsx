@@ -88,8 +88,8 @@ const CategoriesPage = () => {
           <h1>Khóa học: {dataCategory?.title}</h1>
         </div>
 
-        {/* <CoursesBeginner />
-        <FeaturedCourses /> */}
+        {/* <CoursesBeginner /> */}
+        {/* <FeaturedCourses /> */}
       </div>
       <div className="main-categories__content">
         <div className="categories-box">

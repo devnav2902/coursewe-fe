@@ -7,7 +7,7 @@ import CategoriesApi from "../../../api/categories.api";
 import Rating from "../../../components/Rating/Rating.component";
 import { routesWithParams } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
-import SkeletonInstructors from "../../home/utils/component.utils";
+import SkeletonInstructors from "../../../components/SkeletonCourses/SkeletonCourses.component";
 import { settings } from "../../home/utils/slick.utils";
 import { getCategorySlug } from "../utils/functions";
 const StyledInstructor = styled.div`
