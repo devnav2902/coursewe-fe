@@ -1,30 +1,13 @@
+import { Col, Input, Row, Select } from "antd";
 import { useEffect, useState } from "react";
+import { Controller } from "react-hook-form";
 import ReactQuill from "react-quill";
-import { Col, Form, Input, Row } from "antd";
-import { Select } from "antd";
 import InstructionalLevelApi from "../../../api/instructionalLevel.api";
-import { useForm, Controller } from "react-hook-form";
 import CustomQuill from "../../../utils/quill";
-import { Upload, message } from "antd";
-import { FileImageOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import CourseApi from "../../../api/course.api";
-import axios from "axios";
 
 const { Option } = Select;
-const { Dragger } = Upload;
 
-const BasicsPage = ({
-  course,
-  triggerSubmit,
-  setTriggerSubmit,
-  handleValueChanged,
-  valueChanged,
-  resetState,
-  watch,
-  control,
-  register,
-  setValue,
-}) => {
+const BasicsPage = ({ course, control, setValue }) => {
   const {
     title,
     description,
@@ -47,13 +30,6 @@ const BasicsPage = ({
       });
   }, [instructionalLevelLoaded]);
 
-  const beforeUpload = () => false;
-  const propsFileUpload = {
-    multiple: false,
-    maxCount: 1,
-    beforeUpload,
-  };
-
   return (
     <div className="edit-course-section">
       <div className="inner-column">
@@ -63,11 +39,11 @@ const BasicsPage = ({
             <label htmlFor="title">Tiêu đề khóa học</label>
             <Controller
               name="title"
-              defaultValue={title}
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
+                  defaultValue={title}
                   required
                   id="title"
                   showCount
@@ -82,10 +58,10 @@ const BasicsPage = ({
             <label htmlFor="subtitle">Tóm tắt khóa học</label>
             <Controller
               name="subtitle"
-              defaultValue={subtitle}
               control={control}
               render={({ field }) => (
                 <Input
+                  defaultValue={subtitle}
                   id="subtitle"
                   {...field}
                   showCount
@@ -101,11 +77,11 @@ const BasicsPage = ({
             <Controller
               control={control}
               name="description"
-              defaultValue={description}
               render={({ field }) => (
                 <ReactQuill
-                  {...field}
+                  defaultValue={description}
                   onChange={(content, delta, source) => {
+                    console.log(delta);
                     if (source === "user") {
                       field.onChange(content);
                     }
@@ -125,10 +101,10 @@ const BasicsPage = ({
                 <Controller
                   name="instructional_level_id"
                   control={control}
-                  defaultValue={instructional_level_id}
                   render={({ field }) => (
                     <Select
                       {...field}
+                      defaultValue={instructional_level_id}
                       loading={!instructionalLevelLoaded}
                       options={instructionalLevel}
                       style={{ width: "100%" }}
@@ -149,65 +125,6 @@ const BasicsPage = ({
               </Col>
             </Row>
           </div>
-
-          <Row gutter={26}>
-            <Col span={12}>
-              <div className="form-group">
-                <label htmlFor="thumbnail">Hình ảnh khóa học</label>
-
-                <Controller
-                  name="thumbnail"
-                  control={control}
-                  render={({ field }) => (
-                    <Dragger
-                      {...propsFileUpload}
-                      {...field}
-                      onChange={(file) => {
-                        setValue("thumbnail", file.file);
-                      }}
-                      accept="image/*"
-                      defaultFileList={[
-                        { thumbUrl: thumbnail, name: thumbnail },
-                      ]}
-                    >
-                      <p className="ant-upload-drag-icon">
-                        <FileImageOutlined />
-                      </p>
-                      <p className="ant-upload-text">
-                        Click hoặc kéo thả hình ảnh khóa học tại đây
-                      </p>
-                    </Dragger>
-                  )}
-                />
-              </div>
-            </Col>
-            <Col span={12}>
-              <div className="form-group">
-                <label htmlFor="demo-video-url">Video giới thiệu</label>
-
-                <Controller
-                  name="video_demo"
-                  control={control}
-                  render={({ field }) => (
-                    <Dragger
-                      beforeUpload={(file) => beforeUpload(file, "video_demo")}
-                      {...propsFileUpload}
-                      {...field}
-                      accept="video/*"
-                      defaultFileList={[{ name: video_demo }]}
-                    >
-                      <p className="ant-upload-drag-icon">
-                        <VideoCameraOutlined />
-                      </p>
-                      <p className="ant-upload-text">
-                        Click hoặc kéo thả video giới thiệu khóa học tại đây
-                      </p>
-                    </Dragger>
-                  )}
-                />
-              </div>
-            </Col>
-          </Row>
 
           <div className="form-group">
             <label htmlFor="">Thông tin cá nhân</label>
