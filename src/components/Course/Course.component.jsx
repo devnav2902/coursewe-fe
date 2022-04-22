@@ -4,7 +4,7 @@ import { BiCheck } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { routesWithParams } from "../../utils/constants";
-import { roundsTheNumber } from "../../utils/functions";
+import { linkThumbnail, roundsTheNumber } from "../../utils/functions";
 import CartButton from "../CartButton/CartButton.component";
 import Rating from "../Rating/Rating.component";
 
@@ -172,7 +172,7 @@ const Course = ({ course }) => {
             to={routesWithParams.detail_course(slug)}
             className="image-course"
           >
-            <img src={thumbnail} alt={title} />
+            <img src={linkThumbnail(thumbnail)} alt={title} />
           </Link>
           <div className="profile-course">
             <div className="name-course truncate">
