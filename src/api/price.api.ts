@@ -7,6 +7,13 @@ class Price {
       .then((res) => res)
       .catch((error) => error.response);
   };
+
+  updatePrice = async (course_id: number, price_id: number) => {
+    return axiosClient
+      .patch("/update-price", { course_id, price_id })
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
 }
 
 const PriceApi = new Price();
