@@ -21,6 +21,7 @@ enum ROUTES {
   "COURSE_BASICS" = "/instructor/course/:id/basics",
   "INTENDED_LEARNERS" = "/instructor/course/:id/goals",
   "CURRICULUM" = "instructor/course/:id/curriculum",
+  "COURSE_IMAGE_&_PREVIEW_VIDEO" = "instructor/course/:id/course-image-and-preview-video",
   "PRICE" = "instructor/course/:id/price",
   "ADMIN_REVIEW" = "/admin/submission-courses-list",
   "CHECKOUT" = "/cart/checkout",
@@ -36,6 +37,8 @@ const routesWithParams = {
   course_basics: (id: string) => `/instructor/course/${id}/basics`,
   learning: (slug: string) => `/learning/${slug}`,
   intended_learners: (id: string | number) => `/instructor/course/${id}/goals`,
+  image_and_preview_video: (id: string | number) =>
+    `/instructor/course/${id}/course-image-and-preview-video`,
   curriculum: (id: string | number) => `/instructor/course/${id}/curriculum`,
   price: (id: string | number) => `/instructor/course/${id}/price`,
   categories: (slug: string) => `/courses/${slug}`,

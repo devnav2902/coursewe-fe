@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import { BE_URL } from "./constants";
 
 const getAccessToken = (): string | null => {
@@ -21,7 +22,19 @@ const isUrl = (link: string) => (link.indexOf("http") > -1 ? true : false);
 const linkThumbnail = (link: string) =>
   isUrl(link) ? link : BE_URL + "/" + link;
 
+const openNotification = (type: "success" | "error", description?: string) => {
+  if (type === "success" || type === "error") {
+    notification[type]({
+      message: "Thông báo",
+      description: description ? description : "Lưu thành công!",
+      top: 70,
+      duration: 3,
+    });
+  }
+};
+
 export {
+  openNotification,
   getAccessToken,
   getDataFromLocalStorage,
   roundsTheNumber,
