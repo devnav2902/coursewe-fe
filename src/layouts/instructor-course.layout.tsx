@@ -1,22 +1,56 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import InstructorApi from "../api/instructor.api";
-import { IoMdPricetags, IoIosArrowBack } from "react-icons/io";
-import { BsInfoCircle } from "react-icons/bs";
+import { FC, useCallback, useEffect, useState } from "react";
+import {
+  Control,
+  FieldValues,
+  useForm,
+  UseFormGetValues,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from "react-hook-form";
+import { BsFileRichtext, BsInfoCircle } from "react-icons/bs";
 import { FaLaptopHouse } from "react-icons/fa";
+import { IoIosArrowBack, IoMdPricetags } from "react-icons/io";
 import { RiBookmark3Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
-import { ROUTES, routesWithParams } from "../utils/constants";
-import Footer from "../components/Footer/Footer.component";
-import { useForm } from "react-hook-form";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import CourseApi from "../api/course.api";
+import InstructorApi from "../api/instructor.api";
+import Footer from "../components/Footer/Footer.component";
+import { IntendedItems } from "../pages/edit-course/utils/method";
+import { ROUTES, routesWithParams } from "../utils/constants";
+import { openNotification } from "../utils/functions";
 
-const InstructorCourseLayout = ({ children }) => {
-  const [course, setCourse] = useState(null);
-  const { id } = useParams();
+export type ICourse = {
+  id: string;
+  course_outcome: IntendedItems;
+  course_requirements: IntendedItems;
+  title: string;
+  isPublished: boolean;
+};
+
+export type ChildrenProps = {
+  course: ICourse;
+  valueChanged?: boolean;
+  handleValueChanged?: (boolValue: boolean) => void;
+  resetState: () => void;
+  control?: Control<FieldValues, any>;
+  register?: UseFormRegister<FieldValues>;
+  watch?: UseFormWatch<FieldValues>;
+  getValues: UseFormGetValues<FieldValues>;
+  setValue: UseFormSetValue<FieldValues>;
+};
+
+type Children = (props: ChildrenProps) => JSX.Element;
+interface LayoutProps {
+  children: Children;
+}
+
+const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
+  const [course, setCourse] = useState<ICourse | null>(null);
+  const { id } = useParams() as { id: string };
   const { pathname } = useLocation();
-  const [valueChanged, setValueChanged] = useState(false); // trigger button save
+  const [valueChanged, setValueChanged] = useState<boolean>(false); // trigger button save
   const navigate = useNavigate();
 
   const {
@@ -27,12 +61,7 @@ const InstructorCourseLayout = ({ children }) => {
     setValue,
     getValues,
     register,
-    reset: resetForm,
-  } = useForm({
-    defaultValues: {
-      delete_course_outcome_order: null,
-    },
-  });
+  } = useForm();
 
   useEffect(() => {
     InstructorApi.getCourseById(id).then((res) => {
@@ -40,9 +69,9 @@ const InstructorCourseLayout = ({ children }) => {
     });
   }, [id]);
 
-  const handleValueChanged = (boolValue) => {
+  const handleValueChanged = useCallback((boolValue) => {
     setValueChanged(boolValue);
-  };
+  }, []);
 
   const resetState = () => {
     handleValueChanged(false);
@@ -72,7 +101,7 @@ const InstructorCourseLayout = ({ children }) => {
   ];
   const isRouteWithButtonPreview = arrRoutesHasPreviewBtn.includes(pathname);
 
-  const handleRedirect = (route) => {
+  const handleRedirect = (route: string) => {
     if (!valueChanged) navigate(route);
     else if (pathname !== route) {
       const isOk = window.confirm(
@@ -81,13 +110,11 @@ const InstructorCourseLayout = ({ children }) => {
 
       if (isOk) {
         navigate(route);
-        resetState();
-        resetForm();
       }
     }
   };
 
-  function apiIntendedLearners(data) {
+  function apiIntendedLearners(data: any) {
     switch (true) {
       case !!data?.course_outcome?.length:
         CourseApi.updateCourseOutcome(id, data).then((res) => {
@@ -118,24 +145,23 @@ const InstructorCourseLayout = ({ children }) => {
     }
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     console.log(data);
 
     switch (pathname) {
       case routesWithParams.course_basics(id):
         CourseApi.updateInformation(id, data).then((res) => {
           resetState();
-          // console.log(res);
+          openNotification("success");
         });
         break;
 
       case routesWithParams.intended_learners(id):
         apiIntendedLearners(data);
-
         break;
 
       default:
-        break;
+        return;
     }
   };
 
@@ -175,7 +201,7 @@ const InstructorCourseLayout = ({ children }) => {
         </div>
       </nav>
 
-      <main className="main-instructor-page">
+      <main className="main-instructor-page spacing-top-nav">
         <div className="sidebar">
           <div className="navbar">
             <strong>Tạo nội dung khóa học</strong>
@@ -187,6 +213,16 @@ const InstructorCourseLayout = ({ children }) => {
             >
               <BsInfoCircle />
               <span>Thông tin khóa học</span>
+            </button>
+            <button
+              type="button"
+              className="navbar-link"
+              onClick={() =>
+                handleRedirect(routesWithParams.image_and_preview_video(id))
+              }
+            >
+              <BsFileRichtext />
+              <span>Hình ảnh & video giới thiệu</span>
             </button>
             <button
               type="button"
@@ -223,19 +259,17 @@ const InstructorCourseLayout = ({ children }) => {
           </div>
         </div>
         <div className="main-content">
-          {isRouteWithButtonSave
-            ? children({
-                course,
-                handleValueChanged,
-                valueChanged,
-                resetState,
-                control,
-                watch,
-                register,
-                setValue,
-                getValues,
-              })
-            : children({ course })}
+          {children({
+            course,
+            handleValueChanged,
+            valueChanged,
+            resetState,
+            control,
+            watch,
+            register,
+            setValue,
+            getValues,
+          })}
         </div>
       </main>
 

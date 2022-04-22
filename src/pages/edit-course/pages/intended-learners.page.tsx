@@ -1,14 +1,10 @@
+import { FC } from "react";
+import { ChildrenProps } from "../../../layouts/instructor-course.layout";
 import OutcomeContainer from "../components/intended-learners/OutcomeContainer.component";
 import RequirementsContainer from "../components/intended-learners/RequirementsContainer.component";
 
-const IntendedLearnersPage = ({
-  course,
-  handleValueChanged,
-  valueChanged,
-  resetState,
-  setValue,
-  getValues,
-}) => {
+const IntendedLearnersPage: FC<ChildrenProps> = (props) => {
+  const { resetState, setValue, getValues, course } = props;
   const formMethod = {
     resetState,
     setValue,
