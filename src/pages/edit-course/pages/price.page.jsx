@@ -1,57 +1,87 @@
-import { Select } from "antd";
+import { message, Select } from "antd";
 import { useEffect, useState } from "react";
 import PriceApi from "../../../api/price.api";
+import { StyledButtonSave, StyledPrice } from "../styles/edit-course.styles";
 
 const PricePage = ({ course }) => {
-  const [price, setPrice] = useState(course.price_id);
   const [priceList, setPriceList] = useState([]);
+  const [loadedPriceList, setLoadedPriceList] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState(course.price.id);
+  const [saving, setSaving] = useState(false);
+
+  function formatPrice(objPrice) {
+    const { format_price, id } = objPrice;
+
+    return {
+      format_price: parseInt(format_price) ? format_price + " đ" : "Miễn phí",
+      id: id,
+    };
+  }
 
   useEffect(() => {
     PriceApi.getPrice().then((res) => {
-      const arr = res.data.price.map((price) => {
-        const { format_price, id } = price;
-
-        return {
-          format_price: parseInt(format_price)
-            ? format_price + " đ"
-            : "Miễn phí",
-          id: id,
-        };
-      });
+      const arr = res.data.price.map((price) => formatPrice(price));
 
       setPriceList(arr);
+      setLoadedPriceList(true);
     });
   }, []);
+
+  function savePrice() {
+    setSaving(true);
+
+    message.config({
+      top: 70,
+      maxCount: 3,
+    });
+    const messagePromise = message.loading("Đang lưu..", 0);
+
+    PriceApi.updatePrice(course.id, currentPrice)
+      .then(() => {
+        messagePromise();
+        message.success("Đã lưu thành công!", 2.5);
+        setSaving(false);
+      })
+      .catch((error) => {
+        setSaving(false);
+        message.error("Có lỗi xảy ra, vui lòng thử lại!", 2.5);
+      });
+  }
 
   return (
     <div className="inner-column">
       <h6 className="">Giá khóa học</h6>
-
       <p>
-        Vui lòng chọn mức giá cho khóa học của bạn bên dưới và nhấp vào 'Save'.
+        Vui lòng chọn mức giá cho khóa học của bạn bên dưới và nhấp vào 'Lưu
+        thay đổi'.
       </p>
-
       <p>
         Nếu bạn tạo khóa học miễn phí, tổng thời lượng của nội dung video phải
         dưới 2 giờ.
       </p>
-
-      <div className="">
-        <div className="price">
-          <div className="select">
-            <Select
-              onChange={(price) => {
-                setPrice(price);
-              }}
-              placeholder="Chọn giá bán"
-              defaultValue={price}
-              style={{ width: "100%" }}
-              options={priceList}
-              fieldNames={{ label: "format_price", value: "id" }}
-            />
-          </div>
-          <button className="button">Save</button>
-        </div>
+      <div>
+        <StyledPrice className="price">
+          <Select
+            loading={!loadedPriceList}
+            onChange={(price) => {
+              setCurrentPrice(price);
+            }}
+            defaultValue={formatPrice(course.price).format_price}
+            placeholder="Chọn giá khóa học"
+            options={priceList}
+            fieldNames={{ label: "format_price", value: "id" }}
+          />
+          <StyledButtonSave onClick={savePrice}>
+            <button
+              className="button"
+              disabled={
+                saving ? true : currentPrice === course.price.id ? true : false // lỗi chưa get giá đã update
+              }
+            >
+              Lưu thay đổi
+            </button>
+          </StyledButtonSave>
+        </StyledPrice>
       </div>
     </div>
   );
