@@ -330,7 +330,7 @@
 
   .course-info {
     &__item {
-      p {
+      > p {
         font-size: 2.4rem;
         font-weight: 700;
         margin-bottom: 2rem;
