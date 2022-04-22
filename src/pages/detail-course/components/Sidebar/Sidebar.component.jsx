@@ -19,6 +19,7 @@ const Sidebar = ({ course }) => {
     course;
   const { rating_count, section_count, lecture_count, course_bill_count } =
     course;
+  const { video_demo } = course;
 
   const [dataCheckPurchase, setDataCheckPurchase] = useState({
     loaded: false,
@@ -155,7 +156,7 @@ const Sidebar = ({ course }) => {
         }`}
       >
         <div className="widget-content">
-          <Video thumbnail={thumbnail} title={title} />
+          <Video thumbnail={thumbnail} title={title} video_demo={video_demo} />
 
           {!dataCheckPurchase.loaded ? (
             <Skeleton active className="pd-2" />
