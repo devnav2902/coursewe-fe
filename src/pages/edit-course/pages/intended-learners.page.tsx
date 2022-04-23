@@ -4,11 +4,15 @@ import OutcomeContainer from "../components/intended-learners/OutcomeContainer.c
 import RequirementsContainer from "../components/intended-learners/RequirementsContainer.component";
 
 const IntendedLearnersPage: FC<ChildrenProps> = (props) => {
-  const { resetState, setValue, getValues, course } = props;
+  const { resetState, setValue, getValues, course, setError, errors } = props;
+  const { clearErrors } = props;
   const formMethod = {
     resetState,
     setValue,
     getValues,
+    setError,
+    errors,
+    clearErrors,
   };
 
   return (

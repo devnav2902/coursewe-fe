@@ -1,28 +1,24 @@
 import { Button, Input, Row } from "antd";
-import _ from "lodash";
-import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-import {
-  FieldValues,
-  UseFormGetValues,
-  UseFormSetValue,
-} from "react-hook-form";
+import { ChangeEvent, FC, useEffect } from "react";
 import { FiPlus } from "react-icons/fi";
 import { ICourse } from "../../../../layouts/instructor-course.layout";
+import { useInputFields } from "../../hooks/intended-learner.hooks";
+import {
+  HookForm,
+  IDataRemove,
+  IntendedItem,
+} from "../../utils/instructor-course.types";
 import {
   iniArrIntendedItems,
-  IntendedItem,
-  IntendedItems,
   onChangeItem,
   onRemoveItem,
+  validateItemsBeforeSend,
 } from "../../utils/method";
 import OutcomeItem from "./Item.component";
 
 interface ContainerProps {
   course: ICourse;
-  formMethod: {
-    getValues: UseFormGetValues<FieldValues>;
-    setValue: UseFormSetValue<FieldValues>;
-  };
+  formMethod: HookForm;
 }
 
 export type EventInput = ChangeEvent<HTMLInputElement>;
@@ -35,32 +31,25 @@ const OutcomeContainer: FC<ContainerProps> = ({ course, formMethod }) => {
   // Khởi tạo mảng item theo điều kiện cho trước (ít nhất 4 item)
   const iniArrItems = iniArrIntendedItems(course_outcome, minItems);
 
-  const [countItem, setCountItem] = useState<number>(iniArrItems.length);
-  const [allowRemoveItem, setAllowRemoveItem] = useState<boolean>(false); // ít nhất 1 items
-  const [inputFields, setInputFields] = useState<IntendedItems>(iniArrItems);
-  const allTextInputRef = useRef<Input[]>([]);
+  const {
+    handleDecreaseItem,
+    handleAddItem,
+    allowRemoveItem,
+    inputFields,
+    countItem,
+    allTextInputRef,
+  } = useInputFields(iniArrItems, minItems);
 
   useEffect(() => {
-    const handleSetAllowRemoveItem = (amount: number) => {
-      const allowRemoveItem = amount > minItems ? true : false;
-      setAllowRemoveItem(allowRemoveItem);
-    };
-
-    handleSetAllowRemoveItem(countItem);
-  }, [countItem]);
-
-  function handleIncreaseItem() {
-    setCountItem((amount) => amount + 1);
-  }
-
-  function handleDecreaseItem() {
-    setCountItem((amount) => amount - 1);
-  }
+    // re-render => ref update mới nhất => validate
+    const dataValidate = { minItems, allInputsRef: allTextInputRef };
+    validateItemsBeforeSend(dataValidate, "outcome_items", formMethod);
+  }, [countItem, formMethod, allTextInputRef]);
 
   function handleRemoveItem(order: number) {
-    const values = {
+    const values: IDataRemove = {
       order,
-      array_update: "course_outcome",
+      array_update: "outcome_items",
       array_order_delete: "delete_course_outcome_order",
     };
 
@@ -68,41 +57,12 @@ const OutcomeContainer: FC<ContainerProps> = ({ course, formMethod }) => {
     handleDecreaseItem();
   }
 
-  function addItemInputFields() {
-    const newfield = (order: number): IntendedItem => ({
-      description: "",
-      order,
-    });
+  function handleChangeValueItem(value: string, order: number) {
+    const data: IntendedItem = { order, description: value };
+    onChangeItem(data, "outcome_items", getValues, setValue);
 
-    setInputFields((currentState) => {
-      console.log(currentState);
-      const { order: maxOrder } = _.maxBy(
-        currentState,
-        "order"
-      ) as IntendedItem;
-      console.log("max order current:", maxOrder);
-
-      const order = maxOrder + 1;
-      return [...currentState, newfield(order)];
-    });
-  }
-
-  function handleAddItem() {
-    const hasEmptyItem = allTextInputRef.current
-      .filter((r) => r) // lọc các ref null(item bị xóa)
-      .some((input) => input.state.value === "");
-
-    if (!hasEmptyItem) {
-      // kiểm tra item mới & cũ not empty => tạo item mới
-      handleIncreaseItem();
-      addItemInputFields();
-    }
-  }
-
-  function handleChangeValueItem(e: EventInput, order: number) {
-    const { value } = e.target as HTMLInputElement;
-    const data = { order, description: value };
-    onChangeItem(data, "course_outcome", getValues, setValue);
+    const dataValidate = { minItems, allInputsRef: allTextInputRef };
+    validateItemsBeforeSend(dataValidate, "outcome_items", formMethod);
   }
 
   return (
@@ -118,7 +78,7 @@ const OutcomeContainer: FC<ContainerProps> = ({ course, formMethod }) => {
                 key={order}
                 order={order}
                 onChangeItem={(e: EventInput) =>
-                  handleChangeValueItem(e, order)
+                  handleChangeValueItem(e.target.value, order)
                 }
                 defaultValue={description}
                 allowRemoveItem={allowRemoveItem}
@@ -132,7 +92,7 @@ const OutcomeContainer: FC<ContainerProps> = ({ course, formMethod }) => {
       <Button
         type="link"
         className="add-response d-flex align-items-center"
-        onClick={() => handleAddItem()}
+        onClick={handleAddItem}
       >
         <FiPlus />
         Thêm câu trả lời cho những mục tiêu của khóa học

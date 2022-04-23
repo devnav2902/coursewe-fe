@@ -1,16 +1,23 @@
+import { Input } from "antd";
+import _ from "lodash";
+import { MutableRefObject } from "react";
 import {
-  UseFormGetValues,
   FieldValues,
+  UseFormGetValues,
   UseFormSetValue,
 } from "react-hook-form";
-// Thay đổi value coure outcome & requirements
-type Type = "course_outcome" | "course_requirements";
-type IntendedItem = { description: string; order: number };
-type IntendedItems = IntendedItem[];
+import {
+  HookForm,
+  IDataRemove,
+  IntendedItem,
+  IntendedItems,
+  TypeItems,
+} from "./instructor-course.types";
 
+// Thay đổi value coure outcome & requirements
 const onChangeItem = (
   values: IntendedItem,
-  type: Type,
+  type: TypeItems,
   getValues: UseFormGetValues<FieldValues>,
   setValue: UseFormSetValue<FieldValues>
 ) => {
@@ -39,13 +46,8 @@ const onChangeItem = (
   setValue(type, updatedItems);
 };
 
-interface IData {
-  array_order_delete: string;
-  array_update: string;
-  order: number;
-}
 const onRemoveItem = (
-  values: IData,
+  values: IDataRemove,
   getValues: UseFormGetValues<FieldValues>,
   setValue: UseFormSetValue<FieldValues>
 ) => {
@@ -78,11 +80,13 @@ const iniArrIntendedItems = (arrItems: IntendedItems, minItems: number) => {
   const lengthArr = arrItems.length;
 
   if (arrItems.length) {
+    const { order: maxOrder } = _.maxBy(arrItems, "order") as IntendedItem;
+
     const arrEmptyOutcome: IntendedItems = Array.from({
       length: minItems - lengthArr,
     }).map((_, i) => ({
       description: "",
-      order: lengthArr + 1 + i,
+      order: maxOrder + 1 + i,
     }));
 
     return [...arrItems, ...arrEmptyOutcome];
@@ -94,10 +98,47 @@ const iniArrIntendedItems = (arrItems: IntendedItems, minItems: number) => {
   }
 };
 
+// check lỗi và gửi lên react hook form
+type DataValidate = {
+  minItems: number;
+  allInputsRef: MutableRefObject<Input[]>;
+};
+
+const validateItemsBeforeSend = (
+  dataValidate: DataValidate,
+  type: TypeItems,
+  formMethod: HookForm
+) => {
+  const { clearErrors, setError, errors } = formMethod;
+  const { minItems, allInputsRef } = dataValidate;
+
+  const totalInputsHasValue = allInputsRef.current
+    .filter((el) => el)
+    .reduce((total, el) => {
+      const hasValue = el.input.value.trim() !== "";
+
+      if (hasValue) return (total += 1);
+      return total;
+    }, 0);
+
+  if (totalInputsHasValue < minItems) {
+    // let message = "";
+    if (type === "outcome_items") {
+      const message = `Bạn cần nhập ít nhất ${minItems} mục tiêu hoặc kết quả học tập!`;
+
+      if (!errors[`not_enough_${type}`])
+        setError(`not_enough_${type}`, { type, message });
+    }
+  } else {
+    if (errors[`not_enough_${type}`]) clearErrors(`not_enough_${type}`);
+  }
+
+  console.log(errors);
+};
+
 export {
   onChangeItem,
   onRemoveItem,
   iniArrIntendedItems,
-  IntendedItem,
-  IntendedItems,
+  validateItemsBeforeSend,
 };

@@ -39,13 +39,14 @@ const Item: FC<ItemProps> = ({
         <Col span={20}>
           <Input
             ref={innerRef}
-            data-order={order}
             name={`item_${order}`}
             onChange={(e: EventInput) => {
               const { value } = e.target;
+
               value.trim() !== ""
                 ? setDisplayActionButton(true)
                 : setDisplayActionButton(false);
+
               onChangeItem(e);
             }}
             showCount

@@ -1,14 +1,6 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
 import { FC, useCallback, useEffect, useState } from "react";
-import {
-  Control,
-  FieldValues,
-  useForm,
-  UseFormGetValues,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch,
-} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { BsFileRichtext, BsInfoCircle } from "react-icons/bs";
 import { FaLaptopHouse } from "react-icons/fa";
 import { IoIosArrowBack, IoMdPricetags } from "react-icons/io";
@@ -17,7 +9,8 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import CourseApi from "../api/course.api";
 import InstructorApi from "../api/instructor.api";
 import Footer from "../components/Footer/Footer.component";
-import { IntendedItems } from "../pages/edit-course/utils/method";
+import { HookForm } from "../pages/edit-course/utils/instructor-course.types";
+import { IntendedItems } from "../pages/edit-course/utils/instructor-course.types";
 import { ROUTES, routesWithParams } from "../utils/constants";
 import { openNotification } from "../utils/functions";
 
@@ -33,13 +26,7 @@ export type ChildrenProps = {
   course: ICourse;
   valueChanged?: boolean;
   handleValueChanged?: (boolValue: boolean) => void;
-  resetState: () => void;
-  control?: Control<FieldValues, any>;
-  register?: UseFormRegister<FieldValues>;
-  watch?: UseFormWatch<FieldValues>;
-  getValues: UseFormGetValues<FieldValues>;
-  setValue: UseFormSetValue<FieldValues>;
-};
+} & HookForm;
 
 type Children = (props: ChildrenProps) => JSX.Element;
 interface LayoutProps {
@@ -54,13 +41,14 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
 
   const {
-    handleSubmit,
-    // formState: { errors },
+    formState: { errors },
     control,
     watch,
     setValue,
     getValues,
     register,
+    setError,
+    clearErrors,
   } = useForm();
 
   useEffect(() => {
@@ -86,6 +74,8 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
       subscription.unsubscribe();
     };
   }, [watch, valueChanged, handleValueChanged]);
+
+  console.log("re-render layout");
 
   if (!course) return null;
 
@@ -115,38 +105,33 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
   };
 
   function apiIntendedLearners(data: any) {
-    switch (true) {
-      case !!data?.course_outcome?.length:
-        CourseApi.updateCourseOutcome(id, data).then((res) => {
-          resetState();
-          console.log(res);
-        });
+    !!data?.course_outcome?.length &&
+      CourseApi.updateCourseOutcome(id, data).then((res) => {
+        resetState();
+        console.log(res);
+      });
 
-      case !!data?.delete_course_outcome_order?.length:
-        CourseApi.deleteCourseOutcome(id, data).then((res) => {
-          resetState();
-          console.log(res);
-        });
+    !!data?.delete_course_outcome_order?.length &&
+      CourseApi.deleteCourseOutcome(id, data).then((res) => {
+        resetState();
+        console.log(res);
+      });
 
-      case !!data?.course_requirements?.length:
-        CourseApi.updateCourseRequirements(id, data).then((res) => {
-          resetState();
-          console.log(res);
-        });
+    !!data?.course_requirements?.length &&
+      CourseApi.updateCourseRequirements(id, data).then((res) => {
+        resetState();
+        console.log(res);
+      });
 
-      case !!data?.delete_course_requirements_order?.length:
-        CourseApi.deleteCourseRequirements(id, data).then((res) => {
-          resetState();
-          console.log(res);
-        });
-
-      default:
-        break;
-    }
+    !!data?.delete_course_requirements_order?.length &&
+      CourseApi.deleteCourseRequirements(id, data).then((res) => {
+        resetState();
+        console.log(res);
+      });
   }
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = () => {
+    const data = getValues();
 
     switch (pathname) {
       case routesWithParams.course_basics(id):
@@ -157,7 +142,11 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
         break;
 
       case routesWithParams.intended_learners(id):
-        apiIntendedLearners(data);
+        if (errors.not_enough_outcome_items) {
+          openNotification("error", errors.not_enough_outcome_items.message);
+        } else {
+          apiIntendedLearners(data);
+        }
         break;
 
       default:
@@ -166,7 +155,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <form className="wrapper instructor-page" onSubmit={handleSubmit(onSubmit)}>
+    <form className="wrapper instructor-page">
       <nav className="nav">
         <div className="nav-content">
           <Link
@@ -191,9 +180,10 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
 
           {isRouteWithButtonSave && (
             <button
+              onClick={onSubmit}
               disabled={valueChanged ? false : true}
-              type="submit"
               className="save"
+              type="button"
             >
               Lưu thay đổi
             </button>
@@ -268,7 +258,10 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
             watch,
             register,
             setValue,
+            setError,
             getValues,
+            errors,
+            clearErrors,
           })}
         </div>
       </main>
