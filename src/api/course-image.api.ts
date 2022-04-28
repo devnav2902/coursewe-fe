@@ -12,7 +12,7 @@ class CourseImage {
 
   updateCourseImage = async (
     course_id: string | number,
-    thumbnail: Blob,
+    thumbnail: File,
     setProgress: (number: number) => void
   ) => {
     const formData = new FormData();

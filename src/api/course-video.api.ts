@@ -1,6 +1,4 @@
-import axios from "axios";
 import axiosClient from "../utils/axios";
-import { openNotification } from "../utils/functions";
 
 class CourseVideo {
   controller: AbortController | null;
@@ -11,7 +9,7 @@ class CourseVideo {
 
   updateCourseVideo = async (
     course_id: string | number,
-    video_demo: Blob,
+    video_demo: File,
     setProgress: (number: number) => void
   ) => {
     const formData = new FormData();
