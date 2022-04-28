@@ -1,15 +1,30 @@
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
-import CURRICULUM from "../utils/constants";
+import { CURRICULUM_TYPES } from "../../utils/constants";
+import { FC } from "react";
+import { Lecture } from "../../../../layouts/instructor-course.layout";
+import { LectureType, SectionType } from "../../utils/instructor-course.types";
+import { useParams } from "react-router-dom";
 
-const LectureTitle = (props) => {
+type LectureTitleProps = {
+  data: Lecture;
+  handleDisplayResources: () => void;
+  displayResources: boolean;
+  editTitleFunc: (id: number, type: LectureType | SectionType) => void;
+  deleteLecture: (lectureId: number, courseId: number) => void;
+};
+
+const LectureTitle: FC<LectureTitleProps> = (props) => {
   const {
     data: { order, title, src, id },
     handleDisplayResources,
     displayResources,
     editTitleFunc: onEditTitle,
+    deleteLecture,
   } = props;
+
+  const { id: courseId } = useParams();
 
   return (
     <div className="lecture-content__title">
@@ -20,22 +35,30 @@ const LectureTitle = (props) => {
         </span>
         <span className="curriculum-title">{title}</span>
         <button
-          onClick={() => onEditTitle(id, CURRICULUM.LECTURE)}
+          type="button"
+          onClick={() => onEditTitle(id, CURRICULUM_TYPES.LECTURE)}
           className="lecture-edit-btn item-icon-button"
         >
           <FaPencilAlt />
         </button>
-        <button className="lecture-delete-btn item-icon-button">
+        <button
+          onClick={() => courseId && deleteLecture(id, parseInt(courseId))}
+          type="button"
+          className="lecture-delete-btn item-icon-button"
+        >
           <FaTrash />
         </button>
       </div>
       {!src && (
         <div className="add-content">
-          <button className="lecture-add-content">+ Nội dung</button>
+          <button type="button" className="lecture-add-content">
+            + Nội dung
+          </button>
         </div>
       )}
       <div className="lecture-collapse">
         <button
+          type="button"
           onClick={handleDisplayResources}
           className="lecture-collapse-btn d-flex align-items-center"
         >

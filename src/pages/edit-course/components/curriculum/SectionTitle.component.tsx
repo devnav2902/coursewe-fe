@@ -1,6 +1,15 @@
+import { FC } from "react";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import { Section } from "../../../../layouts/instructor-course.layout";
+import { LectureType, SectionType } from "../../utils/instructor-course.types";
+import { CURRICULUM_TYPES } from "../../utils/constants";
 
-const SectionTitle = (props) => {
+export type SectionTitleProps = {
+  data: Section;
+  editTitleFunc: (id: number, type: LectureType | SectionType) => void;
+};
+
+const SectionTitle: FC<SectionTitleProps> = (props) => {
   const {
     data: { order, title, id },
     editTitleFunc: onEditTitle,
@@ -15,7 +24,7 @@ const SectionTitle = (props) => {
       </span>
       <button
         type="button"
-        onClick={() => onEditTitle(id, "section")}
+        onClick={() => onEditTitle(id, CURRICULUM_TYPES.SECTION)}
         className="item-icon-button section-edit-btn"
       >
         <FaPencilAlt />

@@ -1,12 +1,20 @@
 import { VideoCameraOutlined } from "@ant-design/icons";
-import { Col, Image, Progress, Row } from "antd";
+import { Col, Image, Progress, ProgressProps, Row, UploadProps } from "antd";
+import { UploadChangeParam } from "antd/lib/upload";
 import Dragger from "antd/lib/upload/Dragger";
 import axios from "axios";
-import { useState } from "react";
+import { FC, useState } from "react";
 import CourseVideoApi from "../../../../api/course-video.api";
 import { openNotification } from "../../../../utils/functions";
 
-const CourseVideo = ({
+type CourseVideoProps = {
+  video_demo: string;
+  courseId: number | string;
+  progressProps: ProgressProps;
+  fileUploadProps: UploadProps;
+};
+
+const CourseVideo: FC<CourseVideoProps> = ({
   video_demo,
   courseId,
   progressProps,
@@ -14,7 +22,7 @@ const CourseVideo = ({
 }) => {
   const [progressUploadVideo, setProgressUploadVideo] = useState(0);
 
-  function handleUploadVideo(file) {
+  function handleUploadVideo(file: UploadChangeParam<File>) {
     if (file.fileList.length) {
       CourseVideoApi.updateCourseVideo(
         courseId,
@@ -42,7 +50,9 @@ const CourseVideo = ({
   }
 
   function handleAbortUploadVideo() {
-    CourseVideoApi.controller.abort();
+    if (CourseVideoApi.controller) {
+      CourseVideoApi.controller.abort();
+    }
     setProgressUploadVideo(0);
   }
 
@@ -65,7 +75,7 @@ const CourseVideo = ({
             showRemoveIcon: progressUploadVideo ? true : false,
           }}
           onChange={handleUploadVideo}
-          defaultFileList={[{ name: video_demo }]}
+          defaultFileList={[{ uid: video_demo, name: video_demo }]}
           onRemove={handleAbortUploadVideo}
         >
           <p className="ant-upload-drag-icon">

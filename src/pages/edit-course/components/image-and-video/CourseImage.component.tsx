@@ -1,25 +1,33 @@
 import { FileImageOutlined } from "@ant-design/icons";
-import { Col, Image, Progress, Row } from "antd";
+import { Col, Image, Progress, ProgressProps, Row, UploadProps } from "antd";
+import { UploadChangeParam } from "antd/lib/upload";
 import Dragger from "antd/lib/upload/Dragger";
 import axios from "axios";
 import { useState } from "react";
 import CourseImageApi from "../../../../api/course-image.api";
 import { linkThumbnail, openNotification } from "../../../../utils/functions";
 
+type CourseImageProps = {
+  thumbnail: string;
+  courseId: number | string;
+  progressProps: ProgressProps;
+  fileUploadProps: UploadProps;
+};
+
 const CourseImage = ({
   thumbnail,
   courseId,
   progressProps,
   fileUploadProps,
-}) => {
+}: CourseImageProps) => {
   const [courseImage, setCourseImage] = useState(thumbnail);
   const [progressUploadImage, setProgressUploadImage] = useState(0);
 
-  function handleUploadImage(file) {
-    if (file.fileList.length) {
+  function handleUploadImage(info: UploadChangeParam<File>) {
+    if (info.fileList.length) {
       CourseImageApi.updateCourseImage(
         courseId,
-        file.file,
+        info.file,
         setProgressUploadImage
       )
         .then((res) => {
@@ -40,7 +48,9 @@ const CourseImage = ({
   }
 
   function handleAbortUploadImage() {
-    CourseImageApi.controller.abort();
+    if (CourseImageApi.controller) {
+      CourseImageApi.controller.abort();
+    }
     setProgressUploadImage(0);
   }
 
@@ -72,7 +82,9 @@ const CourseImage = ({
           onChange={handleUploadImage}
           name="thumbnail"
           accept="image/*"
-          defaultFileList={[{ thumbUrl: courseImage, name: courseImage }]}
+          defaultFileList={[
+            { uid: courseImage, thumbUrl: courseImage, name: courseImage },
+          ]}
           onRemove={handleAbortUploadImage}
           showUploadList={{
             showRemoveIcon: progressUploadImage ? true : false,

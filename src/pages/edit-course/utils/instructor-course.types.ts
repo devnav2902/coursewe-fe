@@ -35,4 +35,14 @@ interface IDataRemove {
   order: number;
 }
 
+// CURRICULUM
+
+export type SectionType = "section";
+export type LectureType = "lecture";
+
+export type CurriculumTypes = {
+  SECTION: SectionType;
+  LECTURE: LectureType;
+};
+
 export { HookForm, IntendedItem, IntendedItems, IDataRemove, TypeItems };

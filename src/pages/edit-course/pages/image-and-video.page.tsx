@@ -1,19 +1,26 @@
+import { ProgressProps, UploadProps } from "antd";
+import { FC } from "react";
+import { ICourse } from "../../../layouts/instructor-course.layout";
 import CourseImage from "../components/image-and-video/CourseImage.component";
 import CourseVideo from "../components/image-and-video/CourseVideo.component";
 
-const ImageAndVideoPage = ({ course }) => {
+type ImageAndVideoProps = {
+  course: ICourse;
+};
+
+const ImageAndVideoPage: FC<ImageAndVideoProps> = ({ course }) => {
   const { video_demo, thumbnail, id } = course;
 
-  const beforeUpload = (e) => false;
+  const beforeUpload = () => false;
 
-  const progressProps = {
+  const progressProps: ProgressProps = {
     status: "active",
     showInfo: false,
     strokeWidth: 12,
     format: (percent) => percent + "%",
   };
 
-  const fileUploadProps = {
+  const fileUploadProps: UploadProps = {
     multiple: false,
     maxCount: 1,
     beforeUpload,

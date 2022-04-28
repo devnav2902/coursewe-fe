@@ -1,11 +1,23 @@
+import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   cancelCreateLecture,
   cancelEditTitle,
-} from "../../../redux/actions/curriculum.actions";
-import CURRICULUM from "../utils/constants";
+} from "../../../../redux/actions/curriculum.actions";
+import { CURRICULUM_TYPES } from "../../utils/constants";
+import { LectureType, SectionType } from "../../utils/instructor-course.types";
 
-const FormEditTitle = ({ title, type, edit = true }) => {
+type FormEditTitleProps = {
+  title: string;
+  type: SectionType | LectureType;
+  edit?: boolean;
+};
+
+const FormEditTitle: FC<FormEditTitleProps> = ({
+  title,
+  type,
+  edit = true,
+}) => {
   const action = edit ? "Lưu" : "Thêm";
   const dispatch = useDispatch();
   const { displayCreateLecture, displayCreateSection } = useSelector(
@@ -13,8 +25,8 @@ const FormEditTitle = ({ title, type, edit = true }) => {
   );
 
   const handleCancelEditTitle = () => {
-    if (!edit && type === CURRICULUM.LECTURE) {
-      // create lecture
+    if (!edit && type === CURRICULUM_TYPES.LECTURE) {
+      // cancel create lecture
       dispatch(cancelCreateLecture);
     } else {
       // edit section/lecture & create section
@@ -23,15 +35,15 @@ const FormEditTitle = ({ title, type, edit = true }) => {
   };
 
   return (
-    <form className="curriculum-form">
+    <div className="curriculum-form">
       <div className={"curriculum-form__title"}>
         <span className={"curriculum-form-txt"}>
           {type === "lecture" ? "Bài giảng" : "Chương học"}
         </span>
         <input
-          maxLength="80"
+          maxLength={80}
           name="title"
-          placeholder="Enter a Title"
+          placeholder="Nhập tiêu đề..."
           type="text"
           defaultValue={title}
         />
@@ -46,7 +58,7 @@ const FormEditTitle = ({ title, type, edit = true }) => {
 
         <button type="button">{action}</button>
       </div>
-    </form>
+    </div>
   );
 };
 

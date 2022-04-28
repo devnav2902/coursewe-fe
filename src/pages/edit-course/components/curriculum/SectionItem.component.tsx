@@ -1,21 +1,28 @@
-import LectureItem from "./LectureItem.component";
-import { nanoid } from "nanoid";
+import { FC, useState } from "react";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import { AiOutlinePlus } from "react-icons/ai";
+import { BsPlusCircleFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { Section } from "../../../../layouts/instructor-course.layout";
 import {
   hideOption,
   openCreateLecture,
   setDisplayCreateLecture,
   setElementDisplay,
-} from "../../../redux/actions/curriculum.actions";
-import SectionTitle from "./SectionTitle.component";
+} from "../../../../redux/actions/curriculum.actions";
+import { CURRICULUM_TYPES } from "../../utils/constants";
+import { LectureType, SectionType } from "../../utils/instructor-course.types";
 import FormEditTitle from "./FormEditTitle.component";
-import CURRICULUM from "../utils/constants";
-import { BsPlusCircleFill } from "react-icons/bs";
-import { Droppable, Draggable } from "react-beautiful-dnd";
+import LectureItem from "./LectureItem.component";
+import SectionTitle, { SectionTitleProps } from "./SectionTitle.component";
 
-const SectionItem = (props) => {
+type SectionItemProps = {
+  sectionItem: Section;
+  innerRef: (element: HTMLDivElement) => any;
+  sectionIndex: any;
+};
+
+const SectionItem: FC<SectionItemProps> = (props) => {
   const { sectionItem, innerRef, sectionIndex, ...restProps } = props;
   const { id, title, order, lecture } = sectionItem;
 
@@ -24,9 +31,10 @@ const SectionItem = (props) => {
   );
   const dispatch = useDispatch();
 
-  const [displayResources, setDisplayResources] = useState(false);
-  const [displayUploadResources, setDisplayUploadResources] = useState(false);
-  const [displayMedia, setDisplayMedia] = useState(false);
+  const [displayResources, setDisplayResources] = useState<boolean>(false);
+  const [displayUploadResources, setDisplayUploadResources] =
+    useState<boolean>(false);
+  const [displayUploadMedia, setDisplayUploadMedia] = useState<boolean>(false);
 
   const handleDisplayUploadResources = () => {
     setDisplayUploadResources(true);
@@ -42,24 +50,24 @@ const SectionItem = (props) => {
   };
 
   const closeUploadMedia = () => {
-    setDisplayMedia(false);
+    setDisplayUploadMedia(false);
   };
 
   const handleDisplayUploadMedia = () => {
-    setDisplayMedia(true);
+    setDisplayUploadMedia(true);
     setDisplayResources(false);
   };
 
-  const onEditTitle = (id, type) => {
+  const onEditTitle = (id: number, type: LectureType | SectionType) => {
     dispatch(setElementDisplay({ id, type }));
 
     setDisplayResources(false);
     setDisplayUploadResources(false);
-    setDisplayMedia(false);
+    setDisplayUploadMedia(false);
   };
 
   const dataDisplay = {
-    displayMedia,
+    displayUploadMedia,
     displayResources,
     displayUploadResources,
   };
@@ -75,8 +83,8 @@ const SectionItem = (props) => {
     handleDisplayUploadResources,
   };
 
-  const SectionTitleProps = {
-    data: { order, title, id },
+  const SectionTitleProps: SectionTitleProps = {
+    data: sectionItem,
     editTitleFunc: onEditTitle,
   };
 
@@ -85,7 +93,8 @@ const SectionItem = (props) => {
   };
 
   const isDisplayEditTitle =
-    elementDisplay.id === id && elementDisplay.type === CURRICULUM.SECTION;
+    elementDisplay.id === id &&
+    elementDisplay.type === CURRICULUM_TYPES.SECTION;
 
   const handleAddItem = () => {
     dispatch(openCreateLecture(id));
@@ -105,7 +114,7 @@ const SectionItem = (props) => {
     >
       <div className="curriculum-content section-content section-editor">
         {isDisplayEditTitle ? (
-          <FormEditTitle title={title} type={CURRICULUM.SECTION} />
+          <FormEditTitle title={title} type={CURRICULUM_TYPES.SECTION} />
         ) : (
           <SectionTitle {...SectionTitleProps} />
         )}
@@ -147,20 +156,24 @@ const SectionItem = (props) => {
                 <FormEditTitle
                   title=""
                   edit={false}
-                  type={CURRICULUM.LECTURE}
+                  type={CURRICULUM_TYPES.LECTURE}
                 />
               )}
 
               {isWorkingOn && !displayCreateLecture && (
                 <li className="menu-items d-flex align-items-center">
                   <button
+                    type="button"
                     onClick={createLecture}
                     className="curriculum-option d-flex align-items-center"
                   >
                     <BsPlusCircleFill />
                     <span>Bài giảng</span>
                   </button>
-                  <button className="curriculum-option d-flex align-items-center">
+                  <button
+                    type="button"
+                    className="curriculum-option d-flex align-items-center"
+                  >
                     <BsPlusCircleFill />
                     <span>Quiz</span>
                   </button>
@@ -171,6 +184,7 @@ const SectionItem = (props) => {
                 className={`curriculum-add-item${isWorkingOn ? " option" : ""}`}
               >
                 <button
+                  type="button"
                   onClick={isWorkingOn ? handleHideOption : handleAddItem}
                 >
                   <AiOutlinePlus />
