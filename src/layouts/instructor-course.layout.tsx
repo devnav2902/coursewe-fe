@@ -14,12 +14,41 @@ import { IntendedItems } from "../pages/edit-course/utils/instructor-course.type
 import { ROUTES, routesWithParams } from "../utils/constants";
 import { openNotification } from "../utils/functions";
 
+export type Resource = {
+  original_filename: string;
+  id: number;
+  filesize: string;
+};
+export type ResourceItems = Resource[];
+export type Lecture = {
+  id: number;
+  title: string;
+  resource: ResourceItems;
+  src: string;
+  original_filename: string;
+  updated_at: string;
+  order: number;
+  playtime_seconds: string;
+  playtime_string: string;
+};
+export type Section = {
+  order: number;
+  title: string;
+  id: number;
+  lecture: LectureItems;
+};
+export type LectureItems = Lecture[];
+export type SectionItems = Section[];
+
 export type ICourse = {
   id: string;
   course_outcome: IntendedItems;
   course_requirements: IntendedItems;
   title: string;
   isPublished: boolean;
+  video_demo: string;
+  thumbnail: string;
+  section: SectionItems;
 };
 
 export type ChildrenProps = {
@@ -105,29 +134,60 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
   };
 
   function apiIntendedLearners(data: any) {
-    !!data?.course_outcome?.length &&
-      CourseApi.updateCourseOutcome(id, data).then((res) => {
-        resetState();
-        console.log(res);
-      });
+    const arrRequest = [];
 
-    !!data?.delete_course_outcome_order?.length &&
-      CourseApi.deleteCourseOutcome(id, data).then((res) => {
-        resetState();
-        console.log(res);
+    if (!!data?.outcome_items?.length) {
+      const promise = new Promise(function (resolve, reject) {
+        CourseApi.updateCourseOutcome(id, data)
+          .then((res) => resolve(res))
+          .catch((error) => reject(error));
       });
+      arrRequest.push(promise);
+    }
 
-    !!data?.course_requirements?.length &&
-      CourseApi.updateCourseRequirements(id, data).then((res) => {
-        resetState();
-        console.log(res);
+    if (!!data?.delete_course_outcome_order?.length) {
+      const promise = new Promise(function (resolve, reject) {
+        CourseApi.deleteCourseOutcome(id, data)
+          .then((res) => resolve(res))
+          .catch((error) => reject(error));
       });
+      arrRequest.push(promise);
+    }
 
-    !!data?.delete_course_requirements_order?.length &&
-      CourseApi.deleteCourseRequirements(id, data).then((res) => {
-        resetState();
-        console.log(res);
+    if (!!data?.requirement_items?.length) {
+      const promise = new Promise(function (resolve, reject) {
+        CourseApi.updateCourseRequirements(id, data)
+          .then((res) => resolve(res))
+          .catch((error) => reject(error));
       });
+      arrRequest.push(promise);
+    }
+
+    if (!!data?.delete_course_requirements_order?.length) {
+      const promise = new Promise(function (resolve, reject) {
+        CourseApi.deleteCourseRequirements(id, data)
+          .then((res) => resolve(res))
+          .catch((error) => reject(error));
+      });
+      arrRequest.push(promise);
+    }
+
+    return Promise.all(arrRequest)
+      .then((res) => {
+        let sum = 0;
+        let promiseErrorArr = [];
+
+        res.forEach((result: any) => {
+          if (result.status === 200) {
+            sum += 1;
+          } else {
+            promiseErrorArr.push(result);
+          }
+        });
+
+        return sum === arrRequest.length ? true : false;
+      })
+      .catch((error) => error);
   }
 
   const onSubmit = () => {
@@ -145,7 +205,12 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
         if (errors.not_enough_outcome_items) {
           openNotification("error", errors.not_enough_outcome_items.message);
         } else {
-          apiIntendedLearners(data);
+          apiIntendedLearners(data).then((success) => {
+            if (success) {
+              openNotification("success");
+              resetState();
+            }
+          });
         }
         break;
 
