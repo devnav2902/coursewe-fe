@@ -141,8 +141,14 @@ const DetailCoursePage = () => {
                     return (
                       <Panel header={<b>{title}</b>} key={i}>
                         {sectionItem.lecture.map((lecture) => {
-                          const { title, id } = lecture;
-                          return <CurriculumItem title={title} key={id} />;
+                          const { title, id, playtime_seconds } = lecture;
+                          return (
+                            <CurriculumItem
+                              title={title}
+                              playtime_seconds={playtime_seconds}
+                              key={id}
+                            />
+                          );
                         })}
                       </Panel>
                     );
