@@ -8,6 +8,7 @@ import "react-quill/dist/quill.snow.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./style/style.scss";
+import "filepond/dist/filepond.min.css";
 // import reportWebVitals from "./reportWebVitals";
 
 axios.defaults.withCredentials = true;
