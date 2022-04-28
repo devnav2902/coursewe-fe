@@ -25,7 +25,7 @@ const setDisplayOption = (sectionId) => ({
 
 const openCreateLecture = (sectionId) => (dispatch) => {
   dispatch(setDisplayOption(sectionId));
-  dispatch(setDisplayCreateLecture(false)); // default, khi click vào button tạo lecture khác sẽ giữ form create => reset default
+  // dispatch(setDisplayCreateLecture(false)); // default, khi click vào button tạo lecture khác sẽ giữ form create => reset default
   dispatch(hideCreateSection());
 };
 
