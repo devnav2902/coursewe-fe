@@ -31,7 +31,7 @@ type RatingProps = {
   value: string | number;
   disabled?: boolean;
   size?: string;
-  count: number;
+  count?: number;
 };
 
 const Rating: FC<RatingProps> = ({
