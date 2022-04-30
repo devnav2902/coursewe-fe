@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-import { IntendedItem, IntendedItems } from "../utils/instructor-course.types";
+import { IntendedItem, IntendedItems } from "../../../ts/types/course.types";
 import _ from "lodash";
 import { Input } from "antd";
 

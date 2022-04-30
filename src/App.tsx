@@ -1,7 +1,6 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter,
   Navigate,
@@ -10,8 +9,9 @@ import {
   useLocation,
 } from "react-router-dom";
 import Loading from "./components/Loading/Loading.component";
-import { getCurrentUser } from "./redux/actions/account.actions";
-import { getCartFromDTB } from "./redux/actions/cart.actions";
+import { useAppDispatch, useTypedSelector } from "./hooks/redux.hooks";
+import { getCart } from "./redux/slices/cart.slice";
+import { getCurrentUser } from "./redux/slices/user.slice";
 import routes, { Routes as IRoutes } from "./routes/allRoutes";
 import { ROUTES } from "./utils/constants";
 
@@ -30,16 +30,21 @@ const ScrollToTop = ({ children }: { children: JSX.Element }) => {
 };
 
 function App(): JSX.Element {
-  const user = useSelector((state: any) => state.user);
-  const dispatch = useDispatch();
+  const user = useTypedSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getCurrentUser());
+    dispatch(getCurrentUser())
+      .unwrap()
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
   }, [dispatch]);
 
   useEffect(() => {
     if (user.loaded) {
-      dispatch(getCartFromDTB());
+      dispatch(getCart());
     }
   }, [user.loaded, dispatch]);
 
@@ -72,12 +77,6 @@ function App(): JSX.Element {
                       )
                     }
                   />
-                );
-              } else if (route.nested) {
-                return (
-                  <Route key={idx} path={route.path} element={route.component}>
-                    {route.nested}
-                  </Route>
                 );
               }
               return (

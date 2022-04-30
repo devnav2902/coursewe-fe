@@ -22,7 +22,7 @@ import LearningPage from "../pages/learning/page/learning.page";
 import MyLearningPage from "../pages/my-learning/page/my-learning.page";
 import OverviewPage from "../pages/overview/page/overview.page";
 import ProfilePage from "../pages/profile/page/profile.page";
-import PurchaseHistoryPage from "../pages/purchase-history/page/purchaseHistory.page";
+import PurchaseHistoryPage from "../pages/purchase-history/page/purchase-history.page";
 import SigninPage from "../pages/signin/page/signin.page";
 import SignupPage from "../pages/signup/page/signup.page";
 import { ROUTES } from "../utils/constants";

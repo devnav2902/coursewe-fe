@@ -1,18 +1,12 @@
 import axiosClient from "../utils/axios";
-
+import { Price as PriceType } from "../ts/types/course.types";
 class Price {
   getPrice = async () => {
-    return axiosClient
-      .get("/get-price")
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<{ price: PriceType[] }>("/get-price");
   };
 
   updatePrice = async (course_id: number, price_id: number) => {
-    return axiosClient
-      .patch("/update-price", { course_id, price_id })
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.patch("/update-price", { course_id, price_id });
   };
 }
 

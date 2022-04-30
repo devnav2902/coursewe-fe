@@ -3,7 +3,7 @@ import { BsFillCheckCircleFill } from "react-icons/bs";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
 import { CURRICULUM_TYPES } from "../../utils/constants";
 import { FC } from "react";
-import { Lecture } from "../../../../layouts/instructor-course.layout";
+import { Lecture } from "../../../../ts/types/course.types";
 import { LectureType, SectionType } from "../../utils/instructor-course.types";
 import { useParams } from "react-router-dom";
 

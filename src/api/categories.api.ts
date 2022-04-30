@@ -1,3 +1,5 @@
+import { ArrayCustomCourses } from "../components/Course/Course.component";
+import { FeaturedCategories } from "../ts/types/categories.types";
 import axiosClient from "../utils/axios";
 
 class Categories {
@@ -23,24 +25,21 @@ class Categories {
   };
 
   featuredCategories = async (limit: number) => {
-    return axiosClient
-      .get(`/featured-categories/${limit}`)
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<{ topLevelCategories: FeaturedCategories }>(
+      `/featured-categories/${limit}`
+    );
   };
 
   featuredCourses = async (limit: number) => {
-    return axiosClient
-      .get(`/featured-courses/${limit}`)
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<{ courses: ArrayCustomCourses }>(
+      `/featured-courses/${limit}`
+    );
   };
 
   featuredCoursesByCategoryId = async (topLevelCategoryId: number) => {
-    return axiosClient
-      .get(`/category/featured-courses/${topLevelCategoryId}`)
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<{ courses: ArrayCustomCourses }>(
+      `/category/featured-courses/${topLevelCategoryId}`
+    );
   };
 }
 const CategoriesApi = new Categories();

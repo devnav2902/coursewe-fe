@@ -1,5 +1,8 @@
 import { FC } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  useAppDispatch,
+  useTypedSelector,
+} from "../../../../hooks/redux.hooks";
 import {
   cancelCreateLecture,
   cancelEditTitle,
@@ -19,8 +22,8 @@ const FormEditTitle: FC<FormEditTitleProps> = ({
   edit = true,
 }) => {
   const action = edit ? "Lưu" : "Thêm";
-  const dispatch = useDispatch();
-  const { displayCreateLecture, displayCreateSection } = useSelector(
+  const dispatch = useAppDispatch();
+  const { displayCreateLecture, displayCreateSection } = useTypedSelector(
     (state) => state.curriculum
   );
 

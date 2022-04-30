@@ -1,25 +1,17 @@
+import { DataCart, ShoppingCart } from "../ts/types/cart.types";
 import axiosClient from "../utils/axios";
 
 class Cart {
   get = async () => {
-    return axiosClient
-      .get("/cart/me")
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<DataCart>("/cart/me");
   };
 
   delete = async (courseId: number) => {
-    return axiosClient
-      .delete(`/cart/${courseId}`)
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.delete<ShoppingCart>(`/cart/${courseId}`);
   };
 
-  addToCart = async (data: object) => {
-    return axiosClient
-      .post("/cart", data)
-      .then((res) => res)
-      .catch((error) => error.response);
+  addToCart = async (data: { course_id: number }) => {
+    return axiosClient.post("/cart", data);
   };
 
   savedForLater = async (courseId: number) => {

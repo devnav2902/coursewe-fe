@@ -6,13 +6,8 @@ import {
   UseFormGetValues,
   UseFormSetValue,
 } from "react-hook-form";
-import {
-  HookForm,
-  IDataRemove,
-  IntendedItem,
-  IntendedItems,
-  TypeItems,
-} from "./instructor-course.types";
+import { HookForm, IDataRemove, TypeItems } from "./instructor-course.types";
+import { IntendedItem, IntendedItems } from "../../../ts/types/course.types";
 
 // Thay đổi value coure outcome & requirements
 const onChangeItem = (

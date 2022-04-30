@@ -1,11 +1,11 @@
+import { FC, useCallback } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
+import { ICourse } from "../../../layouts/instructor-course.layout";
 import { openCreateSection } from "../../../redux/actions/curriculum.actions";
 import FormEditTitle from "../components/curriculum/FormEditTitle.component";
 import SectionItem from "../components/curriculum/SectionItem.component";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { FC, useCallback } from "react";
-import { ICourse } from "../../../layouts/instructor-course.layout";
 
 type CurriculumProps = {
   course: ICourse;
@@ -13,8 +13,10 @@ type CurriculumProps = {
 
 const CurriculumPage: FC<CurriculumProps> = ({ course }) => {
   const { section } = course;
-  const dispatch = useDispatch();
-  const { displayCreateSection } = useSelector((state) => state.curriculum);
+  const dispatch = useAppDispatch();
+  const { displayCreateSection } = useTypedSelector(
+    (state) => state.curriculum
+  );
 
   const handleDisplayCreateSection = () => {
     dispatch(openCreateSection());

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { GrFormClose } from "react-icons/gr";
-import { useSelector } from "react-redux";
-import { Lecture } from "../../../../layouts/instructor-course.layout";
+import { useTypedSelector } from "../../../../hooks/redux.hooks";
+import { Lecture } from "../../../../ts/types/course.types";
 import { secondsToHMS } from "../../../../utils/functions";
 import { useLecture, useResources } from "../../hooks/curriculum.hooks";
 import { StyledTableContaier } from "../../styles/curriculum.styles";
@@ -51,7 +51,7 @@ const LectureItem: FC<LectureItemProps> = (props) => {
     dataDisplay;
   const { closeUploadMedia, closeUploadResources } = closeFunc;
 
-  const { elementDisplay } = useSelector((state) => state.curriculum);
+  const { elementDisplay } = useTypedSelector((state) => state.curriculum);
 
   const { getLatestLecture, lecture, deleteLecture, deleted } =
     useLecture(lectureItem);

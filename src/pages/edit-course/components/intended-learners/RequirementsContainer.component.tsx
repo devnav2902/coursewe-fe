@@ -3,11 +3,8 @@ import { FC } from "react";
 import { FiPlus } from "react-icons/fi";
 import { ICourse } from "../../../../layouts/instructor-course.layout";
 import { useInputFields } from "../../hooks/intended-learner.hooks";
-import {
-  HookForm,
-  IDataRemove,
-  IntendedItem,
-} from "../../utils/instructor-course.types";
+import { HookForm, IDataRemove } from "../../utils/instructor-course.types";
+import { IntendedItem } from "../../../../ts/types/course.types";
 import {
   iniArrIntendedItems,
   onChangeItem,

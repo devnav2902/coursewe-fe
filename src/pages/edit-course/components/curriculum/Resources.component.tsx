@@ -1,10 +1,7 @@
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { Modal } from "antd";
-import React, { FC } from "react";
+import { FC } from "react";
 import { FaFileDownload, FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import ResourceApi from "../../../../api/resource.api";
-import { ResourceItems } from "../../../../layouts/instructor-course.layout";
+import { ResourceItems } from "../../../../ts/types/course.types";
 import { useResources } from "../../hooks/curriculum.hooks";
 import { ResourceContainer } from "../../styles/curriculum.styles";
 

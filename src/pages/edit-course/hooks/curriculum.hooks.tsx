@@ -1,8 +1,5 @@
 import { useState } from "react";
-import {
-  Lecture,
-  ResourceItems,
-} from "../../../layouts/instructor-course.layout";
+import { Lecture, ResourceItems } from "../../../ts/types/course.types";
 import ResourceApi from "../../../api/resource.api";
 import { Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";

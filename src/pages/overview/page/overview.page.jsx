@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
-import OverviewApi from "../../../api/overview.api";
-import { useSelector } from "react-redux";
-import SideBarOverview from "../../../components/SideBarOverview/SideBarOverview.component";
-import { Bar, Line } from "react-chartjs-2";
+import { Tabs } from "antd";
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
+import React, { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
+import { useSelector } from "react-redux";
 import ChartApi from "../../../api/chart.api";
-import { Spin, Tabs } from "antd";
+import OverviewApi from "../../../api/overview.api";
 const { TabPane } = Tabs;
 const OverviewPage = () => {
   const {

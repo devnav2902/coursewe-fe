@@ -10,46 +10,20 @@ import CourseApi from "../api/course.api";
 import InstructorApi from "../api/instructor.api";
 import Footer from "../components/Footer/Footer.component";
 import { HookForm } from "../pages/edit-course/utils/instructor-course.types";
-import { IntendedItems } from "../pages/edit-course/utils/instructor-course.types";
+import { Course, IntendedItems, SectionItems } from "../ts/types/course.types";
 import { ROUTES, routesWithParams } from "../utils/constants";
 import { openNotification } from "../utils/functions";
 
-export type Resource = {
-  original_filename: string;
-  id: number;
-  filesize: string;
-};
-export type ResourceItems = Resource[];
-export type Lecture = {
-  id: number;
-  title: string;
-  resource: ResourceItems;
-  src: string;
-  original_filename: string;
-  updated_at: string;
-  order: number;
-  playtime_seconds: string;
-  playtime_string: string;
-};
-export type Section = {
-  order: number;
-  title: string;
-  id: number;
-  lecture: LectureItems;
-};
-export type LectureItems = Lecture[];
-export type SectionItems = Section[];
-
 export type ICourse = {
-  id: string;
   course_outcome: IntendedItems;
   course_requirements: IntendedItems;
-  title: string;
   isPublished: boolean;
-  video_demo: string;
-  thumbnail: string;
   section: SectionItems;
-};
+  description: string;
+  video_demo: string;
+  instructional_level_id: number;
+  subtitle: string;
+} & Course;
 
 export type ChildrenProps = {
   course: ICourse;

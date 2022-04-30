@@ -1,12 +1,12 @@
 import {
+  Control,
   FieldValues,
+  UseFormClearErrors,
   UseFormGetValues,
+  UseFormRegister,
   UseFormSetError,
   UseFormSetValue,
-  Control,
   UseFormWatch,
-  UseFormRegister,
-  UseFormClearErrors,
 } from "react-hook-form";
 
 type HookForm = {
@@ -21,12 +21,7 @@ type HookForm = {
   errors: { [x: string]: any };
 };
 
-type IntendedItem = { description: string; order: number };
-
-type IntendedItems = IntendedItem[];
-
 type TypeItems = "outcome_items" | "requirement_items";
-
 interface IDataRemove {
   array_order_delete:
     | "delete_course_outcome_order"
@@ -45,4 +40,4 @@ export type CurriculumTypes = {
   LECTURE: LectureType;
 };
 
-export { HookForm, IntendedItem, IntendedItems, IDataRemove, TypeItems };
+export { HookForm, IDataRemove, TypeItems };

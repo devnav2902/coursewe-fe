@@ -2,12 +2,9 @@ import { Button, Input, Row } from "antd";
 import { ChangeEvent, FC, useEffect } from "react";
 import { FiPlus } from "react-icons/fi";
 import { ICourse } from "../../../../layouts/instructor-course.layout";
+import { IntendedItem } from "../../../../ts/types/course.types";
 import { useInputFields } from "../../hooks/intended-learner.hooks";
-import {
-  HookForm,
-  IDataRemove,
-  IntendedItem,
-} from "../../utils/instructor-course.types";
+import { HookForm, IDataRemove } from "../../utils/instructor-course.types";
 import {
   iniArrIntendedItems,
   onChangeItem,

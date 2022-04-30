@@ -1,5 +1,12 @@
+import { CustomCourse } from "../components/Course/Course.component";
 import axiosClient from "../utils/axios";
+import { Course as CourseType } from "../ts/types/course.types";
 
+export type CoursesOfInstructor = (CourseType & {
+  updated_at: string;
+  submit_for_review: boolean;
+  isPublished: boolean;
+})[];
 class Course {
   userHasRated = async (courseId: number) => {
     return axiosClient
@@ -16,17 +23,11 @@ class Course {
   };
 
   bestSellingCourses = async () => {
-    return axiosClient
-      .get("/course/best-selling")
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<{ courses: CustomCourse[] }>("/course/best-selling");
   };
 
   getLatestCourses = async () => {
-    return axiosClient
-      .get("/course/latest")
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<{ latestCourses: CustomCourse[] }>("/course/latest");
   };
 
   getCourseBySlug = async (slug: string) => {
@@ -42,11 +43,10 @@ class Course {
       .catch((error) => error.response);
   };
 
-  getCourseByCurrentUser = async () => {
-    return axiosClient
-      .get("/user/courses")
-      .then((res) => res)
-      .catch((error) => error);
+  getCoursesByCurrentUser = async () => {
+    return axiosClient.get<{ coursesData: { data: CoursesOfInstructor } }>(
+      "/user/courses"
+    );
   };
 
   getCourseById = async (id: string | number) => {

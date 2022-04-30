@@ -2,8 +2,11 @@ import { FC, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsPlusCircleFill } from "react-icons/bs";
-import { useDispatch, useSelector } from "react-redux";
-import { Section } from "../../../../layouts/instructor-course.layout";
+import {
+  useAppDispatch,
+  useTypedSelector,
+} from "../../../../hooks/redux.hooks";
+import { Section } from "../../../../ts/types/course.types";
 import {
   hideOption,
   openCreateLecture,
@@ -26,10 +29,9 @@ const SectionItem: FC<SectionItemProps> = (props) => {
   const { sectionItem, innerRef, sectionIndex, ...restProps } = props;
   const { id, title, order, lecture } = sectionItem;
 
-  const { elementDisplay, displayCreateLecture, displayOption } = useSelector(
-    (state) => state.curriculum
-  );
-  const dispatch = useDispatch();
+  const { elementDisplay, displayCreateLecture, displayOption } =
+    useTypedSelector((state) => state.curriculum);
+  const dispatch = useAppDispatch();
 
   const [displayResources, setDisplayResources] = useState<boolean>(false);
   const [displayUploadResources, setDisplayUploadResources] =
