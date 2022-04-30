@@ -130,7 +130,7 @@ const Header = () => {
             {!myProgress.loadedMyProgress ? (
               <Spin />
             ) : (
-              <div>
+              <>
                 <Progress
                   type="circle"
                   showInfo={false}
@@ -157,7 +157,7 @@ const Header = () => {
                     <FaAngleDown className="ml-1" size="18px" />
                   </a>
                 </Dropdown>
-              </div>
+              </>
             )}
           </div>
         </div>
