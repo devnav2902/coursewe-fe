@@ -2,6 +2,7 @@ import BasicLayout from "../layouts/basic.layout";
 import InstructorCourseLayout from "../layouts/instructor-course.layout";
 import LearningLayout from "../layouts/learning.layout";
 import OverviewLayout from "../layouts/overview.layout";
+import ProfileLayout from "../layouts/profile.layout";
 import NotFound from "../pages/404/pages/index";
 import AdminReviewPage from "../pages/admin-review/page/admin-review.page";
 import CartPage from "../pages/cart/page/cart.page";
@@ -34,7 +35,6 @@ export type Routes = {
   layout?: JSX.Element;
   redirectIfAuthenticated?: boolean;
   private?: boolean;
-  nested?: JSX.Element;
 };
 
 const routes: Routes[] = [
@@ -204,8 +204,13 @@ const routes: Routes[] = [
     private: true,
   },
   {
+    exact: true,
     path: ROUTES.PROFILE,
-    component: <ProfilePage />,
+    component: (
+      <ProfileLayout>
+        {(props: any) => <ProfilePage {...props} />}
+      </ProfileLayout>
+    ),
     private: true,
   },
   {

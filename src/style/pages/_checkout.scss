@@ -1,126 +1,137 @@
 .checkout-page {
-    min-height: 100vh;
+  min-height: 100vh;
 
-    &__container {
-        max-width: 1200px;
-        margin: auto;
-        padding: 4rem 0;
+  &__container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 4rem 0;
 
-        .list-empty {
-            width: 100%;
-            text-align: center;
-            font-weight: 500;
-        }
+    .list-empty {
+      width: 100%;
+      text-align: center;
+      font-weight: 500;
     }
+  }
 
-    &-left {
-        width: 65%;
-        > .title {
-            font-size: 30px;
-            font-family: "Times New Roman", Times, serif;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .address-container {
-            label {
-                font-size: 14px;
-                margin-bottom: 10px;
-                display: inline-block;
-            }
-            select {
-                height: 50px;
-                border: 1px solid #000;
-                padding: 0 10px;
-                max-width: 400px;
-                width: 100%;
-            }
-            .address-select {
-                margin-bottom: 20px;
-            }
-        }
-        .checkout-selection {
-            margin-bottom: 30px;
-            input[type="radio"] {
-                width: 20px;
-                height: 20px;
-                color: #000;
-            }
-            .label {
-                margin: 0 20px 0 6px;
-            }
-        }
-        .order-details {
-            .title {
-                margin-bottom: 20px;
-                font-size: 24px;
-                font-weight: bold;
-            }
-        }
-        .shopping-list {
-            .course {
-                align-items: flex-start;
-                margin-bottom: 1rem;
-                img {
-                    width: 50px;
-                    height: 50px;
-                    object-fit: cover;
-                }
-            }
-            .card-title {
-                overflow: hidden;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                margin-left: 20px;
-                margin-right: 20px;
-            }
-            .card-price {
-                .original-price {
-                    color: rgb(80, 79, 79);
-                }
-            }
-        }
+  &-left {
+    width: 65%;
+    > .title {
+      font-size: 30px;
+      font-family: "Times New Roman", Times, serif;
+      font-weight: bold;
+      margin-bottom: 20px;
     }
+    .address-container {
+      label {
+        font-size: 14px;
+        margin-bottom: 10px;
+        display: inline-block;
+      }
+      select {
+        height: 50px;
+        border: 1px solid #000;
+        padding: 0 10px;
+        max-width: 400px;
+        width: 100%;
+      }
+      .address-select {
+        margin-bottom: 20px;
+      }
+    }
+    .checkout-selection {
+      margin-bottom: 30px;
+      input[type="radio"] {
+        width: 20px;
+        height: 20px;
+        color: #000;
+      }
+      .label {
+        margin: 0 20px 0 6px;
+      }
+    }
+    .order-details {
+      .title {
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+    }
+    .shopping-list {
+      .list-courses {
+        margin-bottom: 1rem;
+        display: flex;
+        width: 80%;
+        .card-title {
+          flex-grow: 1;
+          font-size: 2rem;
+          font-weight: 700;
+        }
+      }
+      .course {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        img {
+          width: 50px;
+          height: 50px;
+          object-fit: cover;
+        }
+      }
+      .card-title {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+      .card-price {
+        .original-price {
+          color: rgb(80, 79, 79);
+        }
+      }
+    }
+  }
 
-    &-right {
-        align-self: flex-start;
-        padding: 30px;
-        width: 35%;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.103);
-        > .title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 22px;
-        }
-        &__price {
-            margin-bottom: 30px;
-            .original-price,
-            .discount-price,
-            .total {
-                justify-content: space-between;
-            }
-            .discount-price {
-                margin-top: 5px;
-                padding-bottom: 10px;
-                border-bottom: 1px solid rgb(20, 20, 20);
-                margin-bottom: 10px;
-            }
-            .total {
-                .title {
-                    font-weight: bold;
-                }
-            }
-        }
-        .complete-payment {
-            width: 100%;
-            height: 55px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            background-color: #a435f0;
-            &:hover {
-                background-color: #9634d8;
-            }
-        }
+  &-right {
+    align-self: flex-start;
+    padding: 30px;
+    width: 35%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.103);
+    > .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 22px;
     }
+    &__price {
+      margin-bottom: 30px;
+      .original-price,
+      .discount-price,
+      .total {
+        justify-content: space-between;
+      }
+      .discount-price {
+        margin-top: 5px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgb(20, 20, 20);
+        margin-bottom: 10px;
+      }
+      .total {
+        .title {
+          font-weight: bold;
+        }
+      }
+    }
+    .complete-payment {
+      width: 100%;
+      height: 55px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #a435f0;
+      &:hover {
+        background-color: #9634d8;
+      }
+    }
+  }
 }

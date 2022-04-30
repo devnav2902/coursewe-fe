@@ -7,6 +7,13 @@ class Profile {
       .then((response) => response)
       .catch((error) => error);
   };
+
+  updateProfile = async (data: object) => {
+    return axiosClient
+      .patch("/change-profile", data)
+      .then((res) => res)
+      .catch((error) => error);
+  };
 }
 const ProfileApi = new Profile();
 export default ProfileApi;

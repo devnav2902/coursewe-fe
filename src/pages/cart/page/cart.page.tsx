@@ -1,6 +1,8 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import CouponApi from "../../../api/coupon.api";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
+import { ROUTES } from "../../../utils/constants";
 import CartContainer from "../components/CartContainer.component";
 import CartEmpty from "../components/CartEmpty.component";
 import CouponItem from "../components/CouponItem.component";
@@ -60,7 +62,9 @@ const CartPage = () => {
                 <div className="total-price">
                   <span className="price">{total} đ</span>
                 </div>
-                <div className="btn-checkout">Thanh toán</div>
+                <Link to={ROUTES.CHECKOUT}>
+                  <div className="btn-checkout">Thanh toán</div>
+                </Link>
                 <div className="promotions">
                   <label>Mã giảm giá</label>
 

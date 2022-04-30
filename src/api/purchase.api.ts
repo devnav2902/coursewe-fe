@@ -8,6 +8,12 @@ class Purchase {
   purchaseHistory = async () => {
     return axiosClient.get<PurchaseHistoryResponse>("/purchase/history");
   };
+  purchase = async () => {
+    return axiosClient
+      .post(`/purchase`)
+      .then((res) => res)
+      .catch((error) => error.response);
+  };
 }
 
 const PurchaseApi = new Purchase();

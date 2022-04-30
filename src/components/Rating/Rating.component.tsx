@@ -31,15 +31,22 @@ type RatingProps = {
   value: string | number;
   disabled?: boolean;
   size?: string;
+  count: number;
 };
 
-const Rating: FC<RatingProps> = ({ value, disabled = true, size = "16px" }) => {
+const Rating: FC<RatingProps> = ({
+  value,
+  disabled = true,
+  size = "16px",
+  count = 5,
+}) => {
   return (
     <RatingWrapper size={size}>
       <Rate
         allowHalf
         disabled={disabled}
         defaultValue={typeof value === "number" ? value : parseFloat(value)}
+        count={count}
       />
     </RatingWrapper>
   );

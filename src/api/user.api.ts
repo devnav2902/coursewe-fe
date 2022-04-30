@@ -41,7 +41,6 @@ class User {
     return axiosClient.post<{ user: UserType }>("/user/sign-up", params);
   };
 }
-
 const UserApi = new User();
 
 export default UserApi;

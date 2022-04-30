@@ -1,6 +1,5 @@
 import { Col, Row } from "antd";
-import React from "react";
-import Slider from "react-slick";
+
 import Course from "../../../components/Course/Course.component";
 import { MdArrowForwardIos, MdArrowBackIosNew } from "react-icons/md";
 import styled from "styled-components";

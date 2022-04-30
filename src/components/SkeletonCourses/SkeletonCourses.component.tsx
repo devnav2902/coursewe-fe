@@ -16,5 +16,5 @@ const SkeletonCourses: FC<SkeletonCourseProps> = function ({ amount = 1 }) {
     </Row>
   );
 };
-
+export default SkeletonCourses;
 export { SkeletonCourses };
