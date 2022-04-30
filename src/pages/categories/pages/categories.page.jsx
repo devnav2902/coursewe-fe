@@ -1,19 +1,21 @@
-import { Checkbox, Collapse, Pagination, Empty, Row } from "antd";
+import {
+  Checkbox,
+  Collapse,
+  Empty,
+  Pagination,
+  Row,
+  Select,
+  Skeleton,
+} from "antd";
 import { memo, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { routesWithParams } from "../../../utils/constants";
-
-import { Select } from "antd";
-import CourseCardLarge from "../components/CourseCardLarge.component";
-import CoursesBeginner from "../components/CoursesBeginner.component";
-import FeaturedCourses from "../components/FeaturedCourses.component";
-import PopularInstructors from "../components/PopularInstructors.component";
+import { useParams } from "react-router-dom";
 import CategoriesApi from "../../../api/categories.api";
-import { Skeleton } from "antd";
+import CourseCardLarge from "../components/CourseCardLarge.component";
 import FilterItemLevels from "../components/FilterItemLevels.component";
-import { getCategorySlug } from "../utils/functions";
-import FilterItemTopics from "../components/FilterItemTopics.component";
 import FilterItemRating from "../components/FilterItemRating.component";
+import FilterItemTopics from "../components/FilterItemTopics.component";
+import PopularInstructors from "../components/PopularInstructors.component";
+import { getCategorySlug } from "../utils/functions";
 
 const { Panel } = Collapse;
 const { Option } = Select;
