@@ -3,14 +3,23 @@ import {
   SearchOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
-import { Avatar, Badge, Cascader, Dropdown, List, Popover, Spin } from "antd";
+import {
+  Avatar,
+  Badge,
+  Cascader,
+  ConfigProvider,
+  Dropdown,
+  Empty,
+  List,
+  Popover,
+  Spin,
+} from "antd";
 import { SingleValueType } from "rc-cascader/lib/Cascader";
 import { useEffect, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CategoriesApi from "../../api/categories.api";
-import { useTypedSelector } from "../../hooks/redux.hooks";
+import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
 import { logout } from "../../redux/slices/user.slice";
 import { ROUTES, routesWithParams } from "../../utils/constants";
 import { linkThumbnail } from "../../utils/functions";
@@ -45,20 +54,27 @@ const TopNav = () => {
   const { cart, loadedCart } = useTypedSelector((state) => state.cart);
   const { fullname, email, avatar, role } = user.profile ?? {};
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logout());
   };
 
   const [displayCascader, setDisplayCascader] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [categoriesData, setCategoriesData] = useState({
+    loaded: false,
+    data: [],
+  });
 
   useEffect(() => {
     CategoriesApi.get().then((res) => {
       const {
         data: { categories },
       } = res;
-      setCategories(categories);
+      setCategoriesData((state) => ({
+        ...state,
+        data: categories,
+        loaded: true,
+      }));
     });
   }, []);
 
@@ -165,26 +181,43 @@ const TopNav = () => {
           <Link to="/">Coursewe</Link>
         </div>
         <div className="category-link">
-          <Cascader
-            changeOnSelect={true}
-            bordered={false}
-            options={categories}
-            expandTrigger="hover"
-            dropdownClassName="categories-dropdown"
-            onChange={onChange}
-            value={undefined}
-            onMouseEnter={() => setDisplayCascader(true)}
-            onMouseLeave={() => setDisplayCascader(false)}
-            placeholder="Danh mục"
-            suffixIcon={null}
-            open={displayCascader}
-            getPopupContainer={(e) => e}
-            fieldNames={{
-              label: "name",
-              value: "slug",
-              children: "subcategory",
-            }}
-          />
+          <ConfigProvider
+            renderEmpty={() =>
+              !categoriesData.loaded ? (
+                <div className="d-flex align-items-center justify-content-center">
+                  <Spin />
+                </div>
+              ) : (
+                categoriesData.loaded &&
+                !categoriesData.data.length && (
+                  <Empty description="Chưa có danh mục nào" />
+                )
+              )
+            }
+          >
+            <Cascader
+              changeOnSelect={true}
+              bordered={false}
+              options={categoriesData.data}
+              expandTrigger="hover"
+              dropdownClassName="categories-dropdown"
+              onChange={onChange}
+              value={[]}
+              loadingIcon
+              allowClear={false}
+              onMouseEnter={() => setDisplayCascader(true)}
+              onMouseLeave={() => setDisplayCascader(false)}
+              placeholder="Danh mục"
+              suffixIcon={null}
+              open={displayCascader}
+              getPopupContainer={(e) => e}
+              fieldNames={{
+                label: "name",
+                value: "slug",
+                children: "subcategory",
+              }}
+            />
+          </ConfigProvider>
         </div>
         <form action="" className="search-bar">
           <div className="icon">
