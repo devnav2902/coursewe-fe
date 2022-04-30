@@ -133,17 +133,21 @@ const learningSlice = createSlice({
       const { myProgress } = state;
       myProgress.complete = payload.complete;
       myProgress.total = payload.total;
+      myProgress.loadedMyProgress = true;
     });
     builder.addCase(getProgress.rejected, (state, { payload }) => {
       const { myProgress } = state;
       myProgress.error = payload;
+      myProgress.loadedMyProgress = true;
     });
     // GET SECTIONS
     builder.addCase(getSections.fulfilled, (state, action) => {
       state.sections.data = action.payload;
+      state.sections.loaded = true;
     });
     builder.addCase(getSections.rejected, (state, action) => {
       state.sections.error = action.payload;
+      state.sections.loaded = true;
     });
   },
 });
