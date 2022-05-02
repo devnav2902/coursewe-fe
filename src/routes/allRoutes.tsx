@@ -16,6 +16,7 @@ import CurriculumPage from "../pages/edit-course/pages/curriculum.page";
 import ImageAndVideoPage from "../pages/edit-course/pages/image-and-video.page";
 import IntendedLearnersPage from "../pages/edit-course/pages/intended-learners.page";
 import PricePage from "../pages/edit-course/pages/price.page";
+import PromotionsPage from "../pages/edit-course/pages/promotions.page";
 import Home from "../pages/home/page/index.page";
 import InstructorBioPage from "../pages/instructor-bio/page/instructor-bio.page";
 import InstructorCoursesPage from "../pages/instructor-courses/page/instructor-courses.page";
@@ -112,6 +113,15 @@ const routes: Routes[] = [
     component: (
       <InstructorCourseLayout key={ROUTES.CURRICULUM}>
         {(props: any) => <CurriculumPage {...props} />}
+      </InstructorCourseLayout>
+    ),
+    private: true,
+  },
+  {
+    path: ROUTES.PROMOTIONS,
+    component: (
+      <InstructorCourseLayout key={ROUTES.PROMOTIONS}>
+        {(props: any) => <PromotionsPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,

@@ -276,10 +276,14 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
               <DollarCircleOutlined />
               <span>Giá khóa học</span>
             </Link>
-            <Link className="navbar-link" to="/">
+            <button
+              type="button"
+              className="navbar-link"
+              onClick={() => handleRedirect(routesWithParams.promotions(id))}
+            >
               <IoMdPricetags />
               <span>Khuyến mại</span>
-            </Link>
+            </button>
           </div>
           <div>
             <button type="submit" className="submit">
