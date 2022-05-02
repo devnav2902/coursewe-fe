@@ -6,13 +6,14 @@ import {
   useAppDispatch,
   useTypedSelector,
 } from "../../../../hooks/redux.hooks";
-import { Section } from "../../../../ts/types/course.types";
 import {
   hideOption,
   openCreateLecture,
   setDisplayCreateLecture,
   setElementDisplay,
-} from "../../../../redux/actions/curriculum.actions";
+} from "../../../../redux/slices/curriculum.slice";
+import { Section } from "../../../../ts/types/course.types";
+
 import { CURRICULUM_TYPES } from "../../utils/constants";
 import { LectureType, SectionType } from "../../utils/instructor-course.types";
 import FormEditTitle from "./FormEditTitle.component";
