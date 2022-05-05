@@ -1,5 +1,5 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, ReactNode, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsFileRichtext, BsInfoCircle } from "react-icons/bs";
 import { FaLaptopHouse } from "react-icons/fa";
@@ -7,26 +7,15 @@ import { IoIosArrowBack, IoMdPricetags } from "react-icons/io";
 import { RiBookmark3Line } from "react-icons/ri";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import CourseApi from "../api/course.api";
-import InstructorApi from "../api/instructor.api";
+import { CourseResponse } from "../api/instructor.api";
 import Footer from "../components/Footer/Footer.component";
+import { useAppDispatch, useTypedSelector } from "../hooks/redux.hooks";
 import { HookForm } from "../pages/edit-course/utils/instructor-course.types";
-import { Course, IntendedItems, SectionItems } from "../ts/types/course.types";
+import { getCourse } from "../redux/slices/instructor-course.slice";
 import { ROUTES, routesWithParams } from "../utils/constants";
 import { openNotification } from "../utils/functions";
 
-export type ICourse = {
-  course_outcome: IntendedItems;
-  course_requirements: IntendedItems;
-  isPublished: boolean;
-  section: SectionItems;
-  description: string;
-  video_demo: string;
-  instructional_level_id: number;
-  subtitle: string;
-} & Course;
-
 export type ChildrenProps = {
-  course: ICourse;
   valueChanged?: boolean;
   handleValueChanged?: (boolValue: boolean) => void;
 } & HookForm;
@@ -36,12 +25,87 @@ interface LayoutProps {
   children: Children;
 }
 
+type InstructorCourseInnerProps = {
+  children: ReactNode;
+  courseData: CourseResponse;
+};
+
+const Sidebar: FC<{
+  handleRedirect: (route: string) => void;
+}> = ({ handleRedirect }) => {
+  const { id } = useParams() as { id: string };
+  return (
+    <div className="sidebar">
+      <div className="navbar">
+        <strong>Tạo nội dung khóa học</strong>
+
+        <button
+          type="button"
+          className="navbar-link"
+          onClick={() => handleRedirect(routesWithParams.course_basics(id))}
+        >
+          <BsInfoCircle />
+          <span>Thông tin khóa học</span>
+        </button>
+        <button
+          type="button"
+          className="navbar-link"
+          onClick={() =>
+            handleRedirect(routesWithParams.image_and_preview_video(id))
+          }
+        >
+          <BsFileRichtext />
+          <span>Hình ảnh & video giới thiệu</span>
+        </button>
+        <button
+          type="button"
+          className="navbar-link"
+          onClick={() => handleRedirect(routesWithParams.intended_learners(id))}
+        >
+          <RiBookmark3Line />
+          <span>Mục tiêu & yêu cầu khóa học</span>
+        </button>
+        <button
+          type="button"
+          className="navbar-link"
+          onClick={() => handleRedirect(routesWithParams.curriculum(id))}
+        >
+          <FaLaptopHouse />
+          <span>Chương trình học</span>
+        </button>
+
+        <Link className="navbar-link" to={routesWithParams.price(id)}>
+          <DollarCircleOutlined />
+          <span>Giá khóa học</span>
+        </Link>
+        <button
+          type="button"
+          className="navbar-link"
+          onClick={() => handleRedirect(routesWithParams.promotions(id))}
+        >
+          <IoMdPricetags />
+          <span>Khuyến mại</span>
+        </button>
+      </div>
+      <div>
+        <button type="submit" className="submit">
+          Yêu cầu xem xét
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
-  const [course, setCourse] = useState<ICourse | null>(null);
   const { id } = useParams() as { id: string };
   const { pathname } = useLocation();
   const [valueChanged, setValueChanged] = useState<boolean>(false); // trigger button save
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+  const {
+    course: { data: courseData },
+  } = useTypedSelector((state) => state.instructorCourse);
 
   const {
     formState: { errors },
@@ -52,13 +116,11 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
     register,
     setError,
     clearErrors,
-  } = useForm();
+  } = useForm(); // assign to variable instead destructuring
 
   useEffect(() => {
-    InstructorApi.getCourseById(id).then((res) => {
-      setCourse(res.data.course);
-    });
-  }, [id]);
+    dispatch(getCourse(id));
+  }, [id, dispatch]);
 
   const handleValueChanged = useCallback((boolValue) => {
     setValueChanged(boolValue);
@@ -80,7 +142,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
 
   console.log("re-render layout");
 
-  if (!course) return null;
+  if (!courseData) return null;
 
   const arrRoutes = [
     routesWithParams.course_basics(id),
@@ -194,7 +256,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <form className="wrapper instructor-page">
+    <div className="wrapper instructor-page">
       <nav className="nav">
         <div className="nav-content">
           <Link
@@ -204,11 +266,11 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
             <IoIosArrowBack />
             <span className="back">Trở về trang khóa học</span>
           </Link>
-          <span title={course.title} className="course-title">
-            {course.title}
+          <span title={courseData.title} className="course-title">
+            {courseData.title}
           </span>
           <span className="header-status">
-            {!course.isPublished ? "Draft" : "Published"}
+            {!courseData.isPublished ? "Draft" : "Published"}
           </span>
 
           {isRouteWithButtonPreview && (
@@ -231,69 +293,9 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
       </nav>
 
       <main className="main-instructor-page spacing-top-nav">
-        <div className="sidebar">
-          <div className="navbar">
-            <strong>Tạo nội dung khóa học</strong>
-
-            <button
-              type="button"
-              className="navbar-link"
-              onClick={() => handleRedirect(routesWithParams.course_basics(id))}
-            >
-              <BsInfoCircle />
-              <span>Thông tin khóa học</span>
-            </button>
-            <button
-              type="button"
-              className="navbar-link"
-              onClick={() =>
-                handleRedirect(routesWithParams.image_and_preview_video(id))
-              }
-            >
-              <BsFileRichtext />
-              <span>Hình ảnh & video giới thiệu</span>
-            </button>
-            <button
-              type="button"
-              className="navbar-link"
-              onClick={() =>
-                handleRedirect(routesWithParams.intended_learners(id))
-              }
-            >
-              <RiBookmark3Line />
-              <span>Mục tiêu & yêu cầu khóa học</span>
-            </button>
-            <button
-              type="button"
-              className="navbar-link"
-              onClick={() => handleRedirect(routesWithParams.curriculum(id))}
-            >
-              <FaLaptopHouse />
-              <span>Chương trình học</span>
-            </button>
-
-            <Link className="navbar-link" to={routesWithParams.price(id)}>
-              <DollarCircleOutlined />
-              <span>Giá khóa học</span>
-            </Link>
-            <button
-              type="button"
-              className="navbar-link"
-              onClick={() => handleRedirect(routesWithParams.promotions(id))}
-            >
-              <IoMdPricetags />
-              <span>Khuyến mại</span>
-            </button>
-          </div>
-          <div>
-            <button type="submit" className="submit">
-              Yêu cầu xem xét
-            </button>
-          </div>
-        </div>
+        <Sidebar handleRedirect={handleRedirect} />
         <div className="main-content">
           {children({
-            course,
             handleValueChanged,
             valueChanged,
             resetState,
@@ -310,7 +312,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
       </main>
 
       <Footer />
-    </form>
+    </div>
   );
 };
 export default InstructorCourseLayout;
