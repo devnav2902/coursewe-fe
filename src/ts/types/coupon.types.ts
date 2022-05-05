@@ -13,6 +13,7 @@ export type CouponType = {
   expiration: string;
   limited_time: number;
   enrollment_limit: number;
+  discountConst?: number;
 };
 
 export type CouponTypes = CouponType[];

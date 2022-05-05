@@ -54,6 +54,9 @@
 .d-flex {
   display: flex !important;
 }
+.flex-column {
+  flex-direction: column;
+}
 .d-inline-block {
   display: inline-block;
 }
