@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import PromotionApi, {
+  ExpiredCoupons,
+  FormCreateCoupon,
   InformationCreateCoupon,
   ScheduledCoupons,
 } from "../../api/promotions.api";
@@ -8,7 +11,7 @@ import { CouponTypes } from "../../ts/types/coupon.types";
 type PromotionState = {
   expiredCoupons: {
     loaded: boolean;
-    data: [];
+    data: ExpiredCoupons;
     error: any;
   };
   scheduledCoupons: {
@@ -26,9 +29,19 @@ type PromotionState = {
     data: InformationCreateCoupon;
     error: any;
   };
+  submitCreatedCoupon: {
+    loading: boolean;
+    error: string | null;
+    success: boolean;
+  };
 };
 
 const initialState: PromotionState = {
+  submitCreatedCoupon: {
+    loading: false,
+    error: null,
+    success: false,
+  },
   expiredCoupons: {
     loaded: false,
     data: [],
@@ -56,6 +69,26 @@ const initialState: PromotionState = {
   },
 };
 
+export const submitCreatedCoupon = createAsyncThunk<
+  any,
+  FormCreateCoupon,
+  { rejectValue: string }
+>("promotions/submitCreatedCoupon", async (data, { rejectWithValue }) => {
+  try {
+    const res = await PromotionApi.createCoupon(data);
+    console.log(res);
+
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.response?.data, error);
+      return rejectWithValue("Lỗi trong quá trình tạo mã giảm giá!");
+    }
+
+    return rejectWithValue("An unknown error");
+  }
+});
+
 export const getScheduledCoupons = createAsyncThunk<ScheduledCoupons, number>(
   "promotions/getScheduledCoupons",
   async (courseId, { rejectWithValue }) => {
@@ -63,6 +96,19 @@ export const getScheduledCoupons = createAsyncThunk<ScheduledCoupons, number>(
       const { data } = await PromotionApi.getScheduledCoupons(courseId);
 
       return data.scheduledCoupons;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const getExpiredCoupons = createAsyncThunk<ExpiredCoupons, number>(
+  "promotions/getExpiredCoupons",
+  async (courseId, { rejectWithValue }) => {
+    try {
+      const { data } = await PromotionApi.getExpiredCoupons(courseId);
+
+      return data.expiredCoupons;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -84,7 +130,8 @@ export const getCouponTypes = createAsyncThunk<CouponTypes, undefined>(
 
 export const getInformationCreateCoupon = createAsyncThunk<
   InformationCreateCoupon,
-  number
+  number,
+  { rejectValue: string }
 >(
   "promotions/getInformationCreateCoupon",
   async (courseId, { rejectWithValue }) => {
@@ -93,7 +140,11 @@ export const getInformationCreateCoupon = createAsyncThunk<
 
       return data;
     } catch (error) {
-      return rejectWithValue(error);
+      console.log(error);
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Error");
     }
   }
 );
@@ -101,8 +152,27 @@ export const getInformationCreateCoupon = createAsyncThunk<
 const promotionSlice = createSlice({
   name: "promotions",
   initialState,
-  reducers: {},
+  reducers: {
+    clearErrorSubmitCreatedCoupon: (state) => {
+      state.submitCreatedCoupon.error = null;
+    },
+    resetSubmitCreatedCoupon: (state) => {
+      state.submitCreatedCoupon = initialState.submitCreatedCoupon;
+    },
+  },
   extraReducers: (builder) => {
+    // SUBMIT CREATED COUPON
+    builder.addCase(submitCreatedCoupon.pending, (state) => {
+      state.submitCreatedCoupon.loading = true;
+    });
+    builder.addCase(submitCreatedCoupon.fulfilled, (state) => {
+      state.submitCreatedCoupon.loading = false;
+      state.submitCreatedCoupon.success = true;
+    });
+    builder.addCase(submitCreatedCoupon.rejected, (state, action) => {
+      state.submitCreatedCoupon.loading = false;
+      state.submitCreatedCoupon.error = action.payload as string;
+    });
     // GET SCHEDULED COUPONS
     builder.addCase(getScheduledCoupons.pending, (state) => {
       state.scheduledCoupons.loaded = false;
@@ -114,6 +184,18 @@ const promotionSlice = createSlice({
     builder.addCase(getScheduledCoupons.rejected, (state, action) => {
       state.scheduledCoupons.loaded = true;
       state.scheduledCoupons.error = action.payload;
+    });
+    // GET EXPIRED COUPONS
+    builder.addCase(getExpiredCoupons.pending, (state) => {
+      state.expiredCoupons.loaded = false;
+    });
+    builder.addCase(getExpiredCoupons.fulfilled, (state, action) => {
+      state.expiredCoupons.loaded = true;
+      state.expiredCoupons.data = action.payload;
+    });
+    builder.addCase(getExpiredCoupons.rejected, (state, action) => {
+      state.expiredCoupons.loaded = true;
+      state.expiredCoupons.error = action.payload;
     });
     // GET COUPON TYPES
     builder.addCase(getCouponTypes.pending, (state) => {
@@ -143,3 +225,5 @@ const promotionSlice = createSlice({
 });
 
 export default promotionSlice.reducer;
+export const { clearErrorSubmitCreatedCoupon, resetSubmitCreatedCoupon } =
+  promotionSlice.actions;
