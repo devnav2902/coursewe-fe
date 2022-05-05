@@ -1,7 +1,6 @@
 import { Button, Input, Row } from "antd";
 import { FC } from "react";
 import { FiPlus } from "react-icons/fi";
-import { ICourse } from "../../../../layouts/instructor-course.layout";
 import { useInputFields } from "../../hooks/intended-learner.hooks";
 import { HookForm, IDataRemove } from "../../utils/instructor-course.types";
 import { IntendedItem } from "../../../../ts/types/course.types";
@@ -12,8 +11,9 @@ import {
 } from "../../utils/method";
 import RequirementItem from "./Item.component";
 import { EventInput } from "./OutcomeContainer.component";
+import { CourseResponse } from "../../../../api/instructor.api";
 interface ContainerProps {
-  course: ICourse;
+  course: CourseResponse;
   formMethod: HookForm;
 }
 
