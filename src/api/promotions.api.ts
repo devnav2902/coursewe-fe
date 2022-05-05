@@ -4,7 +4,6 @@ import axiosClient from "../utils/axios";
 export type ScheduledCoupon = {
   expires: string;
   created_at: string;
-  enrollment_limit: null | number;
   currently_enrolled: number;
   course_id: number;
   coupon_id: string;
@@ -16,6 +15,18 @@ export type ScheduledCoupon = {
 };
 
 export type ScheduledCoupons = ScheduledCoupon[];
+export type ExpiredCoupon = {
+  expires: string;
+  created_at: string;
+  course_id: number;
+  coupon_id: string;
+  code: string;
+  discount_price: string;
+  coupon: CouponType;
+  currently_enrolled: number;
+};
+
+export type ExpiredCoupons = ExpiredCoupon[];
 
 export type InformationCreateCoupon = {
   couponsCreationRemaining: number;
@@ -24,10 +35,25 @@ export type InformationCreateCoupon = {
   isFreeCourse: boolean;
 };
 
+export type FormCreateCoupon = {
+  code: string;
+  "start-date": string;
+  "end-date": string;
+  discount_price: number | null;
+  coupon_type: string;
+  course_id: number | string;
+};
+
 class Promotion {
   getScheduledCoupons = async (courseId: number) => {
     return axiosClient.get<{ scheduledCoupons: ScheduledCoupons }>(
       `/promotions/scheduled-coupons/${courseId}`
+    );
+  };
+
+  getExpiredCoupons = async (courseId: number) => {
+    return axiosClient.get<{ expiredCoupons: ExpiredCoupons }>(
+      `/promotions/expired-coupons/${courseId}`
     );
   };
 
@@ -40,6 +66,13 @@ class Promotion {
   getInformationCreateCoupon = async (courseId: number) => {
     return axiosClient.get<InformationCreateCoupon>(
       `/promotions/information-create-coupon/${courseId}`
+    );
+  };
+
+  createCoupon = async (data: FormCreateCoupon) => {
+    return axiosClient.post<FormCreateCoupon>(
+      "/promotions/create-coupon/",
+      data
     );
   };
 }
