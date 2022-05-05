@@ -1,33 +1,45 @@
 import styled from "styled-components";
 
+export const StyledCouponTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid rgb(153, 153, 153);
+  th,
+  td {
+    text-align: left;
+    padding: 1rem;
+    vertical-align: top;
+    border: 1px solid rgb(153, 153, 153);
+  }
+  tr th {
+    white-space: nowrap;
+  }
+  span {
+    display: block;
+    margin-bottom: 8px;
+  }
+`;
+
 export const StyledPromotionsWrapper = styled.div`
   &.promotions {
     .col-coupon {
       border: 1px solid #6a6f73;
       padding: 1.5rem;
+      transition: all 0.2s;
+      &:hover {
+        background-color: #cadfff;
+      }
+      .ant-radio-inner {
+        border-color: #000;
+        &::after {
+          background: #000;
+        }
+      }
     }
 
     .coupons {
       margin-top: 3rem;
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        border: 1px solid rgb(153, 153, 153);
-        th,
-        td {
-          text-align: left;
-          padding: 1rem;
-          vertical-align: top;
-          border: 1px solid rgb(153, 153, 153);
-        }
-        tr th {
-          white-space: nowrap;
-        }
-        span {
-          display: block;
-          margin-bottom: 8px;
-        }
-      }
+
       .font-heading {
         font-size: 2rem;
         font-weight: 700;

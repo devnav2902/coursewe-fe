@@ -1,4 +1,3 @@
-import React from "react";
 import ActiveCoupon from "../components/promotions/ActiveCoupon.component";
 import CreateCoupon from "../components/promotions/CreateCoupon.component";
 import ExpiredCoupons from "../components/promotions/ExpiredCoupons.component";

@@ -6,9 +6,12 @@ import {
   useAppDispatch,
   useTypedSelector,
 } from "../../../../hooks/redux.hooks";
+import { getListPrice } from "../../../../redux/slices/instructor-course.slice";
 import {
   getCouponTypes,
   getInformationCreateCoupon,
+  getScheduledCoupons,
+  resetSubmitCreatedCoupon,
 } from "../../../../redux/slices/promotions.slice";
 import { CouponType } from "../../../../ts/types/coupon.types";
 import SelectedCouponType from "./SelectedCouponType.component";
@@ -17,6 +20,9 @@ const CreateCoupon = () => {
   const { id } = useParams() as { id: string };
   const currentMonth = moment().month() + 1;
 
+  const { success: succeedSubmitCoupon } = useTypedSelector(
+    (state) => state.promotion.submitCreatedCoupon
+  );
   const couponTypes = useTypedSelector((state) => state.promotion.couponTypes);
   const {
     data: {
@@ -36,22 +42,32 @@ const CreateCoupon = () => {
   useEffect(() => {
     dispatch(getCouponTypes());
     dispatch(getInformationCreateCoupon(parseInt(id)));
-  }, [dispatch]);
+    dispatch(getListPrice());
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (succeedSubmitCoupon) {
+      const courseId = parseInt(id);
+
+      setDisplayCreateCoupon(false);
+      dispatch(getInformationCreateCoupon(courseId));
+      dispatch(getScheduledCoupons(courseId));
+      dispatch(resetSubmitCreatedCoupon());
+    }
+  }, [succeedSubmitCoupon, dispatch]);
+
+  console.log("re-render create coupon");
 
   function showModalCreateCoupon() {
     setDisplayCreateCoupon(true);
   }
 
-  function handleOk() {
-    setDisplayCreateCoupon(false);
-  }
-
-  function handleCancel() {
-    setDisplayCreateCoupon(false);
-  }
-
   function onChangeCouponType(e: RadioChangeEvent) {
     setSelectedCouponType(e.target.value);
+  }
+
+  function hideModalCreateCoupon() {
+    setDisplayCreateCoupon(false);
   }
 
   return (
@@ -71,8 +87,7 @@ const CreateCoupon = () => {
           </div>
         }
         visible={displayCreateCoupon}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        onCancel={hideModalCreateCoupon}
         footer={false}
       >
         <div className="data-coupon">
