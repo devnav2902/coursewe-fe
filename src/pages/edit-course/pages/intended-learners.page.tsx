@@ -1,10 +1,15 @@
 import { FC } from "react";
+import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { ChildrenProps } from "../../../layouts/instructor-course.layout";
 import OutcomeContainer from "../components/intended-learners/OutcomeContainer.component";
 import RequirementsContainer from "../components/intended-learners/RequirementsContainer.component";
 
 const IntendedLearnersPage: FC<ChildrenProps> = (props) => {
-  const { resetState, setValue, getValues, course, setError, errors } = props;
+  const { data: course } = useTypedSelector(
+    (state) => state.instructorCourse.course
+  );
+
+  const { resetState, setValue, getValues, setError, errors } = props;
   const { clearErrors } = props;
   const formMethod = {
     resetState,
@@ -14,6 +19,8 @@ const IntendedLearnersPage: FC<ChildrenProps> = (props) => {
     errors,
     clearErrors,
   };
+
+  if (!course) return null;
 
   return (
     <div className="edit-course-section">

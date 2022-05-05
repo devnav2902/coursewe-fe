@@ -3,20 +3,23 @@ import { FC, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import ReactQuill from "react-quill";
 import InstructionalLevelApi from "../../../api/instructionalLevel.api";
+import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { ChildrenProps } from "../../../layouts/instructor-course.layout";
 import { InstructionalLevel } from "../../../ts/types/course.types";
 import CustomQuill from "../../../utils/quill";
 
 const { Option } = Select;
 
-const BasicsPage: FC<ChildrenProps> = ({ course, control }) => {
-  const { title, description, instructional_level_id, subtitle } = course;
-
+const BasicsPage: FC<ChildrenProps> = ({ control }) => {
   const [instructionalLevelLoaded, setinstructionalLevelLoaded] =
     useState(false);
   const [instructionalLevel, setInstructionalLevel] = useState<
     InstructionalLevel[] | undefined
   >(undefined);
+
+  const { data: course } = useTypedSelector(
+    (state) => state.instructorCourse.course
+  );
 
   useEffect(() => {
     !instructionalLevelLoaded &&
@@ -25,6 +28,10 @@ const BasicsPage: FC<ChildrenProps> = ({ course, control }) => {
         setinstructionalLevelLoaded(true);
       });
   }, [instructionalLevelLoaded]);
+
+  if (!course) return null;
+
+  const { title, description, instructional_level_id, subtitle } = course;
 
   return (
     <div className="edit-course-section">

@@ -1,14 +1,14 @@
 import { FC, useCallback } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { AiOutlinePlus } from "react-icons/ai";
+import { CourseResponse } from "../../../api/instructor.api";
 import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
-import { ICourse } from "../../../layouts/instructor-course.layout";
 import { openCreateSection } from "../../../redux/slices/curriculum.slice";
 import FormEditTitle from "../components/curriculum/FormEditTitle.component";
 import SectionItem from "../components/curriculum/SectionItem.component";
 
 type CurriculumProps = {
-  course: ICourse;
+  course: CourseResponse;
 };
 
 const CurriculumPage: FC<CurriculumProps> = ({ course }) => {

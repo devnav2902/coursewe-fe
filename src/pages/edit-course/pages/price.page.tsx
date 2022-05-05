@@ -1,19 +1,25 @@
 import { message, Select } from "antd";
 import { FC, useEffect, useState } from "react";
+import { CourseResponse } from "../../../api/instructor.api";
 import PriceApi from "../../../api/price.api";
+import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { Course, Price } from "../../../ts/types/course.types";
 import { StyledButtonSave, StyledPrice } from "../styles/edit-course.styles";
 
-type PriceProps = {
-  course: Course & { price: Price };
-};
+type PriceProps = {};
 
-const PricePage: FC<PriceProps> = ({ course }) => {
+const PricePage: FC<PriceProps> = () => {
+  const {
+    course: { data: courseData },
+  } = useTypedSelector((state) => state.instructorCourse) as {
+    course: { data: CourseResponse };
+  };
+
   const [priceList, setPriceList] = useState<Omit<Price, "original_price">[]>(
     []
   );
   const [loadedPriceList, setLoadedPriceList] = useState(false);
-  const [currentPrice, setCurrentPrice] = useState<number>(course.price.id);
+  const [currentPrice, setCurrentPrice] = useState<number>(courseData.price.id);
   const [saving, setSaving] = useState(false);
 
   function formatPrice(objPrice: Price) {
@@ -43,7 +49,7 @@ const PricePage: FC<PriceProps> = ({ course }) => {
     });
     const messagePromise = message.loading("Đang lưu..", 0);
 
-    PriceApi.updatePrice(course.id, currentPrice)
+    PriceApi.updatePrice(courseData.id, currentPrice)
       .then(() => {
         messagePromise();
         message.success("Đã lưu thành công!", 2.5);
@@ -73,7 +79,7 @@ const PricePage: FC<PriceProps> = ({ course }) => {
             onChange={(price) => {
               setCurrentPrice(parseInt(price));
             }}
-            defaultValue={formatPrice(course.price).format_price}
+            defaultValue={formatPrice(courseData.price).format_price}
             placeholder="Chọn giá khóa học"
             options={priceList}
             fieldNames={{ label: "format_price", value: "id" }}
@@ -82,7 +88,11 @@ const PricePage: FC<PriceProps> = ({ course }) => {
             <button
               className="button"
               disabled={
-                saving ? true : currentPrice === course.price.id ? true : false // lỗi chưa get giá đã update
+                saving
+                  ? true
+                  : currentPrice === courseData.price.id
+                  ? true
+                  : false // lỗi chưa get giá đã update
               }
             >
               Lưu thay đổi

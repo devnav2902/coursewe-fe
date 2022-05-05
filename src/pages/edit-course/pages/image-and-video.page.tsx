@@ -1,11 +1,11 @@
 import { ProgressProps, UploadProps } from "antd";
 import { FC } from "react";
-import { ICourse } from "../../../layouts/instructor-course.layout";
+import { CourseResponse } from "../../../api/instructor.api";
 import CourseImage from "../components/image-and-video/CourseImage.component";
 import CourseVideo from "../components/image-and-video/CourseVideo.component";
 
 type ImageAndVideoProps = {
-  course: ICourse;
+  course: CourseResponse;
 };
 
 const ImageAndVideoPage: FC<ImageAndVideoProps> = ({ course }) => {
