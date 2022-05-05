@@ -1,4 +1,3 @@
-import React from "react";
 import {
   FundProjectionScreenOutlined,
   EyeOutlined,
@@ -7,6 +6,114 @@ import {
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ROUTES } from "../../utils/constants";
+import styled from "styled-components";
+
+const StyledSidebar = styled.div`
+  position: fixed;
+  height: 100vh;
+  z-index: 9999;
+  .menu {
+    height: 100vh;
+    z-index: 100;
+    background: #fff;
+    padding-bottom: 5rem;
+    background-color: black !important;
+    width: 60px;
+
+    ul {
+      height: 100vh;
+      z-index: 9999;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      backface-visibility: hidden;
+
+      &:hover {
+        .hover {
+          width: 320px;
+          visibility: visible;
+        }
+        .full-text {
+          opacity: 1 !important;
+        }
+        > li {
+          visibility: hidden;
+        }
+      }
+
+      .logo {
+        font-size: 3rem;
+        font-weight: 700;
+        span {
+          margin-left: 0 !important;
+        }
+      }
+
+      a {
+        height: 60px;
+        color: #fff;
+        align-items: center;
+        display: flex;
+      }
+
+      .hover {
+        transition: width 0.6s, visibility 0.3s;
+        background-color: black;
+        width: 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        visibility: hidden;
+
+        &__item {
+          &:hover {
+            background-color: #3f3d3d;
+          }
+          span {
+            display: flex;
+            align-items: center;
+            margin-left: 5rem;
+            white-space: nowrap;
+            &.anticon {
+              margin-left: 0;
+            }
+          }
+
+          svg {
+            transform: translateX(-50%);
+            left: 30px;
+            position: absolute;
+          }
+        }
+
+        .first-letter {
+          opacity: 0;
+        }
+
+        .full-text {
+          transition: opacity 0.4s;
+          opacity: 0.6;
+          top: 0;
+          left: 0;
+          position: absolute;
+        }
+
+        .logo__container {
+          transform: translateX(-50%);
+          left: 30px;
+          position: absolute;
+
+          span {
+            line-height: 1;
+          }
+        }
+      }
+    }
+  }
+`;
+
 const SideBarOverview = () => {
   const {
     profile: {
@@ -15,7 +122,7 @@ const SideBarOverview = () => {
   } = useSelector((state) => state.user);
 
   return (
-    <div className="sidebar-menu">
+    <StyledSidebar className="sidebar-menu">
       <div className="menu">
         <ul>
           <li>
@@ -35,11 +142,7 @@ const SideBarOverview = () => {
           </li>
           {name === "admin" && (
             <li>
-              <a
-                href="{{
-                                    route('submission-courses-list')
-                                }}"
-              >
+              <a href="{{}}">
                 <EyeOutlined style={{ fontSize: "22px" }} />
               </a>
             </li>
@@ -76,7 +179,7 @@ const SideBarOverview = () => {
           </div>
         </ul>
       </div>
-    </div>
+    </StyledSidebar>
   );
 };
 export default SideBarOverview;
