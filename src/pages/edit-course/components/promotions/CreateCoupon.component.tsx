@@ -6,7 +6,7 @@ import {
   useAppDispatch,
   useTypedSelector,
 } from "../../../../hooks/redux.hooks";
-import { getListPrice } from "../../../../redux/slices/instructor-course.slice";
+import { getPriceList } from "../../../../redux/slices/price.slice";
 import {
   getCouponTypes,
   getInformationCreateCoupon,
@@ -42,7 +42,7 @@ const CreateCoupon = () => {
   useEffect(() => {
     dispatch(getCouponTypes());
     dispatch(getInformationCreateCoupon(parseInt(id)));
-    dispatch(getListPrice());
+    dispatch(getPriceList());
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const CreateCoupon = () => {
       dispatch(getScheduledCoupons(courseId));
       dispatch(resetSubmitCreatedCoupon());
     }
-  }, [succeedSubmitCoupon, dispatch]);
+  }, [succeedSubmitCoupon, dispatch, id]);
 
   console.log("re-render create coupon");
 

@@ -12,10 +12,13 @@ type Props = {
 };
 
 const CustomPrice: FC<Props> = ({ selectedCouponType, formHandler }) => {
+  // const {
+  //   course: { loaded, data: courseData },
+  // } = useTypedSelector((state) => state.instructorCourse);
   const {
-    course: { loaded, data: courseData },
-    price: { data: listPrice, loaded: loadedListPrice },
-  } = useTypedSelector((state) => state.instructorCourse);
+    priceList: { data: priceList, loaded: loadedPriceList },
+    currentPrice: { data: coursePrice, loaded: loadedCoursePrice },
+  } = useTypedSelector((state) => state.price);
   const {
     control,
     formState: { errors },
@@ -26,14 +29,14 @@ const CustomPrice: FC<Props> = ({ selectedCouponType, formHandler }) => {
       (() => {
         const discountConst = selectedCouponType.discountConst; // giá trị sử dụng để tính giảm giá. vd khoảng giảm giá là [349.000, 549.000]=> khuyến mãi trong khoảng [299.000, 499.000]
 
-        if (discountConst && listPrice.length) {
-          const sortedPrice = [...listPrice].sort(
+        if (discountConst && priceList.length) {
+          const sortedPrice = [...priceList].sort(
             (a, b) =>
               parseFloat(a.original_price) - parseFloat(b.original_price)
           );
 
           const indexPrice = sortedPrice.findIndex(
-            (price) => price.id === courseData?.price_id
+            (price) => price.id === coursePrice?.id
           );
 
           const portionArrayPrice = sortedPrice
@@ -59,10 +62,10 @@ const CustomPrice: FC<Props> = ({ selectedCouponType, formHandler }) => {
           };
         }
       })(),
-    [listPrice, courseData?.price_id, selectedCouponType.discountConst]
+    [priceList, coursePrice, selectedCouponType.discountConst]
   );
 
-  return !loaded || !loadedListPrice ? (
+  return !loadedCoursePrice || !loadedPriceList ? (
     <div className="d-flex align-items-center justify-content-center">
       <Spin />
     </div>
@@ -71,9 +74,7 @@ const CustomPrice: FC<Props> = ({ selectedCouponType, formHandler }) => {
       <b className="mt-2 d-block mb-1">Thiết lập giá bán</b>
       <span className="d-block mb-1">
         Giá gốc của khóa học:{" "}
-        <b>
-          {courseData?.price && convertToVND(courseData?.price.original_price)}
-        </b>
+        <b>{coursePrice && convertToVND(coursePrice?.original_price)}</b>
       </span>
       <span className="d-block mb-3">
         Chọn giá trong khoảng từ{" "}

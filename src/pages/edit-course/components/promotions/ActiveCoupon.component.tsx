@@ -73,7 +73,7 @@ const ActiveCoupon = () => {
                   <td>
                     <span>{code}</span>
                   </td>
-                  <td>
+                  <td style={{ whiteSpace: "nowrap" }}>
                     {isFreeCoupon ? (
                       "Miễn phí"
                     ) : (
@@ -86,8 +86,13 @@ const ActiveCoupon = () => {
                   <td>
                     <div>Còn lại: {time_remaining + " ngày"}</div>
 
-                    <div>Ngày bắt đầu: {created_at}</div>
-                    <div>Ngày hết hạn: {expires}</div>
+                    <div>
+                      Ngày bắt đầu:{" "}
+                      <span className="d-block">{created_at}</span>
+                    </div>
+                    <div>
+                      Ngày hết hạn: <span className="d-block">{expires}</span>
+                    </div>
                   </td>
                   <td>
                     <span>
