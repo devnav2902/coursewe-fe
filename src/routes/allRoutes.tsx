@@ -1,7 +1,7 @@
 import BasicLayout from "../layouts/basic.layout";
 import InstructorCourseLayout from "../layouts/instructor-course.layout";
 import LearningLayout from "../layouts/learning.layout";
-import OverviewLayout from "../layouts/overview.layout";
+import InstructorView from "../layouts/instructor-view.layout";
 import ProfileLayout from "../layouts/profile.layout";
 import NotFound from "../pages/404/pages/index";
 import AdminReviewPage from "../pages/admin-review/page/admin-review.page";
@@ -146,9 +146,9 @@ const routes: Routes[] = [
   {
     path: ROUTES.INSTRUCTOR_COURSES,
     component: (
-      <OverviewLayout>
+      <InstructorView>
         <InstructorCoursesPage />
-      </OverviewLayout>
+      </InstructorView>
     ),
     private: true,
   },
@@ -207,9 +207,9 @@ const routes: Routes[] = [
   {
     path: ROUTES.OVERVIEW,
     component: (
-      <OverviewLayout>
+      <InstructorView>
         <OverviewPage />
-      </OverviewLayout>
+      </InstructorView>
     ),
     private: true,
   },
@@ -226,9 +226,9 @@ const routes: Routes[] = [
   {
     path: ROUTES.ADMIN_REVIEW,
     component: (
-      <OverviewLayout>
+      <InstructorView>
         <AdminReviewPage />
-      </OverviewLayout>
+      </InstructorView>
     ),
     private: true,
   },
