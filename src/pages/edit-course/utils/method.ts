@@ -131,6 +131,15 @@ const validateItemsBeforeSend = (
   console.log(errors);
 };
 
+export const convertToVND = (
+  value: string | number,
+  displayCurrencyUnit: boolean = true
+) => {
+  return `${parseFloat(value.toString()).toLocaleString("vi-VN")}${
+    displayCurrencyUnit ? " đ" : ""
+  }`;
+};
+
 export {
   onChangeItem,
   onRemoveItem,
