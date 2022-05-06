@@ -6,6 +6,7 @@ import curriculumReducer from "../slices/curriculum.slice";
 import learningReducer from "../slices/learning.slice";
 import promotionReducer from "../slices/promotions.slice";
 import instructorCourseReducer from "../slices/instructor-course.slice";
+import priceReducer from "../slices/price.slice";
 
 const logger = createLogger({
   // ...options
@@ -20,6 +21,7 @@ export const store = configureStore({
     learning: learningReducer,
     promotion: promotionReducer,
     instructorCourse: instructorCourseReducer,
+    price: priceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(middleware),

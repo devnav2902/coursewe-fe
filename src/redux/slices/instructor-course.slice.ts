@@ -1,17 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import InstructorApi, { CourseResponse } from "../../api/instructor.api";
-import PriceApi from "../../api/price.api";
-import { Price } from "../../ts/types/course.types";
 
 type InstructorCourseState = {
   course: {
     loaded: boolean;
     data: CourseResponse | null;
-    error: any;
-  };
-  price: {
-    loaded: boolean;
-    data: Price[] | [];
     error: any;
   };
 };
@@ -22,26 +15,7 @@ const initialState: InstructorCourseState = {
     data: null,
     error: null,
   },
-  price: {
-    loaded: false,
-    data: [],
-    error: null,
-  },
 };
-
-export const getListPrice = createAsyncThunk<Price[]>(
-  "instructor-course/getListPrice",
-  async (_, { rejectWithValue }) => {
-    try {
-      const {
-        data: { price },
-      } = await PriceApi.getPrice();
-      return price;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
 
 export const getCourse = createAsyncThunk<CourseResponse, number | string>(
   "instructor-course/getCourse",
@@ -64,6 +38,9 @@ const instructorCourseSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     // GET COURSE
+    builder.addCase(getCourse.pending, (state) => {
+      state.course.loaded = false;
+    });
     builder.addCase(getCourse.fulfilled, (state, action) => {
       state.course.loaded = true;
       state.course.data = action.payload;
@@ -71,15 +48,6 @@ const instructorCourseSlice = createSlice({
     builder.addCase(getCourse.rejected, (state, action) => {
       state.course.loaded = true;
       state.course.error = action.payload;
-    });
-    // GET LIST PRICE
-    builder.addCase(getListPrice.fulfilled, (state, action) => {
-      state.price.loaded = true;
-      state.price.data = action.payload;
-    });
-    builder.addCase(getListPrice.rejected, (state, action) => {
-      state.price.loaded = true;
-      state.price.error = action.payload;
     });
   },
 });
