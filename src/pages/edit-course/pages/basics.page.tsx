@@ -3,6 +3,8 @@ import { FC, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import ReactQuill from "react-quill";
 import InstructionalLevelApi from "../../../api/instructionalLevel.api";
+import { CourseResponse } from "../../../api/instructor.api";
+import Loading from "../../../components/Loading/Loading.component";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { ChildrenProps } from "../../../layouts/instructor-course.layout";
 import { InstructionalLevel } from "../../../ts/types/course.types";
@@ -17,7 +19,7 @@ const BasicsPage: FC<ChildrenProps> = ({ control }) => {
     InstructionalLevel[] | undefined
   >(undefined);
 
-  const { data: course } = useTypedSelector(
+  const { data: course, loaded: loadedCourse } = useTypedSelector(
     (state) => state.instructorCourse.course
   );
 
@@ -29,9 +31,10 @@ const BasicsPage: FC<ChildrenProps> = ({ control }) => {
       });
   }, [instructionalLevelLoaded]);
 
-  if (!course) return null;
+  if (!loadedCourse) return <Loading />;
 
-  const { title, description, instructional_level_id, subtitle } = course;
+  const { title, description, instructional_level_id, subtitle } =
+    course as CourseResponse;
 
   return (
     <div className="edit-course-section">

@@ -1,5 +1,6 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
-import { FC, ReactNode, useCallback, useEffect, useState } from "react";
+import { Modal, Spin } from "antd";
+import { FC, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsFileRichtext, BsInfoCircle } from "react-icons/bs";
 import { FaLaptopHouse } from "react-icons/fa";
@@ -7,7 +8,9 @@ import { IoIosArrowBack, IoMdPricetags } from "react-icons/io";
 import { RiBookmark3Line } from "react-icons/ri";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import CourseApi from "../api/course.api";
-import { CourseResponse } from "../api/instructor.api";
+import PublishCourseApi, {
+  MissingPublishRequirements,
+} from "../api/publish-course.api";
 import Footer from "../components/Footer/Footer.component";
 import { useAppDispatch, useTypedSelector } from "../hooks/redux.hooks";
 import { HookForm } from "../pages/edit-course/utils/instructor-course.types";
@@ -25,15 +28,37 @@ interface LayoutProps {
   children: Children;
 }
 
-type InstructorCourseInnerProps = {
-  children: ReactNode;
-  courseData: CourseResponse;
-};
-
 const Sidebar: FC<{
   handleRedirect: (route: string) => void;
 }> = ({ handleRedirect }) => {
   const { id } = useParams() as { id: string };
+
+  const [visiblePublishRequirements, setVisiblePublishRequirements] =
+    useState(false);
+  const [missingPublishRequirements, setMissingPublishRequirements] = useState<{
+    data: MissingPublishRequirements | null;
+    loaded: boolean;
+  }>({ data: null, loaded: false });
+
+  function submitForReview() {
+    setVisiblePublishRequirements(true);
+
+    PublishCourseApi.checkingPublishRequirements(id).then(({ data }) => {
+      const { missingPublishRequirements } = data;
+      console.log(missingPublishRequirements);
+
+      setMissingPublishRequirements((state) => ({
+        ...state,
+        data: missingPublishRequirements,
+        loaded: true,
+      }));
+    });
+  }
+
+  function handleCancel() {
+    setVisiblePublishRequirements(false);
+  }
+
   return (
     <div className="sidebar">
       <div className="navbar">
@@ -88,9 +113,38 @@ const Sidebar: FC<{
         </button>
       </div>
       <div>
-        <button type="submit" className="submit">
+        <button type="button" onClick={submitForReview} className="submit">
           Yêu cầu xem xét
         </button>
+        <Modal
+          footer={null}
+          bodyStyle={
+            missingPublishRequirements.loaded
+              ? undefined
+              : {
+                  minHeight: 300,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }
+          }
+          zIndex={2000}
+          title={
+            missingPublishRequirements.loaded &&
+            "Bạn chưa thể gửi yêu cầu xem xét khóa học này!"
+          }
+          visible={visiblePublishRequirements}
+          onCancel={handleCancel}
+        >
+          {!missingPublishRequirements.loaded ? (
+            <Spin />
+          ) : (
+            <p>
+              Bạn gần như đã sẵn sàng để gửi yêu cầu xem xét khóa học của mình.
+              Dưới đây là một số thông tin của khóa học bạn cần hoàn thành.
+            </p>
+          )}
+        </Modal>
       </div>
     </div>
   );
@@ -141,8 +195,6 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
   }, [watch, valueChanged, handleValueChanged]);
 
   console.log("re-render layout");
-
-  if (!courseData) return null;
 
   const arrRoutes = [
     routesWithParams.course_basics(id),
@@ -266,11 +318,11 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
             <IoIosArrowBack />
             <span className="back">Trở về trang khóa học</span>
           </Link>
-          <span title={courseData.title} className="course-title">
-            {courseData.title}
+          <span title={courseData?.title} className="course-title">
+            {courseData?.title}
           </span>
           <span className="header-status">
-            {!courseData.isPublished ? "Draft" : "Published"}
+            {!courseData?.isPublished ? "Draft" : "Published"}
           </span>
 
           {isRouteWithButtonPreview && (

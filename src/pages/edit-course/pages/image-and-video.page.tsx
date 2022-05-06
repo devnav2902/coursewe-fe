@@ -1,16 +1,12 @@
 import { ProgressProps, UploadProps } from "antd";
 import { FC } from "react";
 import { CourseResponse } from "../../../api/instructor.api";
+import Loading from "../../../components/Loading/Loading.component";
+import { useTypedSelector } from "../../../hooks/redux.hooks";
 import CourseImage from "../components/image-and-video/CourseImage.component";
 import CourseVideo from "../components/image-and-video/CourseVideo.component";
 
-type ImageAndVideoProps = {
-  course: CourseResponse;
-};
-
-const ImageAndVideoPage: FC<ImageAndVideoProps> = ({ course }) => {
-  const { video_demo, thumbnail, id } = course;
-
+const ImageAndVideoPage: FC = () => {
   const beforeUpload = () => false;
 
   const progressProps: ProgressProps = {
@@ -25,6 +21,14 @@ const ImageAndVideoPage: FC<ImageAndVideoProps> = ({ course }) => {
     maxCount: 1,
     beforeUpload,
   };
+
+  const {
+    course: { data: course, loaded: loadedCourse },
+  } = useTypedSelector((state) => state.instructorCourse);
+
+  if (!loadedCourse) return <Loading />;
+
+  const { video_demo, thumbnail, id } = course as CourseResponse;
 
   return (
     <div className="edit-course-section">

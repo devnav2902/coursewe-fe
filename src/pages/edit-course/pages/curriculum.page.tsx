@@ -2,21 +2,20 @@ import { FC, useCallback } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { AiOutlinePlus } from "react-icons/ai";
 import { CourseResponse } from "../../../api/instructor.api";
+import Loading from "../../../components/Loading/Loading.component";
 import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
 import { openCreateSection } from "../../../redux/slices/curriculum.slice";
 import FormEditTitle from "../components/curriculum/FormEditTitle.component";
 import SectionItem from "../components/curriculum/SectionItem.component";
 
-type CurriculumProps = {
-  course: CourseResponse;
-};
-
-const CurriculumPage: FC<CurriculumProps> = ({ course }) => {
-  const { section } = course;
+const CurriculumPage: FC = () => {
   const dispatch = useAppDispatch();
   const { displayCreateSection } = useTypedSelector(
     (state) => state.curriculum
   );
+  const {
+    course: { data: courseData, loaded: loadedCourse },
+  } = useTypedSelector((state) => state.instructorCourse);
 
   const handleDisplayCreateSection = () => {
     dispatch(openCreateSection());
@@ -26,6 +25,9 @@ const CurriculumPage: FC<CurriculumProps> = ({ course }) => {
     // the only one that is required
   }, []);
 
+  if (!loadedCourse) return <Loading />;
+
+  const { section } = courseData as CourseResponse;
   return (
     <div className="edit-course-section">
       <h6 className="">Chương trình học tập</h6>
