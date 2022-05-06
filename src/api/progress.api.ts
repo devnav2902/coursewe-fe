@@ -1,18 +1,13 @@
+import { LearningProgress } from "../ts/types/course.types";
 import axiosClient from "../utils/axios";
 
 class Progress {
   updateProgress = async (data: { lectureId: number; progress: boolean }) => {
-    return axiosClient
-      .post("/progress", data)
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.post("/progress", data);
   };
 
   getProgress = async (id: number) => {
-    return axiosClient
-      .get("/progress/" + id)
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<LearningProgress>("/progress/" + id);
   };
 }
 

@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import OverviewApi from "../../../api/overview.api";
-import { useSelector } from "react-redux";
-import SideBarOverview from "../../../components/SideBarOverview/SideBarOverview.component";
-import { Bar, Line } from "react-chartjs-2";
+import { Tabs } from "antd";
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
+import React, { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
+import { useSelector } from "react-redux";
 import ChartApi from "../../../api/chart.api";
-import { Spin, Tabs } from "antd";
+import OverviewApi from "../../../api/overview.api";
+import { StyledOverviewWrapper } from "../styles/overview.styles";
 const { TabPane } = Tabs;
 const OverviewPage = () => {
   const {
@@ -225,299 +225,217 @@ const OverviewPage = () => {
   };
 
   return (
-    <div className="main-content main-overview-content">
-      <div className="overview-container">
-        <div className="overview-content">
-          <div className="overview-title">
-            <h2>Overview</h2>
-          </div>
-          <div className="metrics-content">
-            <div className="overview-body">
-              <div className="top-metrics">
-                <div className="nav-overview-container">
-                  <ul className="nav-tabs">
-                    {name === "admin" ? (
-                      <div className="overview_admin">
-                        <li className="">
-                          <button className="">
-                            <div className="instructor-analytics--metrics-data">
-                              <div>
-                                <div className="text-midnight-lighter">
-                                  Tổng số giảng viên
-                                </div>
-                                <div className="text-midnight">
-                                  {allInstructors}
-                                </div>
+    <StyledOverviewWrapper className="main-content main-overview-content">
+      <div className="overview-content">
+        <div className="overview-title">
+          <h2>Overview</h2>
+        </div>
+        <div className="metrics-content">
+          <div className="overview-body">
+            <div className="top-metrics">
+              <div className="nav-overview-container">
+                <ul className="nav-tabs">
+                  {name === "admin" ? (
+                    <div className="overview_admin">
+                      <li className="">
+                        <button className="">
+                          <div className="instructor-analytics--metrics-data">
+                            <div>
+                              <div className="text-midnight-lighter">
+                                Tổng số giảng viên
+                              </div>
+                              <div className="text-midnight">
+                                {allInstructors}
                               </div>
                             </div>
-                          </button>
-                        </li>
-                        <li className="">
-                          <button className="">
-                            <div className="instructor-analytics--metrics-data">
-                              <div>
-                                <div className="text-midnight-lighter">
-                                  Tổng số học viên
-                                </div>
-                                <div className="text-midnight">
-                                  {allStudents}
-                                </div>
+                          </div>
+                        </button>
+                      </li>
+                      <li className="">
+                        <button className="">
+                          <div className="instructor-analytics--metrics-data">
+                            <div>
+                              <div className="text-midnight-lighter">
+                                Tổng số học viên
                               </div>
+                              <div className="text-midnight">{allStudents}</div>
                             </div>
-                          </button>
-                        </li>
+                          </div>
+                        </button>
+                      </li>
+                    </div>
+                  ) : undefined}
+                  <li className="">
+                    <button className="">
+                      <div className="instructor-analytics--metrics-data">
+                        <div>
+                          <div className="text-midnight-lighter">
+                            Khóa học của bạn
+                          </div>
+                          <div className="text-midnight">
+                            {allCoursesByInstructor}
+                          </div>
+                        </div>
                       </div>
-                    ) : undefined}
-                    <li className="">
-                      <button className="">
+                    </button>
+                  </li>
+                </ul>
+
+                <ul className="nav-tabs">
+                  <Tabs defaultActiveKey="1">
+                    <TabPane
+                      tab={
+                        <div className="instructor-analytics--metrics-data">
+                          <div className="text-midnight-lighter">
+                            Tổng doanh thu
+                          </div>
+                          <div className="text-midnight">{totalRevenue}đ</div>
+                          <div className="text-midnight-lighter">
+                            {totalRevenueInMonth}đ trong tháng này
+                          </div>
+                        </div>
+                      }
+                      key="1"
+                    >
+                      <div className="tab-content">
+                        <div className="tab-pane">
+                          <div className="instructor-analytics--chart">
+                            <div className="instructor-analytics-message">
+                              <div className="containerChart  activeChart">
+                                <Line options={options} data={dataRenevue} />
+                              </div>
+
+                              {/* {{-- @endif --}} */}
+                            </div>
+                          </div>
+                          <div className="instructor-analytics--chart-footer">
+                            <a href="">
+                              <span>Revenue Report</span>
+                              <i className="fas fa-chevron-right"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </TabPane>
+                    <TabPane
+                      tab={
                         <div className="instructor-analytics--metrics-data">
                           <div>
                             <div className="text-midnight-lighter">
-                              Khóa học của bạn
+                              Học viên
                             </div>
-                            <div className="text-midnight">
-                              {allCoursesByInstructor}
+                            <div className="text-midnight">{totalStudents}</div>
+                            <div className="text-midnight-lighter">
+                              {numberOfStudentsInMonth} trong tháng này
                             </div>
                           </div>
                         </div>
-                      </button>
-                    </li>
-                  </ul>
-                  <ul className=" nav-tabs">
-                    <Tabs defaultActiveKey="1">
-                      <TabPane
-                        tab={
-                          <li
-                            className="overview-item overview-active"
-                            data-chart="revenueChart"
-                          >
-                            <button>
-                              <div className="instructor-analytics--metrics-data">
-                                <div>
-                                  <div className="text-midnight-lighter">
-                                    Tổng doanh thu
-                                  </div>
-                                  <div className="text-midnight">
-                                    {totalRevenue}đ
-                                  </div>
-                                  <div className="text-midnight-lighter">
-                                    {totalRevenueInMonth}đ trong tháng này
-                                  </div>
-                                </div>
+                      }
+                      key="2"
+                    >
+                      <div className="tab-content">
+                        <div className="tab-pane">
+                          <div className="instructor-analytics--chart">
+                            <div className="instructor-analytics-message">
+                              <div className="containerChart activeChart">
+                                <Line
+                                  options={options}
+                                  data={dataEnrollments}
+                                />
                               </div>
-                            </button>
-                          </li>
-                        }
-                        key="1"
-                      >
-                        <div className="tab-content">
-                          <div className="tab-pane">
-                            <div className="instructor-analytics--chart">
-                              <div className="instructor-analytics-message">
-                                <div className="containerChart  activeChart">
-                                  <Line options={options} data={dataRenevue} />
-                                </div>
 
-                                {/* {{-- @endif --}} */}
-                              </div>
-                            </div>
-                            <div className="instructor-analytics--chart-footer">
-                              <a href="">
-                                <span>Revenue Report</span>
-                                <i className="fas fa-chevron-right"></i>
-                              </a>
+                              {/* {{-- @endif --}} */}
                             </div>
                           </div>
-                        </div>
-                      </TabPane>
-                      <TabPane
-                        tab={
-                          <li
-                            className="overview-item"
-                            data-chart="enrollmentsChart"
-                          >
-                            <button>
-                              <div className="instructor-analytics--metrics-data">
-                                <div>
-                                  <div className="text-midnight-lighter">
-                                    Học viên
-                                  </div>
-                                  <div className="text-midnight">
-                                    {totalStudents}
-                                  </div>
-                                  <div className="text-midnight-lighter">
-                                    {numberOfStudentsInMonth} trong tháng này
-                                  </div>
-                                </div>
-                              </div>
-                            </button>
-                          </li>
-                        }
-                        key="2"
-                      >
-                        <div className="tab-content">
-                          <div className="tab-pane">
-                            <div className="instructor-analytics--chart">
-                              <div className="instructor-analytics-message">
-                                <div className="containerChart activeChart">
-                                  <Line
-                                    options={options}
-                                    data={dataEnrollments}
-                                  />
-                                </div>
-
-                                {/* {{-- @endif --}} */}
-                              </div>
-                            </div>
-                            <div className="instructor-analytics--chart-footer">
-                              <a href="">
-                                <span>Revenue Report</span>
-                                <i className="fas fa-chevron-right"></i>
-                              </a>
-                            </div>
+                          <div className="instructor-analytics--chart-footer">
+                            <a href="">
+                              <span>Revenue Report</span>
+                              <i className="fas fa-chevron-right"></i>
+                            </a>
                           </div>
-                        </div>
-                      </TabPane>
-                      <TabPane
-                        tab={
-                          <li
-                            className="overview-item"
-                            data-chart="ratingChart"
-                          >
-                            <button>
-                              <div className="instructor-analytics--metrics-data">
-                                <div>
-                                  <div className="text-midnight-lighter">
-                                    Đánh giá khóa học của bạn
-                                  </div>
-                                  <div className="text-midnight">
-                                    {Number.parseFloat(ratingCourses).toFixed(
-                                      1
-                                    )}
-                                  </div>
-                                  <div className="text-midnight-lighter">
-                                    {numberOfRatingsInMonth} đánh giá trong
-                                    tháng này
-                                  </div>
-                                </div>
-                              </div>
-                            </button>
-                          </li>
-                        }
-                        key="3"
-                      >
-                        <div className="tab-content">
-                          <div className="tab-pane">
-                            <div className="instructor-analytics--chart">
-                              <div className="instructor-analytics-message">
-                                <div className="containerChart activeChart">
-                                  <Line
-                                    options={optionmultis}
-                                    data={datamulti}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="instructor-analytics--chart-footer">
-                              <a href="">
-                                <span>Revenue Report</span>
-                                <i className="fas fa-chevron-right"></i>
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </TabPane>
-                      {name === "admin" ? (
-                        <TabPane
-                          tab={
-                            <li
-                              className="overview-item"
-                              data-chart="coursesChart"
-                            >
-                              <button>
-                                <div className="instructor-analytics--metrics-data">
-                                  <div>
-                                    <div className="text-midnight-lighter">
-                                      Tổng số khóa học
-                                    </div>
-                                    <div className="text-midnight">
-                                      {allCourses}
-                                    </div>
-                                    <div className="text-midnight-lighter">
-                                      {allCoursesInMonth} trong tháng này
-                                    </div>
-                                  </div>
-                                </div>
-                              </button>
-                            </li>
-                          }
-                          key="4"
-                        >
-                          <div className="tab-content">
-                            <div className="tab-pane">
-                              <div className="instructor-analytics--chart">
-                                <div className="instructor-analytics-message">
-                                  <div className="containerChart activeChart">
-                                    <Line
-                                      options={options}
-                                      data={dataCourses}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="instructor-analytics--chart-footer">
-                                <a href="">
-                                  <span>Revenue Report</span>
-                                  <i className="fas fa-chevron-right"></i>
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </TabPane>
-                      ) : undefined}
-                    </Tabs>
-                  </ul>
-                </div>
-              </div>
-
-              {/* <div className="tab-content">
-                      <div className="tab-pane">
-                        <div className="instructor-analytics--chart">
-                          <div className="instructor-analytics-message">
-                            <div className="containerChart  ">
-                              <Line options={options} data={data} />
-                            </div>
-                            <div className="containerChart ">
-                              <Line options={options} data={data} />
-                            </div>
-                            <div className="containerChart activeChart">
-                              <Line options={optionmultis} data={datamulti} />
-                            </div>
-                            <div className="containerChart ">
-                              <Line options={options} data={data} />
-                            </div>
-                            <div className="containerChart">
-                              <canvas id="instructorChart"></canvas>
-                            </div>
-                            <div className="containerChart">
-                              <canvas id="studentChart"></canvas>
-                            </div>
-                            {{-- @endif --}}
-                          </div>
-                        </div>
-                        <div className="instructor-analytics--chart-footer">
-                          <a href="">
-                            <span>Revenue Report</span>
-                            <i className="fas fa-chevron-right"></i>
-                          </a>
                         </div>
                       </div>
-                    </div> */}
+                    </TabPane>
+                    <TabPane
+                      tab={
+                        <div className="instructor-analytics--metrics-data">
+                          <div>
+                            <div className="text-midnight-lighter">
+                              Đánh giá khóa học của bạn
+                            </div>
+                            <div className="text-midnight">
+                              {Number.parseFloat(ratingCourses).toFixed(1)}
+                            </div>
+                            <div className="text-midnight-lighter">
+                              {numberOfRatingsInMonth} đánh giá trong tháng này
+                            </div>
+                          </div>
+                        </div>
+                      }
+                      key="3"
+                    >
+                      <div className="tab-content">
+                        <div className="tab-pane">
+                          <div className="instructor-analytics--chart">
+                            <div className="instructor-analytics-message">
+                              <div className="containerChart activeChart">
+                                <Line options={optionmultis} data={datamulti} />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="instructor-analytics--chart-footer">
+                            <a href="">
+                              <span>Revenue Report</span>
+                              <i className="fas fa-chevron-right"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </TabPane>
+                    {name === "admin" ? (
+                      <TabPane
+                        tab={
+                          <div className="instructor-analytics--metrics-data">
+                            <div>
+                              <div className="text-midnight-lighter">
+                                Tổng số khóa học
+                              </div>
+                              <div className="text-midnight">{allCourses}</div>
+                              <div className="text-midnight-lighter">
+                                {allCoursesInMonth} trong tháng này
+                              </div>
+                            </div>
+                          </div>
+                        }
+                        key="4"
+                      >
+                        <div className="tab-content">
+                          <div className="tab-pane">
+                            <div className="instructor-analytics--chart">
+                              <div className="instructor-analytics-message">
+                                <div className="containerChart activeChart">
+                                  <Line options={options} data={dataCourses} />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="instructor-analytics--chart-footer">
+                              <a href="">
+                                <span>Revenue Report</span>
+                                <i className="fas fa-chevron-right"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </TabPane>
+                    ) : undefined}
+                  </Tabs>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </StyledOverviewWrapper>
   );
 };
 export default OverviewPage;

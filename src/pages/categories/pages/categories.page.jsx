@@ -3,6 +3,17 @@ import { memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { Select, Skeleton } from "antd";
+import {
+  Checkbox,
+  Collapse,
+  Empty,
+  Pagination,
+  Row,
+  Select,
+  Skeleton,
+} from "antd";
+import { memo, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import CategoriesApi from "../../../api/categories.api";
 import CourseCardLarge from "../components/CourseCardLarge.component";
 import FilterItemLevels from "../components/FilterItemLevels.component";

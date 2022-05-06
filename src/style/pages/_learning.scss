@@ -138,9 +138,6 @@ body.default {
           font-size: 13px;
           color: #3e4143;
           justify-content: space-between;
-          i {
-            margin-right: 5px;
-          }
         }
       }
       .resource-list {
@@ -148,32 +145,17 @@ body.default {
 
         button.dropdown {
           border: 1px solid #000;
-          padding: 5px 10px;
+          padding: 5px 8px;
           &:hover {
-            background: #c0c0c0;
-          }
-          i {
-            pointer-events: none;
-          }
-          i:first-child {
-            margin-right: 8px;
-          }
-          i:last-child {
-            font-size: 12px;
-            margin-left: 8px;
+            background: #c8ced3;
           }
         }
         .list {
-          display: none;
           border: 1px solid #cfcfcf;
-          top: 110%;
           max-width: 200px;
           min-width: 180px;
           background: #fff;
           padding: 15px;
-          right: 0;
-          z-index: 100;
-          position: absolute;
         }
         li:not(:last-child) {
           margin-bottom: 15px;
@@ -187,9 +169,6 @@ body.default {
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
-          }
-          i {
-            margin-right: 15px;
           }
         }
       }

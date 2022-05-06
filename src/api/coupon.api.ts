@@ -1,14 +1,17 @@
 import axiosClient from "../utils/axios";
+import { Coupon as CouponType } from "../ts/types/coupon.types";
 
 class Coupon {
   applyCoupon = async (code: string, courseId: number) => {
-    return axiosClient
-      .post(`/coupon/apply-coupon`, {
-        couponInput: code,
-        courseId,
-      })
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.post<{
+      saleOff: number;
+      coupon: CouponType;
+      isFreeCoupon: boolean;
+      message?: string;
+    }>(`/coupon/apply-coupon`, {
+      couponInput: code,
+      courseId,
+    });
   };
 
   applyCouponWithCourses = async (code: string, courses: number[]) => {

@@ -1,6 +1,8 @@
-enum CURRICULUM {
-  SECTION = "section",
-  LECTURE = "lecture",
-}
+import { CurriculumTypes } from "./instructor-course.types";
 
-export default CURRICULUM;
+const CURRICULUM_TYPES: CurriculumTypes = {
+  SECTION: "section",
+  LECTURE: "lecture",
+} as const;
+
+export { CURRICULUM_TYPES };

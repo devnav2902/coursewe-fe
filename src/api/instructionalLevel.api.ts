@@ -1,11 +1,11 @@
 import axiosClient from "../utils/axios";
+import { InstructionalLevel as InstructionalLevelType } from "../ts/types/course.types";
 
 class InstructionalLevel {
   get = async () => {
-    return axiosClient
-      .get("/course/instructional-level")
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<{ instructionalLevel: InstructionalLevelType[] }>(
+      "/course/instructional-level"
+    );
   };
 
   amountCoursesByInstructionalLevel = async (slug: string) => {

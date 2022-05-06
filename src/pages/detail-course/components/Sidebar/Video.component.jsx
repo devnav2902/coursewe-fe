@@ -1,13 +1,10 @@
 import { CaretRightOutlined, CloseOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import ReactPlayer from "react-player/lazy";
-import { linkThumbnail } from "../../../../utils/functions";
+import { BE_URL } from "../../../../utils/constants";
+import { isUrl, linkThumbnail } from "../../../../utils/functions";
 
-const Video = ({
-  thumbnail,
-  title,
-  url = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-}) => {
+const Video = ({ thumbnail, title, video_demo }) => {
   const [handleVideo, setHandleVideo] = useState({
     displayVideo: false,
     playingVideo: false,
@@ -64,7 +61,9 @@ const Video = ({
                   playing={handleVideo.playingVideo}
                   onClickPreview={playVideo}
                   controls={handleVideo.playingVideo ? true : false}
-                  url={url}
+                  url={
+                    isUrl(video_demo) ? video_demo : BE_URL + "/" + video_demo
+                  }
                 />
               </div>
             </div>

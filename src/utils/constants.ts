@@ -2,9 +2,9 @@ const API_URL = "http://127.0.0.1:8000/api";
 const BE_URL = "http://127.0.0.1:8000";
 
 enum ROUTES {
-  "SIGN_IN" = "/sign-in",
-  "SIGN_OUT" = "/sign-out",
-  "SIGN_UP" = "/sign-up",
+  "SIGN_IN" = "/dang-nhap",
+  "SIGN_OUT" = "/dang-xuat",
+  "SIGN_UP" = "/dang-ky-tai-khoan",
   "PURCHASE_HISTORY" = "/purchase-history",
   "CART" = "/cart",
   "CREATE_COURSE" = "/create-course",
@@ -22,6 +22,8 @@ enum ROUTES {
   "COURSE_BASICS" = "/instructor/course/:id/basics",
   "INTENDED_LEARNERS" = "/instructor/course/:id/goals",
   "CURRICULUM" = "instructor/course/:id/curriculum",
+  "PROMOTIONS" = "giang-vien/khoa-hoc/:id/khuyen-mai",
+  "COURSE_IMAGE_&_PREVIEW_VIDEO" = "instructor/course/:id/course-image-and-preview-video",
   "PRICE" = "instructor/course/:id/price",
   "ADMIN_REVIEW" = "/admin/submission-courses-list",
   "CHECKOUT" = "/cart/checkout",
@@ -35,13 +37,16 @@ const routesWithParams = {
   detail_course: (slug: string) => `/khoa-hoc/${slug}`,
   instructor_bio: (slug: string) => `/instructor/profile/${slug}`,
   course_draft: (id: number) => `/course/draft/${id}`,
-  course_basics: (id: string) => `/instructor/course/${id}/basics`,
   learning: (course_slug: string, lectureId: number) =>
     `/khoa-hoc/${course_slug}/bai-giang/${lectureId}`,
   intended_learners: (id: string | number) => `/instructor/course/${id}/goals`,
   course_dash_redirect: (id: number) =>
     `/course_dash_redirect/?course_id=${id}`,
+  course_basics: (id: string | number) => `/instructor/course/${id}/basics`,
+  image_and_preview_video: (id: string | number) =>
+    `/instructor/course/${id}/course-image-and-preview-video`,
   curriculum: (id: string | number) => `/instructor/course/${id}/curriculum`,
+  promotions: (id: string | number) => `/giang-vien/khoa-hoc/${id}/khuyen-mai`,
   price: (id: string | number) => `/instructor/course/${id}/price`,
   categories: (slug: string) => `/courses/${slug}`,
   subcategories: (slug: string, sub: string) => `/courses/${slug}/${sub}`,

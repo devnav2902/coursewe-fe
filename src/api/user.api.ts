@@ -1,12 +1,13 @@
 import axios from "axios";
 import axiosClient from "../utils/axios";
 import { API_URL } from "../utils/constants";
+import { User as UserType } from "../ts/types/user.types";
 
 interface paramsLogin {
   email: string;
   password: string | number;
 }
-interface paramsSignUp {
+export interface ParamsSignUp {
   email: string;
   password: string | number;
   fullname: string;
@@ -14,10 +15,10 @@ interface paramsSignUp {
 
 class User {
   login = async (params: paramsLogin) => {
-    return axios
-      .post(`${API_URL}/user/login`, params)
-      .then((response) => response)
-      .catch((error) => error.response);
+    return axios.post<{ user: UserType; error?: string }>(
+      `${API_URL}/user/login`,
+      params
+    );
   };
 
   getCurrentUser = async () => {
@@ -36,13 +37,8 @@ class User {
       .catch((error) => error.response);
   };
 
-  signUp = async (params: paramsSignUp) => {
-    // Sanctum sẽ authenticate các request bằng session authentication cookie của Laravel. Nếu không có cookie xuất hiện thì Sanctum sẽ cố gắng xác thực yêu cầu bằng token trong request's Authorization header
-
-    return axiosClient
-      .post("/user/sign-up", params)
-      .then((response) => response)
-      .catch((error) => error.response);
+  signUp = async (params: ParamsSignUp) => {
+    return axiosClient.post<{ user: UserType }>("/user/sign-up", params);
   };
 }
 const UserApi = new User();

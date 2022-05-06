@@ -1,7 +1,7 @@
 import BasicLayout from "../layouts/basic.layout";
 import InstructorCourseLayout from "../layouts/instructor-course.layout";
 import LearningLayout from "../layouts/learning.layout";
-import OverviewLayout from "../layouts/overview.layout";
+import InstructorView from "../layouts/instructor-view.layout";
 import ProfileLayout from "../layouts/profile.layout";
 import NotFound from "../pages/404/pages/index";
 import AdminReviewPage from "../pages/admin-review/page/admin-review.page";
@@ -14,8 +14,10 @@ import DetailCoursePage from "../pages/detail-course/page/detail-course.page";
 import DraftPage from "../pages/draft/page/draft.page";
 import BasicsPage from "../pages/edit-course/pages/basics.page";
 import CurriculumPage from "../pages/edit-course/pages/curriculum.page";
+import ImageAndVideoPage from "../pages/edit-course/pages/image-and-video.page";
 import IntendedLearnersPage from "../pages/edit-course/pages/intended-learners.page";
 import PricePage from "../pages/edit-course/pages/price.page";
+import PromotionsPage from "../pages/edit-course/pages/promotions.page";
 import Home from "../pages/home/page/index.page";
 import InstructorBioPage from "../pages/instructor-bio/page/instructor-bio.page";
 import InstructorCoursesPage from "../pages/instructor-courses/page/instructor-courses.page";
@@ -23,7 +25,7 @@ import LearningPage from "../pages/learning/page/learning.page";
 import MyLearningPage from "../pages/my-learning/page/my-learning.page";
 import OverviewPage from "../pages/overview/page/overview.page";
 import ProfilePage from "../pages/profile/page/profile.page";
-import PurchaseHistoryPage from "../pages/purchase-history/page/purchaseHistory.page";
+import PurchaseHistoryPage from "../pages/purchase-history/page/purchase-history.page";
 import SigninPage from "../pages/signin/page/signin.page";
 import SignupPage from "../pages/signup/page/signup.page";
 import { ROUTES } from "../utils/constants";
@@ -73,7 +75,7 @@ const routes: Routes[] = [
   {
     path: ROUTES.COURSE_BASICS,
     component: (
-      <InstructorCourseLayout>
+      <InstructorCourseLayout key={ROUTES.COURSE_BASICS}>
         {(props: any) => <BasicsPage {...props} />}
         {/* callback => children() sẽ return <BasicsPage /> */}
       </InstructorCourseLayout>
@@ -83,7 +85,7 @@ const routes: Routes[] = [
   {
     path: ROUTES.PRICE,
     component: (
-      <InstructorCourseLayout>
+      <InstructorCourseLayout key={ROUTES.PRICE}>
         {(props: any) => <PricePage {...props} />}
       </InstructorCourseLayout>
     ),
@@ -92,8 +94,17 @@ const routes: Routes[] = [
   {
     path: ROUTES.INTENDED_LEARNERS,
     component: (
-      <InstructorCourseLayout>
-        {(props: any) => <IntendedLearnersPage {...props} />}
+      <InstructorCourseLayout key={ROUTES.INTENDED_LEARNERS}>
+        {(props) => <IntendedLearnersPage {...props} />}
+      </InstructorCourseLayout>
+    ),
+    private: true,
+  },
+  {
+    path: ROUTES["COURSE_IMAGE_&_PREVIEW_VIDEO"],
+    component: (
+      <InstructorCourseLayout key={ROUTES["COURSE_IMAGE_&_PREVIEW_VIDEO"]}>
+        {(props: any) => <ImageAndVideoPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
@@ -101,8 +112,17 @@ const routes: Routes[] = [
   {
     path: ROUTES.CURRICULUM,
     component: (
-      <InstructorCourseLayout>
+      <InstructorCourseLayout key={ROUTES.CURRICULUM}>
         {(props: any) => <CurriculumPage {...props} />}
+      </InstructorCourseLayout>
+    ),
+    private: true,
+  },
+  {
+    path: ROUTES.PROMOTIONS,
+    component: (
+      <InstructorCourseLayout key={ROUTES.PROMOTIONS}>
+        {(props: any) => <PromotionsPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
@@ -132,9 +152,9 @@ const routes: Routes[] = [
   {
     path: ROUTES.INSTRUCTOR_COURSES,
     component: (
-      <OverviewLayout>
+      <InstructorView>
         <InstructorCoursesPage />
-      </OverviewLayout>
+      </InstructorView>
     ),
     private: true,
   },
@@ -193,9 +213,9 @@ const routes: Routes[] = [
   {
     path: ROUTES.OVERVIEW,
     component: (
-      <OverviewLayout>
+      <InstructorView>
         <OverviewPage />
-      </OverviewLayout>
+      </InstructorView>
     ),
     private: true,
   },
@@ -212,9 +232,9 @@ const routes: Routes[] = [
   {
     path: ROUTES.ADMIN_REVIEW,
     component: (
-      <OverviewLayout>
+      <InstructorView>
         <AdminReviewPage />
-      </OverviewLayout>
+      </InstructorView>
     ),
     private: true,
   },

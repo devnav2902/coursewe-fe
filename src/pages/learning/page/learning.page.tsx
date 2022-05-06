@@ -1,14 +1,19 @@
 import { Skeleton } from "antd";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import LearningApi from "../../../api/learning.api";
 import ProgressLogsApi from "../../../api/progress-logs.api";
+import { useTypedSelector } from "../../../hooks/redux.hooks";
+import { routesWithParams } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
 import Sidebar from "../components/Sidebar/Sidebar.component";
 import VideoLearning from "../components/VideoLearning.component";
+
 const LearningPage = () => {
-  const { dataCourse } = useSelector((state) => state.learning);
+  const {
+    dataCourse: { course, loadedCourse },
+  } = useTypedSelector((state) => state.learning);
   const [video, setVideo] = useState(null);
   const [lastWatchedSecond, setLastWatchedSecond] = useState(0);
   const navigate = useNavigate();
@@ -43,9 +48,9 @@ const LearningPage = () => {
 
   useEffect(() => {
     if (!last_watched_second) {
-      dataCourse.course?.id &&
+      course?.id &&
         ProgressLogsApi.getDataLastWatchedByLectureId(
-          dataCourse.course.id,
+          course.id,
           lectureId
         ).then(({ data: { dataLastWatched } }) => {
           setLastWatchedSecond(dataLastWatched?.last_watched_second || 0);
@@ -53,17 +58,6 @@ const LearningPage = () => {
     }
   }, [lectureId, last_watched_second]);
   console.log(lastWatchedSecond);
-
-  const courseDestructuring = (() => {
-    const { course } = dataCourse;
-
-    if (course) {
-      const { author, description } = course;
-
-      return { author, description };
-    }
-    return {};
-  })();
 
   return (
     <main className="main-content-wrapper">
@@ -91,7 +85,7 @@ const LearningPage = () => {
       </div>
 
       <div className="content-footer">
-        {!dataCourse.loadedCourse ? (
+        {!loadedCourse ? (
           <Skeleton active />
         ) : (
           <>
@@ -108,13 +102,13 @@ const LearningPage = () => {
                   <div className="row">
                     <p className="title">Thông tin khóa học</p>
                     <div className="course-description">
-                      {
+                      {course?.description && (
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: courseDestructuring.description,
+                            __html: course.description,
                           }}
                         />
-                      }
+                      )}
                     </div>
                   </div>
 
@@ -123,55 +117,75 @@ const LearningPage = () => {
                     <div className="instructor-profile">
                       <div className="header">
                         <img
-                          src={linkThumbnail(courseDestructuring.author.avatar)}
-                          alt={courseDestructuring.author.fullname}
+                          src={
+                            course?.author &&
+                            linkThumbnail(course.author.avatar)
+                          }
+                          alt={course?.author.fullname}
                         />
                         <div className="profile-title">
-                          <a href="route(instructor slug)">
-                            {courseDestructuring.author.fullname}
-                          </a>
+                          <Link
+                            to={
+                              !course?.author
+                                ? ""
+                                : routesWithParams.instructor_bio(
+                                    course.author.slug
+                                  )
+                            }
+                          >
+                            {course?.author.fullname}
+                          </Link>
                           <div className="headline">
-                            {/* {courseDestructuring.bio?.headline} */}
+                            {course?.author.bio?.headline}
                           </div>
                         </div>
                       </div>
                       <div className="profile-social-links">
-                        {/* @if (!empty($author->bio->linkedin))
-                  <div className="socical-link">
-                    <div className="my-link">
-                      <a href="{{ $author->bio->linkedin }}"><i className="fab fa-linkedin">
-                        </i></a>
-                    </div>
-                  </div>
-                @endif
-                @if (!empty($author->bio->twitter))
-                  <div className="socical-link">
-                    <div className="my-link">
-                      <a href="{{ $author->bio->twitter }}"><i className="fab fa-twitter">
-                        </i>
-                      </a>
-                    </div>
-                  </div>
-                @endif
-                @if (!empty($author->bio->facebook))
-                  <div className="socical-link">
-                    <div className="my-link">
-                      <a href="{{ $author->bio->facebook }}"><i className="fab fa-facebook">
-                        </i></a>
-                    </div>
-                  </div>
-                @endif
-                @if (!empty($author->bio->youtube))
-                  <div className="socical-link">
-                    <div className="my-link">
-                      <a href="{{ $author->bio->youtube }}"><i className="fab fa-youtube">
-                        </i></a>
-                    </div>
-                  </div>
-                @endif */}
+                        {course?.author?.bio?.linkedin && (
+                          <div className="socical-link">
+                            <div className="my-link">
+                              <a href="{{ $author->bio->linkedin }}">
+                                <i className="fab fa-linkedin"></i>
+                              </a>
+                            </div>
+                          </div>
+                        )}
+                        {course?.author?.bio?.twitter && (
+                          <div className="socical-link">
+                            <div className="my-link">
+                              <a href="{{ $author->bio->twitter }}">
+                                <i className="fab fa-twitter"></i>
+                              </a>
+                            </div>
+                          </div>
+                        )}
+                        {course?.author?.bio?.facebook && (
+                          <div className="socical-link">
+                            <div className="my-link">
+                              <a href="{{ $author->bio->facebook }}">
+                                <i className="fab fa-facebook"></i>
+                              </a>
+                            </div>
+                          </div>
+                        )}
+                        {course?.author?.bio?.youtube && (
+                          <div className="socical-link">
+                            <div className="my-link">
+                              <a href="{{ $author->bio->youtube }}">
+                                <i className="fab fa-youtube"></i>
+                              </a>
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div className="profile-description">
-                        {/* {!! $author->bio->bio !!} */}
+                        {course?.author?.bio && (
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: course.author.bio.bio,
+                            }}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
