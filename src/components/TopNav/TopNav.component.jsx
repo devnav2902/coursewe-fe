@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CategoriesApi from "../../api/categories.api";
+import SearchApi from "../../api/search.api";
+import PostFiltersForm from "./component/PostFiltersForm.component";
 import { logout } from "../../redux/actions/account.actions";
 import { ROUTES, routesWithParams } from "../../utils/constants";
 import { linkThumbnail } from "../../utils/functions";
@@ -52,6 +54,7 @@ const TopNav = () => {
 
   const [displayCascader, setDisplayCascader] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [hideNotification, setHideNotification] = useState(false);
 
   useEffect(() => {
     CategoriesApi.get().then((res) => {
@@ -129,7 +132,7 @@ const TopNav = () => {
     !loadedCart ? null : (
       <div className="shopping-cart mr-3">
         <Popover
-          placement="bottom"
+          placement="bottomRight"
           content={content}
           getPopupContainer={(e) => e}
         >
@@ -148,6 +151,74 @@ const TopNav = () => {
         </Popover>
       </div>
     );
+
+  //Notification
+  // function onLoadMore() {
+  //   setonLoadMore({
+  //     loading: true,
+  //     list: this.state.data.concat(
+  //       [...new Array(count)].map(() => ({
+  //         loading: true,
+  //         name: {},
+  //         picture: {},
+  //       }))
+  //     ),
+  //   });
+  // }
+  // const loadMore =
+  //   !initLoading && !loading ? (
+  //     <div
+  //       style={{
+  //         textAlign: "center",
+  //         marginTop: 12,
+  //         height: 32,
+  //         lineHeight: "32px",
+  //       }}
+  //     >
+  //       <Button onClick={onLoadMore}>loading more</Button>
+  //     </div>
+  //   ) : null;
+  const list = [];
+  const contentNotification = (
+    <>
+      <List
+        className="demo-loadmore-list"
+        // loading={initLoading}
+        itemLayout="horizontal"
+        // loadMore={loadMore}
+        dataSource={list}
+        renderItem={(item) => (
+          <List.Item>
+            <List.Item.Meta
+              avatar={<Avatar src={item.picture.large} />}
+              title={<a href="https://ant.design">{item.name.last}</a>}
+              description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+            />
+          </List.Item>
+        )}
+      />
+
+      <Link to={""}>Xem tất cả</Link>
+    </>
+  );
+  function handleVisibleChange() {
+    setHideNotification(!hideNotification);
+  }
+  const Notification = () => {
+    return (
+      <Popover
+        content={contentNotification}
+        title="Thông báo"
+        trigger="click"
+        visible={hideNotification}
+        zIndex={9999}
+        placement={"bottom"}
+        getPopupContainer={(e) => e}
+      >
+        <BellOutlined style={{ fontSize: 18 }} onClick={handleVisibleChange} />
+      </Popover>
+    );
+  };
 
   function onChange(value) {
     setDisplayCascader(false);
@@ -186,7 +257,7 @@ const TopNav = () => {
             }}
           />
         </div>
-        <form action="" className="search-bar">
+        {/* <form action="" className="search-bar">
           <div className="icon">
             <SearchOutlined style={{ fontSize: 18 }} />
           </div>
@@ -209,7 +280,9 @@ const TopNav = () => {
               </div>
             </div>
           </div>
-        </form>
+        </form> */}
+        <PostFiltersForm />
+        {/* <PostList/> */}
 
         {!user.profile ? (
           !user.loaded ? (
@@ -234,10 +307,7 @@ const TopNav = () => {
             <Link to={ROUTES.MY_LEARNING}>My learning</Link>
             <ShoppingCart />
             <div className="notification">
-              <div className="icon-notification">
-                {/* <div className="icon-notification @if (count($globalNotificationCourse)) has @endif"> */}
-                <BellOutlined style={{ fontSize: 18 }} />
-              </div>
+              <Notification />
               <div className="wrapper-notification">
                 <div className="header-notification d-flex">
                   <h6>Thông báo</h6>

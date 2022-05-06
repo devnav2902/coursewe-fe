@@ -8,6 +8,7 @@ import AdminReviewPage from "../pages/admin-review/page/admin-review.page";
 import CartPage from "../pages/cart/page/cart.page";
 import CategoriesPage from "../pages/categories/pages/categories.page";
 import CheckoutPage from "../pages/checkout/page/checkout.page";
+import CourseDashRedirestPage from "../pages/course-dash-redirect/page/course-dash-redirest.page";
 import CreateCoursePage from "../pages/create-course/page/createCourse.page";
 import DetailCoursePage from "../pages/detail-course/page/detail-course.page";
 import DraftPage from "../pages/draft/page/draft.page";
@@ -121,6 +122,11 @@ const routes: Routes[] = [
         <MyLearningPage />
       </BasicLayout>
     ),
+    private: true,
+  },
+  {
+    path: ROUTES.COURSE_DASH_REDIRECT,
+    component: <CourseDashRedirestPage />,
     private: true,
   },
   {

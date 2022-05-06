@@ -1,11 +1,58 @@
 import { Skeleton } from "antd";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import LearningApi from "../../../api/learning.api";
+import ProgressLogsApi from "../../../api/progress-logs.api";
 import { linkThumbnail } from "../../../utils/functions";
 import Sidebar from "../components/Sidebar/Sidebar.component";
-
+import VideoLearning from "../components/VideoLearning.component";
 const LearningPage = () => {
   const { dataCourse } = useSelector((state) => state.learning);
-  // console.log(dataCourse);
+  const [video, setVideo] = useState(null);
+  const [lastWatchedSecond, setLastWatchedSecond] = useState(0);
+  const navigate = useNavigate();
+  const { lectureId, course_slug } = useParams() as {
+    lectureId: string;
+    course_slug: string;
+  };
+  const [searchParams] = useSearchParams();
+  // const timeCurrent = useRef(null);
+  const last_watched_second = searchParams.get("start");
+
+  useEffect(() => {
+    async function getVideo() {
+      try {
+        const {
+          data: {
+            lecture: { src },
+          },
+        } = await LearningApi.getVideo(course_slug, parseInt(lectureId));
+        setVideo(src);
+      } catch (error) {
+        // axios.isAxiosError(error);
+        // if (error.response.status !== 200) return navigate(ROUTES.NOT_FOUND);
+      }
+    }
+
+    getVideo();
+    // return () => {
+    //   window.removeEventListener("scroll", handleScroll);
+    // };
+  }, [course_slug, lectureId]);
+
+  useEffect(() => {
+    if (!last_watched_second) {
+      dataCourse.course?.id &&
+        ProgressLogsApi.getDataLastWatchedByLectureId(
+          dataCourse.course.id,
+          lectureId
+        ).then(({ data: { dataLastWatched } }) => {
+          setLastWatchedSecond(dataLastWatched?.last_watched_second || 0);
+        });
+    }
+  }, [lectureId, last_watched_second]);
+  console.log(lastWatchedSecond);
 
   const courseDestructuring = (() => {
     const { course } = dataCourse;
@@ -29,9 +76,15 @@ const LearningPage = () => {
       <div className="learning-content">
         <div className="video-content">
           <div className="video-player">
-            <video controls>
-              <source src="{{ asset($course->section[0]->lecture[0]->src) }}" />
-            </video>
+            <VideoLearning
+              last_watched_second={
+                last_watched_second
+                  ? parseInt(last_watched_second)
+                  : lastWatchedSecond
+              }
+              thumbnail={""}
+              url={"hi"}
+            />
           </div>
         </div>
         <Sidebar />
@@ -78,7 +131,7 @@ const LearningPage = () => {
                             {courseDestructuring.author.fullname}
                           </a>
                           <div className="headline">
-                            {courseDestructuring.bio?.headline}
+                            {/* {courseDestructuring.bio?.headline} */}
                           </div>
                         </div>
                       </div>

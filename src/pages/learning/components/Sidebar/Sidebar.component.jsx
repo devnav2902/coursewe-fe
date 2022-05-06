@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import Loading from "../../../../components/Loading/Loading.component";
 import { getSections } from "../../../../redux/actions/learning.actions";
 import {
@@ -14,6 +15,7 @@ const Sidebar = () => {
 
   const { dataCourse, sections } = useSelector((state) => state.learning);
   const dispatch = useDispatch();
+  // console.log(dataCourse.course.slug);
 
   useEffect(() => {
     if (dataCourse.course) {
@@ -49,7 +51,11 @@ const Sidebar = () => {
           <Loading />
         ) : (
           sections.data.map((section) => (
-            <SectionItem key={section.id} section={section} />
+            <SectionItem
+              key={section.id}
+              section={section}
+              dataCourse={dataCourse}
+            />
           ))
         )}
       </StyledSectionWrapper>

@@ -1,9 +1,11 @@
 import { Collapse } from "antd";
+import { Link } from "react-router-dom";
+import { routesWithParams } from "../../../../utils/constants";
 import LectureItem from "./LectureItem.component";
 
 const { Panel } = Collapse;
 
-const SectionItem = ({ section }) => {
+const SectionItem = ({ section, dataCourse }) => {
   return (
     <div className="section">
       <div className="accordion-panel {{ $section->order == 1 ? '' : 'd-none' }}">
@@ -34,7 +36,14 @@ const SectionItem = ({ section }) => {
               }
               key="1"
             >
-              <LectureItem key={lecture.id} lecture={lecture} />
+              <Link
+                to={routesWithParams.learning(
+                  dataCourse.course.slug,
+                  lecture.id
+                )}
+              >
+                <LectureItem key={lecture.id} lecture={lecture} />
+              </Link>
             </Panel>
           ))}
         </Collapse>

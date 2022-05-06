@@ -6,10 +6,13 @@ import { isUrl } from "../../../utils/functions";
 import { StyledCourse } from "../styles/my-learning.styles";
 
 const Course = ({ course }) => {
-  const { author, count_progress, slug, thumbnail, title, rating } = course;
+  const { author, count_progress, slug, thumbnail, title, rating, id } = course;
   return (
     <StyledCourse className="course">
-      <Link to={routesWithParams.learning(slug)} className="image-course">
+      <Link
+        to={routesWithParams.course_dash_redirect(id)}
+        className="image-course"
+      >
         <img
           src={isUrl(thumbnail) ? thumbnail : BE_URL + "/" + thumbnail}
           alt={title}
@@ -17,7 +20,7 @@ const Course = ({ course }) => {
       </Link>
       <div className="profile-course">
         <h4 className="name-course truncate">
-          <Link to={routesWithParams.learning(slug)}>{title}</Link>
+          <Link to={routesWithParams.course_dash_redirect(id)}>{title}</Link>
         </h4>
         <Link
           to={routesWithParams.instructor_bio(author.slug)}

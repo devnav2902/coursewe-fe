@@ -17,7 +17,8 @@ enum ROUTES {
   "PROFILE" = "/user/profile",
   "COURSE_DRAFT" = "/course/draft/:id",
   "MY_LEARNING" = "/my-learning",
-  "LEARNING" = "/learning/:slug",
+  "LEARNING" = "/khoa-hoc/:course_slug/bai-giang/:lectureId",
+  "COURSE_DASH_REDIRECT" = "/course_dash_redirect",
   "COURSE_BASICS" = "/instructor/course/:id/basics",
   "INTENDED_LEARNERS" = "/instructor/course/:id/goals",
   "CURRICULUM" = "instructor/course/:id/curriculum",
@@ -27,7 +28,7 @@ enum ROUTES {
   "CATEGORIES" = "/courses/:slug",
   "SUBCATEGORIES" = "/courses/:slug/:sub",
   "TOPICS" = "/courses/:slug/:sub/:topic",
- 
+  "NOT_FOUND" = "/404",
 }
 
 const routesWithParams = {
@@ -35,8 +36,11 @@ const routesWithParams = {
   instructor_bio: (slug: string) => `/instructor/profile/${slug}`,
   course_draft: (id: number) => `/course/draft/${id}`,
   course_basics: (id: string) => `/instructor/course/${id}/basics`,
-  learning: (slug: string) => `/learning/${slug}`,
+  learning: (course_slug: string, lectureId: number) =>
+    `/khoa-hoc/${course_slug}/bai-giang/${lectureId}`,
   intended_learners: (id: string | number) => `/instructor/course/${id}/goals`,
+  course_dash_redirect: (id: number) =>
+    `/course_dash_redirect/?course_id=${id}`,
   curriculum: (id: string | number) => `/instructor/course/${id}/curriculum`,
   price: (id: string | number) => `/instructor/course/${id}/price`,
   categories: (slug: string) => `/courses/${slug}`,

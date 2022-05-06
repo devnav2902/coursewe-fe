@@ -14,15 +14,15 @@ import { routesWithParams } from "../utils/constants";
 
 const LearningLayout = ({ children }) => {
   const dispatch = useDispatch();
-  const { slug } = useParams();
+  const { course_slug } = useParams();
 
   useEffect(() => {
-    dispatch(getCourse(slug));
+    dispatch(getCourse(course_slug));
 
     return () => {
       dispatch(resetStateLearning);
     };
-  }, [slug]);
+  }, [course_slug]);
 
   return (
     <>

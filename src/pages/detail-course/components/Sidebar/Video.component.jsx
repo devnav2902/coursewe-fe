@@ -3,7 +3,11 @@ import { useState } from "react";
 import ReactPlayer from "react-player/lazy";
 import { linkThumbnail } from "../../../../utils/functions";
 
-const Video = ({ thumbnail, title }) => {
+const Video = ({
+  thumbnail,
+  title,
+  url = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+}) => {
   const [handleVideo, setHandleVideo] = useState({
     displayVideo: false,
     playingVideo: false,
@@ -60,9 +64,7 @@ const Video = ({ thumbnail, title }) => {
                   playing={handleVideo.playingVideo}
                   onClickPreview={playVideo}
                   controls={handleVideo.playingVideo ? true : false}
-                  url={
-                    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                  }
+                  url={url}
                 />
               </div>
             </div>
