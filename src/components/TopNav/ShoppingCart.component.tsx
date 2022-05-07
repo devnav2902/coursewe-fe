@@ -1,5 +1,5 @@
 import { ShoppingOutlined } from "@ant-design/icons";
-import { Avatar, Badge, List, Popover } from "antd";
+import { Avatar, Badge, ConfigProvider, Empty, List, Popover } from "antd";
 import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -54,54 +54,62 @@ const ShoppingCart = () => {
 
   const content = (
     <StyledListItems>
-      <List
-        footer={
-          !cart.length ? null : (
-            <div>
-              <div className="total fw-bold mb-1">Tổng cộng: {total} đ</div>
-              <Link to={ROUTES.CART} className="btn btn-color-default w-100">
-                Xem trong giỏ hàng
-              </Link>
-            </div>
-          )
-        }
-        dataSource={cart}
-        itemLayout="horizontal"
-        renderItem={(item) => (
-          <List.Item>
-            <List.Item.Meta
-              avatar={
-                <a href={routesWithParams.detail_course(item.slug)}>
-                  <Avatar
-                    size={70}
-                    shape="square"
-                    src={linkThumbnail(item.thumbnail)}
-                  />
-                </a>
-              }
-              title={
-                <a
-                  className="fw-bold"
-                  href={routesWithParams.detail_course(item.slug)}
-                >
-                  {item.title}
-                </a>
-              }
-              description={
-                <a href={routesWithParams.detail_course(item.slug)}>
-                  <span className="d-block author">{item.author.fullname}</span>
-                  <span className="fw-bold d-block price">
-                    <span className="original-price">
-                      {item.price.format_price} đ
-                    </span>
-                    {/* <span className="discount"></span> */}
-                  </span>
-                </a>
-              }
-            />
-          </List.Item>
+      <ConfigProvider
+        renderEmpty={() => (
+          <Empty description="Chưa có khóa học nào trong giỏ hàng!" />
         )}
-      />
+      >
+        <List
+          footer={
+            !cart.length ? null : (
+              <div>
+                <div className="total fw-bold mb-1">Tổng cộng: {total} đ</div>
+                <Link to={ROUTES.CART} className="btn btn-color-default w-100">
+                  Xem trong giỏ hàng
+                </Link>
+              </div>
+            )
+          }
+          dataSource={cart}
+          itemLayout="horizontal"
+          renderItem={(item) => (
+            <List.Item>
+              <List.Item.Meta
+                avatar={
+                  <a href={routesWithParams.detail_course(item.slug)}>
+                    <Avatar
+                      size={70}
+                      shape="square"
+                      src={linkThumbnail(item.thumbnail)}
+                    />
+                  </a>
+                }
+                title={
+                  <a
+                    className="fw-bold"
+                    href={routesWithParams.detail_course(item.slug)}
+                  >
+                    {item.title}
+                  </a>
+                }
+                description={
+                  <a href={routesWithParams.detail_course(item.slug)}>
+                    <span className="d-block author">
+                      {item.author.fullname}
+                    </span>
+                    <span className="fw-bold d-block price">
+                      <span className="original-price">
+                        {item.price.format_price} đ
+                      </span>
+                      {/* <span className="discount"></span> */}
+                    </span>
+                  </a>
+                }
+              />
+            </List.Item>
+          )}
+        />
+      </ConfigProvider>
     </StyledListItems>
   );
 
