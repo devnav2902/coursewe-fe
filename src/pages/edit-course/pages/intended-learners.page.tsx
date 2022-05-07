@@ -1,26 +1,16 @@
 import { FC } from "react";
+import Loading from "../../../components/Loading/Loading.component";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { ChildrenProps } from "../../../layouts/instructor-course.layout";
 import OutcomeContainer from "../components/intended-learners/OutcomeContainer.component";
 import RequirementsContainer from "../components/intended-learners/RequirementsContainer.component";
 
-const IntendedLearnersPage: FC<ChildrenProps> = (props) => {
+const IntendedLearnersPage: FC<ChildrenProps> = ({ formHandler }) => {
   const { data: course } = useTypedSelector(
     (state) => state.instructorCourse.course
   );
 
-  const { resetState, setValue, getValues, setError, errors } = props;
-  const { clearErrors } = props;
-  const formMethod = {
-    resetState,
-    setValue,
-    getValues,
-    setError,
-    errors,
-    clearErrors,
-  };
-
-  if (!course) return null;
+  if (!course) return <Loading />;
 
   return (
     <div className="edit-course-section">
@@ -44,7 +34,7 @@ const IntendedLearnersPage: FC<ChildrenProps> = (props) => {
               có thể mong đợi đạt được sau khi hoàn thành khóa học của bạn.
             </p>
 
-            <OutcomeContainer course={course} formMethod={formMethod} />
+            <OutcomeContainer course={course} formMethod={formHandler} />
           </section>
           <section>
             <b className="mb-1 d-inline-block">
@@ -59,7 +49,7 @@ const IntendedLearnersPage: FC<ChildrenProps> = (props) => {
               hội để hạ thấp rào cản với những người mới bắt đầu.
             </p>
 
-            <RequirementsContainer course={course} formMethod={formMethod} />
+            <RequirementsContainer course={course} formMethod={formHandler} />
           </section>
         </div>
       </div>

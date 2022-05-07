@@ -1,42 +1,27 @@
-import {
-  Checkbox,
-  Collapse,
-  Empty,
-  Pagination,
-  Row,
-  Select,
-  Skeleton,
-} from "antd";
+import { Empty, Pagination, Row } from "antd";
 import { memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CategoriesApi from "../../../api/categories.api";
+import SkeletonCourses from "../../../components/SkeletonCourses/SkeletonCourses.component";
 import CourseCardLarge from "../components/CourseCardLarge.component";
 import FilterItemLevels from "../components/FilterItemLevels.component";
+import FilterItemPrice from "../components/FilterItemPrice.component";
 import FilterItemRating from "../components/FilterItemRating.component";
 import FilterItemTopics from "../components/FilterItemTopics.component";
 import PopularInstructors from "../components/PopularInstructors.component";
 import { getCategorySlug } from "../utils/functions";
-
-const { Panel } = Collapse;
-const { Option } = Select;
 
 const CategoriesPage = () => {
   const { slug, sub, topic } = useParams();
 
   // STATE
   const [dataCategory, setDataCategory] = useState(null);
-  const [dataAmountCoursesByTypesPrice, setDataAmountCoursesByTypesPrice] =
-    useState(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [displaySkeletonCourses, setDisplaySkeletonCourses] = useState(true);
-  const [
-    getValueAmountCoursesByTypesPrice,
-    setgetValueAmountCoursesByTypesPrice,
-  ] = useState(null);
-  // console.log(dataCategory);
+
   // console.log("categories page render");
   // EFFECT
-  // console.log(slug, sub, topic);
   useEffect(() => {
     const params = { slug, sub, topic };
     setDisplaySkeletonCourses(true);
@@ -47,19 +32,7 @@ const CategoriesPage = () => {
       setDisplaySkeletonCourses(false);
       setCurrentPage(1);
     });
-    CategoriesApi.getAmountCoursesByTypesPrice(slugCategory).then((res) => {
-      // console.log(res.data);
-      setDataAmountCoursesByTypesPrice(res.data.amountCoursesByTypesPrice);
-    });
   }, [slug, sub, topic]);
-  // console.log(params);
-  if (!dataAmountCoursesByTypesPrice) return null;
-  const { free, paid } = dataAmountCoursesByTypesPrice;
-  // }, [slug,]);
-
-  const SkeletonCourses = function () {
-    return Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} active />);
-  };
 
   function onChangePage(page) {
     setDisplaySkeletonCourses(true);
@@ -71,16 +44,6 @@ const CategoriesPage = () => {
         setDataCategory(data.courses);
       });
   }
-  // console.log(dataCategory);
-  function onChange(checkedValues) {
-    console.log("checked = ", checkedValues);
-    setgetValueAmountCoursesByTypesPrice(checkedValues);
-  }
-  const options = [
-    { label: "Miễn phí" + " (" + free.amount + ")", value: 0 },
-    { label: "Trả phí" + " (" + paid.amount + ")", value: "Paid" },
-  ];
-  // console.log(options);
 
   return (
     <div className="main-categories">
@@ -99,36 +62,13 @@ const CategoriesPage = () => {
             <FilterItemRating />
             <FilterItemTopics />
             <FilterItemLevels />
-            <div className="filter-item">
-              <div className="filter-item__content">
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  expandIconPosition="right"
-                  bordered={false}
-                >
-                  <Panel header={<b>Giá bán</b>} key="1">
-                    <Checkbox.Group
-                      options={options}
-                      defaultValue={["Apple"]}
-                      onChange={onChange}
-                    />
-
-                    {/* <Checkbox>
-                      Trả phí <span className="amount">{free}</span>
-                    </Checkbox>
-                    <Checkbox>
-                      Miễn phí <span className="amount">{paid}</span>
-                    </Checkbox> */}
-                  </Panel>
-                </Collapse>
-              </div>
-            </div>
+            <FilterItemPrice />
           </div>
         </div>
 
         <div className="category-page-container">
           {displaySkeletonCourses ? (
-            <SkeletonCourses />
+            <SkeletonCourses amount={8} />
           ) : !dataCategory.total ? (
             <Row justify="center">
               <Empty description="Hiện chưa có khóa học nào!" />

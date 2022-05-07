@@ -127,7 +127,7 @@ const SideBarOverview = () => {
         <ul>
           <li>
             <Link className="logo" to="/">
-              <span>D</span>
+              <span>C</span>
             </Link>
           </li>
           <li>
@@ -151,28 +151,28 @@ const SideBarOverview = () => {
             <div className="hover__item">
               <Link className="logo" to="/">
                 <div className="logo__container">
-                  <span className="first-letter">D</span>
-                  <span className="full-text">Devco</span>
+                  <span className="first-letter">C</span>
+                  <span className="full-text">Coursewe</span>
                 </div>
               </Link>
             </div>
             <div className="hover__item">
               <Link to={ROUTES.INSTRUCTOR_COURSES}>
                 <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
-                <span>Courses</span>
+                <span>Quản lý khóa học</span>
               </Link>
             </div>
             <div className="hover__item">
               <Link to={ROUTES.OVERVIEW}>
                 <BarChartOutlined style={{ fontSize: "22px" }} />
-                <span>Performance</span>
+                <span>Tổng quan</span>
               </Link>
             </div>
             {name === "admin" && (
               <div className="hover__item">
                 <Link to={ROUTES.ADMIN_REVIEW}>
                   <EyeOutlined style={{ fontSize: "22px" }} />
-                  <span>Review courses</span>
+                  <span>Đánh giá chất lượng khóa học</span>
                 </Link>
               </div>
             )}
