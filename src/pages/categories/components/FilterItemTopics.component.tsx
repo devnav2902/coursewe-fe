@@ -1,17 +1,20 @@
 import { Checkbox, Col, Collapse, Empty, Skeleton } from "antd";
-import { memo, useEffect, useState } from "react";
+import { FC, memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import CategoriesApi from "../../../api/categories.api";
+import CategoriesApi, {
+  ArrayAmountCoursesInTopics,
+} from "../../../api/categories.api";
 import { getCategorySlug } from "../utils/functions";
 
 const { Panel } = Collapse;
 
-const FilterItemTopics = () => {
+const FilterItemTopics: FC = () => {
   const { slug, sub, topic } = useParams();
-  console.log(slug, sub, topic);
 
   // STATE
-  const [amountCoursesInTopics, setAmountCoursesInTopics] = useState([]);
+  const [amountCoursesInTopics, setAmountCoursesInTopics] = useState<
+    ArrayAmountCoursesInTopics | []
+  >([]);
   const [loaded, setLoaded] = useState(false);
 
   // EFFECT
@@ -19,11 +22,13 @@ const FilterItemTopics = () => {
     const params = { slug, sub, topic };
     const categorySlug = getCategorySlug(params);
 
-    setLoaded(false);
-    CategoriesApi.amountCoursesInTopics(categorySlug).then((res) => {
-      setAmountCoursesInTopics(res.data.topicsWithCourses);
-      setLoaded(true);
-    });
+    if (categorySlug) {
+      setLoaded(false);
+      CategoriesApi.amountCoursesInTopics(categorySlug).then(({ data }) => {
+        setAmountCoursesInTopics(data.topicsWithCourses);
+        setLoaded(true);
+      });
+    }
   }, [slug, sub, topic]);
 
   return (

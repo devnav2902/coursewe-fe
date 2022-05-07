@@ -1,18 +1,22 @@
 import { Checkbox, Collapse, Skeleton } from "antd";
 import { memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import CategoriesApi from "../../../api/categories.api";
+import CategoriesApi, {
+  AmountCoursesByTypesPrice,
+} from "../../../api/categories.api";
 import { getCategorySlug } from "../utils/functions";
 
 const { Panel } = Collapse;
 
 const FilterItemPrice = () => {
   const { slug, sub, topic } = useParams();
-  console.log(slug, sub, topic);
 
   // STATE
   const [dataAmountCoursesByTypesPrice, setDataAmountCoursesByTypesPrice] =
-    useState({ free: { amount: 0 }, paid: { amount: 0 } });
+    useState<AmountCoursesByTypesPrice>({
+      free: { amount: 0 },
+      paid: { amount: 0 },
+    });
   const [loaded, setLoaded] = useState(false);
 
   // EFFECT
@@ -20,25 +24,23 @@ const FilterItemPrice = () => {
     const params = { slug, sub, topic };
     const categorySlug = getCategorySlug(params);
 
-    setLoaded(false);
+    if (categorySlug) {
+      setLoaded(false);
 
-    CategoriesApi.getAmountCoursesByTypesPrice(categorySlug).then((res) => {
-      // console.log(res.data);
-      setDataAmountCoursesByTypesPrice(res.data.amountCoursesByTypesPrice);
-      setLoaded(true);
-    });
+      CategoriesApi.getAmountCoursesByTypesPrice(categorySlug).then(
+        ({ data }) => {
+          setDataAmountCoursesByTypesPrice(data.amountCoursesByTypesPrice);
+          setLoaded(true);
+        }
+      );
+    }
   }, [slug, sub, topic]);
 
   const { free, paid } = dataAmountCoursesByTypesPrice;
   const options = [
-    { label: `Miễn phí (${free.amount})`, value: 0 },
+    { label: `Miễn phí (${free.amount})`, value: "Free" },
     { label: `Trả phí (${paid.amount})`, value: "Paid" },
   ];
-
-  // function onChange(checkedValues) {
-  //   console.log("checked = ", checkedValues);
-  //   setgetValueAmountCoursesByTypesPrice(checkedValues);
-  // }
 
   return (
     <div className="filter-item">

@@ -1,8 +1,8 @@
 import { Empty, Pagination, Row } from "antd";
 import { memo, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import CategoriesApi from "../../../api/categories.api";
-import SkeletonCourses from "../../../components/SkeletonCourses/SkeletonCourses.component";
+import { useParams,useLocation } from "react-router-dom";
+import CategoriesApi, { CoursesByCategory } from "../../../api/categories.api";
+import SkeletonCourses from "../../../components/Skeleton/Skeleton.component";
 import CourseCardLarge from "../components/CourseCardLarge.component";
 import FilterItemLevels from "../components/FilterItemLevels.component";
 import FilterItemPrice from "../components/FilterItemPrice.component";
@@ -11,38 +11,47 @@ import FilterItemTopics from "../components/FilterItemTopics.component";
 import PopularInstructors from "../components/PopularInstructors.component";
 import { getCategorySlug } from "../utils/functions";
 
+
 const CategoriesPage = () => {
   const { slug, sub, topic } = useParams();
+  const data = useLocation()
+  console.log(data);
+  
 
   // STATE
-  const [dataCategory, setDataCategory] = useState(null);
-
+  const [dataCategory, setDataCategory] = useState<CoursesByCategory | null>(
+    null
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [displaySkeletonCourses, setDisplaySkeletonCourses] = useState(true);
 
-  // console.log("categories page render");
   // EFFECT
   useEffect(() => {
     const params = { slug, sub, topic };
     setDisplaySkeletonCourses(true);
     const slugCategory = getCategorySlug(params);
 
-    CategoriesApi.getCoursesByCategorySlug(slugCategory).then((res) => {
-      setDataCategory(res.data.courses);
-      setDisplaySkeletonCourses(false);
-      setCurrentPage(1);
-    });
+    if (slugCategory) {
+      CategoriesApi.getCoursesByCategorySlug(slugCategory).then(({ data }) => {
+        setDataCategory(data.courses);
+        setDisplaySkeletonCourses(false);
+        setCurrentPage(1);
+      });
+    }
   }, [slug, sub, topic]);
 
-  function onChangePage(page) {
+  function onChangePage(page: number) {
     setDisplaySkeletonCourses(true);
     setCurrentPage(page);
-    fetch(`${dataCategory.path}?page=${page}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setDisplaySkeletonCourses(false);
-        setDataCategory(data.courses);
-      });
+
+    if (dataCategory) {
+      fetch(`${dataCategory.path}?page=${page}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setDisplaySkeletonCourses(false);
+          setDataCategory(data.courses);
+        });
+    }
   }
 
   return (
@@ -50,7 +59,7 @@ const CategoriesPage = () => {
       <div className="main-categories__header">
         <PopularInstructors />
         <div className="sec-title">
-          <h1>Khóa học: {dataCategory?.title}</h1>
+          {/* <h1>Khóa học: {dataCategory?.title}</h1> */}
         </div>
 
         {/* <CoursesBeginner /> */}
@@ -68,13 +77,13 @@ const CategoriesPage = () => {
 
         <div className="category-page-container">
           {displaySkeletonCourses ? (
-            <SkeletonCourses amount={8} />
-          ) : !dataCategory.total ? (
+            <SkeletonCourses amount={6} />
+          ) : !dataCategory?.total ? (
             <Row justify="center">
               <Empty description="Hiện chưa có khóa học nào!" />
             </Row>
           ) : (
-            <div className="all-courses">
+            <div className="courses">
               {dataCategory.data.map((course) => (
                 <CourseCardLarge key={course.id} course={course} />
               ))}
