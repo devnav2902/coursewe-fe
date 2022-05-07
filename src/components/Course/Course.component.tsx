@@ -131,6 +131,7 @@ export type CustomCourse = CourseType & {
   author: User;
   price: Price;
   rating_count: number;
+  lecture_count: number;
   rating_avg_rating: string;
   subtitle: string;
 };
