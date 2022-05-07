@@ -79,4 +79,5 @@ export type CoursesPagination<C> = {
   prev_page_url: string;
   to: number;
   total: number;
+  path: string;
 };
