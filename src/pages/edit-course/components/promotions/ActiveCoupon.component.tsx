@@ -1,4 +1,4 @@
-import { Spin } from "antd";
+import { ConfigProvider, Empty, Spin, Table } from "antd";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -7,6 +7,7 @@ import {
 } from "../../../../hooks/redux.hooks";
 import { getScheduledCoupons } from "../../../../redux/slices/promotions.slice";
 import { StyledCouponTable } from "../../styles/promotions.styles";
+import { ScheduledCoupon } from "../../../../api/promotions.api";
 
 const ActiveCoupon = () => {
   const { id } = useParams() as { id: string };
@@ -23,92 +24,104 @@ const ActiveCoupon = () => {
     dispatch(getScheduledCoupons(parseInt(id)));
   }, [dispatch, id]);
 
+  const columns = [
+    {
+      title: "Code",
+      dataIndex: "code",
+      key: "code",
+      render: (code: string) => <span>{code}</span>,
+    },
+    {
+      title: "Giảm giá",
+      dataIndex: "discount_price",
+      key: "discount_price",
+      render: (discount_price: string) => {
+        const discountPrice = discount_price + " đ";
+        const originalPrice = priceOfCourse?.format_price + " đ";
+        const isFreeCoupon = parseInt(discount_price) === 0 ? true : false;
+
+        return isFreeCoupon ? (
+          "Miễn phí"
+        ) : (
+          <p className="d-flex flex-column">
+            <span className="line-through">{originalPrice}</span>{" "}
+            {discountPrice}
+          </p>
+        );
+      },
+    },
+    {
+      title: "Thời gian hiệu lực",
+      dataIndex: "time_remaining",
+      key: "time_remaining",
+      render: (_: any, record: ScheduledCoupon) => {
+        const { created_at, time_remaining, expires } = record;
+        return (
+          <>
+            <p>Còn lại: {time_remaining + " ngày"}</p>
+
+            <p>
+              Ngày bắt đầu: <span className="d-block">{created_at}</span>
+            </p>
+            <p>
+              Ngày hết hạn: <span className="d-block">{expires}</span>
+            </p>
+          </>
+        );
+      },
+    },
+    {
+      title: "Số lượng",
+      dataIndex: ["coupon", "enrollment_limit"],
+      key: "enrollment_limit",
+      render: (enrollment_limit: number) => {
+        const isUnlimited = enrollment_limit === 0 ? true : false;
+
+        return (
+          <span>
+            {isUnlimited ? "Không giới hạn" : "0/" + enrollment_limit}
+          </span>
+        );
+      },
+    },
+    {
+      title: "Số lượng ghi danh",
+      dataIndex: "currently_enrolled",
+      key: "currently_enrolled",
+      render: (currently_enrolled: number) => <span>{currently_enrolled}</span>,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (status: boolean) => (
+        <span>{status ? "Kích hoạt" : "Đã tắt"}</span>
+      ),
+    },
+  ];
+
   return (
     <div className="coupons">
       <p className="font-heading">Còn hiệu lực</p>
+
       {!scheduledCoupons.loaded ? (
         <div className="d-flex align-items-center justify-content-center">
           <Spin />
         </div>
-      ) : !scheduledCoupons.data.length ? (
-        <div className="table-container">
-          <div className="content content-coupons">
-            <div
-              className="content-header__info d-flex"
-              style={{ justifyContent: "center" }}
-            >
-              <span>Chưa có mã giảm giá nào được kích hoạt</span>
-            </div>
-          </div>
-        </div>
       ) : (
         <StyledCouponTable>
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Giảm giá</th>
-              <th>Thời gian hiệu lực</th>
-              <th>Số lượng</th>
-              <th>Số lượng ghi danh</th>
-              <th>Trạng thái</th>
-            </tr>
-          </thead>
-          <tbody>
-            {scheduledCoupons.data.map((coupon, i) => {
-              const { code, discount_price, time_remaining, expires } = coupon;
-              const {
-                currently_enrolled,
-                coupon: { enrollment_limit },
-                status,
-                created_at,
-              } = coupon;
-              const discountPrice = discount_price + " đ";
-              const originalPrice = priceOfCourse?.format_price + " đ";
-              const isFreeCoupon =
-                parseInt(discount_price) === 0 ? true : false;
-              const isUnlimited = enrollment_limit === 0 ? true : false;
-
-              return (
-                <tr key={i}>
-                  <td>
-                    <span>{code}</span>
-                  </td>
-                  <td style={{ whiteSpace: "nowrap" }}>
-                    {isFreeCoupon ? (
-                      "Miễn phí"
-                    ) : (
-                      <div className="d-flex flex-column">
-                        <span className="line-through">{originalPrice}</span>{" "}
-                        {discountPrice}
-                      </div>
-                    )}
-                  </td>
-                  <td>
-                    <div>Còn lại: {time_remaining + " ngày"}</div>
-
-                    <div>
-                      Ngày bắt đầu:{" "}
-                      <span className="d-block">{created_at}</span>
-                    </div>
-                    <div>
-                      Ngày hết hạn: <span className="d-block">{expires}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <span>
-                      {isUnlimited ? "Không giới hạn" : "0/" + enrollment_limit}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="center">{currently_enrolled}</span>
-                  </td>
-                  <td>
-                    <span>{status ? "Kích hoạt" : "Đã tắt"}</span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
+          <ConfigProvider
+            renderEmpty={() => (
+              <Empty description="Chưa có mã giảm giá nào được kích hoạt" />
+            )}
+          >
+            <Table
+              bordered
+              rowKey={(record) => record.created_at}
+              columns={columns}
+              dataSource={scheduledCoupons.data}
+            />
+          </ConfigProvider>
         </StyledCouponTable>
       )}
     </div>

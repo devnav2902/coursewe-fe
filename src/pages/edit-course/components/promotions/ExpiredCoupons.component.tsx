@@ -1,4 +1,4 @@
-import { Spin } from "antd";
+import { ConfigProvider, Empty, Spin, Table } from "antd";
 import moment from "moment";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -21,6 +21,58 @@ const ExpiredCoupons = () => {
     dispatch(getExpiredCoupons(parseInt(id)));
   }, [dispatch, id]);
 
+  const columns = [
+    {
+      title: "Code",
+      dataIndex: "code",
+      key: "code",
+      render: (code: string) => <span>{code}</span>,
+    },
+    {
+      title: "Giảm giá",
+      dataIndex: "discount_price",
+      key: "discount_price",
+      render: (discount_price: string) => {
+        const discountPrice = discount_price + " đ";
+        const isFreeCoupon = parseInt(discount_price) === 0 ? true : false;
+
+        return isFreeCoupon ? (
+          "Miễn phí"
+        ) : (
+          <p className="d-flex flex-column">
+            {isFreeCoupon ? "Miễn phí" : { discountPrice }}
+          </p>
+        );
+      },
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "created_at",
+      key: "created_at",
+      render: (created_at: string) => {
+        const datetimeFormat = "DD/MM/YYYY HH:mm A";
+        const createdAt = moment(created_at).format(datetimeFormat);
+        return <span>{createdAt}</span>;
+      },
+    },
+    {
+      title: "Ngày hết hạn",
+      dataIndex: "expires",
+      key: "expires",
+      render: (expires: string) => {
+        const datetimeFormat = "DD/MM/YYYY HH:mm A";
+        const expiredAt = moment(expires).format(datetimeFormat);
+        return <span>{expiredAt}</span>;
+      },
+    },
+    {
+      title: "Số lượng ghi danh",
+      dataIndex: "currently_enrolled",
+      key: "currently_enrolled",
+      render: (currently_enrolled: number) => <span>{currently_enrolled}</span>,
+    },
+  ];
+
   return (
     <div className="coupons">
       <p className="font-heading">Hết hạn</p>
@@ -28,70 +80,20 @@ const ExpiredCoupons = () => {
         <div className="d-flex align-items-center justify-content-center">
           <Spin />
         </div>
-      ) : !expiredCoupons.data.length ? (
-        <div className="table-container">
-          <div className="content content-coupons">
-            <div
-              className="content-header__info d-flex"
-              style={{ justifyContent: "center" }}
-            >
-              <span>Không có mã giảm giá nào</span>
-            </div>
-          </div>
-        </div>
       ) : (
         <StyledCouponTable>
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Giảm giá</th>
-              <th>Ngày tạo</th>
-              <th>Ngày hết hạn</th>
-              <th>Số học viên ghi danh</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {expiredCoupons.data.map((coupon, index) => {
-              const {
-                code,
-                discount_price,
-                expires,
-                created_at,
-                currently_enrolled,
-              } = coupon;
-              const datetimeFormat = "DD/MM/YYYY HH:mm A";
-              const createdAt = moment(created_at).format(datetimeFormat);
-              const expiredAt = moment(expires).format(datetimeFormat);
-              const discountPrice = discount_price + " đ";
-              const isFreeCoupon =
-                parseInt(discount_price) === 0 ? true : false;
-
-              return (
-                <tr key={index}>
-                  <td>
-                    <span>{code}</span>
-                  </td>
-                  <td>
-                    {isFreeCoupon ? (
-                      "Miễn phí"
-                    ) : (
-                      <div className="d-flex flex-column">{discountPrice}</div>
-                    )}
-                  </td>
-                  <td>
-                    <span>{createdAt}</span>
-                  </td>
-                  <td>
-                    <span>{expiredAt}</span>
-                  </td>
-                  <td>
-                    <span className="center">{currently_enrolled}</span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
+          <ConfigProvider
+            renderEmpty={() => (
+              <Empty description="Chưa có mã giảm giá nào được kích hoạt" />
+            )}
+          >
+            <Table
+              bordered
+              rowKey={(record) => record.created_at}
+              columns={columns}
+              dataSource={expiredCoupons.data}
+            />
+          </ConfigProvider>
         </StyledCouponTable>
       )}
     </div>
