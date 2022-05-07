@@ -1,154 +1,25 @@
-import { DollarCircleOutlined } from "@ant-design/icons";
-import { Modal, Spin } from "antd";
 import { FC, useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { BsFileRichtext, BsInfoCircle } from "react-icons/bs";
-import { FaLaptopHouse } from "react-icons/fa";
-import { IoIosArrowBack, IoMdPricetags } from "react-icons/io";
-import { RiBookmark3Line } from "react-icons/ri";
+import { FieldValues, useForm, UseFormReturn } from "react-hook-form";
+import { IoIosArrowBack } from "react-icons/io";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import CourseApi from "../api/course.api";
-import PublishCourseApi, {
-  MissingPublishRequirements,
-} from "../api/publish-course.api";
 import Footer from "../components/Footer/Footer.component";
 import { useAppDispatch, useTypedSelector } from "../hooks/redux.hooks";
-import { HookForm } from "../pages/edit-course/utils/instructor-course.types";
 import { getCourse } from "../redux/slices/instructor-course.slice";
 import { ROUTES, routesWithParams } from "../utils/constants";
 import { openNotification } from "../utils/functions";
+import { Sidebar } from "./components/instructor-course.components";
 
 export type ChildrenProps = {
   valueChanged?: boolean;
   handleValueChanged?: (boolValue: boolean) => void;
-} & HookForm;
+  formHandler: UseFormReturn<FieldValues>;
+};
 
 type Children = (props: ChildrenProps) => JSX.Element;
 interface LayoutProps {
   children: Children;
 }
-
-const Sidebar: FC<{
-  handleRedirect: (route: string) => void;
-}> = ({ handleRedirect }) => {
-  const { id } = useParams() as { id: string };
-
-  const [visiblePublishRequirements, setVisiblePublishRequirements] =
-    useState(false);
-  const [missingPublishRequirements, setMissingPublishRequirements] = useState<{
-    data: MissingPublishRequirements | null;
-    loaded: boolean;
-  }>({ data: null, loaded: false });
-
-  function submitForReview() {
-    setVisiblePublishRequirements(true);
-
-    PublishCourseApi.checkingPublishRequirements(id).then(({ data }) => {
-      const { missingPublishRequirements } = data;
-      console.log(missingPublishRequirements);
-
-      setMissingPublishRequirements((state) => ({
-        ...state,
-        data: missingPublishRequirements,
-        loaded: true,
-      }));
-    });
-  }
-
-  function handleCancel() {
-    setVisiblePublishRequirements(false);
-  }
-
-  return (
-    <div className="sidebar">
-      <div className="navbar">
-        <strong>Tạo nội dung khóa học</strong>
-
-        <button
-          type="button"
-          className="navbar-link"
-          onClick={() => handleRedirect(routesWithParams.course_basics(id))}
-        >
-          <BsInfoCircle />
-          <span>Thông tin khóa học</span>
-        </button>
-        <button
-          type="button"
-          className="navbar-link"
-          onClick={() =>
-            handleRedirect(routesWithParams.image_and_preview_video(id))
-          }
-        >
-          <BsFileRichtext />
-          <span>Hình ảnh & video giới thiệu</span>
-        </button>
-        <button
-          type="button"
-          className="navbar-link"
-          onClick={() => handleRedirect(routesWithParams.intended_learners(id))}
-        >
-          <RiBookmark3Line />
-          <span>Mục tiêu & yêu cầu khóa học</span>
-        </button>
-        <button
-          type="button"
-          className="navbar-link"
-          onClick={() => handleRedirect(routesWithParams.curriculum(id))}
-        >
-          <FaLaptopHouse />
-          <span>Chương trình học</span>
-        </button>
-
-        <Link className="navbar-link" to={routesWithParams.price(id)}>
-          <DollarCircleOutlined />
-          <span>Giá khóa học</span>
-        </Link>
-        <button
-          type="button"
-          className="navbar-link"
-          onClick={() => handleRedirect(routesWithParams.promotions(id))}
-        >
-          <IoMdPricetags />
-          <span>Khuyến mại</span>
-        </button>
-      </div>
-      <div>
-        <button type="button" onClick={submitForReview} className="submit">
-          Yêu cầu xem xét
-        </button>
-        <Modal
-          footer={null}
-          bodyStyle={
-            missingPublishRequirements.loaded
-              ? undefined
-              : {
-                  minHeight: 300,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }
-          }
-          zIndex={2000}
-          title={
-            missingPublishRequirements.loaded &&
-            "Bạn chưa thể gửi yêu cầu xem xét khóa học này!"
-          }
-          visible={visiblePublishRequirements}
-          onCancel={handleCancel}
-        >
-          {!missingPublishRequirements.loaded ? (
-            <Spin />
-          ) : (
-            <p>
-              Bạn gần như đã sẵn sàng để gửi yêu cầu xem xét khóa học của mình.
-              Dưới đây là một số thông tin của khóa học bạn cần hoàn thành.
-            </p>
-          )}
-        </Modal>
-      </div>
-    </div>
-  );
-};
 
 const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
   const { id } = useParams() as { id: string };
@@ -161,16 +32,10 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
     course: { data: courseData },
   } = useTypedSelector((state) => state.instructorCourse);
 
+  const formHandler = useForm(); // assign to variable instead destructuring
   const {
     formState: { errors },
-    control,
-    watch,
-    setValue,
-    getValues,
-    register,
-    setError,
-    clearErrors,
-  } = useForm(); // assign to variable instead destructuring
+  } = formHandler;
 
   useEffect(() => {
     dispatch(getCourse(id));
@@ -185,14 +50,14 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
+    const subscription = formHandler.watch((value, { name, type }) => {
       !valueChanged && handleValueChanged(true);
       console.log(value, name, type);
     });
     return () => {
       subscription.unsubscribe();
     };
-  }, [watch, valueChanged, handleValueChanged]);
+  }, [formHandler, valueChanged, handleValueChanged]);
 
   console.log("re-render layout");
 
@@ -221,7 +86,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
     }
   };
 
-  function apiIntendedLearners(data: any) {
+  async function apiIntendedLearners(data: any) {
     const arrRequest = [];
 
     if (!!data?.outcome_items?.length) {
@@ -279,7 +144,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
   }
 
   const onSubmit = () => {
-    const data = getValues();
+    const data = formHandler.getValues();
 
     switch (pathname) {
       case routesWithParams.course_basics(id):
@@ -350,15 +215,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
           {children({
             handleValueChanged,
             valueChanged,
-            resetState,
-            control,
-            watch,
-            register,
-            setValue,
-            setError,
-            getValues,
-            errors,
-            clearErrors,
+            formHandler,
           })}
         </div>
       </main>
