@@ -1,11 +1,15 @@
 import axiosClient from "../utils/axios";
 
+export type FilterRatingByCategorySlug = {
+  [key: string]: { amount: number };
+};
+export type ArrayFilterRating = FilterRatingByCategorySlug[];
+type FilterRatingResponse = { filterRating: ArrayFilterRating };
 class Rating {
   filterRatingByCategorySlug = async (slug: string) => {
-    return axiosClient
-      .get(`/rating/filter-rating/${slug}`)
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<FilterRatingResponse>(
+      `/rating/filter-rating/${slug}`
+    );
   };
 }
 
