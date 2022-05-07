@@ -4,58 +4,6 @@ import LatestCourses from "../components/LatestCourses.component";
 import TopCategories from "../components/TopCategories.component";
 
 const Home: FC = () => {
-  const arrCourses = [
-    {
-      title: "Microsoft SQL from A to Z",
-      slug: "Microsoft SQL from A to Z",
-      thumbnail: "https://img-c.udemycdn.com/course/240x135/1439004_c492_3.jpg",
-      rating_avg_rating: "4.0",
-      rating_count: 123,
-    },
-    {
-      title: "Microsoft SQL from A to Z",
-      slug: "Microsoft SQL from A to Z",
-      thumbnail: "https://img-c.udemycdn.com/course/240x135/1439004_c492_3.jpg",
-      rating_avg_rating: "4.0",
-      rating_count: 123,
-    },
-    {
-      title: "Microsoft SQL from A to Z",
-      slug: "Microsoft SQL from A to Z",
-      thumbnail: "https://img-c.udemycdn.com/course/240x135/1439004_c492_3.jpg",
-      rating_avg_rating: "4.0",
-      rating_count: 123,
-    },
-    {
-      title: "Microsoft SQL from A to Z",
-      slug: "Microsoft SQL from A to Z",
-      thumbnail: "https://img-c.udemycdn.com/course/240x135/1439004_c492_3.jpg",
-      rating_avg_rating: "4.0",
-      rating_count: 123,
-    },
-    {
-      title: "Microsoft SQL from A to Z",
-      slug: "Microsoft SQL from A to Z",
-      thumbnail: "https://img-c.udemycdn.com/course/240x135/1439004_c492_3.jpg",
-      rating_avg_rating: "4.0",
-      rating_count: 123,
-    },
-    {
-      title: "Microsoft SQL from A to Z",
-      slug: "Microsoft SQL from A to Z",
-      thumbnail: "https://img-c.udemycdn.com/course/240x135/1439004_c492_3.jpg",
-      rating_avg_rating: "4.0",
-      rating_count: 123,
-    },
-    {
-      title: "Microsoft SQL from A to Z",
-      slug: "Microsoft SQL from A to Z",
-      thumbnail: "https://img-c.udemycdn.com/course/240x135/1439004_c492_3.jpg",
-      rating_avg_rating: "4.0",
-      rating_count: 123,
-    },
-  ];
-
   return (
     <div className="main-home">
       <div className="main-home__content">
@@ -81,66 +29,6 @@ const Home: FC = () => {
             <TopCategories />
             <LatestCourses />
             <BestSellingCourses />
-
-            {/* <div className="featured_course list-items">
-              <h2 className="title">Khóa học nổi bật</h2>
-              <div className="container_wrap">
-                <div className="box-courses">
-                  <div className="nav">
-                    <i className="fas btn fa-chevron-left btnLeft"></i>
-                    <i className="fas btn fa-chevron-right btnRight"></i>
-                  </div>
-                  <div className="list-courses"></div>
-                </div>
-              </div>
-            </div>
-            <div className="bestseller_course list-items">
-              <h2 className="title">Khóa học bán chạy</h2>
-              <div className="container_wrap">
-                <div className="box-courses">
-                  <div className="nav">
-                    <i className="fas btn fa-chevron-left btnLeft"></i>
-                    <i className="fas btn fa-chevron-right btnRight"></i>
-                  </div>
-                  <div className="list-courses"></div>
-                </div>
-              </div>
-            </div>
-            <div className="authors list-items">
-              <h2 className="title">Giảng viên tiêu biểu</h2>
-              <div className="container_wrap">
-                <div className="nav">
-                  <i className="fas btn fa-chevron-left btnLeft"></i>
-                  <i className="fas btn fa-chevron-right btnRight"></i>
-                </div>
-                <div className="author-box">
-                  @foreach ($instructors as $author)
-                  <a
-                    className="inner-box"
-                    href="{{ route('instructor', ['slug' => $author->slug]) }}"
-                  >
-                    <div className="image">
-                      <img src="{{ asset($author->avatar) }}" alt="" />
-                    </div>
-                    <div className="name">$authorfullname</div>
-
-                    <div className="author-box__footer">
-                      <div className="num_students">
-                        <span className="num fw-bold">
-                          $authorcount_students
-                        </span>
-                        $authorcount_students 1 ? 'students' : 'student'
-                      </div>
-                      <div className="num_courses">
-                        <span className="num fw-bold">$authorcourse_count</span>
-                        $authorcourse_count 1 ? 'courses' : 'course'
-                      </div>
-                    </div>
-                  </a>
-                  @endforeach
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
         <div className="content-wrapper d-flex align-items-center">
@@ -169,15 +57,6 @@ const Home: FC = () => {
         </div>
       </div>
     </div>
-    // <Row gutter={[15, 15]} classNameName="list-courses">
-    //   {arrCourses.map((course, i) => {
-    //     return (
-    //       <Col span={6}>
-    //         <Course course={course} />
-    //       </Col>
-    //     );
-    //   })}
-    // </Row>
   );
 };
 

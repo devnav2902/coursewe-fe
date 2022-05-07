@@ -6,9 +6,9 @@ import CategoriesApi from "../../../api/categories.api";
 import Course, {
   ArrayCustomCourses,
 } from "../../../components/Course/Course.component";
-import { SkeletonCourses } from "../../../components/SkeletonCourses/SkeletonCourses.component";
+import SkeletonCourses from "../../../components/Skeleton/Skeleton.component";
 import { FeaturedCategories } from "../../../ts/types/categories.types";
-import { settings } from "../utils/slick.utils";
+import { settings } from "../../../utils/slick.utils";
 import FeaturedCourseTab from "./FeaturedCourseTab.component";
 
 const StyledTabs = styled.div`
@@ -48,13 +48,13 @@ const TopCategories: FC = () => {
       <h2 className="fw-bold">Khóa học nổi bật</h2>
 
       {!loadedFeaturedCategories ? (
-        <SkeletonCourses amount={5} />
+        <SkeletonCourses amount={5} flex={1} />
       ) : (
         <StyledTabs>
           <Tabs defaultActiveKey="all" onChange={onChangeTab}>
             <TabPane tab="Tất cả" key="all">
               {!loadedFeaturedCourses ? (
-                <SkeletonCourses amount={5} />
+                <SkeletonCourses amount={5} flex={1} />
               ) : (
                 <Slider {...settings}>
                   {featuredCourses.map((course) => (
