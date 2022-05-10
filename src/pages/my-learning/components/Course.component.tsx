@@ -9,20 +9,11 @@ import { linkThumbnail } from "../../../utils/functions";
 import { StyledCourse } from "../styles/my-learning.styles";
 
 type CourseProps = {
-  course: CustomCourse & { lecture: Lecture };
+  course: CustomCourse;
 };
 
 const Course: FC<CourseProps> = ({ course }) => {
-  const {
-    author,
-    count_progress,
-    slug,
-    thumbnail,
-    title,
-    rating,
-    id,
-    lecture: { id: lectureId },
-  } = course;
+  const { author, count_progress, slug, thumbnail, title, rating, id } = course;
   return (
     <StyledCourse className="course">
       <Link
@@ -43,7 +34,7 @@ const Course: FC<CourseProps> = ({ course }) => {
         </Link>
         {count_progress === 0.0 ? (
           <div className="course-footer">
-            <Link to={routesWithParams.learning(slug, lectureId)}>
+            <Link to={routesWithParams.course_dash_redirect(id)}>
               Bắt đầu học
             </Link>
           </div>

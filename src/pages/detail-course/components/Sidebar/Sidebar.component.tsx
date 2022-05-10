@@ -193,7 +193,10 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
             <Skeleton active className="pd-2" />
           ) : dataCheckPurchase.hasPurchased ? (
             <StyledGoToCourseBtn className="pd-2">
-              <Link to={routesWithParams.learning(slug)} className="btn w-100">
+              <Link
+                to={routesWithParams.course_dash_redirect(id)}
+                className="btn w-100"
+              >
                 Đi đến khóa học
               </Link>
             </StyledGoToCourseBtn>

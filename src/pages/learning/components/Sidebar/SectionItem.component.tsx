@@ -46,7 +46,13 @@ const SectionItem: FC<SectionProps> = ({ section }) => {
               }
               key="1"
             >
-              <Link to={routesWithParams.learning(course.slug, lecture.id)}>
+              <Link
+                to={
+                  !course?.slug
+                    ? ""
+                    : routesWithParams.learning(course.slug, lecture.id)
+                }
+              >
                 <LectureItem key={lecture.id} lecture={lecture} />
               </Link>
             </Panel>

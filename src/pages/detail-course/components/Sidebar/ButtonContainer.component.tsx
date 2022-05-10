@@ -19,7 +19,7 @@ const ButtonContainer: FC<Props> = ({
   dataCoupon,
 }) => {
   const { profile } = useTypedSelector((state) => state.user);
-  const { author, price, slug } = course;
+  const { author, price, slug, id } = course;
 
   const isInstructor = author.id === profile?.id;
   const isFreeCourse = parseInt(price.original_price) === 0;
@@ -28,7 +28,7 @@ const ButtonContainer: FC<Props> = ({
     <StyledButtonBox className="buttons-box">
       {isInstructor ? (
         <Link
-          to={routesWithParams.learning(slug)}
+          to={routesWithParams.course_dash_redirect(id)}
           className="theme-btn btn-style-one"
         >
           Xem khóa học

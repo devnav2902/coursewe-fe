@@ -1,17 +1,5 @@
-import { Checkbox, Collapse, Empty, Pagination, Row } from "antd";
-import { memo, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
-import { Select, Skeleton } from "antd";
-import {
-  Checkbox,
-  Collapse,
-  Empty,
-  Pagination,
-  Row,
-  Select,
-  Skeleton,
-} from "antd";
+import { Collapse } from "antd";
+import { Checkbox, Select, Skeleton } from "antd";
 import { memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CategoriesApi from "../../../api/categories.api";
