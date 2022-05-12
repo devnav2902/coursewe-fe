@@ -1,6 +1,7 @@
 .main-categories {
   padding: 3rem;
-  &__content {
+  &__main {
+    min-height: 90vh;
     display: flex;
   }
   .category-page-container {
@@ -9,46 +10,7 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    .categories-box {
-      margin-bottom: var(--spacing-3);
-      text-align: center;
-      .categories {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        justify-content: center;
-        max-width: 80rem;
-        margin: 0 auto;
-      }
-      .title {
-        margin-bottom: var(--spacing-3);
-        font-size: 2.2rem;
-        display: block;
-        color: var(--color-dark);
-        font-weight: 700;
-      }
-      a {
-        --color: rgb(228, 228, 228);
-        --color-hover: rgb(204, 204, 204);
-        transition: all 0.2s linear;
-        color: var(--color-dark);
-        font-size: 1.6rem;
-        font-weight: 500;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        text-transform: capitalize;
-        padding: 1rem 2rem;
-        border-radius: 2rem;
-        margin: var(--spacing-1) var(--spacing-1) 0 0;
-        background: var(--color);
-        line-height: 1;
-      }
 
-      a.active,
-      a:hover {
-        background: var(--color-hover);
-        color: var(--color-dark);
-      }
-    }
     .sec-title {
       color: var(--color-dark);
       margin-bottom: var(--spacing-3);
@@ -88,8 +50,7 @@
   .categories-box {
     flex: 0 0 34rem;
     padding: 0 var(--spacing-2) 0 0;
-    // position: sticky;
-    top: calc(var(--spacing-2) + var(--height-nav));
+
     .title {
       position: relative;
       padding: 0 0 1.1rem;

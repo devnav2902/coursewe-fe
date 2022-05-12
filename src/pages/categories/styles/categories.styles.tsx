@@ -127,7 +127,7 @@ export const StyledInstructor = styled.div`
 
 export const StyledCourseCardLarge = styled.div`
   width: 100%;
-  margin: 0 1rem 2rem;
+  margin: 0 0 2rem;
   display: flex;
   padding: 0 0 2rem;
   overflow: hidden;
@@ -263,5 +263,130 @@ export const StyledQuickViewBox = styled.div`
     &:hover {
       background-color: #e9e7e7;
     }
+  }
+`;
+
+export const StyledBreadcrumb = styled.div`
+  .ant-breadcrumb {
+    font-size: 16px;
+  }
+`;
+
+export const StyledLoadingOverlay = styled.div`
+  background-color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  padding-top: 4.8rem;
+`;
+
+export const StyledCourses = styled.div`
+  padding: 3rem 0;
+
+  .carousel-next-btn,
+  .carousel-prev-btn {
+    top: 50% !important;
+  }
+  .carousel-next-btn {
+    transform: translate(50%, -50%) !important;
+    right: 0 !important;
+  }
+  .carousel-prev-btn {
+    transform: translate(-50%, -50%) !important;
+    left: 0 !important;
+  }
+
+  .course-carousel {
+    border: 1px solid #d1d7dc;
+    display: flex !important;
+    .image-wrapper {
+      width: 100%;
+      max-width: 48rem;
+      margin-right: 2.4rem;
+      flex-shrink: 0;
+      aspect-ratio: 16/9;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .title {
+      font-size: 2.4rem;
+      font-weight: bold;
+      color: #000;
+    }
+    p,
+    .info-row {
+      color: #000;
+      margin-bottom: 0;
+      padding-bottom: 0.5rem;
+    }
+    .main-content {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .info-row {
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+
+      > span {
+        color: #6a6f73;
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        &:not(:last-child)::after {
+          content: "\\25CF";
+          margin: 0 0.4rem;
+          font-size: 6px;
+        }
+      }
+      .rating-avg {
+        font-weight: bold;
+        color: #b4690e;
+        margin-right: 0.4rem;
+        &::after {
+          display: none;
+        }
+      }
+      .rating-count {
+        margin-left: 0.4rem;
+      }
+    }
+    .price {
+      margin-top: auto;
+      font-weight: bold;
+      span {
+        color: #000;
+        font-size: 2.4rem;
+      }
+    }
+  }
+`;
+
+export const StyledFilter = styled.div`
+  font-weight: bold;
+  margin-bottom: 2rem;
+  .count {
+    color: #1c1d1f;
+    background-color: transparent;
+    border: 1px solid #1c1d1f;
+    padding: 1.2rem;
+    font-size: 1.6rem;
+  }
+  .clear-filters {
+    cursor: pointer;
+    &:hover {
+      color: #3e3f44;
+    }
+  }
+  .results {
+    color: #6a6f73;
   }
 `;
