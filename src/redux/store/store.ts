@@ -7,6 +7,7 @@ import learningReducer from "../slices/learning.slice";
 import promotionReducer from "../slices/promotions.slice";
 import instructorCourseReducer from "../slices/instructor-course.slice";
 import priceReducer from "../slices/price.slice";
+import categoriesReducer from "../slices/categories.slice";
 
 const logger = createLogger({
   // ...options
@@ -22,9 +23,10 @@ export const store = configureStore({
     promotion: promotionReducer,
     instructorCourse: instructorCourseReducer,
     price: priceReducer,
+    categories: categoriesReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  // .concat(middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

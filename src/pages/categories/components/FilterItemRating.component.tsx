@@ -1,35 +1,25 @@
-import { Collapse, Radio, Skeleton, Space } from "antd";
-import { memo, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import RatingApi, {
-  ArrayFilterRating,
-  FilterRatingByCategorySlug,
-} from "../../../api/rating.api";
+import { Collapse, Radio, RadioChangeEvent, Space } from "antd";
+import { memo } from "react";
+import { useSearchParams } from "react-router-dom";
 import Rating from "../../../components/Rating/Rating.component";
-import { getCategorySlug } from "../utils/functions";
+import { useTypedSelector } from "../../../hooks/redux.hooks";
 
 const { Panel } = Collapse;
 
 const FilterItemRating = () => {
-  const { slug, sub, topic } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const ratingDefaultValue = searchParams.get("danh-gia")
+    ? searchParams.get("danh-gia")
+    : null;
 
-  // STATE
-  const [filterRating, setFilterRating] = useState<ArrayFilterRating>([]);
-  const [loaded, setLoaded] = useState(false);
+  const { data } = useTypedSelector(
+    ({ categories }) => categories.discoveryUnits
+  );
 
-  // EFFECT
-  useEffect(() => {
-    const params = { slug, sub, topic };
-    const categorySlug = getCategorySlug(params);
-
-    if (categorySlug) {
-      setLoaded(false);
-      RatingApi.filterRatingByCategorySlug(categorySlug).then(({ data }) => {
-        setFilterRating(data.filterRating);
-        setLoaded(true);
-      });
-    }
-  }, [slug, sub, topic]);
+  function onChangeRadioGroup(e: RadioChangeEvent) {
+    searchParams.set("danh-gia", e.target.value);
+    setSearchParams(searchParams);
+  }
 
   return (
     <div className="filter-item">
@@ -40,23 +30,25 @@ const FilterItemRating = () => {
           bordered={false}
         >
           <Panel header={<b>Đánh giá</b>} key="1">
-            {!loaded ? (
-              <Skeleton active />
-            ) : (
-              <Radio.Group>
-                <Space direction="vertical">
-                  {Object.keys(filterRating).map((rating: string, i) => (
-                    <Radio value={rating} key={i}>
-                      <Rating value={parseFloat(rating)} size={"14px"} />
-                      <span className="ml-1">{rating} trở lên</span>
-                      <span className="amount ml-1">
-                        ({filterRating[rating as any].amount})
-                      </span>
+            <Radio.Group
+              onChange={onChangeRadioGroup}
+              defaultValue={ratingDefaultValue}
+            >
+              <Space direction="vertical">
+                {data?.filterRating &&
+                  Object.entries(data.filterRating).map(([key, value]) => (
+                    <Radio
+                      value={key}
+                      key={key}
+                      disabled={!value.amount ? true : false}
+                    >
+                      <Rating value={parseFloat(key)} size={"17px"} />
+                      <span className="ml-1">{key} trở lên</span>
+                      <span className="amount ml-1">({value.amount})</span>
                     </Radio>
                   ))}
-                </Space>
-              </Radio.Group>
-            )}
+              </Space>
+            </Radio.Group>
           </Panel>
         </Collapse>
       </div>

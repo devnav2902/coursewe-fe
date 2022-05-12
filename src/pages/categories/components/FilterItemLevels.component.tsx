@@ -1,40 +1,34 @@
-import { Checkbox, Col, Collapse, Skeleton, Space } from "antd";
-import { memo, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import InstructionalLevelApi, {
-  ArrayAmountCoursesByLevel,
-} from "../../../api/instructionalLevel.api";
-import { getCategorySlug } from "../utils/functions";
+import { Checkbox, Collapse, Space } from "antd";
+import { CheckboxValueType } from "antd/lib/checkbox/Group";
+import { memo } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useTypedSelector } from "../../../hooks/redux.hooks";
+import { isNumberStringWithCommas } from "../utils/functions";
 
 const { Panel } = Collapse;
 
 const FilterItemLevels = () => {
-  const { slug, sub, topic } = useParams();
+  const { data } = useTypedSelector(
+    ({ categories }) => categories.discoveryUnits
+  );
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  // STATE
-  const [
-    amountCoursesByInstructionalLevel,
-    setAmountCoursesByInstructionalLevel,
-  ] = useState<ArrayAmountCoursesByLevel>([]);
-  const [loaded, setLoaded] = useState(false);
+  const levelDefaultValue = (() => {
+    const level = searchParams.get("trinh-do") as string;
+    const isNumber =
+      typeof Number(level) === "number" && !isNaN(parseInt(level));
 
-  // EFFECT
-  useEffect(() => {
-    const params = { slug, sub, topic };
-    const categorySlug = getCategorySlug(params);
+    return isNumberStringWithCommas(level)
+      ? level.split(",").map((level) => parseInt(level))
+      : isNumber
+      ? [parseInt(level)]
+      : undefined;
+  })();
 
-    if (categorySlug) {
-      setLoaded(false);
-      InstructionalLevelApi.amountCoursesByInstructionalLevel(
-        categorySlug
-      ).then(({ data }) => {
-        setAmountCoursesByInstructionalLevel(
-          data.amountCoursesByInstructionalLevel
-        );
-        setLoaded(true);
-      });
-    }
-  }, [slug, sub, topic]);
+  function onChangeLevel(value: CheckboxValueType[]) {
+    searchParams.set("trinh-do", value.toString());
+    setSearchParams(searchParams);
+  }
 
   return (
     <div className="filter-item">
@@ -45,13 +39,18 @@ const FilterItemLevels = () => {
           bordered={false}
         >
           <Panel header={<b>Cấp độ</b>} key="1">
-            {!loaded ? (
-              <Skeleton active />
-            ) : (
-              <Checkbox.Group>
+            {data?.amountCoursesByInstructionalLevel && (
+              <Checkbox.Group
+                onChange={onChangeLevel}
+                defaultValue={levelDefaultValue}
+              >
                 <Space direction="vertical">
-                  {amountCoursesByInstructionalLevel.map((item) => (
-                    <Checkbox key={item.id} value={item.id}>
+                  {data.amountCoursesByInstructionalLevel.map((item) => (
+                    <Checkbox
+                      key={item.id}
+                      value={item.id}
+                      disabled={!item.amount ? true : false}
+                    >
                       {item.name}{" "}
                       <span className="amount">({item.amount})</span>
                     </Checkbox>
