@@ -14,13 +14,14 @@ const CourseDashRedirestPage: FC = () => {
     ProgressLogsApi.getDataLastWatched(id).then(
       ({ data: { dataLastWatched } }) => {
         if (!dataLastWatched) {
-          navigate(ROUTES.NOT_FOUND);
+          // navigate(ROUTES.NOT_FOUND);
         } else {
           const {
             course: { slug },
             lecture_id,
             last_watched_second,
           } = dataLastWatched;
+          console.log(last_watched_second);
           navigate(
             routesWithParams.learning(slug, lecture_id) +
               "?start=" +

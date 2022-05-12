@@ -11,15 +11,15 @@ import { routesWithParams } from "../utils/constants";
 
 const LearningLayout: FC = ({ children }) => {
   const dispatch = useAppDispatch();
-  const { slug } = useParams() as { slug: string };
+  const { course_slug } = useParams() as { course_slug: string };
 
   useEffect(() => {
-    dispatch(getCourse(slug));
+    dispatch(getCourse(course_slug));
 
     return () => {
       dispatch(resetStateLearning);
     };
-  }, [slug]);
+  }, [course_slug]);
 
   return (
     <>

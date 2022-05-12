@@ -4,6 +4,7 @@ import { AiOutlineFileText } from "react-icons/ai";
 import { BsPlayCircle } from "react-icons/bs";
 import { ImFolderDownload } from "react-icons/im";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { Link } from "react-router-dom";
 import ProgressApi from "../../../../api/progress.api";
 import ResourceApi from "../../../../api/resource.api";
 import {
@@ -16,6 +17,7 @@ import {
   getSections,
 } from "../../../../redux/slices/learning.slice";
 import { Lecture } from "../../../../ts/types/course.types";
+import { routesWithParams } from "../../../../utils/constants";
 
 type LectureProps = {
   lecture: Lecture;
@@ -23,6 +25,9 @@ type LectureProps = {
 
 const LectureItem: FC<LectureProps> = ({ lecture }) => {
   const dispatch = useAppDispatch();
+  const {
+    dataCourse: { course },
+  } = useTypedSelector((state) => state.learning);
   const { dataCourse } = useTypedSelector((state) => state.learning);
 
   const [checked, setChecked] = useState({
@@ -91,60 +96,72 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
           <span></span>
         </label>
       </div>
-      <div className="link">
-        <div className="text">
-          {lecture.order}.&nbsp;{lecture.title}
-        </div>
-        <div className="bottom d-flex align-items-center">
-          <div className="duration d-flex align-items-center">
-            <BsPlayCircle style={{ marginRight: 5 }} />
-            <span className="times">{lecture.playtime_string}</span>
+      <Link
+        to={
+          !course?.slug
+            ? ""
+            : routesWithParams.learning(course.slug, lecture.id)
+        }
+      >
+        {" "}
+        <div className="link">
+          <div className="text">
+            {lecture.order}.&nbsp;{lecture.title}
           </div>
-
-          {lecture.resource.length > 0 && (
-            <div className="resource-list">
-              <Dropdown
-                placement="bottomRight"
-                getPopupContainer={(e) => e}
-                overlay={
-                  <ul className="list">
-                    {lecture.resource.map((resource, i) => {
-                      const { lecture_id: lectureId, id: resourceid } =
-                        resource;
-
-                      return (
-                        <li
-                          onClick={() =>
-                            downloadFile(
-                              lectureId,
-                              resourceid,
-                              resource.original_filename
-                            )
-                          }
-                          key={i}
-                          className="cursor-pointer d-flex download-btn align-items-center"
-                        >
-                          <ImFolderDownload style={{ flexShrink: 0 }} />
-                          <div className="ml-1 filename">
-                            {resource.original_filename}
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                }
-                trigger={["click"]}
-              >
-                <button className="dropdown d-flex align-items-center">
-                  <AiOutlineFileText style={{ marginRight: 4 }} />
-                  Tài liệu
-                  <MdOutlineKeyboardArrowDown fontSize={18} className="ml-1" />
-                </button>
-              </Dropdown>
+          <div className="bottom d-flex align-items-center">
+            <div className="duration d-flex align-items-center">
+              <BsPlayCircle style={{ marginRight: 5 }} />
+              <span className="times">{lecture.playtime_string}</span>
             </div>
-          )}
+
+            {lecture.resource.length > 0 && (
+              <div className="resource-list">
+                <Dropdown
+                  placement="bottomRight"
+                  getPopupContainer={(e) => e}
+                  overlay={
+                    <ul className="list">
+                      {lecture.resource.map((resource, i) => {
+                        const { lecture_id: lectureId, id: resourceid } =
+                          resource;
+
+                        return (
+                          <li
+                            onClick={() =>
+                              downloadFile(
+                                lectureId,
+                                resourceid,
+                                resource.original_filename
+                              )
+                            }
+                            key={i}
+                            className="cursor-pointer d-flex download-btn align-items-center"
+                          >
+                            <ImFolderDownload style={{ flexShrink: 0 }} />
+                            <div className="ml-1 filename">
+                              {resource.original_filename}
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  }
+                  trigger={["click"]}
+                >
+                  <button className="dropdown d-flex align-items-center">
+                    <AiOutlineFileText style={{ marginRight: 4 }} />
+                    Tài liệu
+                    <MdOutlineKeyboardArrowDown
+                      fontSize={18}
+                      className="ml-1"
+                    />
+                  </button>
+                </Dropdown>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </Link>
     </li>
   );
 };

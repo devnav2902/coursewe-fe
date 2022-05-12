@@ -1,9 +1,16 @@
+import {
+  FacebookOutlined,
+  LinkedinOutlined,
+  TwitterOutlined,
+  YoutubeOutlined,
+} from "@ant-design/icons";
 import { Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import LearningApi from "../../../api/learning.api";
 import ProgressLogsApi from "../../../api/progress-logs.api";
+import Loading from "../../../components/Loading/Loading.component";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { routesWithParams } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
@@ -16,13 +23,14 @@ const LearningPage = () => {
   } = useTypedSelector((state) => state.learning);
   const [video, setVideo] = useState(null);
   const [lastWatchedSecond, setLastWatchedSecond] = useState(0);
+  const [saveLastWatchedSecond, setSaveLastWatchedSecond] = useState(false);
   const navigate = useNavigate();
   const { lectureId, course_slug } = useParams() as {
     lectureId: string;
     course_slug: string;
   };
   const [searchParams] = useSearchParams();
-  // const timeCurrent = useRef(null);
+
   const last_watched_second = searchParams.get("start");
 
   useEffect(() => {
@@ -47,17 +55,19 @@ const LearningPage = () => {
   }, [course_slug, lectureId]);
 
   useEffect(() => {
-    if (!last_watched_second) {
-      course?.id &&
-        ProgressLogsApi.getDataLastWatchedByLectureId(
-          course.id,
-          lectureId
-        ).then(({ data: { dataLastWatched } }) => {
+    if (last_watched_second) return setSaveLastWatchedSecond(true);
+
+    course?.id &&
+      ProgressLogsApi.getDataLastWatchedByLectureId(course.id, lectureId).then(
+        ({ data: { dataLastWatched } }) => {
           setLastWatchedSecond(dataLastWatched?.last_watched_second || 0);
-        });
-    }
-  }, [lectureId, last_watched_second]);
-  console.log(lastWatchedSecond);
+          setSaveLastWatchedSecond(true);
+        }
+      );
+
+    setSaveLastWatchedSecond(false);
+  }, [lectureId, last_watched_second, course?.id]);
+  // console.log(lastWatchedSecond);
 
   return (
     <main className="main-content-wrapper">
@@ -70,15 +80,21 @@ const LearningPage = () => {
       <div className="learning-content">
         <div className="video-content">
           <div className="video-player">
-            <VideoLearning
-              last_watched_second={
-                last_watched_second
-                  ? parseInt(last_watched_second)
-                  : lastWatchedSecond
-              }
-              thumbnail={""}
-              url={"hi"}
-            />
+            {saveLastWatchedSecond ? (
+              <VideoLearning
+                last_watched_second={
+                  last_watched_second
+                    ? parseInt(last_watched_second)
+                    : lastWatchedSecond
+                }
+                thumbnail={""}
+                url={
+                  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                }
+              />
+            ) : (
+              <Loading />
+            )}
           </div>
         </div>
         <Sidebar />
@@ -144,9 +160,9 @@ const LearningPage = () => {
                         {course?.author?.bio?.linkedin && (
                           <div className="socical-link">
                             <div className="my-link">
-                              <a href="{{ $author->bio->linkedin }}">
-                                <i className="fab fa-linkedin"></i>
-                              </a>
+                              <Link to={course?.author?.bio?.linkedin}>
+                                <LinkedinOutlined />
+                              </Link>
                             </div>
                           </div>
                         )}
@@ -154,7 +170,7 @@ const LearningPage = () => {
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->twitter }}">
-                                <i className="fab fa-twitter"></i>
+                                <TwitterOutlined />
                               </a>
                             </div>
                           </div>
@@ -163,7 +179,7 @@ const LearningPage = () => {
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->facebook }}">
-                                <i className="fab fa-facebook"></i>
+                                <FacebookOutlined />
                               </a>
                             </div>
                           </div>
@@ -172,7 +188,7 @@ const LearningPage = () => {
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->youtube }}">
-                                <i className="fab fa-youtube"></i>
+                                <YoutubeOutlined />
                               </a>
                             </div>
                           </div>
