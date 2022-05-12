@@ -1,26 +1,35 @@
 import { Cascader, ConfigProvider, Empty, Spin } from "antd";
-import { SingleValueType } from "rc-cascader/lib/Cascader";
-import React, { useEffect, useState } from "react";
+import { SingleValueType, DefaultOptionType } from "rc-cascader/lib/Cascader";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CategoriesApi from "../../api/categories.api";
+import CategoriesApi, { ArrayCategories } from "../../api/categories.api";
 import { routesWithParams } from "../../utils/constants";
 
 const Categories = () => {
   const navigate = useNavigate();
 
   const [displayCascader, setDisplayCascader] = useState(false);
-  const [categoriesData, setCategoriesData] = useState({
+  const [categoriesData, setCategoriesData] = useState<{
+    loaded: boolean;
+    data: ArrayCategories;
+  }>({
     loaded: false,
     data: [],
   });
 
-  function onChangeCascader(value: SingleValueType) {
+  function onChangeCascader(
+    value: SingleValueType,
+    selectOptions: DefaultOptionType[]
+  ) {
     setDisplayCascader(false);
 
     const arrParams = value as string[];
     const slug = arrParams.reduce((result, cur) => (result += `${cur}/`), "");
 
-    slug && navigate(routesWithParams.categories(slug));
+    slug &&
+      navigate(routesWithParams.categories(slug), {
+        state: { categoryData: selectOptions },
+      });
   }
 
   useEffect(() => {
@@ -33,6 +42,8 @@ const Categories = () => {
         data: categories,
         loaded: true,
       }));
+
+      console.log(categories);
     });
   }, []);
 

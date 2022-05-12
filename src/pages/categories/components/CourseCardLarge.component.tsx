@@ -1,50 +1,23 @@
 import { Col, Popover } from "antd";
+import { FC } from "react";
 import { BiCheck } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import CartButton from "../../../components/CartButton/CartButton.component";
+import { CustomCourse } from "../../../components/Course/Course.component";
 import Rating from "../../../components/Rating/Rating.component";
 import WishlistButton from "../../../components/WishlistButton/WishlistButton.component";
-import { BE_URL, routesWithParams } from "../../../utils/constants";
-import { isUrl, roundsTheNumber } from "../../../utils/functions";
+import { routesWithParams } from "../../../utils/constants";
+import { linkThumbnail, roundsTheNumber } from "../../../utils/functions";
+import {
+  StyledCourseCardLarge,
+  StyledQuickViewBox,
+} from "../styles/categories.styles";
 
-const StyledQuickViewBox = styled.div`
-  .goal {
-    font-size: 18px;
-    font-weight: bold;
-    padding-bottom: 10px;
-  }
-  .list-items {
-    padding-bottom: 15px;
-  }
-  .desc,
-  .list-items {
-    width: 340px;
-    line-height: 1.4;
-    font-size: 14px;
-  }
-  .btn {
-    font-weight: bold;
-    font-size: 16px;
-  }
-  .toggle-wishlist {
-    width: 5rem;
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 0.8rem;
-    border-radius: 50%;
-    border: 1px solid #000;
-    flex-shrink: 0;
+type CourseCardLargeProps = {
+  course: CustomCourse;
+};
 
-    &:hover {
-      background-color: #e9e7e7;
-    }
-  }
-`;
-
-const CourseCardLarge = ({ course }) => {
+const CourseCardLarge: FC<CourseCardLargeProps> = ({ course }) => {
   const {
     title,
     slug,
@@ -84,13 +57,10 @@ const CourseCardLarge = ({ course }) => {
       content={quickViewBox}
       className="popover"
     >
-      <div className="course-block">
+      <StyledCourseCardLarge>
         <Link to={routesWithParams.detail_course(slug)}>
           <div className="image">
-            <img
-              src={isUrl(thumbnail) ? thumbnail : BE_URL + "/" + thumbnail}
-              alt={title}
-            />
+            <img src={linkThumbnail(thumbnail)} alt={title} />
           </div>
         </Link>
         <div className="content d-flex">
@@ -128,7 +98,7 @@ const CourseCardLarge = ({ course }) => {
             <div className="price">{price.format_price} đ</div>
           </div>
         </div>
-      </div>
+      </StyledCourseCardLarge>
     </Popover>
   );
 };

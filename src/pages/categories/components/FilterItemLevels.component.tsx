@@ -1,20 +1,21 @@
-import { Checkbox, Col, Collapse, Skeleton } from "antd";
+import { Checkbox, Col, Collapse, Skeleton, Space } from "antd";
 import { memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import InstructionalLevelApi from "../../../api/instructionalLevel.api";
+import InstructionalLevelApi, {
+  ArrayAmountCoursesByLevel,
+} from "../../../api/instructionalLevel.api";
 import { getCategorySlug } from "../utils/functions";
 
 const { Panel } = Collapse;
 
 const FilterItemLevels = () => {
   const { slug, sub, topic } = useParams();
-  console.log(slug, sub, topic);
 
   // STATE
   const [
     amountCoursesByInstructionalLevel,
     setAmountCoursesByInstructionalLevel,
-  ] = useState([]);
+  ] = useState<ArrayAmountCoursesByLevel>([]);
   const [loaded, setLoaded] = useState(false);
 
   // EFFECT
@@ -22,13 +23,17 @@ const FilterItemLevels = () => {
     const params = { slug, sub, topic };
     const categorySlug = getCategorySlug(params);
 
-    setLoaded(false);
-    InstructionalLevelApi.amountCoursesByInstructionalLevel(categorySlug).then(
-      (res) => {
-        setAmountCoursesByInstructionalLevel(res.data);
+    if (categorySlug) {
+      setLoaded(false);
+      InstructionalLevelApi.amountCoursesByInstructionalLevel(
+        categorySlug
+      ).then(({ data }) => {
+        setAmountCoursesByInstructionalLevel(
+          data.amountCoursesByInstructionalLevel
+        );
         setLoaded(true);
-      }
-    );
+      });
+    }
   }, [slug, sub, topic]);
 
   return (
@@ -43,13 +48,16 @@ const FilterItemLevels = () => {
             {!loaded ? (
               <Skeleton active />
             ) : (
-              amountCoursesByInstructionalLevel.map((item) => (
-                <Col key={item.id} className="mb-1">
-                  <Checkbox>
-                    {item.name} <span className="amount">({item.amount})</span>
-                  </Checkbox>
-                </Col>
-              ))
+              <Checkbox.Group>
+                <Space direction="vertical">
+                  {amountCoursesByInstructionalLevel.map((item) => (
+                    <Checkbox key={item.id} value={item.id}>
+                      {item.name}{" "}
+                      <span className="amount">({item.amount})</span>
+                    </Checkbox>
+                  ))}
+                </Space>
+              </Checkbox.Group>
             )}
           </Panel>
         </Collapse>

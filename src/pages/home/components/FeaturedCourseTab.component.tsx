@@ -4,8 +4,8 @@ import CategoriesApi from "../../../api/categories.api";
 import Course, {
   ArrayCustomCourses,
 } from "../../../components/Course/Course.component";
-import { SkeletonCourses } from "../../../components/SkeletonCourses/SkeletonCourses.component";
-import { settings } from "../utils/slick.utils";
+import SkeletonCourses from "../../../components/Skeleton/Skeleton.component";
+import { settings } from "../../../utils/slick.utils";
 
 type FeaturedCourseTabProps = {
   categoryId: number;
@@ -26,7 +26,7 @@ const FeaturedCourseTab: FC<FeaturedCourseTabProps> = ({ categoryId }) => {
   }, [categoryId]);
 
   return !loadedFeaturedCourses ? (
-    <SkeletonCourses amount={5} />
+    <SkeletonCourses flex={1} amount={5} />
   ) : (
     <Slider {...settings}>
       {featuredCourses.map((course) => (

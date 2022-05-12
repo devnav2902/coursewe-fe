@@ -2,21 +2,18 @@ import styled from "styled-components";
 
 export const StyledCouponTable = styled.table`
   width: 100%;
-  border-collapse: collapse;
-  border: 1px solid rgb(153, 153, 153);
-  th,
+
   td {
-    text-align: left;
-    padding: 1rem;
     vertical-align: top;
-    border: 1px solid rgb(153, 153, 153);
   }
-  tr th {
-    white-space: nowrap;
-  }
+
   span {
     display: block;
     margin-bottom: 8px;
+  }
+
+  .ant-empty-description {
+    color: #272626;
   }
 `;
 

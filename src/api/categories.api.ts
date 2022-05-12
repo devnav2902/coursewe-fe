@@ -1,29 +1,122 @@
-import { ArrayCustomCourses } from "../components/Course/Course.component";
+import {
+  ArrayCustomCourses,
+  CustomCourse,
+} from "../components/Course/Course.component";
 import { FeaturedCategories } from "../ts/types/categories.types";
+import { CoursesPagination } from "../ts/types/course.types";
 import axiosClient from "../utils/axios";
+
+export type CoursesByCategory = CoursesPagination<ArrayCustomCourses>;
+export type CoursesByCategoryResponse = {
+  courses: CoursesByCategory;
+};
+
+export type Topic = { name: string; slug: string };
+export type Subcategory = {
+  subcategory: Topic[];
+} & Topic;
+export type Category = {
+  name: string;
+  slug: string;
+  subcategory: Subcategory[];
+};
+export type ArrayCategories = Category[];
+export type CategoriesResponse = { categories: ArrayCategories };
+
+export type AmountCoursesByLevel = {
+  name: string;
+  id: number;
+  amount: number;
+};
+export type ArrayAmountCoursesByLevel = AmountCoursesByLevel[];
+
+export type FilterRating = {
+  [key: string]: { amount: number };
+};
+
+export type AmountCoursesInTopic = {
+  amount: number;
+  category_id: number;
+  slug: string;
+  title: string;
+};
+export type ArrayAmountCoursesInTopics = AmountCoursesInTopic[];
+
+export type AmountCoursesByTypesPrice = {
+  free: { amount: number; type: "free" };
+  paid: { amount: number; type: "paid" };
+};
+
+export type DiscoveryUnitsResponse = {
+  amountCoursesInTopics: ArrayAmountCoursesInTopics;
+  filterRating: FilterRating;
+  amountCoursesByInstructionalLevel: ArrayAmountCoursesByLevel;
+  amountCoursesByTypesPrice: AmountCoursesByTypesPrice;
+};
+
+export type Breadcrumb = {
+  category_id: number;
+  level1_title: string;
+  level1_slug: string;
+  subcategory_id?: number;
+  level2_title?: string;
+  level2_slug?: string;
+  topic_id?: number;
+  level3_title?: string;
+  level3_slug?: string;
+};
+export type BreadcrumbResponse = {
+  breadcrumb: Breadcrumb;
+};
+
+export type PopularInstructor = {
+  id: number;
+  fullname: string;
+  slug: string;
+  avatar: string;
+  totalStudents: number;
+  roundedAvgCourses: number;
+  numberOfCourses: number;
+};
+export type ArrayPopularInstructors = PopularInstructor[];
+export type PopularInstructorsResponse = {
+  popularInstructors: ArrayPopularInstructors;
+};
+
+export type CoursesBeginner = CoursesPagination<ArrayCustomCourses>;
+export type CoursesBeginnerResponse = {
+  coursesBeginner: CoursesBeginner;
+};
 
 class Categories {
   get = async () => {
-    return axiosClient
-      .get("/categories")
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<CategoriesResponse>("/categories");
   };
 
-  getCoursesByCategorySlug = async (slug: string) => {
-    return axiosClient
-      .get(`/categories/get-courses/${slug}`)
-      .then((res) => res)
-      .catch((error) => error.response);
+  coursesBeginner = async (slug: string) => {
+    return axiosClient.get<CoursesBeginnerResponse>(
+      `/categories/courses-beginner/${slug}`
+    );
   };
-  getAmountCoursesByTypesPrice = async (slug: string) => {
-    return axiosClient.get(`/categories/types-price/${slug}`);
+
+  discoveryUnits = async (slug: string, params: object) => {
+    return axiosClient.get<DiscoveryUnitsResponse>(
+      `/categories/discovery-units/${slug}`,
+      { params }
+    );
   };
-  amountCoursesInTopics = async (slug: string) => {
-    return axiosClient
-      .get(`/categories/amount-courses-in-topics/${slug}`)
-      .then((res) => res)
-      .catch((error) => error.response);
+
+  getCoursesByCategorySlug = async (slug: string, params: object) => {
+    return axiosClient.get<CoursesByCategoryResponse>(
+      `/categories/get-courses/${slug}`,
+      { params }
+    );
+  };
+
+  getBreadcrumbByCategory = async (slug: string) => {
+    return axiosClient.get<BreadcrumbResponse>(
+      `/categories/breadcrumb/${slug}`
+    );
   };
 
   featuredCategories = async (limit: number) => {
@@ -43,11 +136,11 @@ class Categories {
       `/category/featured-courses/${topLevelCategoryId}`
     );
   };
+
   getPopularInstructors = async (slug: string) => {
-    return axiosClient
-      .get(`/categories/popular-instructors/${slug}`)
-      .then((res) => res)
-      .catch((error) => error);
+    return axiosClient.get<PopularInstructorsResponse>(
+      `/categories/popular-instructors/${slug}`
+    );
   };
 }
 const CategoriesApi = new Categories();

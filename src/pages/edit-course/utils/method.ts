@@ -104,7 +104,11 @@ const validateItemsBeforeSend = (
   type: TypeItems,
   formMethod: HookForm
 ) => {
-  const { clearErrors, setError, errors } = formMethod;
+  const {
+    clearErrors,
+    setError,
+    formState: { errors },
+  } = formMethod;
   const { minItems, allInputsRef } = dataValidate;
 
   const totalInputsHasValue = allInputsRef.current

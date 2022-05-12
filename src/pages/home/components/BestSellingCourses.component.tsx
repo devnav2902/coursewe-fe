@@ -4,8 +4,8 @@ import CourseApi from "../../../api/course.api";
 import Course, {
   ArrayCustomCourses,
 } from "../../../components/Course/Course.component";
-import { SkeletonCourses } from "../../../components/SkeletonCourses/SkeletonCourses.component";
-import { settings } from "../utils/slick.utils";
+import SkeletonCourses from "../../../components/Skeleton/Skeleton.component";
+import { settings } from "../../../utils/slick.utils";
 
 const BestSellingCourses: FC = () => {
   const [courses, setCourses] = useState<ArrayCustomCourses>([]);
@@ -24,7 +24,7 @@ const BestSellingCourses: FC = () => {
 
       <div className="data">
         {!loaded ? (
-          <SkeletonCourses amount={5} />
+          <SkeletonCourses flex={1} amount={5} />
         ) : (
           <Slider {...settings}>
             {courses.map((course) => (

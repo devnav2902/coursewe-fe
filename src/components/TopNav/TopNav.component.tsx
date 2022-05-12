@@ -57,7 +57,7 @@ const TopNav = () => {
           ) : (
             <>
               <Link className="instructor" to="/instructor">
-                Giảng dạy trên Devco
+                Giảng dạy trên Coursewe
               </Link>
               <ShoppingCart />
               <Link className="btn-style-two login-button" to={ROUTES.SIGN_IN}>
@@ -71,7 +71,7 @@ const TopNav = () => {
         ) : (
           <div className="user">
             <Link to={ROUTES.INSTRUCTOR_COURSES}>Quản lý khóa học</Link>
-            <Link to={ROUTES.MY_LEARNING}>My learning</Link>
+            <Link to={ROUTES.MY_LEARNING}>Học tập</Link>
             <ShoppingCart />
             <div className="notification">
               <div className="icon-notification">

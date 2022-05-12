@@ -12,7 +12,9 @@ import CustomQuill from "../../../utils/quill";
 
 const { Option } = Select;
 
-const BasicsPage: FC<ChildrenProps> = ({ control }) => {
+const BasicsPage: FC<ChildrenProps> = ({ formHandler }) => {
+  const { control } = formHandler;
+
   const [instructionalLevelLoaded, setinstructionalLevelLoaded] =
     useState(false);
   const [instructionalLevel, setInstructionalLevel] = useState<
