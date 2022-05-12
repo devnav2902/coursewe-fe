@@ -28,6 +28,19 @@ class ProgressLogs {
       `/last-watched/course/${course_id}/lecture/${lectureId}`
     );
   };
+  saveLastWatched = async ({
+    course_id,
+    lecture_id,
+    second,
+  }: {
+    course_id: number | string;
+    lecture_id: number;
+    second: number;
+  }) => {
+    return axiosClient.post(
+      `/last-watched/course/${course_id}/lecture/${lecture_id}/last_watched_second/${second}`
+    );
+  };
 }
 
 const ProgressLogsApi = new ProgressLogs();
