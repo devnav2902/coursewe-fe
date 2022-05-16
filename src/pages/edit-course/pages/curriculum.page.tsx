@@ -33,7 +33,7 @@ const CurriculumPage: FC = () => {
       <h6 className="">Chương trình học tập</h6>
 
       <div className="edit-course-form">
-        {section.length && (
+        {section.length > 0 && (
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="sections" type="SECTIONS">
               {(provided) => (
