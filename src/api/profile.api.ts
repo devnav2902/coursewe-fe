@@ -1,5 +1,12 @@
 import axiosClient from "../utils/axios";
 
+type Message = {
+  message: String;
+};
+export type MissingRequirements = { [x: string]: Message[] };
+type CheckInstructorProfileResponse = {
+  missingRequirements: MissingRequirements;
+};
 class Profile {
   getBio = async () => {
     return axiosClient
@@ -9,10 +16,13 @@ class Profile {
   };
 
   updateProfile = async (data: object) => {
-    return axiosClient
-      .patch("/change-profile", data)
-      .then((res) => res)
-      .catch((error) => error);
+    return axiosClient.patch("/change-profile", data);
+  };
+
+  checkInstructorProfileBeforePublishCourse = async () => {
+    return axiosClient.get<CheckInstructorProfileResponse>(
+      "/check-instructor-profile-before-publish-course"
+    );
   };
 }
 const ProfileApi = new Profile();

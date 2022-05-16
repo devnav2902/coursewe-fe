@@ -1,4 +1,5 @@
 import { ArrayCustomCourses } from "../components/Course/Course.component";
+import { ArrayCategories } from "../ts/types/categories.types";
 import {
   Course,
   CoursesPagination,
@@ -29,6 +30,7 @@ export type CourseResponse = {
   author: User;
   price_id: number;
   price: Price;
+  categories: ArrayCategories;
 } & Course;
 class Instructor {
   getCourseById = async (id: string | number) => {
