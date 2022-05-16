@@ -70,8 +70,8 @@ button {
   width: 100%;
 }
 
-@import "./utils/helpers";
 @import "./utils/mixins";
+@import "./utils/helpers";
 @import "./components/nav-top";
 @import "./components/header-bar";
 @import "./components/pagination";
@@ -102,3 +102,6 @@ button {
 
 // admin
 @import "./style-admin/admin";
+
+@import "./custom-library/antd/input";
+@import "./custom-library/quill/quill";
