@@ -172,7 +172,7 @@ const SideBarOverview = () => {
               <div className="hover__item">
                 <Link to={ROUTES.ADMIN_REVIEW}>
                   <EyeOutlined style={{ fontSize: "22px" }} />
-                  <span>Đánh giá chất lượng khóa học</span>
+                  <span>Xét duyệt khóa học</span>
                 </Link>
               </div>
             )}
