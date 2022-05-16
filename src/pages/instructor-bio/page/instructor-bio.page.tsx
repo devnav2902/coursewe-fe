@@ -38,7 +38,7 @@ const InstructorBioPage = () => {
 
         <h1 className="name-author">{author.fullname}</h1>
         <h2 className="headline" style={{ fontSize: "1.4rem" }}>
-          {author.bio?.headline}
+          {author?.headline}
         </h2>
 
         <div className="instructor-profile">
@@ -56,7 +56,7 @@ const InstructorBioPage = () => {
         <div className="show-more">
           <div
             className="content markdown"
-            dangerouslySetInnerHTML={{ __html: author.bio?.bio || "" }}
+            dangerouslySetInnerHTML={{ __html: author?.bio || "" }}
           />
 
           <div className="my-course">
@@ -91,7 +91,7 @@ const InstructorBioPage = () => {
           />
         </div>
 
-        <SocialBox social={author.bio} />
+        <SocialBox social={author} />
       </div>
     </StyledInstructorBioContainer>
   ) : (
@@ -106,16 +106,16 @@ const InstructorBioPage = () => {
             alt={author.fullname}
             className="circle-img avatar mb-1"
           />
-          <h2>{author.bio?.headline}</h2>
+          <h2>{author?.headline}</h2>
           <ul className="social-box d-flex align-items-center justify-content-center ">
-            <SocialBox social={author.bio} />
+            <SocialBox social={author} />
           </ul>
         </div>
         {author.bio && (
           <div className="user-profile__right">
             <div
               className="biography"
-              dangerouslySetInnerHTML={{ __html: author.bio.bio }}
+              dangerouslySetInnerHTML={{ __html: author.bio }}
             />
           </div>
         )}
