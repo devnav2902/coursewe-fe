@@ -1,5 +1,11 @@
+import axios from "axios";
 import { FC, useCallback, useEffect, useState } from "react";
-import { FieldValues, useForm, UseFormReturn } from "react-hook-form";
+import {
+  FieldValues,
+  SubmitHandler,
+  useForm,
+  UseFormReturn,
+} from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import CourseApi from "../api/course.api";
@@ -32,9 +38,12 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
     course: { data: courseData },
   } = useTypedSelector((state) => state.instructorCourse);
 
-  const formHandler = useForm(); // assign to variable instead destructuring
+  const formHandler = useForm();
   const {
     formState: { errors },
+    handleSubmit,
+    setError,
+    clearErrors,
   } = formHandler;
 
   useEffect(() => {
@@ -53,11 +62,21 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
     const subscription = formHandler.watch((value, { name, type }) => {
       !valueChanged && handleValueChanged(true);
       console.log(value, name, type);
+      if (errors.topic && name === "topic" && value.topic) {
+        (value.topic?.length || typeof value.topic === "number") &&
+          clearErrors("topic"); // xóa topic trong phần basics(categories)
+      }
     });
     return () => {
       subscription.unsubscribe();
     };
-  }, [formHandler, valueChanged, handleValueChanged]);
+  }, [
+    formHandler,
+    valueChanged,
+    handleValueChanged,
+    clearErrors,
+    errors.topic,
+  ]);
 
   console.log("re-render layout");
 
@@ -143,15 +162,26 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
       .catch((error) => error);
   }
 
-  const onSubmit = () => {
-    const data = formHandler.getValues();
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    // const data = formHandler.getValues();
+    console.log(errors);
 
     switch (pathname) {
       case routesWithParams.course_basics(id):
-        CourseApi.updateInformation(id, data).then((res) => {
-          resetState();
-          openNotification("success");
-        });
+        CourseApi.updateInformation(id, data)
+          .then((res) => {
+            resetState();
+            openNotification("success");
+          })
+          .catch((error) => {
+            if (axios.isAxiosError(error)) {
+              const { errors } = error.response?.data;
+              for (const key in errors) {
+                const element = errors[key];
+                setError(key, { message: element.at(-1) });
+              }
+            }
+          });
         break;
 
       case routesWithParams.intended_learners(id):
@@ -198,7 +228,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
 
           {isRouteWithButtonSave && (
             <button
-              onClick={onSubmit}
+              onClick={handleSubmit(onSubmit)}
               disabled={valueChanged ? false : true}
               className="save"
               type="button"
