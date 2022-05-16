@@ -1,5 +1,6 @@
 import { BellOutlined, SearchOutlined } from "@ant-design/icons";
 import { Dropdown, Spin } from "antd";
+import { FC } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
 import { logout } from "../../redux/slices/user.slice";
@@ -8,9 +9,35 @@ import { linkThumbnail } from "../../utils/functions";
 import Categories from "./Categories.component";
 import ShoppingCart from "./ShoppingCart.component";
 
-const TopNav = () => {
+const UserImage: FC = () => {
+  const { profile } = useTypedSelector((state) => state.user);
+
+  return (
+    <div className="user-img w-100 h-100 d-flex align-items-center justify-content-center">
+      {!profile?.avatar ? (
+        <div
+          className="first-letter w-100 h-100 d-flex align-items-center justify-content-center fw-bold"
+          style={{
+            background: "#9a9a9a",
+            color: "#fff",
+            fontSize: "1.8rem",
+          }}
+        >
+          {profile?.fullname?.charAt(0).toUpperCase()}
+        </div>
+      ) : (
+        <img
+          src={!profile?.avatar ? "" : linkThumbnail(profile?.avatar)}
+          alt={profile?.fullname}
+        />
+      )}
+    </div>
+  );
+};
+
+const TopNav: FC = () => {
   const user = useTypedSelector((state) => state.user);
-  const { fullname, email, avatar, role } = user.profile ?? {};
+  const { fullname, email, role } = user.profile ?? {};
   const dispatch = useAppDispatch();
 
   function handleLogout() {
@@ -111,13 +138,8 @@ const TopNav = () => {
                 overlay={
                   <div className="profile-content">
                     <div className="profile-info">
-                      <Link to="/profile">
-                        <div className="user-img">
-                          <img
-                            src={!avatar ? "" : linkThumbnail(avatar)}
-                            alt={fullname}
-                          />
-                        </div>
+                      <Link to={ROUTES.PROFILE}>
+                        <UserImage />
                         <div className="account">
                           <p>{fullname}</p>
                           <span>{email}</span>
@@ -144,7 +166,7 @@ const TopNav = () => {
                       )}
 
                       <li>
-                        <Link to="/profile">Profile & settings</Link>
+                        <Link to={ROUTES.PROFILE}>Thông tin cá nhân</Link>
                       </li>
                       <li>
                         <Link to="/" onClick={handleLogout}>
@@ -156,10 +178,7 @@ const TopNav = () => {
                 }
               >
                 <span className="profile-img">
-                  <img
-                    src={!avatar ? "" : linkThumbnail(avatar)}
-                    alt={fullname}
-                  />
+                  <UserImage />
                 </span>
               </Dropdown>
             </div>
