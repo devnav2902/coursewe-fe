@@ -1,6 +1,6 @@
 import { Alert, Col, Row, Slider, Spin } from "antd";
 import { FC, useMemo } from "react";
-import { Control, Controller, UseFormReturn } from "react-hook-form";
+import { Controller, UseFormReturn } from "react-hook-form";
 import { FormCreateCoupon } from "../../../../api/promotions.api";
 import { useTypedSelector } from "../../../../hooks/redux.hooks";
 import { CouponType } from "../../../../ts/types/coupon.types";
