@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import CourseApi, { CoursesOfInstructor } from "../../../api/course.api";
 import Loading from "../../../components/Loading/Loading.component";
 import { ROUTES, routesWithParams } from "../../../utils/constants";
+import { linkThumbnail } from "../../../utils/functions";
 
 const InstructorCoursesPage: FC = () => {
   const [coursesData, setCoursesData] = useState<{
@@ -79,8 +80,13 @@ const InstructorCoursesPage: FC = () => {
                   <li key={course.id}>
                     <div className="img-courses">
                       <img
-                        alt=""
-                        src="https://s.udemycdn.com/course/200_H/placeholder.jpg"
+                        style={{ objectFit: "cover" }}
+                        alt={course.title}
+                        src={
+                          course.thumbnail
+                            ? linkThumbnail(course.thumbnail)
+                            : "https://s.udemycdn.com/course/200_H/placeholder.jpg"
+                        }
                       />
                     </div>
                     <div

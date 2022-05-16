@@ -82,12 +82,12 @@ const LearningPage: FC = () => {
                             {course?.author.fullname}
                           </Link>
                           <div className="headline">
-                            {course?.author.bio?.headline}
+                            {course?.author?.headline}
                           </div>
                         </div>
                       </div>
                       <div className="profile-social-links">
-                        {course?.author?.bio?.linkedin && (
+                        {course?.author?.linkedin && (
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->linkedin }}">
@@ -96,7 +96,7 @@ const LearningPage: FC = () => {
                             </div>
                           </div>
                         )}
-                        {course?.author?.bio?.twitter && (
+                        {course?.author?.twitter && (
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->twitter }}">
@@ -105,7 +105,7 @@ const LearningPage: FC = () => {
                             </div>
                           </div>
                         )}
-                        {course?.author?.bio?.facebook && (
+                        {course?.author?.facebook && (
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->facebook }}">
@@ -114,7 +114,7 @@ const LearningPage: FC = () => {
                             </div>
                           </div>
                         )}
-                        {course?.author?.bio?.youtube && (
+                        {course?.author?.youtube && (
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->youtube }}">
@@ -128,7 +128,7 @@ const LearningPage: FC = () => {
                         {course?.author?.bio && (
                           <div
                             dangerouslySetInnerHTML={{
-                              __html: course.author.bio.bio,
+                              __html: course.author.bio,
                             }}
                           />
                         )}
