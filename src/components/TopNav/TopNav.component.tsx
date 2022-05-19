@@ -1,5 +1,6 @@
 import { BellOutlined, SearchOutlined } from "@ant-design/icons";
 import { Dropdown, Spin } from "antd";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
 import { logout } from "../../redux/slices/user.slice";
@@ -10,12 +11,15 @@ import ShoppingCart from "./ShoppingCart.component";
 
 const TopNav = () => {
   const user = useTypedSelector((state) => state.user);
+  const { cart } = useTypedSelector((state) => state.cart);
   const { fullname, email, avatar, role } = user.profile ?? {};
+  const [cartTemp, setCartTemp] = useState(0);
   const dispatch = useAppDispatch();
 
   function handleLogout() {
     dispatch(logout());
   }
+  console.log(cart);
 
   return (
     <nav className="nav-top">
