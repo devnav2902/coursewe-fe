@@ -135,13 +135,17 @@
           font-weight: bold;
         }
         .ant-select-selection-item {
-          line-height: 42px;
+          line-height: 44px;
         }
         .ant-upload-list-item-name {
           max-width: 250px;
         }
         .ant-upload-list-item-card-actions {
           position: absolute !important;
+        }
+        .ant-select-multiple .ant-select-selection-item {
+          line-height: 24px;
+          border-radius: 20px;
         }
       }
       .form-group > span,
@@ -155,6 +159,10 @@
         input::placeholder {
           color: rgb(126, 119, 119) !important;
         }
+      }
+      .ant-select-selection-placeholder {
+        line-height: 44px;
+        color: #463f3f;
       }
 
       .goals-wrapper,
@@ -196,6 +204,11 @@
         &__info {
           padding: 1rem;
           background-color: #fcaea0;
+
+          a {
+            color: #5624d0;
+            text-decoration: underline;
+          }
         }
       }
     }

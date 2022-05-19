@@ -92,7 +92,9 @@ const LearningPage = () => {
                           >
                             {course?.author.fullname}
                           </Link>
-                          <div className="headline">{course?.author.bio}</div>
+                          <div className="headline">
+                            {course?.author?.headline}
+                          </div>
                         </div>
                       </div>
                       <div className="profile-social-links">
@@ -106,7 +108,7 @@ const LearningPage = () => {
                             </div>
                           </div>
                         )}
-                        {course?.author?.bio?.twitter && (
+                        {course?.author?.twitter && (
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->twitter }}">
@@ -115,7 +117,7 @@ const LearningPage = () => {
                             </div>
                           </div>
                         )}
-                        {course?.author?.bio?.facebook && (
+                        {course?.author?.facebook && (
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->facebook }}">
@@ -124,7 +126,7 @@ const LearningPage = () => {
                             </div>
                           </div>
                         )}
-                        {course?.author?.bio?.youtube && (
+                        {course?.author?.youtube && (
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->youtube }}">
@@ -138,7 +140,7 @@ const LearningPage = () => {
                         {course?.author?.bio && (
                           <div
                             dangerouslySetInnerHTML={{
-                              __html: course.author.bio.bio,
+                              __html: course.author.bio,
                             }}
                           />
                         )}

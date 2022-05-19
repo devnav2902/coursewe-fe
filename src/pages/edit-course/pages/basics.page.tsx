@@ -4,18 +4,22 @@ import { Controller } from "react-hook-form";
 import ReactQuill from "react-quill";
 import InstructionalLevelApi from "../../../api/instructionalLevel.api";
 import { CourseResponse } from "../../../api/instructor.api";
+import ErrorBanner from "../../../components/ErrorBanner/ErrorBanner.component";
 import Loading from "../../../components/Loading/Loading.component";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { ChildrenProps } from "../../../layouts/instructor-course.layout";
 import { InstructionalLevel } from "../../../ts/types/course.types";
 import CustomQuill from "../../../utils/quill";
-
-const { Option } = Select;
+import Categories from "../components/basics/Categories.component";
+import InstructorProfile from "../components/basics/InstructorProfile.component";
 
 const BasicsPage: FC<ChildrenProps> = ({ formHandler }) => {
-  const { control } = formHandler;
+  const {
+    control,
+    formState: { errors },
+  } = formHandler;
 
-  const [instructionalLevelLoaded, setinstructionalLevelLoaded] =
+  const [instructionalLevelLoaded, setInstructionalLevelLoaded] =
     useState(false);
   const [instructionalLevel, setInstructionalLevel] = useState<
     InstructionalLevel[] | undefined
@@ -29,7 +33,7 @@ const BasicsPage: FC<ChildrenProps> = ({ formHandler }) => {
     !instructionalLevelLoaded &&
       InstructionalLevelApi.get().then((res) => {
         setInstructionalLevel(res.data.instructionalLevel);
-        setinstructionalLevelLoaded(true);
+        setInstructionalLevelLoaded(true);
       });
   }, [instructionalLevelLoaded]);
 
@@ -52,7 +56,6 @@ const BasicsPage: FC<ChildrenProps> = ({ formHandler }) => {
                 <Input
                   {...field}
                   defaultValue={title}
-                  required
                   id="title"
                   showCount
                   maxLength={60}
@@ -89,7 +92,6 @@ const BasicsPage: FC<ChildrenProps> = ({ formHandler }) => {
                 <ReactQuill
                   defaultValue={description}
                   onChange={(content, delta, source) => {
-                    console.log(delta);
                     if (source === "user") {
                       field.onChange(content);
                     }
@@ -100,11 +102,12 @@ const BasicsPage: FC<ChildrenProps> = ({ formHandler }) => {
                 />
               )}
             />
+            <ErrorBanner error={errors.description} />
           </div>
 
           <div className="form-group">
-            <label htmlFor="categories">Thông tin cơ bản</label>
-            <Row gutter={16}>
+            <label htmlFor="">Thông tin cơ bản</label>
+            <Row gutter={[16, 0]}>
               <Col span={8}>
                 <Controller
                   name="instructional_level_id"
@@ -121,29 +124,13 @@ const BasicsPage: FC<ChildrenProps> = ({ formHandler }) => {
                   )}
                 />
               </Col>
-              <Col span={8}>
-                <Select defaultValue="lucy" style={{ width: "100%" }}>
-                  <Option value="lucy">IT & SOFTWARE</Option>
-                </Select>
-              </Col>
-              <Col span={8}>
-                <Select defaultValue="lucy" style={{ width: "100%" }}>
-                  <Option value="lucy">Hardware</Option>
-                </Select>
-              </Col>
+              <Categories formHandler={formHandler} />
             </Row>
           </div>
 
           <div className="form-group">
-            <label htmlFor="">Thông tin cá nhân</label>
-            <div className="instructor-profile">
-              <div className="instructor-profile__info">
-                Tất cả các thông tin của giảng viên phải được điền đầy đủ trước
-                khi khóa học được mở bán công khai. Bao gồm tên, hình ảnh, và
-                giới thiệu ngắn tối thiểu 50 từ.
-                <a href="{{ route('profile') }}">Tới trang profile.</a>
-              </div>
-            </div>
+            <label htmlFor="">Thông tin giảng viên</label>
+            <InstructorProfile />
           </div>
         </div>
       </div>

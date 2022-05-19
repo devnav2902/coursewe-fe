@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import CategoriesApi, {
+  ArrayCategories,
   ArrayPopularInstructors,
   Breadcrumb,
   CoursesBeginner,
@@ -8,6 +9,11 @@ import CategoriesApi, {
 } from "../../api/categories.api";
 
 type CategoriesState = {
+  categories: {
+    loaded: boolean;
+    error: null | string;
+    data: ArrayCategories | [];
+  };
   discoveryUnits: {
     loaded: boolean;
     error: null | string;
@@ -36,6 +42,11 @@ type CategoriesState = {
 };
 
 const initialState: CategoriesState = {
+  categories: {
+    loaded: false,
+    error: null,
+    data: [],
+  },
   discoveryUnits: {
     loaded: false,
     error: null,
@@ -62,6 +73,22 @@ const initialState: CategoriesState = {
     loaded: false,
   },
 };
+
+export const getCategories = createAsyncThunk<
+  ArrayCategories,
+  undefined,
+  { rejectValue: string }
+>("categories/getCategories", async (_, { rejectWithValue }) => {
+  try {
+    const {
+      data: { categories },
+    } = await CategoriesApi.get();
+
+    return categories;
+  } catch (error) {
+    return rejectWithValue("Lỗi trong quá trình tải thông tin!");
+  }
+});
 
 export const getCoursesBeginner = createAsyncThunk<
   CoursesBeginner,
@@ -142,6 +169,18 @@ const categoriesSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // GET CATEGORIES
+    builder.addCase(getCategories.pending, (state) => {
+      state.categories.loaded = false;
+    });
+    builder.addCase(getCategories.fulfilled, (state, action) => {
+      state.categories.loaded = true;
+      state.categories.data = action.payload;
+    });
+    builder.addCase(getCategories.rejected, (state, action) => {
+      state.categories.loaded = true;
+      state.categories.error = action.payload as string;
+    });
     // GET DISCOVERY UNITS
     builder.addCase(getDiscoveryUnits.pending, (state) => {
       state.discoveryUnits.loaded = false;

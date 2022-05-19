@@ -1,8 +1,7 @@
 import BasicLayout from "../layouts/basic.layout";
 import InstructorCourseLayout from "../layouts/instructor-course.layout";
-import LearningLayout from "../layouts/learning.layout";
 import InstructorView from "../layouts/instructor-view.layout";
-import ProfileLayout from "../layouts/profile.layout";
+import LearningLayout from "../layouts/learning.layout";
 import NotFound from "../pages/404/pages/index";
 import AdminReviewPage from "../pages/admin-review/page/admin-review.page";
 import CartPage from "../pages/cart/page/cart.page";
@@ -220,13 +219,8 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    exact: true,
     path: ROUTES.PROFILE,
-    component: (
-      <ProfileLayout>
-        {(props: any) => <ProfilePage {...props} />}
-      </ProfileLayout>
-    ),
+    component: <ProfilePage />,
     private: true,
   },
   {

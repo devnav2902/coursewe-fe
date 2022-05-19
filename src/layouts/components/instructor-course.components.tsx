@@ -1,12 +1,11 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
-import { Modal, Spin, Typography } from "antd";
+import { Modal, Spin } from "antd";
 import { FC, useState } from "react";
 import { BsFileRichtext, BsInfoCircle } from "react-icons/bs";
 import { FaLaptopHouse } from "react-icons/fa";
 import { IoMdPricetags } from "react-icons/io";
 import { RiBookmark3Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import PublishCourseApi, {
   MissingPublishRequirements,
 } from "../../api/publish-course.api";
@@ -46,7 +45,14 @@ export const Sidebar: FC<{
         const pagesAndRequirements: PagesAndRequirements = {
           "Thông tin khóa học": {
             url: routesWithParams.course_basics(id),
-            items: ["title", "subtitle", "description", "categories_count"],
+            items: [
+              "title",
+              "subtitle",
+              "description",
+              "categories_count",
+              "author.avatar",
+              "author.bio",
+            ],
             missing: [],
           },
           "Hình ảnh & video giới thiệu": {
@@ -207,15 +213,20 @@ export const Sidebar: FC<{
                         <li>
                           Tại <Link to={url}>{pageName}:</Link>
                         </li>
-                        <li
-                          style={{
-                            listStyleType: "disc",
-                            listStylePosition: "inside",
-                          }}
-                          className="pd-l-2"
-                        >
-                          {missing}
-                        </li>
+                        {missing.map((item) => {
+                          return (
+                            <li
+                              key={item}
+                              style={{
+                                listStyleType: "disc",
+                                listStylePosition: "inside",
+                              }}
+                              className="pd-l-2"
+                            >
+                              {item}
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   );

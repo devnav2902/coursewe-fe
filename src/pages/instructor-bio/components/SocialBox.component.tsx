@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import {
   AiFillFacebook,
   AiFillLinkedin,
@@ -8,7 +8,7 @@ import {
 import { User } from "../../../ts/types/user.types";
 
 type Props = {
-  social: User["bio"];
+  social: User;
 };
 
 const SocialBox: FC<Props> = ({ social }) => {

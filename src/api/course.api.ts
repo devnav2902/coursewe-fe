@@ -62,19 +62,7 @@ class Course {
       .catch((error) => error);
   };
   updateInformation = async (id: string | number, data: any) => {
-    let dataForm = new FormData();
-    for (const key in data) data[key] && dataForm.append(key, data[key]);
-
-    return axiosClient
-      .post(`/course/update-information/${id}`, dataForm, {
-        headers: {
-          "Content-Type":
-            "multipart/form-data; charset=utf-8; boundary=" +
-            Math.random().toString().substr(2),
-        },
-      })
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.patch(`/course/update-information/${id}`, data);
   };
 
   updateCourseOutcome = async (id: string | number, data: any) => {

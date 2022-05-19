@@ -1,0 +1,10 @@
+.ql-container,
+.ql-toolbar {
+  &.ql-snow {
+    @include border-color-custom;
+  }
+}
+
+.ql-container {
+  min-height: 10rem;
+}

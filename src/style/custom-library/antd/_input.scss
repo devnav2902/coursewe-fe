@@ -1,0 +1,9 @@
+.ant-input-group {
+  > span {
+    @include border-color-custom;
+    border-radius: 0;
+  }
+  input {
+    @include custom-input;
+  }
+}

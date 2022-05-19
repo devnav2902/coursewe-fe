@@ -11,11 +11,17 @@ export type CoursesByCategoryResponse = {
   courses: CoursesByCategory;
 };
 
-export type Topic = { name: string; slug: string };
+export type Topic = {
+  name: string;
+  slug: string;
+  id: number;
+  parent_id: number;
+};
 export type Subcategory = {
-  subcategory: Topic[];
+  subcategory?: Topic[];
 } & Topic;
 export type Category = {
+  id: number;
   name: string;
   slug: string;
   subcategory: Subcategory[];

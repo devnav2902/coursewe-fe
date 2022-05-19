@@ -1,21 +1,23 @@
 import { Cascader, ConfigProvider, Empty, Spin } from "antd";
-import { SingleValueType, DefaultOptionType } from "rc-cascader/lib/Cascader";
+import { DefaultOptionType, SingleValueType } from "rc-cascader/lib/Cascader";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CategoriesApi, { ArrayCategories } from "../../api/categories.api";
+import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
+import { getCategories } from "../../redux/slices/categories.slice";
 import { routesWithParams } from "../../utils/constants";
 
 const Categories = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [displayCascader, setDisplayCascader] = useState(false);
-  const [categoriesData, setCategoriesData] = useState<{
-    loaded: boolean;
-    data: ArrayCategories;
-  }>({
-    loaded: false,
-    data: [],
-  });
+  const { loaded, data: categoriesData } = useTypedSelector(
+    ({ categories }) => categories.categories
+  );
+
+  useEffect(() => {
+    !loaded && dispatch(getCategories());
+  }, [dispatch, loaded]);
 
   function onChangeCascader(
     value: SingleValueType,
@@ -32,40 +34,23 @@ const Categories = () => {
       });
   }
 
-  useEffect(() => {
-    CategoriesApi.get().then((res) => {
-      const {
-        data: { categories },
-      } = res;
-      setCategoriesData((state) => ({
-        ...state,
-        data: categories,
-        loaded: true,
-      }));
-
-      console.log(categories);
-    });
-  }, []);
-
   return (
     <ConfigProvider
       renderEmpty={() =>
-        !categoriesData.loaded ? (
+        !loaded ? (
           <div className="d-flex align-items-center justify-content-center">
             <Spin />
           </div>
         ) : (
-          categoriesData.loaded &&
-          !categoriesData.data.length && (
-            <Empty description="Chưa có danh mục nào" />
-          )
+          loaded &&
+          !categoriesData.length && <Empty description="Chưa có danh mục nào" />
         )
       }
     >
       <Cascader
         changeOnSelect={true}
         bordered={false}
-        options={categoriesData.data}
+        options={categoriesData}
         expandTrigger="hover"
         dropdownClassName="categories-dropdown"
         onChange={onChangeCascader}

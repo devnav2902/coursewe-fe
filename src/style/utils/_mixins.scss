@@ -1,5 +1,18 @@
 @mixin responsive($maxWidth) {
-    @media screen and (max-width: $maxWidth) {
-        @content;
-    }
+  @media screen and (max-width: $maxWidth) {
+    @content;
+  }
+}
+
+@mixin custom-input {
+  height: 44px;
+  border-radius: 0;
+  @include border-color-custom();
+  &::placeholder {
+    color: rgb(126, 119, 119) !important;
+  }
+}
+
+@mixin border-color-custom {
+  border-color: rgb(158, 126, 126);
 }

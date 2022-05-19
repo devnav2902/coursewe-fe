@@ -84,7 +84,7 @@ const ExpiredCoupons = () => {
         <StyledCouponTable>
           <ConfigProvider
             renderEmpty={() => (
-              <Empty description="Chưa có mã giảm giá nào được kích hoạt" />
+              <Empty description="Chưa có mã giảm giá nào hết hạn" />
             )}
           >
             <Table
