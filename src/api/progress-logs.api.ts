@@ -13,7 +13,7 @@ type DataLastWatched = {
 };
 
 type LastWatchedResponse = {
-  dataLastWatched: DataLastWatched | null;
+  dataLastWatched: DataLastWatched;
 };
 
 class ProgressLogs {

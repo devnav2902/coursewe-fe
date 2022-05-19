@@ -5,12 +5,7 @@ import {
   YoutubeOutlined,
 } from "@ant-design/icons";
 import { Skeleton } from "antd";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import LearningApi from "../../../api/learning.api";
-import ProgressLogsApi from "../../../api/progress-logs.api";
-import Loading from "../../../components/Loading/Loading.component";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { routesWithParams } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
@@ -21,52 +16,7 @@ const LearningPage = () => {
   const {
     dataCourse: { course, loadedCourse },
   } = useTypedSelector((state) => state.learning);
-  const [video, setVideo] = useState(null);
-  const [lastWatchedSecond, setLastWatchedSecond] = useState(0);
-  const [saveLastWatchedSecond, setSaveLastWatchedSecond] = useState(false);
-  const navigate = useNavigate();
-  const { lectureId, course_slug } = useParams() as {
-    lectureId: string;
-    course_slug: string;
-  };
-  const [searchParams] = useSearchParams();
 
-  const last_watched_second = searchParams.get("start");
-
-  useEffect(() => {
-    async function getVideo() {
-      try {
-        const {
-          data: {
-            lecture: { src },
-          },
-        } = await LearningApi.getVideo(course_slug, parseInt(lectureId));
-        setVideo(src);
-      } catch (error) {
-        // axios.isAxiosError(error);
-        // if (error.response.status !== 200) return navigate(ROUTES.NOT_FOUND);
-      }
-    }
-
-    getVideo();
-    // return () => {
-    //   window.removeEventListener("scroll", handleScroll);
-    // };
-  }, [course_slug, lectureId]);
-
-  useEffect(() => {
-    if (last_watched_second) return setSaveLastWatchedSecond(true);
-
-    course?.id &&
-      ProgressLogsApi.getDataLastWatchedByLectureId(course.id, lectureId).then(
-        ({ data: { dataLastWatched } }) => {
-          setLastWatchedSecond(dataLastWatched?.last_watched_second || 0);
-          setSaveLastWatchedSecond(true);
-        }
-      );
-
-    setSaveLastWatchedSecond(false);
-  }, [lectureId, last_watched_second, course?.id]);
   // console.log(lastWatchedSecond);
 
   return (
@@ -80,21 +30,12 @@ const LearningPage = () => {
       <div className="learning-content">
         <div className="video-content">
           <div className="video-player">
-            {saveLastWatchedSecond ? (
-              <VideoLearning
-                last_watched_second={
-                  last_watched_second
-                    ? parseInt(last_watched_second)
-                    : lastWatchedSecond
-                }
-                thumbnail={""}
-                url={
-                  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                }
-              />
-            ) : (
-              <Loading />
-            )}
+            <VideoLearning
+              thumbnail={""}
+              url={
+                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+              }
+            />
           </div>
         </div>
         <Sidebar />
@@ -151,16 +92,15 @@ const LearningPage = () => {
                           >
                             {course?.author.fullname}
                           </Link>
-                          <div className="headline">
-                            {course?.author.bio?.headline}
-                          </div>
+                          <div className="headline">{course?.author.bio}</div>
                         </div>
                       </div>
                       <div className="profile-social-links">
-                        {course?.author?.bio?.linkedin && (
+                        {course?.author?.linkedin && (
                           <div className="socical-link">
                             <div className="my-link">
-                              <Link to={course?.author?.bio?.linkedin}>
+                              {console.log(location)}
+                              <Link to={location}>
                                 <LinkedinOutlined />
                               </Link>
                             </div>

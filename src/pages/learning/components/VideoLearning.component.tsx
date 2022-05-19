@@ -1,110 +1,144 @@
-import {
-  FC,
-  LegacyRef,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FC, memo, useCallback, useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player/lazy";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import LearningApi from "../../../api/learning.api";
 import ProgressLogsApi from "../../../api/progress-logs.api";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
-import { linkThumbnail } from "../../../utils/functions";
 
 type VideoLearningProps = {
   thumbnail: string;
-  last_watched_second: number;
   url: string;
+};
+const useUnload = (fn: any) => {
+  const cb = useRef(fn);
+
+  useEffect(() => {
+    const onUnload = cb.current;
+    window.addEventListener("beforeunload", onUnload);
+    return () => {
+      window.removeEventListener("beforeunload", onUnload);
+    };
+  }, [cb]);
 };
 
 const VideoLearning: FC<VideoLearningProps> = memo(
   ({
     thumbnail,
-    last_watched_second,
     url = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
   }) => {
     const [handleVideo, setHandleVideo] = useState({
       playingVideo: true,
     });
+
     const videoRef = useRef<ReactPlayer>(null);
-    const { lectureId } = useParams() as { lectureId: string };
-    const { course } = useTypedSelector((state) => state.learning.dataCourse);
-    const lectureRef = useRef(lectureId);
-    const [played, setPlayed] = useState(0);
+
+    const { course, loadedCourse } = useTypedSelector(
+      (state) => state.learning.dataCourse
+    );
+
     const [isReady, setIsReady] = useState(false);
+    const [isLoad, setIsLoad] = useState(false);
     const playerRef = useRef();
+
+    const [video, setVideo] = useState(null);
+    const [lastWatchedSecond, setLastWatchedSecond] = useState(0);
+
+    const [saveLastWatchedSecond, setSaveLastWatchedSecond] = useState(false);
+    const navigate = useNavigate();
+    const { lectureId, course_slug } = useParams() as {
+      lectureId: string;
+      course_slug: string;
+    };
+    const lectureRef = useRef(lectureId);
+
+    const [searchParams] = useSearchParams();
+
+    const last_watched_second = searchParams.get("start");
 
     function playVideo() {
       setHandleVideo((state) => ({ ...state, playingVideo: true }));
     }
-
-    // const second = videoRef.current?.getCurrentTime();
     const onReady = useCallback(() => {
-      if (!isReady) {
-        const timeToStart = last_watched_second;
-        videoRef.current?.seekTo(timeToStart, "seconds");
-        setIsReady(true);
+      if (!isReady && last_watched_second) {
+        const timeToStart = parseInt(last_watched_second);
+
+        if (timeToStart !== NaN) {
+          videoRef.current?.seekTo(timeToStart, "seconds");
+          setIsReady(true);
+        }
       }
     }, [isReady, last_watched_second]);
     useEffect(() => {
-      setIsReady(false);
-      const timeToStart = last_watched_second;
-      videoRef.current?.seekTo(timeToStart, "seconds");
-    }, [lectureId, last_watched_second]);
-    const second = videoRef.current?.getCurrentTime();
+      async function getVideo() {
+        try {
+          if (loadedCourse) {
+            const {
+              data: {
+                lecture: { src },
+              },
+            } = await LearningApi.getVideo(course_slug, parseInt(lectureId));
+            setVideo(src);
+          }
+        } catch (error) {
+          // axios.isAxiosError(error);
+          // if (error.response.status !== 200) return navigate(ROUTES.NOT_FOUND);
+        }
+      }
+
+      getVideo();
+      // return () => {
+      //   window.removeEventListener("scroll", handleScroll);
+      // };
+    }, [course_slug, lectureId, loadedCourse]);
+
     useEffect(() => {
-      if (course?.id && typeof second === "number") {
+      if (last_watched_second && !loadedCourse)
+        return setSaveLastWatchedSecond(true);
+
+      course?.id &&
+        ProgressLogsApi.getDataLastWatchedByLectureId(
+          course.id,
+          lectureId
+        ).then(({ data: { dataLastWatched } }) => {
+          setLastWatchedSecond(dataLastWatched?.last_watched_second || 0);
+          setSaveLastWatchedSecond(true);
+        });
+
+      setSaveLastWatchedSecond(false);
+    }, [lectureId, last_watched_second, course?.id, loadedCourse]);
+
+    // const second = videoRef.current?.getCurrentTime();
+
+    const second = videoRef.current?.getCurrentTime();
+    // console.log(second);
+    const saveLastWatched = useCallback(() => {
+      window.confirm("hi");
+      if (course?.id && typeof second === "number" && loadedCourse) {
         ProgressLogsApi.saveLastWatched({
           course_id: course.id,
           lecture_id: parseInt(lectureRef.current),
           second,
         }).then((res) => {
           lectureRef.current = lectureId;
+          localStorage.setItem("success", "success");
         });
       }
-    }, [lectureId, course?.id, second]);
-    useEffect(() => {
-      window.addEventListener(
-        "beforeunload",
-        function () {
-          if (course?.id && typeof second === "number") {
-            ProgressLogsApi.saveLastWatched({
-              course_id: course.id,
-              lecture_id: parseInt(lectureRef.current),
-              second,
-            }).then((res) => {
-              lectureRef.current = lectureId;
-            });
-          }
-        },
-        true
-      );
-      window.removeEventListener(
-        "beforeunload",
-        function () {
-          if (course?.id && typeof second === "number") {
-            ProgressLogsApi.saveLastWatched({
-              course_id: course.id,
-              lecture_id: parseInt(lectureRef.current),
-              second,
-            }).then((res) => {
-              lectureRef.current = lectureId;
-            });
-          }
-        },
-        false
-      );
-    }, []);
+    }, [lectureId, course?.id, second, loadedCourse]);
+
+    // useEffect(saveLastWatched, [saveLastWatched]);
+    // console.log(isReady);
+
+    useUnload((e) => {
+      e.preventDefault();
+      console.log("hey");
+      alert("HEY");
+    });
+
     return (
       <div className="video-content">
         <div className="video-player">
           <ReactPlayer
             ref={videoRef}
-            onProgress={(progress) => {
-              setPlayed(progress.playedSeconds);
-            }}
             // light={linkThumbnail(thumbnail)}
             width="100%"
             height="100%"

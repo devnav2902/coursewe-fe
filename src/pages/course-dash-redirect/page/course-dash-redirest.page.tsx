@@ -1,36 +1,31 @@
-import { Skeleton } from "antd";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import CourseApi from "../../../api/course.api";
 import ProgressLogsApi from "../../../api/progress-logs.api";
-import { ROUTES, routesWithParams } from "../../../utils/constants";
+import { routesWithParams } from "../../../utils/constants";
 
 const CourseDashRedirestPage: FC = () => {
   const [searchParams] = useSearchParams();
+
   const navigate = useNavigate();
   const id = searchParams.get("course_id") as string;
-
+  // window.history.back();
   useEffect(() => {
     ProgressLogsApi.getDataLastWatched(id).then(
       ({ data: { dataLastWatched } }) => {
-        if (!dataLastWatched) {
-          // navigate(ROUTES.NOT_FOUND);
-        } else {
-          const {
-            course: { slug },
-            lecture_id,
-            last_watched_second,
-          } = dataLastWatched;
-          console.log(last_watched_second);
-          navigate(
-            routesWithParams.learning(slug, lecture_id) +
-              "?start=" +
-              last_watched_second
-          );
-        }
+        const {
+          course: { slug },
+          lecture_id,
+          last_watched_second,
+        } = dataLastWatched;
+
+        navigate(
+          routesWithParams.learning(slug, lecture_id) +
+            "?start=" +
+            last_watched_second
+        );
       }
     );
-  }, [id]);
+  }, [id, navigate]);
 
   return null;
 };

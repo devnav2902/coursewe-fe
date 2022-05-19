@@ -17,7 +17,7 @@ const ROUTES = {
   PROFILE: "/user/profile",
   COURSE_DRAFT: "/course/draft/:id",
   MY_LEARNING: "/my-learning",
-  LEARNING: "/learning/:slug",
+  LEARNING: "/khoa-hoc/:course_slug/bai-giang/:lectureId",
   COURSE_BASICS: "/instructor/course/:id/basics",
   INTENDED_LEARNERS: "/instructor/course/:id/goals",
   CURRICULUM: "instructor/course/:id/curriculum",
@@ -30,6 +30,8 @@ const ROUTES = {
   CATEGORIES: "/danh-muc/:slug",
   SUBCATEGORIES: "/danh-muc/:slug/:sub",
   TOPICS: "/danh-muc/:slug/:sub/:topic",
+  COURSE_DASH_REDIRECT: "/course_dash_redirect",
+  NOT_FOUND: "/404",
 } as const;
 
 const routesWithParams = {
@@ -39,8 +41,6 @@ const routesWithParams = {
   learning: (course_slug: string, lectureId: number) =>
     `/khoa-hoc/${course_slug}/bai-giang/${lectureId}`,
   intended_learners: (id: string | number) => `/instructor/course/${id}/goals`,
-  course_dash_redirect: (id: number) =>
-    `/course_dash_redirect/?course_id=${id}`,
   course_basics: (id: string | number) => `/instructor/course/${id}/basics`,
   image_and_preview_video: (id: string | number) =>
     `/instructor/course/${id}/course-image-and-preview-video`,
@@ -49,6 +49,8 @@ const routesWithParams = {
   price: (id: string | number) => `/instructor/course/${id}/price`,
   categories: (slug: string) => `/danh-muc/${slug}`,
   subcategories: (slug: string, sub: string) => `/danh-muc/${slug}/${sub}`,
+  course_dash_redirect: (id: number) =>
+    `/course_dash_redirect/?course_id=${id}`,
   topics: (slug: string, sub: string, topic: string) =>
     `/danh-muc/${slug}/${sub}/${topic}`,
 };
