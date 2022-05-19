@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ROUTES } from "../../utils/constants";
 import styled from "styled-components";
+import { MdVideoSettings } from "react-icons/md";
 
 const StyledSidebar = styled.div`
   position: fixed;
@@ -131,20 +132,20 @@ const SideBarOverview = () => {
             </Link>
           </li>
           <li>
-            <Link to={ROUTES.INSTRUCTOR_COURSES}>
-              <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
-            </Link>
-          </li>
-          <li>
             <Link to={ROUTES.OVERVIEW}>
               <BarChartOutlined style={{ fontSize: "22px" }} />
             </Link>
           </li>
+          <li>
+            <Link to={ROUTES.INSTRUCTOR_COURSES}>
+              <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
+            </Link>
+          </li>
           {name === "admin" && (
             <li>
-              <a href="{{}}">
-                <EyeOutlined style={{ fontSize: "22px" }} />
-              </a>
+              <Link to={ROUTES.ADMIN_REVIEW}>
+                <MdVideoSettings style={{ fontSize: "22px" }} />
+              </Link>
             </li>
           )}
           <div className="hover">
@@ -157,21 +158,22 @@ const SideBarOverview = () => {
               </Link>
             </div>
             <div className="hover__item">
-              <Link to={ROUTES.INSTRUCTOR_COURSES}>
-                <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
-                <span>Quản lý khóa học</span>
-              </Link>
-            </div>
-            <div className="hover__item">
               <Link to={ROUTES.OVERVIEW}>
                 <BarChartOutlined style={{ fontSize: "22px" }} />
                 <span>Tổng quan</span>
               </Link>
             </div>
+            <div className="hover__item">
+              <Link to={ROUTES.INSTRUCTOR_COURSES}>
+                <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
+                <span>Quản lý khóa học</span>
+              </Link>
+            </div>
+
             {name === "admin" && (
               <div className="hover__item">
                 <Link to={ROUTES.ADMIN_REVIEW}>
-                  <EyeOutlined style={{ fontSize: "22px" }} />
+                  <MdVideoSettings style={{ fontSize: "22px" }} />
                   <span>Xét duyệt khóa học</span>
                 </Link>
               </div>
