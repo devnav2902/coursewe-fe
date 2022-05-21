@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import {
   BrowserRouter,
   Navigate,
@@ -39,7 +39,7 @@ function App(): JSX.Element {
   }, [dispatch]);
 
   return (
-    <>
+    <Suspense fallback={<div></div>}>
       <BrowserRouter>
         <ScrollToTop>
           <Routes>
@@ -73,7 +73,7 @@ function App(): JSX.Element {
           </Routes>
         </ScrollToTop>
       </BrowserRouter>
-    </>
+    </Suspense>
   );
 }
 
