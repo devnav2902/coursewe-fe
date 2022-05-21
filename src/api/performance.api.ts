@@ -18,6 +18,16 @@ export type EnrollmentResponse = {
   enrollmentData: EnrollmentArray;
 };
 
+export type AmountCoursesByCategory = {
+  amountCourses: number;
+  revenue: number;
+  category: string;
+};
+export type AmountCoursesByCategoryArray = AmountCoursesByCategory[];
+export type AmountCoursesByCategoryResponse = {
+  amountCoursesByCategory: AmountCoursesByCategoryArray;
+};
+
 class Performance {
   getRevenue = async (params: Params) =>
     axiosClient.get<RevenueResponse>("/performance/revenue", {
@@ -36,11 +46,12 @@ class Performance {
       .then((res) => res)
       .catch((error) => error);
   };
-  getCourses = async (year: number, currentMonth: number) => {
-    return axiosClient
-      .post("/performance/courses", { year, currentMonth })
-      .then((res) => res)
-      .catch((error) => error);
+
+  getCourses = async (params: Params) => {
+    return axiosClient.get<AmountCoursesByCategoryResponse>(
+      "/performance/courses",
+      { params }
+    );
   };
 }
 const PerformanceApi = new Performance();
