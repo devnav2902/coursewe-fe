@@ -1,13 +1,12 @@
 import {
-  FundProjectionScreenOutlined,
-  EyeOutlined,
   BarChartOutlined,
+  FundProjectionScreenOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { ROUTES } from "../../utils/constants";
-import styled from "styled-components";
 import { MdVideoSettings } from "react-icons/md";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { useTypedSelector } from "../../hooks/redux.hooks";
+import { ROUTES } from "../../utils/constants";
 
 const StyledSidebar = styled.div`
   position: fixed;
@@ -116,11 +115,7 @@ const StyledSidebar = styled.div`
 `;
 
 const SideBarOverview = () => {
-  const {
-    profile: {
-      role: { name },
-    },
-  } = useSelector((state) => state.user);
+  const { profile } = useTypedSelector((state) => state.user);
 
   return (
     <StyledSidebar className="sidebar-menu">
@@ -136,12 +131,14 @@ const SideBarOverview = () => {
               <BarChartOutlined style={{ fontSize: "22px" }} />
             </Link>
           </li>
-          <li>
-            <Link to={ROUTES.INSTRUCTOR_COURSES}>
-              <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
-            </Link>
-          </li>
-          {name === "admin" && (
+          {profile?.role.name === "user" && (
+            <li>
+              <Link to={ROUTES.INSTRUCTOR_COURSES}>
+                <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
+              </Link>
+            </li>
+          )}
+          {profile?.role.name === "admin" && (
             <li>
               <Link to={ROUTES.ADMIN_REVIEW}>
                 <MdVideoSettings style={{ fontSize: "22px" }} />
@@ -163,14 +160,16 @@ const SideBarOverview = () => {
                 <span>Tổng quan</span>
               </Link>
             </div>
-            <div className="hover__item">
-              <Link to={ROUTES.INSTRUCTOR_COURSES}>
-                <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
-                <span>Quản lý khóa học</span>
-              </Link>
-            </div>
+            {profile?.role.name === "user" && (
+              <div className="hover__item">
+                <Link to={ROUTES.INSTRUCTOR_COURSES}>
+                  <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
+                  <span>Quản lý khóa học</span>
+                </Link>
+              </div>
+            )}
 
-            {name === "admin" && (
+            {profile?.role.name === "admin" && (
               <div className="hover__item">
                 <Link to={ROUTES.ADMIN_REVIEW}>
                   <MdVideoSettings style={{ fontSize: "22px" }} />
