@@ -83,7 +83,7 @@ const TopNav: FC = () => {
             <Spin />
           ) : (
             <>
-              <Link className="instructor" to="/instructor">
+              <Link className="instructor" to={ROUTES.INSTRUCTOR_COURSES}>
                 Giảng dạy trên Coursewe
               </Link>
               <ShoppingCart />

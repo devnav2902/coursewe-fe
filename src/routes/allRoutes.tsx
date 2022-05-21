@@ -8,7 +8,7 @@ const InstructorView = React.lazy(
   () => import("../layouts/instructor-view.layout")
 );
 const LearningLayout = React.lazy(() => import("../layouts/learning.layout"));
-const NotFound = React.lazy(() => import("../pages/404/pages/index"));
+const NotFound = React.lazy(() => import("../pages/404/pages/not-found.page"));
 const AdminReviewPage = React.lazy(
   () => import("../pages/admin-review/page/admin-review.page")
 );
@@ -77,6 +77,7 @@ export type Routes = {
   layout?: JSX.Element;
   redirectIfAuthenticated?: boolean;
   private?: boolean;
+  admin?: boolean;
 };
 
 const routes: Routes[] = [
@@ -267,6 +268,7 @@ const routes: Routes[] = [
       </InstructorView>
     ),
     private: true,
+    admin: true,
   },
   {
     path: ROUTES.CHECKOUT,

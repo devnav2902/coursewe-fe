@@ -56,6 +56,22 @@ function App(): JSX.Element {
                 );
               }
 
+              if (route.admin) {
+                return (
+                  <Route
+                    key={idx}
+                    path={route.path}
+                    element={
+                      user.profile?.role.name === "user" ? (
+                        <Navigate to="/" />
+                      ) : (
+                        route.component
+                      )
+                    }
+                  />
+                );
+              }
+
               if (route.private && !user.profile) {
                 return (
                   <Route
