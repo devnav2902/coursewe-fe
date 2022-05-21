@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CourseApi, { CoursesOfInstructor } from "../../../api/course.api";
 import Loading from "../../../components/Loading/Loading.component";
-import { ROUTES, routesWithParams } from "../../../utils/constants";
+import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
 
 const InstructorCoursesPage: FC = () => {
@@ -112,7 +112,7 @@ const InstructorCoursesPage: FC = () => {
                       {!course.submit_for_review ? (
                         <Link
                           className="view"
-                          to={routesWithParams.course_basics(course.id)}
+                          to={ROUTES.course_basics(course.id)}
                         >
                           Edit / Manage course
                         </Link>

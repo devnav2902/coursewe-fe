@@ -12,7 +12,7 @@ import CourseApi from "../api/course.api";
 import Footer from "../components/Footer/Footer.component";
 import { useAppDispatch, useTypedSelector } from "../hooks/redux.hooks";
 import { getCourse } from "../redux/slices/instructor-course.slice";
-import { ROUTES, routesWithParams } from "../utils/constants";
+import { ROUTES } from "../utils/constants";
 import { openNotification } from "../utils/functions";
 import { Sidebar } from "./components/instructor-course.components";
 
@@ -80,15 +80,12 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
 
   console.log("re-render layout");
 
-  const arrRoutes = [
-    routesWithParams.course_basics(id),
-    routesWithParams.intended_learners(id),
-  ];
+  const arrRoutes = [ROUTES.course_basics(id), ROUTES.intended_learners(id)];
   const isRouteWithButtonSave = arrRoutes.includes(pathname);
 
   const arrRoutesHasPreviewBtn = [
-    routesWithParams.course_basics(id),
-    routesWithParams.curriculum(id),
+    ROUTES.course_basics(id),
+    ROUTES.curriculum(id),
   ];
   const isRouteWithButtonPreview = arrRoutesHasPreviewBtn.includes(pathname);
 
@@ -167,7 +164,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
     console.log(errors);
 
     switch (pathname) {
-      case routesWithParams.course_basics(id):
+      case ROUTES.course_basics(id):
         CourseApi.updateInformation(id, data)
           .then((res) => {
             resetState();
@@ -184,7 +181,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
           });
         break;
 
-      case routesWithParams.intended_learners(id):
+      case ROUTES.intended_learners(id):
         if (errors.not_enough_outcome_items) {
           openNotification("error", errors.not_enough_outcome_items.message);
         } else {

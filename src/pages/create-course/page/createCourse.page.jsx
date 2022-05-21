@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import { createCourse } from "../../../redux/actions/course.actions";
-import { ROUTES, routesWithParams } from "../../../utils/constants";
+import { ROUTES } from "../../../utils/constants";
 
 const CreateCoursePage = () => {
   const dispatch = useDispatch();
@@ -19,8 +19,8 @@ const CreateCoursePage = () => {
   console.log(idNewCourse);
 
   useEffect(() => {
-    idNewCourse && navigate(routesWithParams.course_basics(idNewCourse));
-  }, [idNewCourse]);
+    idNewCourse && navigate(ROUTES.course_basics(idNewCourse));
+  }, [idNewCourse, navigate]);
   return (
     <form method="POST" class="create-course" onSubmit={handleSubmit(onSubmit)}>
       <div>

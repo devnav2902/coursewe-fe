@@ -8,7 +8,7 @@ import {
   removeItem,
 } from "../../../redux/slices/cart.slice";
 import { CartType, Course } from "../../../ts/types/cart.types";
-import { routesWithParams } from "../../../utils/constants";
+import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail, roundsTheNumber } from "../../../utils/functions";
 
 type Props = {
@@ -65,7 +65,7 @@ const CourseItem: FC<Props> = ({ course, actionType }) => {
 
   return (
     <div className="course-item">
-      <Link to={routesWithParams.detail_course(slug)} className="">
+      <Link to={ROUTES.detail_course(slug)} className="">
         <div className="card-thumbnail">
           <img alt={title} src={linkThumbnail(thumbnail)} />
         </div>

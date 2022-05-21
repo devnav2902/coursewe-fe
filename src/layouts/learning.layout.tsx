@@ -8,7 +8,7 @@ import Footer from "../components/Footer/Footer.component";
 import { useAppDispatch, useTypedSelector } from "../hooks/redux.hooks";
 import { resetStateLearning } from "../redux/actions/learning.actions";
 import { getCourse, getProgress } from "../redux/slices/learning.slice";
-import { routesWithParams } from "../utils/constants";
+import { ROUTES } from "../utils/constants";
 
 const LearningLayout: FC = ({ children }) => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const LearningLayout: FC = ({ children }) => {
     return () => {
       dispatch(resetStateLearning);
     };
-  }, [slug]);
+  }, [slug, dispatch]);
 
   return (
     <>
@@ -94,7 +94,7 @@ const Header = () => {
 
       dispatch(getProgress(id));
     }
-  }, [course]);
+  }, [course, dispatch]);
 
   const menu = (
     <Menu>
@@ -116,11 +116,7 @@ const Header = () => {
         <div className="vertical-divider"></div>
 
         <h1 className="course-title">
-          <Link
-            to={
-              !course?.slug ? "" : routesWithParams.detail_course(course.slug)
-            }
-          >
+          <Link to={!course?.slug ? "" : ROUTES.detail_course(course.slug)}>
             {course?.title}
           </Link>
         </h1>

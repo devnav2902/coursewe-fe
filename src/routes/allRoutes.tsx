@@ -47,33 +47,33 @@ const routes: Routes[] = [
     ),
   },
   {
-    path: ROUTES.SUBCATEGORIES,
+    path: ROUTES.subcategories(),
     component: (
-      <BasicLayout key={ROUTES.SUBCATEGORIES}>
+      <BasicLayout key={ROUTES.subcategories()}>
         <CategoriesPage />
       </BasicLayout>
     ),
   },
   {
-    path: ROUTES.TOPICS,
+    path: ROUTES.topics(),
     component: (
-      <BasicLayout key={ROUTES.TOPICS}>
+      <BasicLayout key={ROUTES.topics()}>
         <CategoriesPage />
       </BasicLayout>
     ),
   },
   {
-    path: ROUTES.CATEGORIES,
+    path: ROUTES.categories(),
     component: (
-      <BasicLayout key={ROUTES.CATEGORIES}>
+      <BasicLayout key={ROUTES.categories()}>
         <CategoriesPage />
       </BasicLayout>
     ),
   },
   {
-    path: ROUTES.COURSE_BASICS,
+    path: ROUTES.course_basics(),
     component: (
-      <InstructorCourseLayout key={ROUTES.COURSE_BASICS}>
+      <InstructorCourseLayout key={ROUTES.course_basics()}>
         {(props: any) => <BasicsPage {...props} />}
         {/* callback => children() sẽ return <BasicsPage /> */}
       </InstructorCourseLayout>
@@ -81,52 +81,52 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    path: ROUTES.PRICE,
+    path: ROUTES.price(),
     component: (
-      <InstructorCourseLayout key={ROUTES.PRICE}>
+      <InstructorCourseLayout key={ROUTES.price()}>
         {(props: any) => <PricePage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
   },
   {
-    path: ROUTES.INTENDED_LEARNERS,
+    path: ROUTES.intended_learners(),
     component: (
-      <InstructorCourseLayout key={ROUTES.INTENDED_LEARNERS}>
+      <InstructorCourseLayout key={ROUTES.intended_learners()}>
         {(props) => <IntendedLearnersPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
   },
   {
-    path: ROUTES["COURSE_IMAGE_&_PREVIEW_VIDEO"],
+    path: ROUTES["image_and_preview_video"](),
     component: (
-      <InstructorCourseLayout key={ROUTES["COURSE_IMAGE_&_PREVIEW_VIDEO"]}>
+      <InstructorCourseLayout key={ROUTES["image_and_preview_video"]()}>
         {(props: any) => <ImageAndVideoPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
   },
   {
-    path: ROUTES.CURRICULUM,
+    path: ROUTES.curriculum(),
     component: (
-      <InstructorCourseLayout key={ROUTES.CURRICULUM}>
+      <InstructorCourseLayout key={ROUTES.curriculum()}>
         {(props: any) => <CurriculumPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
   },
   {
-    path: ROUTES.PROMOTIONS,
+    path: ROUTES.promotions(),
     component: (
-      <InstructorCourseLayout key={ROUTES.PROMOTIONS}>
+      <InstructorCourseLayout key={ROUTES.promotions()}>
         {(props: any) => <PromotionsPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
   },
   {
-    path: ROUTES.LEARNING,
+    path: ROUTES.learning(),
     component: (
       <LearningLayout>
         <LearningPage />
@@ -152,7 +152,7 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    path: ROUTES.INSTRUCTOR_BIO,
+    path: ROUTES.instructor_bio(),
     component: (
       <BasicLayout>
         <InstructorBioPage />
@@ -160,7 +160,7 @@ const routes: Routes[] = [
     ),
   },
   {
-    path: ROUTES.DETAIL_COURSE,
+    path: ROUTES.detail_course(),
     component: (
       <BasicLayout>
         <DetailCoursePage />
@@ -232,7 +232,7 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    path: ROUTES.COURSE_DRAFT,
+    path: ROUTES.course_draft(),
     component: <DraftPage />,
     // private: true,
   },

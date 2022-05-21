@@ -1,53 +1,77 @@
 const API_URL = "http://127.0.0.1:8000/api";
 const BE_URL = "http://127.0.0.1:8000";
 
+type TopicParams = {
+  slug: string;
+  sub: string;
+  topic: string;
+};
+
+type SubcategoryParams = {
+  slug: string;
+  sub: string;
+};
+
 const ROUTES = {
   SIGN_IN: "/dang-nhap",
   SIGN_OUT: "/dang-xuat",
   SIGN_UP: "/dang-ky-tai-khoan",
   PURCHASE_HISTORY: "/lich-su-thanh-toan",
   CART: "/gio-hang",
-  CREATE_COURSE: "/create-course",
-  INSTRUCTOR_BIO: "/instructor/profile/:slug",
-  DETAIL_COURSE: "/khoa-hoc/:slug",
-  INSTRUCTOR_COURSES: "/instructor/courses",
-  USER_COURSES: "/user/courses",
-  OVERVIEW: "/instructor/overview",
+  CREATE_COURSE: "/tao-khoa-hoc",
+  INSTRUCTOR_COURSES: "/quan-ly/khoa-hoc",
+  OVERVIEW: "/quan-ly/tong-quan",
   USER_BIO: "/user/bio",
   PROFILE: "/user/profile",
-  COURSE_DRAFT: "/course/draft/:id",
-  MY_LEARNING: "/my-learning",
-  LEARNING: "/learning/:slug",
-  COURSE_BASICS: "/instructor/course/:id/basics",
-  INTENDED_LEARNERS: "/instructor/course/:id/goals",
-  CURRICULUM: "instructor/course/:id/curriculum",
-  PROMOTIONS: "giang-vien/khoa-hoc/:id/khuyen-mai",
-  "COURSE_IMAGE_&_PREVIEW_VIDEO":
-    "instructor/course/:id/course-image-and-preview-video",
-  PRICE: "instructor/course/:id/price",
+  MY_LEARNING: "/hoc-tap/danh-sach-khoa-hoc",
   ADMIN_REVIEW: "/admin/submission-courses-list",
   CHECKOUT: "/cart/checkout",
-  CATEGORIES: "/danh-muc/:slug",
-  SUBCATEGORIES: "/danh-muc/:slug/:sub",
-  TOPICS: "/danh-muc/:slug/:sub/:topic",
+
+  detail_course: (slug?: string) => `/khoa-hoc/${slug ? slug : ":slug"}`,
+
+  instructor_bio: (slug?: string) =>
+    `/thong-tin-giang-vien/${slug ? slug : ":slug"}`,
+
+  course_draft: (id?: number | string) =>
+    `/khoa-hoc/ban-nhap/${id ? id : ":id"}`,
+
+  course_basics: (id?: string | number) =>
+    `/quan-ly/khoa-hoc/${id ? id : ":id"}/thong-tin-co-ban`,
+
+  learning: (slug?: string) => `/hoc-tap/khoa-hoc/${slug ? slug : ":slug"}`,
+
+  intended_learners: (id?: string | number) =>
+    `/quan-ly/khoa-hoc/${id ? id : ":id"}/muc-tieu-va-yeu-cau`,
+
+  image_and_preview_video: (id?: string | number) =>
+    `/quan-ly/khoa-hoc/${id ? id : ":id"}/hinh-anh-va-video-gioi-thieu`,
+
+  curriculum: (id?: string | number) =>
+    `/quan-ly/khoa-hoc/${id ? id : ":id"}/chuong-trinh-hoc`,
+
+  promotions: (id?: string | number) =>
+    `/quan-ly/khoa-hoc/${id ? id : ":id"}/khuyen-mai`,
+
+  price: (id?: string | number) =>
+    `/quan-ly/khoa-hoc/${id ? id : ":id"}/gia-ban`,
+
+  categories: (slug?: string) => `/danh-muc/${slug ? slug : ":slug"}`,
+
+  subcategories: (params?: SubcategoryParams) => {
+    if (!params) return "/danh-muc/:slug/:sub";
+
+    const { slug, sub } = params;
+    return `/danh-muc/${slug}/${sub}`;
+  },
+
+  topics: (params?: TopicParams) => {
+    if (!params) {
+      return "/danh-muc/:slug/:sub/:topic";
+    }
+
+    const { slug, sub, topic } = params;
+    return `/danh-muc/${slug}/${sub}/${topic}`;
+  },
 } as const;
 
-const routesWithParams = {
-  detail_course: (slug: string) => `/khoa-hoc/${slug}`,
-  instructor_bio: (slug: string) => `/instructor/profile/${slug}`,
-  course_draft: (id: number) => `/course/draft/${id}`,
-  course_basics: (id: string | number) => `/instructor/course/${id}/basics`,
-  learning: (slug: string) => `/learning/${slug}`,
-  intended_learners: (id: string | number) => `/instructor/course/${id}/goals`,
-  image_and_preview_video: (id: string | number) =>
-    `/instructor/course/${id}/course-image-and-preview-video`,
-  curriculum: (id: string | number) => `/instructor/course/${id}/curriculum`,
-  promotions: (id: string | number) => `/giang-vien/khoa-hoc/${id}/khuyen-mai`,
-  price: (id: string | number) => `/instructor/course/${id}/price`,
-  categories: (slug: string) => `/danh-muc/${slug}`,
-  subcategories: (slug: string, sub: string) => `/danh-muc/${slug}/${sub}`,
-  topics: (slug: string, sub: string, topic: string) =>
-    `/danh-muc/${slug}/${sub}/${topic}`,
-};
-
-export { API_URL, BE_URL, ROUTES, routesWithParams };
+export { API_URL, BE_URL, ROUTES };

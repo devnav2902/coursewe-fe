@@ -1,76 +1,62 @@
 import { Select } from "antd";
 import { ChartOptions } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { ImFileExcel } from "react-icons/im";
-import PerformanceApi, { RevenueArray } from "../../../api/performance.api";
-import ChartDataLabels from "chartjs-plugin-datalabels";
+import PerformanceApi, {
+  AmountCoursesByCategoryArray,
+} from "../../../api/performance.api";
 
 const { Option } = Select;
 
 export type Period = 7 | 30 | 12 | "all";
-
-const RevenueChart = () => {
-  const currentMonth = new Date().getMonth() + 1;
-
+const AmountCoursesByCategoryChart = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<Period>(7);
-  const [revenueData, setRevenueData] = useState<{
-    loaded: boolean;
-    data: RevenueArray;
-  }>({ loaded: false, data: [] });
-  const [dateRange, setDateRange] = useState<string[]>([]);
+  const [amountCoursesByCategoryData, setAmountCoursesByCategoryData] =
+    useState<{
+      loaded: boolean;
+      data: AmountCoursesByCategoryArray;
+    }>({ loaded: false, data: [] });
+  const [categoriesList, setCategoriesList] = useState<string[]>([]);
 
   useEffect(() => {
-    if (selectedPeriod === 12) {
-      PerformanceApi.getRevenue({ LTM: true }).then(({ data }) => {
-        const { revenueData } = data;
-        console.log(revenueData);
-
-        const dateRange = revenueData.map((item) =>
-          moment(item.date).format("MM-YYYY")
-        );
-        setDateRange(dateRange);
-
-        setRevenueData((state) => ({
-          ...state,
-          data: revenueData,
-          loaded: true,
-        }));
-      });
-    } else if (selectedPeriod === 7 || selectedPeriod === 30) {
+    if (
+      typeof selectedPeriod === "number" &&
+      [7, 30, 12].includes(selectedPeriod)
+    ) {
       const toDate = moment(new Date()).format("YYYY-MM-DD");
       const fromDate = moment(toDate)
         .subtract(selectedPeriod, "day")
         .format("YYYY-MM-DD");
-      console.log(toDate, fromDate);
 
-      PerformanceApi.getRevenue({ fromDate, toDate }).then(({ data }) => {
-        const { revenueData } = data;
-        console.log(revenueData);
+      const params =
+        selectedPeriod === 7 || selectedPeriod === 30
+          ? { fromDate, toDate }
+          : { LTM: true as const };
 
-        const dateRange = revenueData.map((item) => {
-          if (revenueData.length >= 30)
-            return moment(item.date).format("DD-MM");
+      PerformanceApi.getCourses(params).then(({ data }) => {
+        const { amountCoursesByCategory } = data;
 
-          return moment(item.date).format("DD-MM-YYYY");
-        });
-        setDateRange(dateRange);
+        const categories = amountCoursesByCategory.map((item) => item.category);
+        setCategoriesList(categories);
 
-        setRevenueData((state) => ({
+        setAmountCoursesByCategoryData((state) => ({
           ...state,
-          data: revenueData,
+          data: amountCoursesByCategory,
           loaded: true,
         }));
       });
     }
-  }, [currentMonth, selectedPeriod]);
+  }, [selectedPeriod]);
 
-  const options: ChartOptions<"line"> = {
+  const options: ChartOptions = {
     responsive: true,
     datasets: {
       line: {
+        backgroundColor: "transparent",
         pointStyle: "circle",
         tension: 0,
         pointHoverRadius: 6,
@@ -95,7 +81,12 @@ const RevenueChart = () => {
       },
       tooltip: {
         callbacks: {
-          label: (context) => `Doanh thu: ${context.formattedValue} VNĐ`,
+          label: (context) => {
+            if (context.dataset.type === "line") {
+              return `Doanh thu: ${context.formattedValue} VNĐ`;
+            }
+            return `Số lượng: ${context.formattedValue} khóa học`;
+          },
         },
         titleFont: {
           size: 18,
@@ -106,12 +97,13 @@ const RevenueChart = () => {
       },
       datalabels: {
         color: "#302f2f",
-        font: { size: 16, weight: "bold" },
+        font: { size: 14, weight: "bold" },
         align: "top",
         anchor: "end",
+        padding: { top: 10 },
         formatter: (value, context) => {
-          if (context.dataset.data.length >= 30) return null;
-          return value === 0 ? "" : value.toLocaleString("vi-VN");
+          if (context.dataset.type === "bar") return null;
+          return value === 0 ? null : value.toLocaleString("vi-VN");
         },
       },
     },
@@ -119,8 +111,8 @@ const RevenueChart = () => {
       x: {
         stacked: true,
         ticks: {
-          color: "rgba(42, 42, 43, 0.719)",
-          font: { size: 14 },
+          color: "rgb(0, 0, 0)",
+          font: { size: 14, weight: "bold" },
         },
         grid: {
           display: false,
@@ -128,6 +120,7 @@ const RevenueChart = () => {
       },
       y: {
         stacked: true,
+        position: "left",
         ticks: {
           color: "rgba(42, 42, 43, 0.719)",
           font: { size: 14 },
@@ -136,18 +129,41 @@ const RevenueChart = () => {
           color: "#c0c0c0",
         },
       },
+      yRevenue: {
+        stacked: true,
+        position: "right",
+        ticks: {
+          color: "#31357c",
+          font: { size: 14 },
+        },
+        grid: { display: false },
+      },
     },
   };
 
   const chartData = (() => {
-    const data = revenueData.data.map((item) => item.revenue);
+    const dataAmountCourses = amountCoursesByCategoryData.data.map(
+      (item) => item.amountCourses
+    );
+    const dataRevenue = amountCoursesByCategoryData.data.map(
+      (item) => item.revenue
+    );
 
     return {
-      labels: dateRange,
+      labels: categoriesList,
       datasets: [
         {
-          label: "Doanh thu(VNĐ)",
-          data,
+          type: "line" as const,
+          label: "Doanh thu theo danh mục",
+          data: dataRevenue,
+          yAxisID: "yRevenue",
+          borderColor: "transparent",
+        },
+        {
+          type: "bar" as const,
+          label: "Khóa học theo danh mục",
+          data: dataAmountCourses,
+          backgroundColor: "#2f7ed8",
           borderColor: "transparent",
         },
       ],
@@ -181,7 +197,8 @@ const RevenueChart = () => {
             </Select>
           </div>
           <div className="containerChart activeChart">
-            <Line
+            <Chart
+              type="bar"
               plugins={[ChartDataLabels]}
               options={options}
               data={chartData}
@@ -200,4 +217,4 @@ const RevenueChart = () => {
   );
 };
 
-export default RevenueChart;
+export default AmountCoursesByCategoryChart;

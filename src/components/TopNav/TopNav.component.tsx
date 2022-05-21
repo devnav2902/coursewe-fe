@@ -97,9 +97,15 @@ const TopNav: FC = () => {
           )
         ) : (
           <div className="user">
-            <Link to={ROUTES.INSTRUCTOR_COURSES}>Quản lý khóa học</Link>
-            <Link to={ROUTES.MY_LEARNING}>Học tập</Link>
-            <ShoppingCart />
+            {role?.name === "user" ? (
+              <>
+                <Link to={ROUTES.INSTRUCTOR_COURSES}>Quản lý khóa học</Link>
+                <Link to={ROUTES.MY_LEARNING}>Học tập</Link>
+                <ShoppingCart />
+              </>
+            ) : (
+              <Link to={ROUTES.OVERVIEW}>Dashboard</Link>
+            )}
             <div className="notification">
               <div className="icon-notification">
                 {/* <div className="icon-notification @if (count($globalNotificationCourse)) has @endif"> */}
@@ -149,19 +155,14 @@ const TopNav: FC = () => {
 
                     <ul className="pages">
                       {role && role.name === "user" ? (
-                        <>
-                          <li>
-                            <Link to="/dashboard">Instructor dashboard</Link>
-                          </li>
-                          <li>
-                            <Link to="purchase-history">
-                              Lịch sử thanh toán
-                            </Link>
-                          </li>
-                        </>
+                        <li>
+                          <Link to={ROUTES.PURCHASE_HISTORY}>
+                            Lịch sử thanh toán
+                          </Link>
+                        </li>
                       ) : (
                         <li>
-                          <Link to="/dashboard">Dashboard</Link>
+                          <Link to={ROUTES.OVERVIEW}>Dashboard</Link>
                         </li>
                       )}
 

@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import Rating from "../../../components/Rating/Rating.component";
 import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
 import { getPopularInstructors } from "../../../redux/slices/categories.slice";
-import { routesWithParams } from "../../../utils/constants";
+import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
 import { settings } from "../../../utils/slick.utils";
 import { StyledInstructor } from "../styles/categories.styles";
@@ -47,7 +47,7 @@ const PopularInstructors: FC = () => {
                     <Link
                       key={id}
                       className="inner-box"
-                      to={routesWithParams.instructor_bio(slug)}
+                      to={ROUTES.instructor_bio(slug)}
                     >
                       <div className="image">
                         <img src={linkThumbnail(avatar)} alt="" />
