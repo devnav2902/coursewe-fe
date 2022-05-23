@@ -23,7 +23,7 @@ const Sidebar: FC = () => {
       const { id } = dataCourse.course;
       dispatch(getSections(id));
     }
-  }, [dataCourse.loadedCourse, dispatch]);
+  }, [dataCourse.loadedCourse, dispatch, dataCourse.course]);
 
   useEffect(() => {
     const onScroll = () => setOffset(window.pageYOffset);
