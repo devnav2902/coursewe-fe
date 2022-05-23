@@ -13,6 +13,7 @@ export type Progress = {
 };
 export type Lecture = {
   id: number;
+  section_id: number;
   title: string;
   resource: ResourceItems;
   resource_count?: number;
