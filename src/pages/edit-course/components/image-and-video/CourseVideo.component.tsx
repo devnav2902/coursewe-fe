@@ -75,7 +75,9 @@ const CourseVideo: FC<CourseVideoProps> = ({
             showRemoveIcon: progressUploadVideo ? true : false,
           }}
           onChange={handleUploadVideo}
-          defaultFileList={[{ uid: video_demo, name: video_demo }]}
+          defaultFileList={
+            !video_demo ? undefined : [{ uid: video_demo, name: video_demo }]
+          }
           onRemove={handleAbortUploadVideo}
         >
           <p className="ant-upload-drag-icon">
