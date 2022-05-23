@@ -3,7 +3,7 @@ import { Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AdminApi from "../../../api/admin-review.api";
-import { BE_URL, routesWithParams } from "../../../utils/constants";
+import { BE_URL, ROUTES } from "../../../utils/constants";
 
 const AdminReviewPage = () => {
   const [dataCourse, setDataCourse] = useState([]);
@@ -39,7 +39,7 @@ const AdminReviewPage = () => {
         PRICE: "10 Downing Street",
         DATE: course.updated_at,
         ACTION: (
-          <Link to={routesWithParams.course_draft(course_id)}>
+          <Link to={ROUTES.course_draft(course_id)}>
             <button>view</button>
           </Link>
         ),

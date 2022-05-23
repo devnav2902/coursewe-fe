@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import {
   BrowserRouter,
   Navigate,
@@ -39,7 +39,7 @@ function App(): JSX.Element {
   }, [dispatch]);
 
   return (
-    <>
+    <Suspense fallback={<div></div>}>
       <BrowserRouter>
         <ScrollToTop>
           <Routes>
@@ -52,6 +52,22 @@ function App(): JSX.Element {
                     key={idx}
                     path={route.path}
                     element={<Navigate to="/" />}
+                  />
+                );
+              }
+
+              if (route.admin) {
+                return (
+                  <Route
+                    key={idx}
+                    path={route.path}
+                    element={
+                      user.profile?.role.name === "user" ? (
+                        <Navigate to="/" />
+                      ) : (
+                        route.component
+                      )
+                    }
                   />
                 );
               }
@@ -73,7 +89,7 @@ function App(): JSX.Element {
           </Routes>
         </ScrollToTop>
       </BrowserRouter>
-    </>
+    </Suspense>
   );
 }
 

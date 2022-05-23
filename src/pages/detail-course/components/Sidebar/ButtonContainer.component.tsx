@@ -1,9 +1,8 @@
 import { FC } from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import CartButton from "../../../../components/CartButton/CartButton.component";
 import { useTypedSelector } from "../../../../hooks/redux.hooks";
-import { routesWithParams } from "../../../../utils/constants";
+import { ROUTES } from "../../../../utils/constants";
 import { CustomCourse } from "../../page/detail-course.page";
 import { StyledButtonBox } from "../../styles/detail-course.styles";
 
@@ -28,7 +27,7 @@ const ButtonContainer: FC<Props> = ({
     <StyledButtonBox className="buttons-box">
       {isInstructor ? (
         <Link
-          to={routesWithParams.course_dash_redirect(id)}
+          to={ROUTES.course_dash_redirect(id)}
           className="theme-btn btn-style-one"
         >
           Xem khóa học

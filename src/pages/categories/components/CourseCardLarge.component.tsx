@@ -6,7 +6,7 @@ import CartButton from "../../../components/CartButton/CartButton.component";
 import { CustomCourse } from "../../../components/Course/Course.component";
 import Rating from "../../../components/Rating/Rating.component";
 import WishlistButton from "../../../components/WishlistButton/WishlistButton.component";
-import { routesWithParams } from "../../../utils/constants";
+import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail, roundsTheNumber } from "../../../utils/functions";
 import {
   StyledCourseCardLarge,
@@ -58,20 +58,20 @@ const CourseCardLarge: FC<CourseCardLargeProps> = ({ course }) => {
       className="popover"
     >
       <StyledCourseCardLarge>
-        <Link to={routesWithParams.detail_course(slug)}>
+        <Link to={ROUTES.detail_course(slug)}>
           <div className="image">
             <img src={linkThumbnail(thumbnail)} alt={title} />
           </div>
         </Link>
         <div className="content d-flex">
           <div className="content__left">
-            <Link to={routesWithParams.detail_course(slug)}>
+            <Link to={ROUTES.detail_course(slug)}>
               <h3 className="title truncate">{title}</h3>
             </Link>
             <p className="subtitle">{subtitle}</p>
 
             <div className="author">
-              <Link to={routesWithParams.instructor_bio(author.slug)}>
+              <Link to={ROUTES.instructor_bio(author.slug)}>
                 {author.fullname}
               </Link>
             </div>

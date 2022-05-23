@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
 import { getCategories } from "../../redux/slices/categories.slice";
-import { routesWithParams } from "../../utils/constants";
+import { ROUTES } from "../../utils/constants";
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Categories = () => {
     const slug = arrParams.reduce((result, cur) => (result += `${cur}/`), "");
 
     slug &&
-      navigate(routesWithParams.categories(slug), {
+      navigate(ROUTES.categories(slug), {
         state: { categoryData: selectOptions },
       });
   }

@@ -10,7 +10,7 @@ import {
   Price,
 } from "../../ts/types/course.types";
 import { User } from "../../ts/types/user.types";
-import { routesWithParams } from "../../utils/constants";
+import { ROUTES } from "../../utils/constants";
 import { linkThumbnail, roundsTheNumber } from "../../utils/functions";
 import CartButton from "../CartButton/CartButton.component";
 import Rating from "../Rating/Rating.component";
@@ -158,7 +158,7 @@ const Course: FC<CourseProps> = ({ course }) => {
 
   const quickViewBox = (
     <StyledQuickViewBox>
-      <Link to={routesWithParams.detail_course(slug)} className="title">
+      <Link to={ROUTES.detail_course(slug)} className="title">
         {title}
       </Link>
       <div className="level">{instructional_level.level}</div>
@@ -192,20 +192,14 @@ const Course: FC<CourseProps> = ({ course }) => {
     >
       <StyledCourse>
         <div className={`course${mouseEnter ? " hovered" : ""}`}>
-          <Link
-            to={routesWithParams.detail_course(slug)}
-            className="image-course"
-          >
+          <Link to={ROUTES.detail_course(slug)} className="image-course">
             <img src={linkThumbnail(thumbnail)} alt={title} />
           </Link>
           <div className="profile-course">
             <div className="name-course truncate">
-              <Link to={routesWithParams.detail_course(slug)}>{title}</Link>
+              <Link to={ROUTES.detail_course(slug)}>{title}</Link>
             </div>
-            <Link
-              to={routesWithParams.instructor_bio(author.slug)}
-              className="author"
-            >
+            <Link to={ROUTES.instructor_bio(author.slug)} className="author">
               {author.fullname}
             </Link>
             <div className="course-info">

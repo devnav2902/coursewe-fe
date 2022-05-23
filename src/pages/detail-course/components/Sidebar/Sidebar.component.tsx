@@ -15,7 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import CouponApi from "../../../../api/coupon.api";
 import CourseApi from "../../../../api/course.api";
 import { Coupon } from "../../../../ts/types/coupon.types";
-import { ROUTES, routesWithParams } from "../../../../utils/constants";
+import { ROUTES } from "../../../../utils/constants";
 import { CustomCourse } from "../../page/detail-course.page";
 import { StyledGoToCourseBtn } from "../../styles/detail-course.styles";
 import ButtonContainer from "./ButtonContainer.component";
@@ -193,10 +193,7 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
             <Skeleton active className="pd-2" />
           ) : dataCheckPurchase.hasPurchased ? (
             <StyledGoToCourseBtn className="pd-2">
-              <Link
-                to={routesWithParams.course_dash_redirect(id)}
-                className="btn w-100"
-              >
+              <Link to={ROUTES.course_dash_redirect(id)} className="btn w-100">
                 Đi đến khóa học
               </Link>
             </StyledGoToCourseBtn>

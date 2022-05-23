@@ -67,23 +67,22 @@ const StudentChart = () => {
     datasets: {
       line: {
         pointStyle: "circle",
-        tension: 0.2,
+        tension: 0,
         pointHoverRadius: 6,
         pointHoverBorderWidth: 6,
-        pointRadius: 5,
+        pointRadius: 3,
         pointBorderWidth: 2,
         pointBackgroundColor: "#fff",
-        pointBorderColor: "#f5a067",
-        segment: { borderColor: "#f5a067", borderWidth: 2 },
+        pointBorderColor: "#00ccff",
+        segment: { borderColor: "#00ccff", borderWidth: 2 },
       },
     },
     plugins: {
       legend: {
         position: "top" as const,
         labels: {
-          color: "#f5a067",
           font: {
-            size: 16,
+            size: 14,
             weight: "bold",
           },
           padding: 15,
@@ -119,7 +118,7 @@ const StudentChart = () => {
           font: { size: 14 },
         },
         grid: {
-          color: "#ebedef",
+          display: false,
         },
       },
       y: {
@@ -129,7 +128,7 @@ const StudentChart = () => {
           font: { size: 14 },
         },
         grid: {
-          color: "#ebedef",
+          color: "#c0c0c0",
         },
       },
     },
@@ -144,8 +143,7 @@ const StudentChart = () => {
         {
           label: "Học viên đã đăng ký",
           data,
-          borderColor: "#f5a067",
-          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          borderColor: "transparent",
         },
       ],
     };

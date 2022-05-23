@@ -4,25 +4,6 @@
   .section-content {
     padding: 30px 20px 30px;
   }
-  .section-content.hidden {
-    .section-content__title {
-      display: none !important;
-    }
-  }
-  .lecture-content.hidden {
-    .lecture-content__title {
-      display: none !important;
-    }
-  }
-
-  .lecture-content.hidden-btn {
-    .lecture-content__title {
-      .add-content,
-      .lecture-collapse {
-        display: none;
-      }
-    }
-  }
 
   .lecture-content {
     &.show-collapse {
@@ -134,6 +115,11 @@
         }
       }
     }
+  }
+
+  button:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed;
   }
 }
 .curriculum-form {
@@ -262,8 +248,13 @@
       transition: all 0.2s;
       position: relative;
       border: 1px solid #dbdbdb;
-      svg {
+      box-sizing: content-box;
+      margin-right: 2rem;
+
+      .icon {
         padding: 10px;
+      }
+      svg {
         font-size: 25px;
       }
       svg.hover {
@@ -288,6 +279,7 @@
           opacity: 1;
           visibility: visible;
           color: #fff;
+          fill: #fff;
           transform: translate(-50%, 0);
         }
         .content-type__label {
@@ -303,6 +295,7 @@
       align-self: stretch;
       text-align: center;
       padding: 3px;
+      white-space: nowrap;
     }
   }
 }

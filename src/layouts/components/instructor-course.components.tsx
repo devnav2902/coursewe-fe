@@ -9,7 +9,7 @@ import { Link, useParams } from "react-router-dom";
 import PublishCourseApi, {
   MissingPublishRequirements,
 } from "../../api/publish-course.api";
-import { routesWithParams } from "../../utils/constants";
+import { ROUTES } from "../../utils/constants";
 
 type PagesAndRequirementsItem = {
   url: string;
@@ -44,7 +44,7 @@ export const Sidebar: FC<{
       } else {
         const pagesAndRequirements: PagesAndRequirements = {
           "Thông tin khóa học": {
-            url: routesWithParams.course_basics(id),
+            url: ROUTES.course_basics(id),
             items: [
               "title",
               "subtitle",
@@ -56,27 +56,27 @@ export const Sidebar: FC<{
             missing: [],
           },
           "Hình ảnh & video giới thiệu": {
-            url: routesWithParams.image_and_preview_video(id),
+            url: ROUTES.image_and_preview_video(id),
             items: ["thumbnail", "video_demo"],
             missing: [],
           },
           "Mục tiêu & yêu cầu khóa học": {
-            url: routesWithParams.intended_learners(id),
+            url: ROUTES.intended_learners(id),
             items: ["course_outcome_count"],
             missing: [],
           },
           "Chương trình học": {
-            url: routesWithParams.curriculum(id),
+            url: ROUTES.curriculum(id),
             items: ["lecture_count"],
             missing: [],
           },
           "Giá khóa học": {
-            url: routesWithParams.price(id),
+            url: ROUTES.price(id),
             missing: [],
             items: [],
           },
           "Khuyến mại": {
-            url: routesWithParams.promotions(id),
+            url: ROUTES.promotions(id),
             missing: [],
             items: [],
           },
@@ -118,7 +118,7 @@ export const Sidebar: FC<{
         <button
           type="button"
           className="navbar-link"
-          onClick={() => handleRedirect(routesWithParams.course_basics(id))}
+          onClick={() => handleRedirect(ROUTES.course_basics(id))}
         >
           <BsInfoCircle />
           <span>Thông tin khóa học</span>
@@ -126,9 +126,7 @@ export const Sidebar: FC<{
         <button
           type="button"
           className="navbar-link"
-          onClick={() =>
-            handleRedirect(routesWithParams.image_and_preview_video(id))
-          }
+          onClick={() => handleRedirect(ROUTES.image_and_preview_video(id))}
         >
           <BsFileRichtext />
           <span>Hình ảnh & video giới thiệu</span>
@@ -136,7 +134,7 @@ export const Sidebar: FC<{
         <button
           type="button"
           className="navbar-link"
-          onClick={() => handleRedirect(routesWithParams.intended_learners(id))}
+          onClick={() => handleRedirect(ROUTES.intended_learners(id))}
         >
           <RiBookmark3Line />
           <span>Mục tiêu & yêu cầu khóa học</span>
@@ -144,20 +142,20 @@ export const Sidebar: FC<{
         <button
           type="button"
           className="navbar-link"
-          onClick={() => handleRedirect(routesWithParams.curriculum(id))}
+          onClick={() => handleRedirect(ROUTES.curriculum(id))}
         >
           <FaLaptopHouse />
           <span>Chương trình học</span>
         </button>
 
-        <Link className="navbar-link" to={routesWithParams.price(id)}>
+        <Link className="navbar-link" to={ROUTES.price(id)}>
           <DollarCircleOutlined />
           <span>Giá khóa học</span>
         </Link>
         <button
           type="button"
           className="navbar-link"
-          onClick={() => handleRedirect(routesWithParams.promotions(id))}
+          onClick={() => handleRedirect(ROUTES.promotions(id))}
         >
           <IoMdPricetags />
           <span>Khuyến mại</span>

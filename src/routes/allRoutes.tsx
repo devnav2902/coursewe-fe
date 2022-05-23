@@ -1,32 +1,74 @@
-import BasicLayout from "../layouts/basic.layout";
-import InstructorCourseLayout from "../layouts/instructor-course.layout";
-import InstructorView from "../layouts/instructor-view.layout";
-import LearningLayout from "../layouts/learning.layout";
-import NotFound from "../pages/404/pages/index";
-import AdminReviewPage from "../pages/admin-review/page/admin-review.page";
-import CartPage from "../pages/cart/page/cart.page";
-import CategoriesPage from "../pages/categories/pages/categories.page";
-import CheckoutPage from "../pages/checkout/page/checkout.page";
+import React from "react";
 import CourseDashRedirestPage from "../pages/course-dash-redirect/page/course-dash-redirest.page";
-import CreateCoursePage from "../pages/create-course/page/createCourse.page";
-import DetailCoursePage from "../pages/detail-course/page/detail-course.page";
-import DraftPage from "../pages/draft/page/draft.page";
-import BasicsPage from "../pages/edit-course/pages/basics.page";
-import CurriculumPage from "../pages/edit-course/pages/curriculum.page";
-import ImageAndVideoPage from "../pages/edit-course/pages/image-and-video.page";
-import IntendedLearnersPage from "../pages/edit-course/pages/intended-learners.page";
-import PricePage from "../pages/edit-course/pages/price.page";
-import PromotionsPage from "../pages/edit-course/pages/promotions.page";
-import Home from "../pages/home/page/index.page";
-import InstructorBioPage from "../pages/instructor-bio/page/instructor-bio.page";
-import InstructorCoursesPage from "../pages/instructor-courses/page/instructor-courses.page";
-import LearningPage from "../pages/learning/page/learning.page";
-import MyLearningPage from "../pages/my-learning/page/my-learning.page";
-import OverviewPage from "../pages/overview/page/overview.page";
-import ProfilePage from "../pages/profile/page/profile.page";
-import PurchaseHistoryPage from "../pages/purchase-history/page/purchase-history.page";
-import SigninPage from "../pages/signin/page/signin.page";
-import SignupPage from "../pages/signup/page/signup.page";
+
+const BasicLayout = React.lazy(() => import("../layouts/basic.layout"));
+const InstructorCourseLayout = React.lazy(
+  () => import("../layouts/instructor-course.layout")
+);
+const InstructorView = React.lazy(
+  () => import("../layouts/instructor-view.layout")
+);
+const LearningLayout = React.lazy(() => import("../layouts/learning.layout"));
+const NotFound = React.lazy(() => import("../pages/404/pages/not-found.page"));
+const AdminReviewPage = React.lazy(
+  () => import("../pages/admin-review/page/admin-review.page")
+);
+const CartPage = React.lazy(() => import("../pages/cart/page/cart.page"));
+const CategoriesPage = React.lazy(
+  () => import("../pages/categories/pages/categories.page")
+);
+const CheckoutPage = React.lazy(
+  () => import("../pages/checkout/page/checkout.page")
+);
+const CreateCoursePage = React.lazy(
+  () => import("../pages/create-course/page/createCourse.page")
+);
+const DetailCoursePage = React.lazy(
+  () => import("../pages/detail-course/page/detail-course.page")
+);
+const DraftPage = React.lazy(() => import("../pages/draft/page/draft.page"));
+const BasicsPage = React.lazy(
+  () => import("../pages/edit-course/pages/basics.page")
+);
+const CurriculumPage = React.lazy(
+  () => import("../pages/edit-course/pages/curriculum.page")
+);
+const ImageAndVideoPage = React.lazy(
+  () => import("../pages/edit-course/pages/image-and-video.page")
+);
+const IntendedLearnersPage = React.lazy(
+  () => import("../pages/edit-course/pages/intended-learners.page")
+);
+const PricePage = React.lazy(
+  () => import("../pages/edit-course/pages/price.page")
+);
+const PromotionsPage = React.lazy(
+  () => import("../pages/edit-course/pages/promotions.page")
+);
+const Home = React.lazy(() => import("../pages/home/page/index.page"));
+const InstructorBioPage = React.lazy(
+  () => import("../pages/instructor-bio/page/instructor-bio.page")
+);
+const InstructorCoursesPage = React.lazy(
+  () => import("../pages/instructor-courses/page/instructor-courses.page")
+);
+const LearningPage = React.lazy(
+  () => import("../pages/learning/page/learning.page")
+);
+const MyLearningPage = React.lazy(
+  () => import("../pages/my-learning/page/my-learning.page")
+);
+const OverviewPage = React.lazy(
+  () => import("../pages/overview/page/overview.page")
+);
+const ProfilePage = React.lazy(
+  () => import("../pages/profile/page/profile.page")
+);
+const PurchaseHistoryPage = React.lazy(
+  () => import("../pages/purchase-history/page/purchase-history.page")
+);
+const SigninPage = React.lazy(() => import("../pages/signin/page/signin.page"));
+const SignupPage = React.lazy(() => import("../pages/signup/page/signup.page"));
 import { ROUTES } from "../utils/constants";
 
 export type Routes = {
@@ -36,6 +78,7 @@ export type Routes = {
   layout?: JSX.Element;
   redirectIfAuthenticated?: boolean;
   private?: boolean;
+  admin?: boolean;
 };
 
 const routes: Routes[] = [
@@ -48,33 +91,33 @@ const routes: Routes[] = [
     ),
   },
   {
-    path: ROUTES.SUBCATEGORIES,
+    path: ROUTES.subcategories(),
     component: (
-      <BasicLayout key={ROUTES.SUBCATEGORIES}>
+      <BasicLayout key={ROUTES.subcategories()}>
         <CategoriesPage />
       </BasicLayout>
     ),
   },
   {
-    path: ROUTES.TOPICS,
+    path: ROUTES.topics(),
     component: (
-      <BasicLayout key={ROUTES.TOPICS}>
+      <BasicLayout key={ROUTES.topics()}>
         <CategoriesPage />
       </BasicLayout>
     ),
   },
   {
-    path: ROUTES.CATEGORIES,
+    path: ROUTES.categories(),
     component: (
-      <BasicLayout key={ROUTES.CATEGORIES}>
+      <BasicLayout key={ROUTES.categories()}>
         <CategoriesPage />
       </BasicLayout>
     ),
   },
   {
-    path: ROUTES.COURSE_BASICS,
+    path: ROUTES.course_basics(),
     component: (
-      <InstructorCourseLayout key={ROUTES.COURSE_BASICS}>
+      <InstructorCourseLayout key={ROUTES.course_basics()}>
         {(props: any) => <BasicsPage {...props} />}
         {/* callback => children() sẽ return <BasicsPage /> */}
       </InstructorCourseLayout>
@@ -82,52 +125,52 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    path: ROUTES.PRICE,
+    path: ROUTES.price(),
     component: (
-      <InstructorCourseLayout key={ROUTES.PRICE}>
+      <InstructorCourseLayout key={ROUTES.price()}>
         {(props: any) => <PricePage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
   },
   {
-    path: ROUTES.INTENDED_LEARNERS,
+    path: ROUTES.intended_learners(),
     component: (
-      <InstructorCourseLayout key={ROUTES.INTENDED_LEARNERS}>
+      <InstructorCourseLayout key={ROUTES.intended_learners()}>
         {(props) => <IntendedLearnersPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
   },
   {
-    path: ROUTES["COURSE_IMAGE_&_PREVIEW_VIDEO"],
+    path: ROUTES["image_and_preview_video"](),
     component: (
-      <InstructorCourseLayout key={ROUTES["COURSE_IMAGE_&_PREVIEW_VIDEO"]}>
+      <InstructorCourseLayout key={ROUTES["image_and_preview_video"]()}>
         {(props: any) => <ImageAndVideoPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
   },
   {
-    path: ROUTES.CURRICULUM,
+    path: ROUTES.curriculum(),
     component: (
-      <InstructorCourseLayout key={ROUTES.CURRICULUM}>
+      <InstructorCourseLayout key={ROUTES.curriculum()}>
         {(props: any) => <CurriculumPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
   },
   {
-    path: ROUTES.PROMOTIONS,
+    path: ROUTES.promotions(),
     component: (
-      <InstructorCourseLayout key={ROUTES.PROMOTIONS}>
+      <InstructorCourseLayout key={ROUTES.promotions()}>
         {(props: any) => <PromotionsPage {...props} />}
       </InstructorCourseLayout>
     ),
     private: true,
   },
   {
-    path: ROUTES.LEARNING,
+    path: ROUTES.learning(),
     component: (
       <LearningLayout>
         <LearningPage />
@@ -144,7 +187,7 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    path: ROUTES.COURSE_DASH_REDIRECT,
+    path: ROUTES.course_dash_redirect(),
     component: <CourseDashRedirestPage />,
     private: true,
   },
@@ -158,7 +201,7 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    path: ROUTES.INSTRUCTOR_BIO,
+    path: ROUTES.instructor_bio(),
     component: (
       <BasicLayout>
         <InstructorBioPage />
@@ -166,7 +209,7 @@ const routes: Routes[] = [
     ),
   },
   {
-    path: ROUTES.DETAIL_COURSE,
+    path: ROUTES.detail_course(),
     component: (
       <BasicLayout>
         <DetailCoursePage />
@@ -231,6 +274,7 @@ const routes: Routes[] = [
       </InstructorView>
     ),
     private: true,
+    admin: true,
   },
   {
     path: ROUTES.CHECKOUT,
@@ -238,7 +282,7 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    path: ROUTES.COURSE_DRAFT,
+    path: ROUTES.course_draft(),
     component: <DraftPage />,
     // private: true,
   },

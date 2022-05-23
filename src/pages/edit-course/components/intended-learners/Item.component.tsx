@@ -31,7 +31,7 @@ const Item: FC<ItemProps> = ({
 
   useEffect(() => {
     defaultValue && setDisplayActionButton(true);
-  }, []);
+  }, [defaultValue]);
 
   return !display ? null : (
     <Col span={24}>

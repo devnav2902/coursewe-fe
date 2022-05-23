@@ -1,5 +1,6 @@
 import { FileImageOutlined } from "@ant-design/icons";
 import { Col, Image, Progress, ProgressProps, Row, UploadProps } from "antd";
+import { ImageProps } from "antd/lib/image";
 import { UploadChangeParam } from "antd/lib/upload";
 import Dragger from "antd/lib/upload/Dragger";
 import axios from "axios";
@@ -57,22 +58,22 @@ const CourseImage = ({
   return (
     <Row gutter={26}>
       <Col span={12}>
+        <div id="preview-img"></div>
         <Image
           style={{ aspectRatio: "16/9" }}
+          preview={
+            !courseImage
+              ? false
+              : {
+                  getContainer: () =>
+                    document.getElementById("preview-img") as any,
+                  src: linkThumbnail(courseImage),
+                }
+          }
           src={
             courseImage
               ? linkThumbnail(courseImage)
               : "https://s.udemycdn.com/course/750x422/placeholder.jpg"
-          }
-          placeholder={
-            <Image
-              preview={false}
-              src={
-                courseImage
-                  ? linkThumbnail(courseImage)
-                  : "https://s.udemycdn.com/course/750x422/placeholder.jpg"
-              }
-            />
           }
         />
       </Col>
@@ -82,9 +83,11 @@ const CourseImage = ({
           onChange={handleUploadImage}
           name="thumbnail"
           accept="image/*"
-          defaultFileList={[
-            { uid: courseImage, thumbUrl: courseImage, name: courseImage },
-          ]}
+          defaultFileList={
+            !courseImage
+              ? undefined
+              : [{ uid: courseImage, thumbUrl: courseImage, name: courseImage }]
+          }
           onRemove={handleAbortUploadImage}
           showUploadList={{
             showRemoveIcon: progressUploadImage ? true : false,

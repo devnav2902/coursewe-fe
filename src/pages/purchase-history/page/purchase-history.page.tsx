@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
 import PurchaseApi from "../../../api/purchase.api";
 import Loading from "../../../components/Loading/Loading.component";
@@ -59,7 +60,9 @@ const PurchaseHistoryPage = () => {
                     return (
                       <tr key={i}>
                         <td>{title}</td>
-                        <td>{created_at}</td>
+                        <td>
+                          {moment(created_at).format("DD-MM-YYYY HH:mm A")}
+                        </td>
                         <td>{promo_code ? promo_code : "Không có"}</td>
                         <td>{parseInt(price).toLocaleString("vi-VN")}đ</td>
                         <td>{parseInt(purchase).toLocaleString()}đ</td>

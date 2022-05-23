@@ -1,26 +1,23 @@
 import axios from "axios";
-import {
-  ProcessServerConfigFunction,
-  ProgressServerConfigFunction,
-} from "filepond";
-import { FC } from "react";
-import { FilePond } from "react-filepond";
+import { ProcessServerConfigFunction } from "filepond";
+import { FC, useContext } from "react";
+import { FilePond, registerPlugin } from "react-filepond";
 import LectureApi from "../../../../api/lecture.api";
 import ResourceApi from "../../../../api/resource.api";
 import { API_URL } from "../../../../utils/constants";
+import { openNotification } from "../../../../utils/functions";
+import { LectureContext } from "../../hooks/curriculum.hooks";
 import { CustomFileUpload } from "../../styles/curriculum.styles";
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+
+registerPlugin(FilePondPluginFileValidateType);
 
 type FileUploadProps = {
   fileType: "video" | "resource";
   lectureId: number;
-  getLatestData: () => void;
 };
 
-const FileUpload: FC<FileUploadProps> = ({
-  fileType,
-  lectureId,
-  getLatestData,
-}) => {
+const FileUpload: FC<FileUploadProps> = ({ fileType, lectureId }) => {
   const label =
     fileType === "video"
       ? `<div class='input-group'>
@@ -44,19 +41,29 @@ const FileUpload: FC<FileUploadProps> = ({
     process: ProcessServerConfigFunction;
   };
 
+  const {
+    lectureUploading: { lectureUploading, setLectureUploadingTo },
+    lectureData: {
+      handle: { getLatestLecture },
+    },
+    resourceUploading: { setResourceUploadingTo },
+  } = useContext(LectureContext);
+
   const configServer: Config = {
     url: API_URL,
     timeout: 7000,
     process: function (
-      fieldName: string,
-      file: any,
-      metadata: { [key: string]: any },
-      load: (p: string | { [key: string]: any }) => void,
-      error: (errorText: string) => void,
-      progress: ProgressServerConfigFunction,
-      abort: () => void
+      fieldName,
+      file,
+      metadata,
+      load,
+      error,
+      progress,
+      abort
     ) {
       console.log(metadata);
+      if (fileType === "video") setLectureUploadingTo(true);
+      else if (fileType === "resource") setResourceUploadingTo(true);
 
       const formData = new FormData();
       formData.append(fieldName, file, file.name);
@@ -76,9 +83,10 @@ const FileUpload: FC<FileUploadProps> = ({
           source,
         }).then((res: any) => {
           console.log(res);
+          setLectureUploadingTo(false);
+          getLatestLecture(); // get dữ liệu mới nhất từ dtb, trigger rerender
 
           load(res.data.fileUploaded); // gọi load filepond(object/id file) => dùng cho revert/restore
-          getLatestData(); // get dữ liệu mới nhất từ dtb, trigger rerender
         });
       } else {
         ResourceApi.upload({
@@ -86,8 +94,10 @@ const FileUpload: FC<FileUploadProps> = ({
           onUploadProgress,
           source,
         }).then((res: any) => {
+          setResourceUploadingTo(false);
+          getLatestLecture(); // Get bài giảng mới nhất(đã chứa resource mới nhất)
+
           load(res.data.fileUploaded);
-          getLatestData();
         });
       }
 
@@ -96,6 +106,11 @@ const FileUpload: FC<FileUploadProps> = ({
         abort: () => {
           // This function is entered if the user has tapped the cancel button
           source.cancel("Đã hủy upload file.");
+
+          if (fileType === "video") setLectureUploadingTo(false);
+          else if (fileType === "resource") setResourceUploadingTo(false);
+
+          openNotification("success", "Đã dừng upload file");
           // Let FilePond know the request has been cancelled
           abort();
         },
@@ -110,14 +125,14 @@ const FileUpload: FC<FileUploadProps> = ({
         className="custom-fileupload"
         allowMultiple={false}
         acceptedFileTypes={fileTypes}
-        labelTapToRetry="Nhấn để thử lại"
-        labelFileProcessing="Đang tải lên"
-        labelFileProcessingError="Lỗi khi tải lên"
-        labelTapToCancel="Hủy tải lên"
         maxFiles={1}
         name="file"
         labelIdle={label}
         allowRevert={false}
+        labelTapToRetry="Nhấn để thử lại"
+        labelFileProcessing="Đang tải lên"
+        labelFileProcessingError="Lỗi khi tải lên"
+        labelTapToCancel="Hủy tải lên"
       />
     </CustomFileUpload>
   );

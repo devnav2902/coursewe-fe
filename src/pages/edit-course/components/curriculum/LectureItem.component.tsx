@@ -1,95 +1,112 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
+import { FaFileAlt } from "react-icons/fa";
 import { GrFormClose } from "react-icons/gr";
-import { useTypedSelector } from "../../../../hooks/redux.hooks";
+import { ImFileVideo } from "react-icons/im";
 import { Lecture } from "../../../../ts/types/course.types";
 import { secondsToHMS } from "../../../../utils/functions";
-import { useLecture, useResources } from "../../hooks/curriculum.hooks";
+import { LectureContext } from "../../hooks/curriculum.hooks";
 import { StyledTableContaier } from "../../styles/curriculum.styles";
 import { CURRICULUM_TYPES } from "../../utils/constants";
-import { LectureType, SectionType } from "../../utils/instructor-course.types";
 import FileUpload from "./FileUpload.component";
 import FormEditTitle from "./FormEditTitle.component";
 import LectureTitle from "./LectureTitle.component";
 import Resources from "./Resources.component";
-
-type Func = () => void;
+import VideoUploadNote from "./VideoUploadNote.component";
 
 type LectureItemProps = {
   innerRef: (element: HTMLLIElement) => void;
-  data: Lecture;
-  handleFunc: {
-    handleDisplayResources: Func;
-    handleDisplayUploadMedia: Func;
-    handleDisplayUploadResources: Func;
-  };
-  closeFunc: { closeUploadMedia: Func; closeUploadResources: Func };
-  dataDisplay: {
-    displayUploadMedia: boolean;
-    displayResources: boolean;
-    displayUploadResources: boolean;
-  };
-  editTitleFunc: (id: number, type: LectureType | SectionType) => void;
 };
 
 const LectureItem: FC<LectureItemProps> = (props) => {
-  const {
-    data: lectureItem,
-    handleFunc,
-    dataDisplay,
-    closeFunc,
-    editTitleFunc,
-    innerRef,
-    ...restProps
-  } = props;
+  const { innerRef, ...restProps } = props;
 
   const {
-    handleDisplayResources,
-    handleDisplayUploadMedia,
-    handleDisplayUploadResources,
-  } = handleFunc;
-  const { displayUploadMedia, displayResources, displayUploadResources } =
-    dataDisplay;
-  const { closeUploadMedia, closeUploadResources } = closeFunc;
+    isDisplayEditTitle,
+    lectureData: {
+      lecture,
+      handle: { setUpdatedTitle },
+      updatedTitle,
+    },
+    contentTab: { displayContentTab, closeContentTab },
+    displayResourceData: { displayResources },
+    uploadMedia: {
+      displayUploadMedia,
+      handleDisplayUploadMedia,
+      closeUploadMedia,
+    },
+    uploadResources: {
+      closeUploadResources,
+      handleDisplayUploadResources,
+      displayUploadResources,
+    },
+    lectureUploading: { lectureUploading },
+  } = useContext(LectureContext);
 
-  const { elementDisplay } = useTypedSelector((state) => state.curriculum);
+  const { id, src, original_filename, updated_at, playtime_seconds } =
+    lecture as Lecture;
 
-  const { getLatestLecture, lecture, deleteLecture, deleted } =
-    useLecture(lectureItem);
-  const {
-    id,
-    title,
-    resource,
-    src,
-    original_filename,
-    updated_at,
-    playtime_seconds,
-  } = lecture;
-
-  const { getLatestResources, resources } = useResources(id, resource);
-
-  const isDisplayEditTitle =
-    elementDisplay.id === id &&
-    elementDisplay.type === CURRICULUM_TYPES.LECTURE;
-
-  const lectureTitleProps = {
-    data: lecture,
-    handleDisplayResources,
-    displayResources,
-    editTitleFunc,
-    deleteLecture,
-  };
-
-  return deleted ? null : (
+  return (
     <li
       ref={innerRef}
       {...restProps}
-      data-lecture={id}
       className="curriculum-content lecture-content"
     >
       {isDisplayEditTitle ? (
-        <FormEditTitle title={title} type={CURRICULUM_TYPES.LECTURE} />
+        <FormEditTitle
+          setUpdatedTitle={setUpdatedTitle}
+          title={updatedTitle}
+          type={CURRICULUM_TYPES.LECTURE}
+        />
       ) : (
-        <LectureTitle {...lectureTitleProps} />
+        <LectureTitle />
+      )}
+
+      {displayContentTab && (
+        <div className="content-tab">
+          <div className="content-tab__header">
+            <span>Nội dung tải lên</span>
+            <button
+              type="button"
+              onClick={closeContentTab}
+              className="content-tab-close d-flex align-items-center"
+            >
+              <GrFormClose />
+            </button>
+          </div>
+          <div className="content-tab__nav content-tab__main">
+            <p className="content-tab__nav-header">
+              Chọn nội dung bạn muốn tải lên.
+            </p>
+            <ul className="content-tab__nav-container">
+              <li
+                onClick={handleDisplayUploadMedia}
+                className="content-type-selector"
+              >
+                <div className="content-type-option">
+                  <div className="icon">
+                    <ImFileVideo />
+                    <ImFileVideo className="hover" />
+                  </div>
+
+                  <span className="content-type__label">Bài giảng</span>
+                </div>
+              </li>
+              <li
+                onClick={handleDisplayUploadResources}
+                className="content-type-selector"
+              >
+                <div className="content-type-option">
+                  <div className="icon">
+                    <FaFileAlt />
+                    <FaFileAlt className="hover" />
+                  </div>
+
+                  <span className="content-type__label">Tài liệu</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       )}
 
       {displayResources && (
@@ -112,7 +129,7 @@ const LectureItem: FC<LectureItemProps> = (props) => {
                       <td>
                         {original_filename}
                         <br />
-                        {secondsToHMS(playtime_seconds)}
+                        Thời lượng: {secondsToHMS(playtime_seconds)}
                       </td>
                       {/* <td>Video</td> */}
                       <td>Thành công</td>
@@ -130,18 +147,11 @@ const LectureItem: FC<LectureItemProps> = (props) => {
                   </tbody>
                 </table>
 
-                <span className="note">
-                  <b>Note: </b>
-                  Video phải đạt tối thiểu 720p và không vượt quá 2.0 GB
-                </span>
+                <VideoUploadNote />
               </StyledTableContaier>
             )}
 
-            <Resources
-              resource={resources}
-              lectureId={id}
-              handleDisplayUploadResources={handleDisplayUploadResources}
-            />
+            <Resources />
           </div>
         </div>
       )}
@@ -153,6 +163,7 @@ const LectureItem: FC<LectureItemProps> = (props) => {
             <button
               onClick={closeUploadMedia}
               type="button"
+              disabled={lectureUploading ? true : false}
               className="content-tab-close d-flex align-items-center"
             >
               <GrFormClose />
@@ -160,17 +171,10 @@ const LectureItem: FC<LectureItemProps> = (props) => {
           </div>
           <div className="content-tab__media content-tab__main">
             <div className="content-tab__media-file">
-              <span className="note">
-                <b>Note: </b>
-                Video phải đạt tối thiểu 720p và không vượt quá 2.0 GB.
-              </span>
+              <VideoUploadNote />
 
               <div className="lecture-editor">
-                <FileUpload
-                  getLatestData={getLatestLecture}
-                  lectureId={id}
-                  fileType="video"
-                />
+                <FileUpload lectureId={id} fileType="video" />
               </div>
             </div>
           </div>
@@ -198,11 +202,7 @@ const LectureItem: FC<LectureItemProps> = (props) => {
               </span>
 
               <div className="lecture-editor">
-                <FileUpload
-                  getLatestData={getLatestResources}
-                  lectureId={id}
-                  fileType="resource"
-                />
+                <FileUpload lectureId={id} fileType="resource" />
               </div>
             </div>
           </div>

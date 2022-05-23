@@ -1,6 +1,6 @@
 import { FC, memo } from "react";
 import { Breadcrumb as BreadcrumbType } from "../../../api/categories.api";
-import { routesWithParams } from "../../../utils/constants";
+import { ROUTES } from "../../../utils/constants";
 import { Breadcrumb } from "antd";
 import { StyledBreadcrumb } from "../styles/categories.styles";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
@@ -31,7 +31,7 @@ const BreadcrumbItem: FC = () => {
                 return (
                   <Breadcrumb.Item
                     key={i}
-                    href={routesWithParams.categories(topLevelSlug)}
+                    href={ROUTES.categories(topLevelSlug)}
                   >
                     {topLevelTitle}
                   </Breadcrumb.Item>
@@ -40,10 +40,10 @@ const BreadcrumbItem: FC = () => {
                 return (
                   <Breadcrumb.Item
                     key={i}
-                    href={routesWithParams.subcategories(
-                      topLevelSlug,
-                      subcategorySlug
-                    )}
+                    href={ROUTES.subcategories({
+                      slug: topLevelSlug,
+                      sub: subcategorySlug,
+                    })}
                   >
                     {subcategoryTitle}
                   </Breadcrumb.Item>
@@ -52,11 +52,11 @@ const BreadcrumbItem: FC = () => {
                 return (
                   <Breadcrumb.Item
                     key={i}
-                    href={routesWithParams.topics(
-                      topLevelSlug,
-                      subcategorySlug,
-                      topicSlug
-                    )}
+                    href={ROUTES.topics({
+                      slug: topLevelSlug,
+                      sub: subcategorySlug,
+                      topic: topicSlug,
+                    })}
                   >
                     {topicTitle}
                   </Breadcrumb.Item>

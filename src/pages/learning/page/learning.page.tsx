@@ -7,7 +7,7 @@ import {
 import { Skeleton } from "antd";
 import { Link } from "react-router-dom";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
-import { routesWithParams } from "../../../utils/constants";
+import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
 import Sidebar from "../components/Sidebar/Sidebar.component";
 import VideoLearning from "../components/VideoLearning.component";
@@ -85,9 +85,7 @@ const LearningPage = () => {
                             to={
                               !course?.author
                                 ? ""
-                                : routesWithParams.instructor_bio(
-                                    course.author.slug
-                                  )
+                                : ROUTES.instructor_bio(course.author.slug)
                             }
                           >
                             {course?.author.fullname}

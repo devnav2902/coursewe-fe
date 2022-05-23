@@ -5,7 +5,7 @@ import Rating from "../../../components/Rating/Rating.component";
 import Skeleton from "../../../components/Skeleton/Skeleton.component";
 import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
 import { getCoursesBeginner } from "../../../redux/slices/categories.slice";
-import { routesWithParams } from "../../../utils/constants";
+import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail, roundsTheNumber } from "../../../utils/functions";
 import { settings } from "../../../utils/slick.utils";
 import { StyledCourses } from "../styles/categories.styles";
@@ -50,7 +50,7 @@ const CoursesBeginner: FC = () => {
             } = course;
 
             return (
-              <Link key={id} to={routesWithParams.detail_course(slug)}>
+              <Link key={id} to={ROUTES.detail_course(slug)}>
                 <div className="course-carousel">
                   <div className="image-wrapper">
                     <img src={linkThumbnail(thumbnail)} alt="" />

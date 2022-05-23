@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
 import { getCart } from "../../redux/slices/cart.slice";
-import { ROUTES, routesWithParams } from "../../utils/constants";
+import { ROUTES } from "../../utils/constants";
 import { linkThumbnail } from "../../utils/functions";
 import Loading from "../Loading/Loading.component";
 
@@ -77,7 +77,7 @@ const ShoppingCart = () => {
             <List.Item>
               <List.Item.Meta
                 avatar={
-                  <a href={routesWithParams.detail_course(item.slug)}>
+                  <a href={ROUTES.detail_course(item.slug)}>
                     <Avatar
                       size={70}
                       shape="square"
@@ -86,15 +86,12 @@ const ShoppingCart = () => {
                   </a>
                 }
                 title={
-                  <a
-                    className="fw-bold"
-                    href={routesWithParams.detail_course(item.slug)}
-                  >
+                  <a className="fw-bold" href={ROUTES.detail_course(item.slug)}>
                     {item.title}
                   </a>
                 }
                 description={
-                  <a href={routesWithParams.detail_course(item.slug)}>
+                  <a href={ROUTES.detail_course(item.slug)}>
                     <span className="d-block author">
                       {item.author.fullname}
                     </span>

@@ -22,7 +22,7 @@ import {
   SectionItems,
 } from "../../../ts/types/course.types";
 import { User } from "../../../ts/types/user.types";
-import { routesWithParams } from "../../../utils/constants";
+import { ROUTES } from "../../../utils/constants";
 import { roundsTheNumber } from "../../../utils/functions";
 import CurriculumItem from "../components/CurriculumItem.component";
 import RatingGraph from "../components/RatingGraph.component";
@@ -110,7 +110,7 @@ const DetailCoursePage = () => {
                   <h6>Giảng viên</h6>
                   <div className="info-author">
                     <div className="authors">
-                      <Link to={routesWithParams.instructor_bio(author.slug)}>
+                      <Link to={ROUTES.instructor_bio(author.slug)}>
                         {author.fullname}
                       </Link>
                     </div>

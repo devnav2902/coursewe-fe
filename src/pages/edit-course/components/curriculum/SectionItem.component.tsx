@@ -1,113 +1,76 @@
-import { FC, useState } from "react";
+import { FC, memo, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsPlusCircleFill } from "react-icons/bs";
+import SectionApi from "../../../../api/section.api";
 import {
   useAppDispatch,
   useTypedSelector,
 } from "../../../../hooks/redux.hooks";
 import {
+  cancelCreateLecture,
   hideOption,
   openCreateLecture,
   setDisplayCreateLecture,
-  setElementDisplay,
+  updateSection,
 } from "../../../../redux/slices/curriculum.slice";
 import { Section } from "../../../../ts/types/course.types";
-
+import { LectureProvider } from "../../hooks/curriculum.hooks";
 import { CURRICULUM_TYPES } from "../../utils/constants";
-import { LectureType, SectionType } from "../../utils/instructor-course.types";
 import FormEditTitle from "./FormEditTitle.component";
 import LectureItem from "./LectureItem.component";
-import SectionTitle, { SectionTitleProps } from "./SectionTitle.component";
+import SectionTitle from "./SectionTitle.component";
 
 type SectionItemProps = {
   sectionItem: Section;
   innerRef: (element: HTMLDivElement) => any;
-  sectionIndex: any;
+  nthSection: number;
+  lectureOrderIsUpdating: boolean;
 };
 
 const SectionItem: FC<SectionItemProps> = (props) => {
-  const { sectionItem, innerRef, sectionIndex, ...restProps } = props;
-  const { id, title, order, lecture } = sectionItem;
+  const {
+    sectionItem,
+    innerRef,
+    nthSection,
+    lectureOrderIsUpdating,
+    ...restProps
+  } = props;
 
   const { elementDisplay, displayCreateLecture, displayOption } =
     useTypedSelector((state) => state.curriculum);
   const dispatch = useAppDispatch();
 
-  const [displayResources, setDisplayResources] = useState<boolean>(false);
-  const [displayUploadResources, setDisplayUploadResources] =
-    useState<boolean>(false);
-  const [displayUploadMedia, setDisplayUploadMedia] = useState<boolean>(false);
-
-  const handleDisplayUploadResources = () => {
-    setDisplayUploadResources(true);
-    setDisplayResources(false);
-  };
-
-  const handleDisplayResources = () => {
-    setDisplayResources(!displayResources);
-  };
-
-  const closeUploadResources = () => {
-    setDisplayUploadResources(false);
-  };
-
-  const closeUploadMedia = () => {
-    setDisplayUploadMedia(false);
-  };
-
-  const handleDisplayUploadMedia = () => {
-    setDisplayUploadMedia(true);
-    setDisplayResources(false);
-  };
-
-  const onEditTitle = (id: number, type: LectureType | SectionType) => {
-    dispatch(setElementDisplay({ id, type }));
-
-    setDisplayResources(false);
-    setDisplayUploadResources(false);
-    setDisplayUploadMedia(false);
-  };
-
-  const dataDisplay = {
-    displayUploadMedia,
-    displayResources,
-    displayUploadResources,
-  };
-
-  const closeFunc = {
-    closeUploadMedia,
-    closeUploadResources,
-  };
-
-  const handleFunc = {
-    handleDisplayResources,
-    handleDisplayUploadMedia,
-    handleDisplayUploadResources,
-  };
-
-  const SectionTitleProps: SectionTitleProps = {
-    data: sectionItem,
-    editTitleFunc: onEditTitle,
-  };
-
-  const createLecture = () => {
-    dispatch(setDisplayCreateLecture(true));
-  };
+  const { id, lecture, title } = sectionItem;
+  const [updatedTitle, setUpdatedTitle] = useState(title); // kh cần gửi request lên server
 
   const isDisplayEditTitle =
     elementDisplay.id === id &&
     elementDisplay.type === CURRICULUM_TYPES.SECTION;
 
-  const handleAddItem = () => {
-    dispatch(openCreateLecture(id));
-  };
-
-  const handleHideOption = () => {
-    dispatch(hideOption());
-  };
-
   const isWorkingOn = displayOption.sectionId === id;
+
+  function createLecture() {
+    dispatch(setDisplayCreateLecture(true));
+  }
+
+  function handleAddItem() {
+    dispatch(openCreateLecture(id));
+  }
+
+  function handleHideOption() {
+    dispatch(hideOption());
+  }
+
+  // Sau khi tạo bài giảng sẽ gửi request cập nhật lại UI
+  function getLatestSection() {
+    isWorkingOn &&
+      SectionApi.getSectionById(id).then(({ data }) => {
+        dispatch(updateSection(data.section));
+        dispatch(cancelCreateLecture());
+        handleHideOption();
+      });
+  }
 
   return (
     <div
@@ -117,13 +80,24 @@ const SectionItem: FC<SectionItemProps> = (props) => {
     >
       <div className="curriculum-content section-content section-editor">
         {isDisplayEditTitle ? (
-          <FormEditTitle title={title} type={CURRICULUM_TYPES.SECTION} />
+          <FormEditTitle
+            setUpdatedTitle={setUpdatedTitle}
+            title={updatedTitle}
+            type={CURRICULUM_TYPES.SECTION}
+          />
         ) : (
-          <SectionTitle {...SectionTitleProps} />
+          <SectionTitle
+            nthSection={nthSection}
+            data={sectionItem}
+            updatedTitle={updatedTitle}
+          />
         )}
       </div>
 
-      <Droppable droppableId={`droppable-section-${id}`} type={sectionIndex}>
+      <Droppable
+        droppableId={`droppable-section-${id}`}
+        type={"section-" + nthSection}
+      >
         {(provided) => (
           <ul
             className="lecture-wrapper"
@@ -133,21 +107,19 @@ const SectionItem: FC<SectionItemProps> = (props) => {
             {lecture.map((lectureItem, i) => {
               return (
                 <Draggable
-                  draggableId={`${sectionIndex}${i}`}
+                  isDragDisabled={lectureOrderIsUpdating ? true : false}
+                  draggableId={lectureItem.id.toString()}
                   index={i}
-                  key={`key${sectionIndex}${i}`}
+                  key={lectureItem.id}
                 >
                   {(provided) => (
-                    <LectureItem
-                      innerRef={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      data={lectureItem}
-                      handleFunc={handleFunc}
-                      dataDisplay={dataDisplay}
-                      closeFunc={closeFunc}
-                      editTitleFunc={onEditTitle}
-                    />
+                    <LectureProvider lecture={lectureItem} nthLecture={i + 1}>
+                      <LectureItem
+                        innerRef={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      />
+                    </LectureProvider>
                   )}
                 </Draggable>
               );
@@ -155,15 +127,15 @@ const SectionItem: FC<SectionItemProps> = (props) => {
             {provided.placeholder}
 
             <div className="lecture-wrapper__handle">
-              {isWorkingOn && displayCreateLecture && (
+              {!isWorkingOn ? null : displayCreateLecture ? (
                 <FormEditTitle
                   title=""
                   edit={false}
                   type={CURRICULUM_TYPES.LECTURE}
+                  sectionId={id}
+                  getLatestSection={getLatestSection}
                 />
-              )}
-
-              {isWorkingOn && !displayCreateLecture && (
+              ) : (
                 <li className="menu-items d-flex align-items-center">
                   <button
                     type="button"
@@ -173,13 +145,13 @@ const SectionItem: FC<SectionItemProps> = (props) => {
                     <BsPlusCircleFill />
                     <span>Bài giảng</span>
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     className="curriculum-option d-flex align-items-center"
                   >
                     <BsPlusCircleFill />
                     <span>Quiz</span>
-                  </button>
+                  </button> */}
                 </li>
               )}
 
@@ -200,4 +172,4 @@ const SectionItem: FC<SectionItemProps> = (props) => {
     </div>
   );
 };
-export default SectionItem;
+export default memo(SectionItem);
