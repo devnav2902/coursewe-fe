@@ -8,20 +8,9 @@ import { useEffect, useState } from "react";
 import { BiCheck } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { Link, useParams } from "react-router-dom";
-import CourseApi from "../../../api/course.api";
+import CourseApi, { CustomCourse } from "../../../api/course.api";
 import Loading from "../../../components/Loading/Loading.component";
 import Rating from "../../../components/Rating/Rating.component";
-import {
-  Course,
-  CourseOutcome,
-  CourseRequirements,
-  Lecture,
-  LectureItems,
-  Price,
-  Ratings,
-  SectionItems,
-} from "../../../ts/types/course.types";
-import { User } from "../../../ts/types/user.types";
 import { ROUTES } from "../../../utils/constants";
 import { roundsTheNumber } from "../../../utils/functions";
 import CurriculumItem from "../components/CurriculumItem.component";
@@ -30,28 +19,6 @@ import Review from "../components/Review.component";
 import Sidebar from "../components/Sidebar/Sidebar.component";
 
 const { Panel } = Collapse;
-
-type CustomLecture = Omit<Lecture, "resource_count"> & {
-  resource_count: number;
-};
-
-export type CustomCourse = Omit<Course, "lecture"> & {
-  course_outcome: CourseOutcome[];
-  course_requirements: CourseRequirements[];
-  course_bill_count: number;
-  rating_avg_rating: string;
-  section: SectionItems;
-  description: string;
-  author: User;
-  price: Price;
-  video_demo: string;
-  section_count: number;
-  lecture_count: number;
-  lecture: CustomLecture[];
-  rating: Ratings;
-  rating_count: number;
-  subtitle: string;
-};
 
 const DetailCoursePage = () => {
   const [course, setCourse] = useState<CustomCourse | null>(null);

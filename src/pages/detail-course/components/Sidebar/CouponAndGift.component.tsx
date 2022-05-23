@@ -1,14 +1,28 @@
 import { Spin } from "antd";
-import { FC, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  MutableRefObject,
+  SetStateAction,
+  useState,
+} from "react";
 import { FaTimes } from "react-icons/fa";
+import { CustomCourse } from "../../../../api/course.api";
 import { useTypedSelector } from "../../../../hooks/redux.hooks";
-import { CustomCourse } from "../../page/detail-course.page";
 import {
   StyledBtnItem,
   StyledCouponItem,
   StyledCouponWrapper,
 } from "../../styles/detail-course.styles";
-import { CouponProps } from "./Sidebar.component";
+import { DataCoupon } from "./Sidebar.component";
+
+export type CouponProps = {
+  dataCoupon: DataCoupon;
+  applyCoupon: () => void;
+  setDataCoupon: Dispatch<SetStateAction<DataCoupon>>;
+  refInput: MutableRefObject<any>;
+  setSearchParams: (args: any) => void;
+};
 
 type Props = {
   course: CustomCourse;

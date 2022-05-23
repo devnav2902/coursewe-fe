@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
+import { CustomCourse } from "../../../../api/course.api";
 import CartButton from "../../../../components/CartButton/CartButton.component";
 import { useTypedSelector } from "../../../../hooks/redux.hooks";
 import { ROUTES } from "../../../../utils/constants";
-import { CustomCourse } from "../../page/detail-course.page";
 import { StyledButtonBox } from "../../styles/detail-course.styles";
 
 type Props = {
