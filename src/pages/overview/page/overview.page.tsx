@@ -18,6 +18,7 @@ import RevenueChart from "../components/RevenueChart.component";
 import { StyledOverviewWrapper } from "../styles/overview.styles";
 import StudentChart from "../components/StudentChart.component";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
+import RatingChart from "../components/RatingChart.component";
 const { TabPane } = Tabs;
 const OverviewPage = () => {
   const { profile } = useTypedSelector((state) => state.user);
@@ -27,7 +28,7 @@ const OverviewPage = () => {
   const [loadedCourses, setLoadedCourses] = useState(false);
 
   const [overview, setOverview] = useState(null);
-  const [chartRating, setChartRating] = useState([]);
+
   const [chartCourses, setChartCourses] = useState([]);
 
   useEffect(() => {
@@ -37,13 +38,6 @@ const OverviewPage = () => {
     const year = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1;
 
-    ChartApi.getRating(year, currentMonth).then((res) => {
-      const {
-        data: { chartRating },
-      } = res;
-      setChartRating(chartRating);
-      setLoadedRating(true);
-    });
     ChartApi.getCourses(year, currentMonth).then((res) => {
       const {
         data: { chartCourses },
@@ -53,7 +47,6 @@ const OverviewPage = () => {
     });
   }, []);
 
-  if (!loadedRating) return null;
   if (!loadedCourses) return null;
 
   if (!overview) return null;
@@ -70,21 +63,6 @@ const OverviewPage = () => {
     allCoursesInMonth,
     allCoursesByInstructor,
   } = overview;
-
-  function avgRating() {
-    const avg = [];
-    chartRating.map((rating) =>
-      rating.avg_rating === null ? avg.push(0) : avg.push(rating.avg_rating)
-    );
-    return avg;
-  }
-  function avgNumberStudent() {
-    const avg = [];
-    chartRating.map((rating) =>
-      rating.avg_rating === null ? avg.push(0) : avg.push(rating.count_student)
-    );
-    return avg;
-  }
 
   ChartJS.register(
     CategoryScale,
@@ -121,55 +99,6 @@ const OverviewPage = () => {
         // text: "Doanh thu",
       },
     },
-  };
-  const optionmultis = {
-    responsive: true,
-    interaction: {
-      mode: "index",
-      intersect: false,
-    },
-    stacked: false,
-    plugins: {
-      title: {
-        display: true,
-        // text: "Chart.js Line Chart - Multi Axis",
-      },
-    },
-    scales: {
-      y: {
-        type: "linear",
-        display: true,
-        position: "left",
-      },
-      y1: {
-        type: "linear",
-        display: true,
-        position: "right",
-        grid: {
-          drawOnChartArea: false,
-        },
-      },
-    },
-  };
-
-  const datamulti = {
-    labels,
-    datasets: [
-      {
-        label: "Trung bình đánh giá của học viên",
-        data: avgRating(),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-        yAxisID: "y",
-      },
-      {
-        label: "Số học viên đã đăng ký",
-        data: avgNumberStudent(),
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-        yAxisID: "y1",
-      },
-    ],
   };
 
   const dataCourses = {
@@ -255,23 +184,7 @@ const OverviewPage = () => {
                   }
                   key="3"
                 >
-                  <div className="tab-content">
-                    <div className="tab-pane">
-                      <div className="instructor-analytics--chart">
-                        <div className="instructor-analytics-message">
-                          <div className="containerChart activeChart">
-                            <Line options={optionmultis} data={datamulti} />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="instructor-analytics--chart-footer">
-                        <a href="">
-                          <span>Revenue Report</span>
-                          <i className="fas fa-chevron-right"></i>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+                  <RatingChart />
                 </TabPane>
                 {name === "admin" ? (
                   <TabPane
