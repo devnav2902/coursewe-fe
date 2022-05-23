@@ -128,7 +128,7 @@ const VideoLearning: FC<VideoLearningProps> = memo(
     // useEffect(saveLastWatched, [saveLastWatched]);
     // console.log(isReady);
 
-    useUnload((e) => {
+    useUnload((e: Event) => {
       e.preventDefault();
       console.log("hey");
       alert("HEY");

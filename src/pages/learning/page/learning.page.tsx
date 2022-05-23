@@ -101,7 +101,6 @@ const LearningPage = () => {
                         {course?.author?.linkedin && (
                           <div className="socical-link">
                             <div className="my-link">
-                              {console.log(location)}
                               <Link to={location}>
                                 <LinkedinOutlined />
                               </Link>
@@ -111,7 +110,7 @@ const LearningPage = () => {
                         {course?.author?.twitter && (
                           <div className="socical-link">
                             <div className="my-link">
-                              <a href="{{ $author->bio->twitter }}">
+                              <a target="_blank" href={course.author.twitter}>
                                 <TwitterOutlined />
                               </a>
                             </div>
@@ -120,7 +119,13 @@ const LearningPage = () => {
                         {course?.author?.facebook && (
                           <div className="socical-link">
                             <div className="my-link">
-                              <a href="{{ $author->bio->facebook }}">
+                              <a
+                                href={
+                                  "http://www.facebook.com/" +
+                                  course.author.facebook
+                                }
+                                target="_blank"
+                              >
                                 <FacebookOutlined />
                               </a>
                             </div>
