@@ -25,7 +25,9 @@ const CreateCoursePage = React.lazy(
 const DetailCoursePage = React.lazy(
   () => import("../pages/detail-course/page/detail-course.page")
 );
-const DraftPage = React.lazy(() => import("../pages/draft/page/draft.page"));
+const LandingPageDraft = React.lazy(
+  () => import("../pages/draft/pages/course-landing-page.page")
+);
 const BasicsPage = React.lazy(
   () => import("../pages/edit-course/pages/basics.page")
 );
@@ -276,9 +278,12 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    path: ROUTES.course_draft(),
-    component: <DraftPage />,
-    // private: true,
+    path: ROUTES.landing_page_draft(),
+    component: (
+      <BasicLayout>
+        <LandingPageDraft />
+      </BasicLayout>
+    ),
   },
   {
     path: ROUTES.CART,

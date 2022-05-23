@@ -29,10 +29,9 @@ const ROUTES = {
 
   detail_course: (slug?: string) => `/khoa-hoc/${slug ? slug : ":slug"}`,
 
-  instructor_bio: (slug?: string) =>
-    `/thong-tin-giang-vien/${slug ? slug : ":slug"}`,
+  instructor_bio: (slug?: string) => `/user/${slug ? slug : ":slug"}`,
 
-  course_draft: (id?: number | string) =>
+  landing_page_draft: (id?: number | string) =>
     `/khoa-hoc/ban-nhap/${id ? id : ":id"}`,
 
   course_basics: (id?: string | number) =>
