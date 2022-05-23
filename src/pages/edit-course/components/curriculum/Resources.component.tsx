@@ -1,35 +1,66 @@
-import { FC } from "react";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Modal } from "antd";
+import { FC, useContext, memo } from "react";
 import { FaFileDownload, FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { ResourceItems } from "../../../../ts/types/course.types";
-import { useResources } from "../../hooks/curriculum.hooks";
+import ResourceApi from "../../../../api/resource.api";
+import { LectureContext } from "../../hooks/curriculum.hooks";
 import { ResourceContainer } from "../../styles/curriculum.styles";
 
-type ResourceProps = {
-  resource: ResourceItems;
-  lectureId: number;
-  handleDisplayUploadResources: () => void;
-};
-
-const Resources: FC<ResourceProps> = ({
-  resource,
-  lectureId,
-  handleDisplayUploadResources,
-}) => {
+const Resources: FC = () => {
   const { id: courseId } = useParams();
 
-  const { resources, deleteResource } = useResources(lectureId, resource);
+  const {
+    lectureData: {
+      lecture,
+      handle: { getLatestLecture },
+    },
+    uploadResources: { handleDisplayUploadResources },
+  } = useContext(LectureContext);
+
+  // function getLatestResources() {
+  //   ResourceApi.getByLectureId(lectureId)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setResources(res.data.resources);
+  //     })
+  //     .catch((error) => error);
+  // }
+
+  function deleteResource(resourceId: number, courseId: number) {
+    Modal.confirm({
+      title: "Thông báo",
+      icon: <ExclamationCircleOutlined />,
+      content: "Bạn xác nhận muốn gỡ tài liệu này khỏi bài học?",
+      okText: "Đồng ý",
+      cancelText: "Hủy bỏ",
+      onOk: () => {
+        if (courseId) {
+          return new Promise((resolve, reject) => {
+            lecture?.id &&
+              ResourceApi.delete(lecture.id, courseId, resourceId)
+                .then((res) => {
+                  getLatestLecture();
+                  resolve(res);
+                })
+                .catch((e) => reject(e));
+          });
+        }
+      },
+      onCancel() {},
+    });
+  }
 
   return (
     <ResourceContainer className="resources">
-      {resources.length > 0 && (
+      {lecture && lecture.resource.length > 0 && (
         <>
           <p>Tài liệu bài giảng</p>
           <div className="list">
-            {resources.map((resourceItem) => {
+            {lecture.resource.map((resourceItem) => {
               const { filesize, original_filename, id } = resourceItem;
               return (
-                <div key={id} data-lecture={lectureId} className="item">
+                <div key={id} className="item">
                   <div className="item__file">
                     <div className="icon">
                       <FaFileDownload />
@@ -64,4 +95,4 @@ const Resources: FC<ResourceProps> = ({
   );
 };
 
-export default Resources;
+export default memo(Resources);
