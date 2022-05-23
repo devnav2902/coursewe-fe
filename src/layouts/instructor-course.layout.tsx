@@ -218,9 +218,16 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
           </span>
 
           {isRouteWithButtonPreview && (
-            <a target="_blank" href="" className="preview">
+            <Link
+              to={
+                pathname === ROUTES.course_basics(id)
+                  ? ROUTES.landing_page_draft(id)
+                  : ""
+              }
+              className="preview"
+            >
               Xem thử
-            </a>
+            </Link>
           )}
 
           {isRouteWithButtonSave && (
