@@ -25,6 +25,7 @@
     "chartjs-plugin-datalabels": "^2.0.0",
     "eslint-plugin-react-hooks": "^4.5.0",
     "filepond": "^4.30.3",
+    "filepond-plugin-file-validate-type": "^1.2.8",
     "filepond-plugin-image-preview": "^4.6.10",
     "lodash": "^4.17.21",
     "nanoid": "^3.3.1",

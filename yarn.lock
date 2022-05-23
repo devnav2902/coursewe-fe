@@ -4778,6 +4778,11 @@ filelist@^1.0.1:
   dependencies:
     minimatch "^3.0.4"
 
+filepond-plugin-file-validate-type@^1.2.8:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-type/-/filepond-plugin-file-validate-type-1.2.8.tgz#58ab1815a3f505f2189e6943263ae3b6cb314bd1"
+  integrity sha512-UBTqIWbk5+5R0GBELI8svu01MHWjFSLfc9DfCMvFtHKXLdJMxY1p37ChC4YKQjhfODaTuvLnNVRsukMGMFZBBg==
+
 filepond-plugin-image-preview@^4.6.10:
   version "4.6.10"
   resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.6.10.tgz#6e7ecc0997b1b6295e06d3824c37de3111a40c1f"
