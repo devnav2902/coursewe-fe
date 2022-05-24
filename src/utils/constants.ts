@@ -26,7 +26,8 @@ const ROUTES = {
   MY_LEARNING: "/hoc-tap/danh-sach-khoa-hoc",
   ADMIN_REVIEW: "/admin/submission-courses-list",
   CHECKOUT: "/cart/checkout",
-
+  course_dash_redirect: (id: number) =>
+    `/course_dash_redirect/?course_id=${id}`,
   detail_course: (slug?: string) => `/khoa-hoc/${slug ? slug : ":slug"}`,
 
   instructor_bio: (slug?: string) => `/user/${slug ? slug : ":slug"}`,

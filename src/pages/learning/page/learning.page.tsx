@@ -1,15 +1,23 @@
+import {
+  FacebookOutlined,
+  LinkedinOutlined,
+  TwitterOutlined,
+  YoutubeOutlined,
+} from "@ant-design/icons";
 import { Skeleton } from "antd";
-import { FC } from "react";
 import { Link } from "react-router-dom";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
 import Sidebar from "../components/Sidebar/Sidebar.component";
+import VideoLearning from "../components/VideoLearning.component";
 
-const LearningPage: FC = () => {
+const LearningPage = () => {
   const {
     dataCourse: { course, loadedCourse },
   } = useTypedSelector((state) => state.learning);
+
+  // console.log(lastWatchedSecond);
 
   return (
     <main className="main-content-wrapper">
@@ -22,9 +30,12 @@ const LearningPage: FC = () => {
       <div className="learning-content">
         <div className="video-content">
           <div className="video-player">
-            <video controls>
-              <source src="{{ asset($course->section[0]->lecture[0]->src) }}" />
-            </video>
+            <VideoLearning
+              thumbnail={""}
+              url={
+                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+              }
+            />
           </div>
         </div>
         <Sidebar />
@@ -88,17 +99,17 @@ const LearningPage: FC = () => {
                         {course?.author?.linkedin && (
                           <div className="socical-link">
                             <div className="my-link">
-                              <a href="{{ $author->bio->linkedin }}">
-                                <i className="fab fa-linkedin"></i>
-                              </a>
+                              <Link to={location}>
+                                <LinkedinOutlined />
+                              </Link>
                             </div>
                           </div>
                         )}
                         {course?.author?.twitter && (
                           <div className="socical-link">
                             <div className="my-link">
-                              <a href="{{ $author->bio->twitter }}">
-                                <i className="fab fa-twitter"></i>
+                              <a target="_blank" href={course.author.twitter}>
+                                <TwitterOutlined />
                               </a>
                             </div>
                           </div>
@@ -106,8 +117,14 @@ const LearningPage: FC = () => {
                         {course?.author?.facebook && (
                           <div className="socical-link">
                             <div className="my-link">
-                              <a href="{{ $author->bio->facebook }}">
-                                <i className="fab fa-facebook"></i>
+                              <a
+                                href={
+                                  "http://www.facebook.com/" +
+                                  course.author.facebook
+                                }
+                                target="_blank"
+                              >
+                                <FacebookOutlined />
                               </a>
                             </div>
                           </div>
@@ -116,7 +133,7 @@ const LearningPage: FC = () => {
                           <div className="socical-link">
                             <div className="my-link">
                               <a href="{{ $author->bio->youtube }}">
-                                <i className="fab fa-youtube"></i>
+                                <YoutubeOutlined />
                               </a>
                             </div>
                           </div>

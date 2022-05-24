@@ -134,13 +134,6 @@ function Success({ details }) {
   let total = 0.0;
   let shoppingList = "";
 
-  purchase_units.map((data) => {
-    const {
-      amount: { value },
-    } = data;
-    return (total += parseFloat(value));
-  });
-
   // console.log(sum);
   // courses.forEach((course) => {
   //   let purchase = 0.0;

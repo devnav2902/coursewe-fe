@@ -8,9 +8,9 @@ class Purchase {
   purchaseHistory = async () => {
     return axiosClient.get<PurchaseHistoryResponse>("/purchase/history");
   };
-  purchase = async () => {
+  purchase = async (courses: any) => {
     return axiosClient
-      .post(`/purchase`)
+      .post(`/purchase`, { courses })
       .then((res) => res)
       .catch((error) => error.response);
   };

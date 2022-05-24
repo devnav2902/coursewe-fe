@@ -1,4 +1,5 @@
 import React from "react";
+import CourseDashRedirestPage from "../pages/course-dash-redirect/page/course-dash-redirest.page";
 
 const BasicLayout = React.lazy(() => import("../layouts/basic.layout"));
 const InstructorCourseLayout = React.lazy(
@@ -185,6 +186,11 @@ const routes: Routes[] = [
         <MyLearningPage />
       </BasicLayout>
     ),
+    private: true,
+  },
+  {
+    path: ROUTES.course_dash_redirect(),
+    component: <CourseDashRedirestPage />,
     private: true,
   },
   {

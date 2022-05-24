@@ -7,6 +7,7 @@ import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
 import { getCart } from "../../redux/slices/cart.slice";
 import { ROUTES } from "../../utils/constants";
 import { linkThumbnail } from "../../utils/functions";
+import Loading from "../Loading/Loading.component";
 
 const StyledCart = styled.div`
   .notification-badge {

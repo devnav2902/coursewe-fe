@@ -18,7 +18,7 @@ const ButtonContainer: FC<Props> = ({
   dataCoupon,
 }) => {
   const { profile } = useTypedSelector((state) => state.user);
-  const { author, price, slug } = course;
+  const { author, price, slug, id } = course;
 
   const isInstructor = author.id === profile?.id;
   const isFreeCourse = parseInt(price.original_price) === 0;
@@ -26,7 +26,10 @@ const ButtonContainer: FC<Props> = ({
   return (
     <StyledButtonBox className="buttons-box">
       {isInstructor ? (
-        <Link to={ROUTES.learning(slug)} className="theme-btn btn-style-one">
+        <Link
+          to={ROUTES.course_dash_redirect(id)}
+          className="theme-btn btn-style-one"
+        >
           Xem khóa học
         </Link>
       ) : isFreeCourse || dataCoupon.isFreeCoupon ? (

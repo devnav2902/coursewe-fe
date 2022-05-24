@@ -12,15 +12,15 @@ type CourseProps = {
 };
 
 const Course: FC<CourseProps> = ({ course }) => {
-  const { author, count_progress, slug, thumbnail, title, rating } = course;
+  const { author, count_progress, slug, thumbnail, title, rating, id } = course;
   return (
     <StyledCourse className="course">
-      <Link to={ROUTES.learning(slug)} className="image-course">
+      <Link to={ROUTES.course_dash_redirect(id)} className="image-course">
         <img src={linkThumbnail(thumbnail)} alt={title} />
       </Link>
       <div className="profile-course">
         <h4 className="name-course truncate">
-          <Link to={ROUTES.learning(slug)}>{title}</Link>
+          <Link to={ROUTES.course_dash_redirect(id)}>{title}</Link>
         </h4>
         <Link
           to={!author ? "author" : ROUTES.instructor_bio(author.slug)}
@@ -30,7 +30,7 @@ const Course: FC<CourseProps> = ({ course }) => {
         </Link>
         {count_progress === 0.0 ? (
           <div className="course-footer">
-            <Link to={ROUTES.learning(slug)}>Bắt đầu học</Link>
+            <Link to={ROUTES.course_dash_redirect(id)}>Bắt đầu học</Link>
           </div>
         ) : (
           <div className="course-footer">

@@ -1,7 +1,6 @@
 import { Dropdown, Menu, Progress, Spin } from "antd";
 import { FC, useEffect } from "react";
 import { FaAngleDown } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "../components/Footer/Footer.component";
@@ -11,16 +10,16 @@ import { getCourse, getProgress } from "../redux/slices/learning.slice";
 import { ROUTES } from "../utils/constants";
 
 const LearningLayout: FC = ({ children }) => {
-  const dispatch = useDispatch();
-  const { slug } = useParams() as { slug: string };
+  const dispatch = useAppDispatch();
+  const { course_slug } = useParams() as { course_slug: string };
 
   useEffect(() => {
-    dispatch(getCourse(slug));
+    dispatch(getCourse(course_slug));
 
     return () => {
       dispatch(resetStateLearning);
     };
-  }, [slug, dispatch]);
+  }, [course_slug, dispatch]);
 
   return (
     <>

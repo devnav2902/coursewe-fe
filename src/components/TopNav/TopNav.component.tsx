@@ -1,5 +1,6 @@
 import { BellOutlined, SearchOutlined } from "@ant-design/icons";
 import { Dropdown, Spin } from "antd";
+import { useState } from "react";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
@@ -37,12 +38,16 @@ const UserImage: FC = () => {
 
 const TopNav: FC = () => {
   const user = useTypedSelector((state) => state.user);
+  const { cart } = useTypedSelector((state) => state.cart);
+
+  const [cartTemp, setCartTemp] = useState(0);
   const { fullname, email, role } = user.profile ?? {};
   const dispatch = useAppDispatch();
 
   function handleLogout() {
     dispatch(logout());
   }
+  console.log(cart);
 
   return (
     <nav className="nav-top">

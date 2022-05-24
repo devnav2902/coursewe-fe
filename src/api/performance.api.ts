@@ -17,6 +17,15 @@ export type EnrollmentArray = Enrollment[];
 export type EnrollmentResponse = {
   enrollmentData: EnrollmentArray;
 };
+export type Rating = {
+  date: string;
+  avg_rating: number;
+  count_students: number;
+};
+export type RatingArray = Rating[];
+export type RatingResponse = {
+  chartRatingData: RatingArray;
+};
 
 export type AmountCoursesByCategory = {
   amountCourses: number;
@@ -40,11 +49,10 @@ class Performance {
     });
   };
 
-  getRating = async (year: number, currentMonth: number) => {
-    return axiosClient
-      .post("/performance/rating", { year, currentMonth })
-      .then((res) => res)
-      .catch((error) => error);
+  getRating = async (params: Params) => {
+    return axiosClient.get<RatingResponse>("/performance/rating", {
+      params,
+    });
   };
 
   getCourses = async (params: Params) => {

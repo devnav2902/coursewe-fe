@@ -10,12 +10,11 @@ import PurchaseApi from "../../../api/purchase.api";
 
 const CheckoutPage = () => {
   const dispatch = useDispatch();
-
   const { cart } = useSelector((state) => state.cart);
   const [src, setSrc] = useState(false);
   const [succeeded, setSucceeded] = useState(false);
   const [details, setDetails] = useState(null);
-
+  console.log(cart);
   useEffect(() => {
     QRCode.toDataURL("Coursewe.com").then(setSrc);
   }, []);
@@ -23,8 +22,21 @@ const CheckoutPage = () => {
     setSucceeded(true);
     setDetails(details);
     if (details.status === "COMPLETED") {
+      PurchaseApi.purchase(cart).then((res) => console.log(res));
     }
   }
+  let price = 0;
+
+  cart.map((course) => {
+    const {
+      thumbnail,
+      title,
+      id,
+      price: { format_price },
+      coupon_code,
+    } = course;
+    price += format_price;
+  });
 
   return (
     <Paypal>
@@ -61,6 +73,7 @@ const CheckoutPage = () => {
                           title,
                           id,
                           price: { format_price },
+                          coupon_code,
                         } = course;
                         // console.log(course);
                         return (
@@ -68,8 +81,16 @@ const CheckoutPage = () => {
                             <img src={thumbnail} alt="" />
                             <div className="card-title">{title}</div>
                             <div className="card-price">
-                              <div className="discount-price">$129</div>
-                              <div className="line-through original-price">
+                              {coupon_code && (
+                                <div className="discount-price">$129</div>
+                              )}
+                              <div
+                                className={
+                                  coupon_code
+                                    ? "line-through original-price"
+                                    : "original-price"
+                                }
+                              >
                                 {format_price + " "}VND
                               </div>
                             </div>

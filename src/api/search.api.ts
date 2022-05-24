@@ -1,9 +1,9 @@
 import axiosClient from "../utils/axios";
 
 class Search {
-  search = async () => {
+  search = async (value: string) => {
     return axiosClient
-      .post(`/autocomplete/search`)
+      .post(`/autocomplete/search`, { inputSearch: value })
       .then((response) => response)
       .catch((error) => error.response);
   };

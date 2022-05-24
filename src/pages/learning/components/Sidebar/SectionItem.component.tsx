@@ -1,7 +1,10 @@
 import { Collapse } from "antd";
+import { Link } from "react-router-dom";
+import { routesWithParams } from "../../../../utils/constants";
 import { FC } from "react";
 import { Section } from "../../../../ts/types/course.types";
 import LectureItem from "./LectureItem.component";
+import { useTypedSelector } from "../../../../hooks/redux.hooks";
 
 const { Panel } = Collapse;
 
@@ -10,6 +13,9 @@ type SectionProps = {
 };
 
 const SectionItem: FC<SectionProps> = ({ section }) => {
+  const {
+    dataCourse: { course },
+  } = useTypedSelector((state) => state.learning);
   return (
     <div className="section">
       <div className="accordion-panel {{ $section->order == 1 ? '' : 'd-none' }}">

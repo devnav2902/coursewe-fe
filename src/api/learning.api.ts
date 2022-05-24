@@ -10,6 +10,15 @@ class Learning {
   getSections = async (courseId: number) => {
     return axiosClient.get<{ sections: SectionItems }>(`/sections/${courseId}`);
   };
+  // getLecture = async (courseId: number) => {
+  //   return axiosClient
+  //     .get(`/sections/${courseId}`)
+  //     .then((res) => res)
+  //     .catch((error) => error.response);
+  // };
+  getVideo = async (course_slug: string, lectureId: number) => {
+    return axiosClient.get(`course/${course_slug}/lecture/${lectureId}`);
+  };
 }
 
 const LearningApi = new Learning();
