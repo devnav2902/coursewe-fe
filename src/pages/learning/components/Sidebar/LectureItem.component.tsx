@@ -17,7 +17,7 @@ import {
   getSections,
 } from "../../../../redux/slices/learning.slice";
 import { Lecture } from "../../../../ts/types/course.types";
-import { routesWithParams } from "../../../../utils/constants";
+import { ROUTES } from "../../../../utils/constants";
 
 type LectureProps = {
   lecture: Lecture;
@@ -96,13 +96,7 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
           <span></span>
         </label>
       </div>
-      <Link
-        to={
-          !course?.slug
-            ? ""
-            : routesWithParams.learning(course.slug, lecture.id)
-        }
-      >
+      <Link to={!course?.slug ? "" : ROUTES.learning(course.slug, lecture.id)}>
         {" "}
         <div className="link">
           <div className="text">

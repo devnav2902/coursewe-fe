@@ -1,10 +1,8 @@
 import { Collapse } from "antd";
-import { Link } from "react-router-dom";
-import { routesWithParams } from "../../../../utils/constants";
 import { FC } from "react";
+import { useTypedSelector } from "../../../../hooks/redux.hooks";
 import { Section } from "../../../../ts/types/course.types";
 import LectureItem from "./LectureItem.component";
-import { useTypedSelector } from "../../../../hooks/redux.hooks";
 
 const { Panel } = Collapse;
 
