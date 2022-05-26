@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useTypedSelector } from "../../hooks/redux.hooks";
 import { addToCart } from "../../redux/slices/cart.slice";
-import { Course } from "../../ts/types/course.types";
+import { Course, Price } from "../../ts/types/course.types";
 import { ROUTES } from "../../utils/constants";
 
 const StyledCartButton = styled.div`
@@ -15,7 +15,7 @@ const StyledCartButton = styled.div`
 `;
 
 type CartButton = {
-  course: Course;
+  course: Course & { price: Price };
 };
 
 const CartButton: FC<CartButton> = ({ course }) => {
@@ -28,7 +28,7 @@ const CartButton: FC<CartButton> = ({ course }) => {
   }
 
   function existedCourseInCart(id: number) {
-    return cartData.cart.some((course) => course.id === id);
+    return cartData.cart.courses.some((course) => course.id === id);
   }
 
   return (
