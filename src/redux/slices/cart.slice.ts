@@ -2,13 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 import CartApi from "../../api/cart.api";
 import {
+  ArrayShoppingCartResponse,
   CartType,
   CartTypes,
   Course,
   Courses,
   FormattedCart,
+  FormattedCartItem,
   ShoppingCart,
-  ShoppingCartResponse,
+  ShoppingCartResponseItem,
 } from "../../ts/types/cart.types";
 
 export type CartState = {
@@ -28,11 +30,14 @@ export const getCart = createAsyncThunk<
     const { data } = await CartApi.get();
 
     return data.shoppingCart.reduce((result, item) => {
-      const { cartType, data } = item;
+      const { cartType, data, current_price, original_price } = item;
       const type = cartType.type;
 
-      return { ...result, [type]: data };
-    }, {}) as FormattedCart;
+      return {
+        ...result,
+        [type]: { courses: data, current_price, original_price },
+      };
+    }, {} as FormattedCart);
   } catch (error) {
     return rejectWithValue(error);
   }
@@ -64,29 +69,32 @@ export const addToCart = createAsyncThunk<Course, number>(
 // utils
 const getItemsByCartType = (
   type: CartType["type"],
-  arr: ShoppingCartResponse
+  arr: ArrayShoppingCartResponse
 ) => {
-  const cartItems = arr
-    .map((cart) => cart.cartType.type === type && cart.data)
-    .filter((val) => val)
-    .at(0) as Courses;
+  const cartItems = arr.find(
+    (cart) => cart.cartType.type === type
+  ) as ShoppingCartResponseItem;
 
-  return cartItems;
+  return {
+    courses: cartItems.data,
+    original_price: cartItems.original_price,
+    current_price: cartItems.current_price,
+  } as FormattedCartItem;
 };
 
 export const removeItem = createAsyncThunk<
-  { type: CartType["type"]; courses: Courses },
+  { type: CartType["type"]; data: FormattedCartItem },
   { id: number; type: CartType["type"] }
 >("cart/removeItem", async ({ id, type }, { rejectWithValue }) => {
   try {
     const { data } = await CartApi.delete(id);
 
-    const courses =
+    const shoppingCartData =
       type === "cart"
         ? getItemsByCartType("cart", data.shoppingCart)
         : getItemsByCartType("saved_for_later", data.shoppingCart);
 
-    return { type, courses };
+    return { type, data: shoppingCartData };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log("error message: ", error.message);
@@ -156,10 +164,11 @@ export const moveToCart = createAsyncThunk<
   }
 });
 
+const initialCart = { courses: [], current_price: "0", original_price: "0" };
 const initialState: CartState = {
-  cart: [],
-  saved_for_later: [],
-  wishlist: [],
+  cart: initialCart,
+  saved_for_later: initialCart,
+  wishlist: initialCart,
   loading: false, // Thêm/ xóa
   error: null,
   loadedCart: false, // load từ dtb
@@ -186,7 +195,7 @@ const cartSlice = createSlice({
     });
     builder.addCase(addToCart.fulfilled, (state, { payload }) => {
       state.loading = false;
-      state.cart.push(payload);
+      state.cart.courses.push(payload);
     });
     builder.addCase(addToCart.rejected, (state, { payload }) => {
       state.loading = false;
@@ -197,9 +206,9 @@ const cartSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(removeItem.fulfilled, (state, { payload }) => {
-      if (payload.type === "cart") state.cart = payload.courses;
+      if (payload.type === "cart") state.cart = payload.data;
       else if (payload.type === "saved_for_later") {
-        state.saved_for_later = payload.courses;
+        state.saved_for_later = payload.data;
       }
 
       state.loading = false;
