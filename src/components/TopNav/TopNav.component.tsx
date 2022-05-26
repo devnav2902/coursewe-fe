@@ -47,7 +47,6 @@ const TopNav: FC = () => {
   function handleLogout() {
     dispatch(logout());
   }
-  console.log(cart);
 
   return (
     <nav className="nav-top">
