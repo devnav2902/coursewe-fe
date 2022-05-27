@@ -1,9 +1,18 @@
-import { FC, memo, useCallback, useEffect, useRef, useState } from "react";
+import {
+  FC,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import ReactPlayer from "react-player/lazy";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import LearningApi from "../../../api/learning.api";
 import ProgressLogsApi from "../../../api/progress-logs.api";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
+import { LearningContext } from "../hooks/leaning.hooks";
 
 type VideoLearningProps = {
   thumbnail: string;
@@ -30,7 +39,8 @@ const VideoLearning: FC<VideoLearningProps> = memo(
       playingVideo: true,
     });
 
-    const videoRef = useRef<ReactPlayer>(null);
+    const { course_slug, lectureId, videoRef, saveLastWatched } =
+      useContext(LearningContext);
 
     const { course, loadedCourse } = useTypedSelector(
       (state) => state.learning.dataCourse
@@ -45,11 +55,6 @@ const VideoLearning: FC<VideoLearningProps> = memo(
 
     const [saveLastWatchedSecond, setSaveLastWatchedSecond] = useState(false);
     const navigate = useNavigate();
-    const { lectureId, course_slug } = useParams() as {
-      lectureId: string;
-      course_slug: string;
-    };
-    const lectureRef = useRef(lectureId);
 
     const [searchParams] = useSearchParams();
 
@@ -62,7 +67,7 @@ const VideoLearning: FC<VideoLearningProps> = memo(
       if (!isReady && last_watched_second) {
         const timeToStart = parseInt(last_watched_second);
 
-        if (timeToStart !== NaN) {
+        if (timeToStart !== NaN && videoRef) {
           videoRef.current?.seekTo(timeToStart, "seconds");
           setIsReady(true);
         }
@@ -107,23 +112,7 @@ const VideoLearning: FC<VideoLearningProps> = memo(
       setSaveLastWatchedSecond(false);
     }, [lectureId, last_watched_second, course?.id, loadedCourse]);
 
-    // const second = videoRef.current?.getCurrentTime();
-
-    const second = videoRef.current?.getCurrentTime();
     // console.log(second);
-    const saveLastWatched = useCallback(() => {
-      window.confirm("hi");
-      if (course?.id && typeof second === "number" && loadedCourse) {
-        ProgressLogsApi.saveLastWatched({
-          course_id: course.id,
-          lecture_id: parseInt(lectureRef.current),
-          second,
-        }).then((res) => {
-          lectureRef.current = lectureId;
-          localStorage.setItem("success", "success");
-        });
-      }
-    }, [lectureId, course?.id, second, loadedCourse]);
 
     // useEffect(saveLastWatched, [saveLastWatched]);
     // console.log(isReady);
@@ -132,6 +121,7 @@ const VideoLearning: FC<VideoLearningProps> = memo(
       e.preventDefault();
       console.log("hey");
       alert("HEY");
+      saveLastWatched();
     });
 
     return (

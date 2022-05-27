@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ProgressLogsApi from "../../../api/progress-logs.api";
-import { routesWithParams } from "../../../utils/constants";
+import { ROUTES } from "../../../utils/constants";
 
 const CourseDashRedirestPage: FC = () => {
   const [searchParams] = useSearchParams();
@@ -13,13 +13,16 @@ const CourseDashRedirestPage: FC = () => {
     ProgressLogsApi.getDataLastWatched(id).then(
       ({ data: { dataLastWatched } }) => {
         const {
-          course: { slug },
+          course: { slug, id },
           lecture_id,
           last_watched_second,
         } = dataLastWatched;
 
         navigate(
-          routesWithParams.learning(slug, lecture_id) +
+          ROUTES.learning({
+            course_slug: slug,
+            lectureId: lecture_id,
+          }) +
             "?start=" +
             last_watched_second
         );
