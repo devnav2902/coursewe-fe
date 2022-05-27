@@ -16,6 +16,13 @@ export type Course = {
   instructional_level: InstructionalLevel;
   author: User;
   coupon_code?: null | string;
+  course_coupon: null | {
+    code: string;
+    course_id: number;
+    discount_price: string;
+    status: 1;
+    purchase_price: string;
+  };
 };
 export type Courses = Course[];
 
@@ -34,13 +41,24 @@ export type CartType = {
   name: string;
 };
 
+export type FormattedCartItem = {
+  courses: Courses;
+  current_price: string;
+  original_price: string;
+};
 export type FormattedCart = {
-  [x in keyof CartTypes]: Courses;
+  [x in keyof CartTypes]: FormattedCartItem;
 };
 
-export type ShoppingCartResponse = { data: Courses; cartType: CartType }[];
-export type ShoppingCart = { shoppingCart: ShoppingCartResponse };
+export type ShoppingCartResponseItem = {
+  data: Courses;
+  cartType: CartType;
+  original_price: string;
+  current_price: string;
+};
+export type ArrayShoppingCartResponse = ShoppingCartResponseItem[];
+export type ShoppingCart = { shoppingCart: ArrayShoppingCartResponse };
 export type DataCart = {
-  shoppingCart: ShoppingCartResponse;
+  shoppingCart: ArrayShoppingCartResponse;
   user_id?: number;
 };

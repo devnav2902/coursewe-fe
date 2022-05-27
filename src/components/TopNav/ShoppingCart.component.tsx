@@ -1,13 +1,12 @@
 import { ShoppingOutlined } from "@ant-design/icons";
 import { Avatar, Badge, ConfigProvider, Empty, List, Popover } from "antd";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
 import { getCart } from "../../redux/slices/cart.slice";
 import { ROUTES } from "../../utils/constants";
 import { linkThumbnail } from "../../utils/functions";
-import Loading from "../Loading/Loading.component";
 
 const StyledCart = styled.div`
   .notification-badge {
@@ -43,14 +42,12 @@ const ShoppingCart = () => {
     if (userLoaded) dispatch(getCart());
   }, [userLoaded, dispatch]);
 
-  const total = useMemo(
-    () =>
-      cart
-        .reduce((total, current) => {
-          return (total += parseFloat(current.price.original_price));
-        }, 0)
-        .toLocaleString("vi-VN"),
-    [cart]
+  const originalTotal = cart.original_price;
+  const appliedCouponTotal = cart.current_price;
+
+  const originalPriceRemovedDot = parseInt(originalTotal.replace(/\./g, ""));
+  const currentPriceRemovedDot = parseInt(
+    appliedCouponTotal.replace(/\./g, "")
   );
 
   const content = (
@@ -62,16 +59,31 @@ const ShoppingCart = () => {
       >
         <List
           footer={
-            !cart.length ? null : (
+            !cart.courses.length ? null : (
               <div>
-                <div className="total fw-bold mb-1">Tổng cộng: {total} đ</div>
+                <div className="total fw-bold mb-1">
+                  Tổng cộng:{" "}
+                  {originalPriceRemovedDot === currentPriceRemovedDot ? (
+                    <span>{originalTotal} VNĐ</span>
+                  ) : (
+                    <>
+                      <span>{appliedCouponTotal} VNĐ</span>&nbsp;
+                      <span
+                        className="line-through"
+                        style={{ color: "#6a6f73", fontWeight: "normal" }}
+                      >
+                        {originalTotal} VNĐ
+                      </span>
+                    </>
+                  )}
+                </div>
                 <Link to={ROUTES.CART} className="btn btn-color-default w-100">
                   Xem trong giỏ hàng
                 </Link>
               </div>
             )
           }
-          dataSource={cart}
+          dataSource={cart.courses}
           itemLayout="horizontal"
           renderItem={(item) => (
             <List.Item>
@@ -96,10 +108,22 @@ const ShoppingCart = () => {
                       {item.author.fullname}
                     </span>
                     <span className="fw-bold d-block price">
-                      <span className="original-price">
-                        {item.price.format_price} đ
-                      </span>
-                      {/* <span className="discount"></span> */}
+                      {!item.course_coupon ? (
+                        <span>{item.price.format_price} VNĐ</span>
+                      ) : (
+                        <>
+                          <span className="discount">
+                            {item.course_coupon.purchase_price} VNĐ
+                          </span>
+                          &nbsp;
+                          <span
+                            className="line-through"
+                            style={{ color: "#6a6f73", fontWeight: "normal" }}
+                          >
+                            {item.price.format_price} VNĐ
+                          </span>
+                        </>
+                      )}
                     </span>
                   </a>
                 }
@@ -117,9 +141,9 @@ const ShoppingCart = () => {
         <StyledCart>
           <Badge
             color="#e260f3"
-            count={cart.length}
+            count={cart.courses.length}
             offset={[5, 2]}
-            title={`${cart.length} khóa học trong giỏ hàng`}
+            title={`${cart.courses.length} khóa học trong giỏ hàng`}
           >
             <ShoppingOutlined style={{ fontSize: 20 }} />
           </Badge>
@@ -134,9 +158,9 @@ const ShoppingCart = () => {
             <Link to={ROUTES.CART} className="link">
               <Badge
                 color="#e260f3"
-                count={cart.length}
+                count={cart.courses.length}
                 offset={[5, 2]}
-                title={`${cart.length} khóa học trong giỏ hàng`}
+                title={`${cart.courses.length} khóa học trong giỏ hàng`}
               >
                 <ShoppingOutlined style={{ fontSize: 20 }} />
               </Badge>

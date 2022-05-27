@@ -7,17 +7,20 @@ import SelectCurrency from "../component/SelectCurrency.component";
 import Success from "../component/Success.component";
 import { useDispatch, useSelector } from "react-redux";
 import PurchaseApi from "../../../api/purchase.api";
+import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
 
 const CheckoutPage = () => {
-  const dispatch = useDispatch();
-  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useAppDispatch();
+  const { cart } = useTypedSelector((state) => state.cart);
   const [src, setSrc] = useState(false);
   const [succeeded, setSucceeded] = useState(false);
   const [details, setDetails] = useState(null);
   console.log(cart);
+
   useEffect(() => {
     QRCode.toDataURL("Coursewe.com").then(setSrc);
   }, []);
+
   function handleSucceeded(details) {
     setSucceeded(true);
     setDetails(details);
@@ -27,7 +30,7 @@ const CheckoutPage = () => {
   }
   let price = 0;
 
-  cart.map((course) => {
+  cart.courses.map((course) => {
     const {
       thumbnail,
       title,

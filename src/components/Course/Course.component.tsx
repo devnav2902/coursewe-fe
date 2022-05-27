@@ -13,6 +13,7 @@ import { User } from "../../ts/types/user.types";
 import { ROUTES } from "../../utils/constants";
 import { linkThumbnail, roundsTheNumber } from "../../utils/functions";
 import CartButton from "../CartButton/CartButton.component";
+import EnrollButton from "../EnrollButton/EnrollButton.component";
 import Rating from "../Rating/Rating.component";
 
 const StyledQuickViewBox = styled.div`
@@ -156,6 +157,8 @@ const Course: FC<CourseProps> = ({ course }) => {
     course_outcome,
   } = course;
 
+  const isFreeCourse = parseInt(price.original_price) === 0;
+
   const quickViewBox = (
     <StyledQuickViewBox>
       <Link to={ROUTES.detail_course(slug)} className="title">
@@ -172,7 +175,11 @@ const Course: FC<CourseProps> = ({ course }) => {
         ))}
       </div>
       <div className="quick-view-footer d-flex align-item-center">
-        <CartButton course={course} />
+        {isFreeCourse ? (
+          <EnrollButton className="w-100" />
+        ) : (
+          <CartButton course={course} />
+        )}
         {/* <WishlistButton course={course} /> */}
       </div>
     </StyledQuickViewBox>

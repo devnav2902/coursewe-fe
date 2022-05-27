@@ -1,50 +1,41 @@
-import {
-  FacebookOutlined,
-  GoogleOutlined,
-  TwitterOutlined,
-} from "@ant-design/icons";
-import { Col, Collapse, Row, Spin } from "antd";
+import { Alert, Col, Collapse, Row } from "antd";
 import { useEffect, useState } from "react";
 import { BiCheck } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { Link, useParams } from "react-router-dom";
 import CourseApi, { CustomCourse } from "../../../api/course.api";
-import Loading from "../../../components/Loading/Loading.component";
 import Rating from "../../../components/Rating/Rating.component";
+import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { ROUTES } from "../../../utils/constants";
-import { roundsTheNumber } from "../../../utils/functions";
-import CurriculumItem from "../components/CurriculumItem.component";
-import RatingGraph from "../components/RatingGraph.component";
-import Review from "../components/Review.component";
-import Sidebar from "../components/Sidebar/Sidebar.component";
+import CurriculumItem from "../../detail-course/components/CurriculumItem.component";
+import Sidebar from "../Sidebar/Sidebar.component";
 
 const { Panel } = Collapse;
 
-const DetailCoursePage = () => {
-  const [course, setCourse] = useState<CustomCourse | null>(null);
-  const [graph, setGraph] = useState(null);
+const DraftPage = () => {
+  const { profile } = useTypedSelector((state) => state.user);
+  const { id } = useParams() as { id: string };
 
-  const { slug } = useParams() as { slug: string };
+  const [dataCourse, setDataCourse] = useState<CustomCourse | null>(null);
 
   useEffect(() => {
-    CourseApi.getCourseBySlug(slug).then((res) => {
-      const { data } = res;
+    CourseApi.getCourseOfAuthorById(id).then(({ data }) => {
+      const { course } = data;
 
-      setCourse(data.course);
-      setGraph(data.graph);
+      setDataCourse(course);
     });
-  }, [slug]);
+  }, [id]);
 
-  if (!course)
-    return (
-      <Loading>
-        <Spin size="large" />
-      </Loading>
-    );
+  if (!dataCourse) return null;
 
-  const { title, description, author, subtitle, section } = course;
-  const { course_requirements, course_outcome } = course;
-  const { rating_count, course_bill_count, rating_avg_rating, rating } = course;
+  const {
+    title,
+    description,
+    section,
+    subtitle,
+    course_requirements,
+    course_outcome,
+  } = dataCourse;
 
   return (
     <div className="detail-course">
@@ -59,17 +50,12 @@ const DetailCoursePage = () => {
               <div className="subtitle">{subtitle}</div>
 
               <div className="rating-content d-flex align-items-center">
-                {rating_avg_rating && (
-                  <span>{roundsTheNumber(rating_avg_rating, 1)}</span>
-                )}
+                <span>0.0</span>
 
-                <Rating
-                  value={roundsTheNumber(rating_avg_rating, 1)}
-                  size="14px"
-                />
+                <Rating count={1} value={1} size="14px" />
 
-                <span className="rating-count">({rating_count} Đánh giá)</span>
-                <span>{course_bill_count} Học viên</span>
+                <span className="rating-count">(0 Đánh giá)</span>
+                <span>0 Học viên</span>
               </div>
 
               <div className="video-info-boxed">
@@ -77,36 +63,38 @@ const DetailCoursePage = () => {
                   <h6>Giảng viên</h6>
                   <div className="info-author">
                     <div className="authors">
-                      <Link to={ROUTES.instructor_bio(author.slug)}>
-                        {author.fullname}
-                      </Link>
+                      {profile && (
+                        <Link to={ROUTES.instructor_bio(profile.slug)}>
+                          {profile.fullname}
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>
-                <div className="pull-right">
-                  <ul className="social-box">
-                    <li className="share">Chia sẻ khóa học:</li>
-                    <li>
-                      <Link to="/" className="">
-                        <FacebookOutlined />
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/" className="">
-                        <GoogleOutlined />
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/" className="">
-                        <TwitterOutlined />
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
               </div>
+
+              <Row>
+                <Col span={24}>
+                  <Alert
+                    message={
+                      <>
+                        <h6>Khóa học này đang trong chế độ xét duyệt.</h6>
+                        <span className="contact">
+                          Để biết thêm thông tin, vui lòng liên hệ&nbsp;
+                          <Link to={ROUTES.instructor_bio(profile?.slug)}>
+                            {profile?.fullname}
+                          </Link>
+                        </span>
+                      </>
+                    }
+                    type="warning"
+                    showIcon
+                  />
+                </Col>
+              </Row>
             </div>
 
-            <Sidebar course={course} />
+            <Sidebar course={dataCourse} />
           </div>
         </div>
 
@@ -184,14 +172,7 @@ const DetailCoursePage = () => {
               <div className="course-info__item">
                 <p>Đánh giá từ học viên</p>
                 <div className="tab active-tab" id="review-box">
-                  {!graph ? null : (
-                    <RatingGraph
-                      rating_avg_rating={rating_avg_rating}
-                      graph={graph}
-                    />
-                  )}
-
-                  <Review reviews={rating} />
+                  Khóa học này chưa có bất kì đánh giá nào!
                 </div>
               </div>
             </div>
@@ -201,5 +182,4 @@ const DetailCoursePage = () => {
     </div>
   );
 };
-
-export default DetailCoursePage;
+export default DraftPage;

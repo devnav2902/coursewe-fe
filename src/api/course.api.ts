@@ -1,12 +1,43 @@
-import { CustomCourse } from "../components/Course/Course.component";
 import axiosClient from "../utils/axios";
-import { Course as CourseType } from "../ts/types/course.types";
+import {
+  Course as CourseType,
+  CourseOutcome,
+  CourseRequirements,
+  Lecture,
+  Price,
+  Ratings,
+  SectionItems,
+} from "../ts/types/course.types";
+import { User } from "../ts/types/user.types";
+import { CustomCourse as CourseComponentType } from "../components/Course/Course.component";
 
 export type CoursesOfInstructor = (CourseType & {
   updated_at: string;
   submit_for_review: boolean;
   isPublished: boolean;
 })[];
+
+type CustomLecture = Omit<Lecture, "resource_count"> & {
+  resource_count: number;
+};
+
+export type CustomCourse = Omit<CourseType, "lecture"> & {
+  course_outcome: CourseOutcome[];
+  course_requirements: CourseRequirements[];
+  course_bill_count: number;
+  rating_avg_rating: string;
+  section: SectionItems;
+  description: string;
+  author: User;
+  price: Price;
+  video_demo: string;
+  section_count: number;
+  lecture_count: number;
+  lecture: CustomLecture[];
+  rating: Ratings;
+  rating_count: number;
+  subtitle: string;
+};
 class Course {
   userHasRated = async (courseId: number) => {
     return axiosClient
@@ -23,24 +54,26 @@ class Course {
   };
 
   bestSellingCourses = async () => {
-    return axiosClient.get<{ courses: CustomCourse[] }>("/course/best-selling");
+    return axiosClient.get<{ courses: CourseComponentType[] }>(
+      "/course/best-selling"
+    );
   };
 
   getLatestCourses = async () => {
-    return axiosClient.get<{ latestCourses: CustomCourse[] }>("/course/latest");
+    return axiosClient.get<{ latestCourses: CourseComponentType[] }>(
+      "/course/latest"
+    );
   };
 
   getCourseBySlug = async (slug: string) => {
-    return axiosClient
-      .get(`/course/get/${slug}`)
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<{ course: CustomCourse; graph: any }>(
+      `/course/get/${slug}`
+    );
   };
-  getCourseOfAuthorById = async (id: number) => {
-    return axiosClient
-      .get("/instructor/course/" + id)
-      .then((res) => res)
-      .catch((error) => error.response);
+  getCourseOfAuthorById = async (id: number | string) => {
+    return axiosClient.get<{ course: CustomCourse }>(
+      `/instructor/course/${id}`
+    );
   };
 
   getCoursesByCurrentUser = async () => {

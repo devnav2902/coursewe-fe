@@ -32,14 +32,14 @@ const ROUTES = {
   ADMIN_REVIEW: "/admin/submission-courses-list",
   CHECKOUT: "/cart/checkout",
   COURSE_DASH_REDIRECT: "/course_dash_redirect",
-  course_dash_redirect: (id: number) =>
-    `/course_dash_redirect/?course_id=${id}`,
+
+  course_dash_redirect: (id?: number) =>
+    `/course_dash_redirect/${id ? "?course_id=" + id : ""}`,
   detail_course: (slug?: string) => `/khoa-hoc/${slug ? slug : ":slug"}`,
 
-  instructor_bio: (slug?: string) =>
-    `/thong-tin-giang-vien/${slug ? slug : ":slug"}`,
+  instructor_bio: (slug?: string) => `/user/${slug ? slug : ":slug"}`,
 
-  course_draft: (id?: number | string) =>
+  landing_page_draft: (id?: number | string) =>
     `/khoa-hoc/ban-nhap/${id ? id : ":id"}`,
 
   course_basics: (id?: string | number) =>

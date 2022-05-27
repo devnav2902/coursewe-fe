@@ -1,4 +1,6 @@
+import { Tooltip } from "antd";
 import { FC } from "react";
+import { BsFillTagFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Rating from "../../../components/Rating/Rating.component";
 import { useAppDispatch } from "../../../hooks/redux.hooks";
@@ -17,9 +19,11 @@ type Props = {
 };
 
 const CourseItem: FC<Props> = ({ course, actionType }) => {
-  const { thumbnail, author, title, slug, id, rating_avg_rating } = course;
-  const { price, rating_count, instructional_level } = course;
-  const discount = "";
+  const { thumbnail, author, title, slug, id, instructional_level } = course;
+  const { rating_count, rating_avg_rating } = course;
+  const { course_coupon, price } = course;
+
+  const purchase_price = course_coupon?.purchase_price;
 
   const dispatch = useAppDispatch();
 
@@ -93,20 +97,27 @@ const CourseItem: FC<Props> = ({ course, actionType }) => {
       </Link>
       <Actions />
       <div className="card-price">
-        {/* {
-                  discount === "Free"
-                    ? `<span title="${coupon.code}" className='discount d-flex align-items-center'>Free<i className='fas fa-tag'></i>
-                        </span>`
-                    : discount
-                    ? `<span title="${coupon.code}" className='discount d-flex align-items-center'>$<span>${discount}</span>
-                            <i className="fas fa-tag"></i>
-                        </span>`
-                    : ""
-                } */}
+        {!purchase_price && typeof purchase_price !== "number" ? (
+          <span className="fw-bold">{course.price.format_price} VNĐ</span>
+        ) : (
+          <div className="d-flex flex-column">
+            <Tooltip title={course.coupon_code} color={"pink"}>
+              <span className="discount">
+                {parseInt(purchase_price) === 0
+                  ? "Miễn phí"
+                  : purchase_price + " VNĐ"}{" "}
+                <BsFillTagFill />
+              </span>
+            </Tooltip>
 
-        <span className={discount ? "original-price line-through" : ""}>
-          <span>{price.format_price} đ</span>
-        </span>
+            <span
+              className="line-through"
+              style={{ color: "#6a6f73", fontWeight: "normal" }}
+            >
+              {course.price.format_price} VNĐ
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

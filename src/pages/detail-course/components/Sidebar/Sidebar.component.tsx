@@ -1,25 +1,15 @@
 import { DesktopOutlined, VideoCameraOutlined } from "@ant-design/icons";
 import { Skeleton } from "antd";
-import {
-  Dispatch,
-  FC,
-  MutableRefObject,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { BiInfinite } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import CouponApi from "../../../../api/coupon.api";
-import CourseApi from "../../../../api/course.api";
+import CourseApi, { CustomCourse } from "../../../../api/course.api";
 import { Coupon } from "../../../../ts/types/coupon.types";
 import { ROUTES } from "../../../../utils/constants";
-import { CustomCourse } from "../../page/detail-course.page";
 import { StyledGoToCourseBtn } from "../../styles/detail-course.styles";
 import ButtonContainer from "./ButtonContainer.component";
-import CouponAndGift from "./CouponAndGift.component";
+import CouponAndGift, { CouponProps } from "./CouponAndGift.component";
 import Nav from "./Nav.component";
 import Price from "./Price.component";
 import Video from "./Video.component";
@@ -28,21 +18,13 @@ type SidebarProps = {
   course: CustomCourse;
 };
 
-type DataCoupon = {
+export type DataCoupon = {
   message: string | "" | undefined;
   coupon: Coupon | null;
   checkingInput: boolean;
   checkingParams: boolean;
   saleOff: number;
   isFreeCoupon: boolean;
-};
-
-export type CouponProps = {
-  dataCoupon: DataCoupon;
-  applyCoupon: () => void;
-  setDataCoupon: Dispatch<SetStateAction<DataCoupon>>;
-  refInput: MutableRefObject<any>;
-  setSearchParams: (args: any) => void;
 };
 
 const Sidebar: FC<SidebarProps> = ({ course }) => {

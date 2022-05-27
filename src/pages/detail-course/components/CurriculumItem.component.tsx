@@ -1,7 +1,16 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
+import { FC } from "react";
 import { secondsToHMS } from "../../../utils/functions";
 
-const CurriculumItem = ({ title, playtime_seconds }) => {
+type CurriculumItemProps = {
+  title: string;
+  playtime_seconds: string;
+};
+
+const CurriculumItem: FC<CurriculumItemProps> = ({
+  title,
+  playtime_seconds,
+}) => {
   return (
     <div className="curriculum-item d-flex align-items-center">
       <div className="pull-left">

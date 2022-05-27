@@ -1,4 +1,13 @@
-const Price = ({ price, dataCoupon }) => {
+import { FC } from "react";
+import { Price as PriceType } from "../../../../ts/types/course.types";
+import { DataCoupon } from "./Sidebar.component";
+
+type PriceProps = {
+  price: PriceType;
+  dataCoupon: DataCoupon;
+};
+
+const Price: FC<PriceProps> = ({ price, dataCoupon }) => {
   const isFreeCourse = parseInt(price.original_price) === 0;
 
   return (

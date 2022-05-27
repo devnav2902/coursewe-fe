@@ -1,10 +1,16 @@
 import { CaretRightOutlined, CloseOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { FC, useState } from "react";
 import ReactPlayer from "react-player/lazy";
 import { BE_URL } from "../../../../utils/constants";
 import { isUrl, linkThumbnail } from "../../../../utils/functions";
 
-const Video = ({ thumbnail, title, video_demo }) => {
+export type VideoProps = {
+  thumbnail: string;
+  title: string;
+  video_demo: string;
+};
+
+const Video: FC<VideoProps> = ({ thumbnail, title, video_demo }) => {
   const [handleVideo, setHandleVideo] = useState({
     displayVideo: false,
     playingVideo: false,
