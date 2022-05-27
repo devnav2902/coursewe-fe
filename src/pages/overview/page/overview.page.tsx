@@ -69,45 +69,6 @@ const OverviewPage = () => {
               </ul>
 
               <Tabs defaultActiveKey="1">
-                <TabPane
-                  tab={
-                    <div className="instructor-analytics">
-                      <div>Tổng doanh thu</div>
-                      <div className="lg-text">{totalRevenue}đ</div>
-                      <div>{totalRevenueInMonth}đ tháng này</div>
-                    </div>
-                  }
-                  key="1"
-                >
-                  <RevenueChart />
-                </TabPane>
-                <TabPane
-                  tab={
-                    <div className="instructor-analytics">
-                      <div>Học viên</div>
-                      <div className="lg-text">{totalStudents}</div>
-                      <div>{numberOfStudentsInMonth} học viên tháng này</div>
-                    </div>
-                  }
-                  key="2"
-                >
-                  <StudentChart />
-                </TabPane>
-                <TabPane
-                  tab={
-                    <div className="instructor-analytics">
-                      <div>Đánh giá khóa học của bạn</div>
-                      <div className="lg-text">
-                        {Number.parseFloat(ratingCourses).toFixed(1)}
-                      </div>
-                      <div>{numberOfRatingsInMonth} đánh giá tháng này</div>
-                    </div>
-                  }
-                  key="3"
-                >
-                  <RatingChart />
-                </TabPane>
-
                 {profile?.role.name === "admin" ? (
                   <TabPane
                     tab={
@@ -159,7 +120,9 @@ const OverviewPage = () => {
                       </div>
                     }
                     key={"rating"}
-                  ></TabPane>
+                  >
+                    <RatingChart />
+                  </TabPane>
                 )}
               </Tabs>
             </div>

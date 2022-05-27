@@ -3,7 +3,7 @@ import { ChartOptions } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
+import { Chart, Line } from "react-chartjs-2";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { ImFileExcel } from "react-icons/im";
 import PerformanceApi, { RatingArray } from "../../../api/performance.api";
@@ -68,70 +68,123 @@ const RatingChart = () => {
       });
     }
   }, [currentMonth, selectedPeriod]);
-  function avgRating() {
-    const avg: any = [];
-    chartRating.data.map((rating: any) =>
-      rating.avg_rating === null ? avg.push(0) : avg.push(rating.avg_rating)
+
+  const chartData = (() => {
+    const avgRating = chartRating.data.map((rating) =>
+      !rating.avg_rating ? 0 : rating.avg_rating
     );
-    return avg;
-  }
 
-  function avgNumberStudent() {
-    const avg: any = [];
-    chartRating.data.map((rating: any) =>
-      rating.avg_rating === null ? avg.push(0) : avg.push(rating.count_student)
+    const numberStudent = chartRating.data.map((rating) =>
+      !rating.count_students ? 0 : rating.count_students
     );
-    return avg;
-  }
 
-  const data = {
-    labels: dateRange,
-    datasets: [
-      {
-        label: "Trung bình đánh giá của học viên",
-        data: avgRating(),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-        yAxisID: "y",
-      },
-      {
-        label: "Số học viên đã đăng ký",
-        data: avgNumberStudent(),
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-        yAxisID: "y1",
-      },
-    ],
-  };
+    return {
+      labels: dateRange,
+      datasets: [
+        {
+          type: "line" as const,
+          label: "Đánh giá trung bình",
+          data: avgRating,
+          yAxisID: "yRating",
+          backgroundColor: "#c0c0c0",
+          borderColor: "transparent",
+        },
+        {
+          type: "bar" as const,
+          label: "Số học viên đánh giá",
+          data: numberStudent,
+          backgroundColor: "#2f7ed8",
+          borderColor: "transparent",
+        },
+      ],
+    };
+  })();
 
-  const options: ChartOptions<"line"> = {
+  const options: ChartOptions = {
     responsive: true,
-    interaction: {
-      mode: "index",
-      intersect: false,
+    datasets: {
+      line: {
+        backgroundColor: "transparent",
+        pointStyle: "circle",
+        tension: 0,
+        pointHoverRadius: 6,
+        pointHoverBorderWidth: 6,
+        pointRadius: 3,
+        pointBorderWidth: 2,
+        pointBackgroundColor: "#fff",
+        pointBorderColor: "#00ccff",
+        segment: { borderColor: "#00ccff", borderWidth: 2 },
+      },
     },
-
     plugins: {
-      title: {
-        display: true,
-        text: "Chart.js Line Chart - Multi Axis",
+      legend: {
+        position: "top" as const,
+        labels: {
+          font: {
+            size: 14,
+            weight: "bold",
+          },
+          padding: 15,
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            if (context.dataset.type === "line") {
+              return `Đánh giá: ${context.formattedValue}`;
+            }
+            return `Số lượng: ${context.formattedValue} học viên`;
+          },
+        },
+        titleFont: {
+          size: 18,
+        },
+        bodyFont: {
+          size: 18,
+        },
+      },
+      datalabels: {
+        color: "#302f2f",
+        font: { size: 14, weight: "bold" },
+        align: "top",
+        anchor: "end",
+        padding: { top: 10 },
+        formatter: (value, context) => {
+          if (context.dataset.type === "bar") return null;
+          return value === 0 ? null : value.toLocaleString("vi-VN");
+        },
       },
     },
     scales: {
-      y: {
-        type: "linear",
-        display: true,
-        position: "left",
-      },
-      y1: {
-        type: "linear",
-        display: true,
-        position: "right",
-
-        // grid line settings
-        grid: {
-          drawOnChartArea: false, // only want the grid lines for one axis to show up
+      x: {
+        stacked: true,
+        ticks: {
+          color: "rgb(0, 0, 0)",
+          font: { size: 14, weight: "bold" },
         },
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        stacked: true,
+        position: "right",
+        ticks: {
+          color: "rgba(42, 42, 43, 0.719)",
+          font: { size: 14 },
+        },
+        grid: {
+          color: "#c0c0c0",
+        },
+      },
+      yRating: {
+        stacked: true,
+        position: "left",
+        ticks: {
+          color: "#31357c",
+          font: { size: 14 },
+        },
+        grid: { display: false },
       },
     },
   };
@@ -159,7 +212,12 @@ const RatingChart = () => {
             </Select>
           </div>
           <div className="containerChart activeChart">
-            <Line plugins={[ChartDataLabels]} options={options} data={data} />
+            <Chart
+              type="bar"
+              plugins={[ChartDataLabels]}
+              options={options}
+              data={chartData}
+            />
           </div>
         </div>
         <div className="instructor-analytics--chart-footer">
