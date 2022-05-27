@@ -11,6 +11,10 @@ type SubcategoryParams = {
   slug: string;
   sub: string;
 };
+type LearningParams = {
+  course_slug: string;
+  lectureId: number | string;
+};
 
 const ROUTES = {
   SIGN_IN: "/dang-nhap",
@@ -24,8 +28,10 @@ const ROUTES = {
   USER_BIO: "/user/bio",
   PROFILE: "/user/profile",
   MY_LEARNING: "/hoc-tap/danh-sach-khoa-hoc",
+  LEARNING: "/khoahoc/:course_slug/baigiang/:lectureId",
   ADMIN_REVIEW: "/admin/submission-courses-list",
   CHECKOUT: "/cart/checkout",
+  COURSE_DASH_REDIRECT: "/course_dash_redirect",
   course_dash_redirect: (id: number) =>
     `/course_dash_redirect/?course_id=${id}`,
   detail_course: (slug?: string) => `/khoa-hoc/${slug ? slug : ":slug"}`,
@@ -39,7 +45,12 @@ const ROUTES = {
   course_basics: (id?: string | number) =>
     `/quan-ly/khoa-hoc/${id ? id : ":id"}/thong-tin-co-ban`,
 
-  learning: (slug?: string) => `/hoc-tap/khoa-hoc/${slug ? slug : ":slug"}`,
+  learning: (params?: LearningParams) => {
+    if (params) {
+      return `/khoahoc/${params.course_slug}/baigiang/${params.lectureId}`;
+    }
+    return `/khoahoc/:course_slug/baigiang/:lectureId`;
+  },
 
   intended_learners: (id?: string | number) =>
     `/quan-ly/khoa-hoc/${id ? id : ":id"}/muc-tieu-va-yeu-cau`,
