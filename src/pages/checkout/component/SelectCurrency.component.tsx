@@ -1,9 +1,10 @@
 import { usePayPalScriptReducer } from "@paypal/react-paypal-js";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const SelectCurrency = () => {
   const [{ options }, dispatch] = usePayPalScriptReducer();
   const [currency, setCurrency] = useState(options.currency);
+
   function onCurrencyChange({ target: { value } }) {
     setCurrency(value);
     dispatch({
@@ -14,13 +15,13 @@ const SelectCurrency = () => {
       },
     });
   }
+
   return (
     <>
-      <label for="">Billing Address</label>
+      <label htmlFor="billingAddressCountry">Chọn loại tiền tệ</label>
       <div className="address-select">
         <select
-          data-purpose="billing-address-country"
-          autocomplete="off"
+          autoComplete="off"
           id="billingAddressCountry"
           className="form-control"
           value={currency}

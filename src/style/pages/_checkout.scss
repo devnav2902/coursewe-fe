@@ -57,19 +57,14 @@
       }
     }
     .shopping-list {
-      .list-courses {
+      .courses {
         margin-bottom: 1rem;
         display: flex;
+        flex-direction: column;
         width: 80%;
-        .card-title {
-          flex-grow: 1;
-          font-size: 2rem;
-          font-weight: 700;
-        }
       }
       .course {
-        flex-direction: column;
-        align-items: flex-start;
+        display: flex;
         margin-bottom: 1rem;
         img {
           width: 50px;
@@ -78,6 +73,9 @@
         }
       }
       .card-title {
+        flex-grow: 1;
+        font-size: 1.5rem;
+        font-weight: 500;
         overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 2;
