@@ -19,12 +19,13 @@ type SidebarProps = {
 };
 
 export type DataCoupon = {
-  message: string | "" | undefined;
+  message: string | undefined;
   coupon: Coupon | null;
   checkingInput: boolean;
   checkingParams: boolean;
   saleOff: number;
   isFreeCoupon: boolean;
+  discount: string;
 };
 
 const Sidebar: FC<SidebarProps> = ({ course }) => {
@@ -45,12 +46,11 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
     checkingParams: false,
     saleOff: 0,
     isFreeCoupon: false,
+    discount: "",
   });
   const refInput = useRef({ value: "" });
   const [searchParams, setSearchParams] = useSearchParams();
   const couponCode = searchParams.get("couponCode");
-
-  const navigate = useNavigate();
 
   // Kiểm tra trạng thái thanh toán
   useEffect(() => {
@@ -89,6 +89,7 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
             coupon: data.coupon,
             saleOff: data.saleOff,
             checkingParams: false,
+            discount: data.discount,
           }));
         }
       });
@@ -137,10 +138,6 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
     }
   }
 
-  function redirectToCheckout() {
-    navigate(ROUTES.CHECKOUT + "?couponCode=" + searchParams.get("couponCode"));
-  }
-
   const couponProps: CouponProps = {
     dataCoupon,
     applyCoupon,
@@ -187,11 +184,7 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
                 <Price dataCoupon={dataCoupon} price={price} />
               )}
 
-              <ButtonContainer
-                redirectToCheckout={redirectToCheckout}
-                course={course}
-                dataCoupon={dataCoupon}
-              />
+              <ButtonContainer course={course} dataCoupon={dataCoupon} />
 
               <div className="infor-course">
                 <h4>Khóa học này bao gồm:</h4>

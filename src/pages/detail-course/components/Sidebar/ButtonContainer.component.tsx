@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CustomCourse } from "../../../../api/course.api";
 import CartButton from "../../../../components/CartButton/CartButton.component";
 import { useTypedSelector } from "../../../../hooks/redux.hooks";
@@ -8,20 +8,28 @@ import { StyledButtonBox } from "../../styles/detail-course.styles";
 
 type Props = {
   course: CustomCourse;
-  redirectToCheckout: () => void;
   dataCoupon: any;
 };
 
-const ButtonContainer: FC<Props> = ({
-  course,
-  redirectToCheckout,
-  dataCoupon,
-}) => {
+const ButtonContainer: FC<Props> = ({ course, dataCoupon }) => {
   const { profile } = useTypedSelector((state) => state.user);
-  const { author, price, slug, id } = course;
+  const { author, price, id } = course;
 
   const isInstructor = author.id === profile?.id;
   const isFreeCourse = parseInt(price.original_price) === 0;
+
+  const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+
+  function redirectToCheckout() {
+    const couponCode = searchParams.get("couponCode");
+
+    const params = !couponCode
+      ? `?course=${id}`
+      : `?couponCode=${couponCode}&course=${id}`;
+    navigate(ROUTES.CHECKOUT + params, { state: dataCoupon });
+  }
 
   return (
     <StyledButtonBox className="buttons-box">
