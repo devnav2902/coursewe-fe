@@ -8,6 +8,7 @@ class Coupon {
       coupon: CouponType;
       isFreeCoupon: boolean;
       message?: string;
+      discount: string;
     }>(`/coupon/apply-coupon`, {
       couponInput: code,
       courseId,
