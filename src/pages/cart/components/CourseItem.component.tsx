@@ -23,7 +23,7 @@ const CourseItem: FC<Props> = ({ course, actionType }) => {
   const { rating_count, rating_avg_rating } = course;
   const { course_coupon, price } = course;
 
-  const purchase_price = course_coupon?.purchase_price;
+  const purchase_price = course_coupon?.discount_price;
 
   const dispatch = useAppDispatch();
 
@@ -97,13 +97,13 @@ const CourseItem: FC<Props> = ({ course, actionType }) => {
       </Link>
       <Actions />
       <div className="card-price">
-        {!purchase_price && typeof purchase_price !== "number" ? (
+        {!course_coupon ? (
           <span className="fw-bold">{course.price.format_price} VNĐ</span>
         ) : (
           <div className="d-flex flex-column">
             <Tooltip title={course.coupon_code} color={"pink"}>
               <span className="discount">
-                {parseInt(purchase_price) === 0
+                {purchase_price === course.price.format_price
                   ? "Miễn phí"
                   : purchase_price + " VNĐ"}{" "}
                 <BsFillTagFill />
