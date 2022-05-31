@@ -13,13 +13,18 @@ const CourseDashRedirestPage: FC = () => {
     ProgressLogsApi.getDataLastWatched(id).then(
       ({ data: { dataLastWatched } }) => {
         const {
-          course: { slug },
+          course: { slug, id },
           lecture_id,
           last_watched_second,
         } = dataLastWatched;
 
         navigate(
-          ROUTES.learning(slug, lecture_id) + "?start=" + last_watched_second
+          ROUTES.learning({
+            course_slug: slug,
+            lectureId: lecture_id,
+          }) +
+            "?start=" +
+            last_watched_second
         );
       }
     );

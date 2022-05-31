@@ -1,5 +1,6 @@
 import React from "react";
 import CourseDashRedirestPage from "../pages/course-dash-redirect/page/course-dash-redirest.page";
+import { LearningProvider } from "../pages/learning/hooks/leaning.hooks";
 
 const BasicLayout = React.lazy(() => import("../layouts/basic.layout"));
 const InstructorCourseLayout = React.lazy(
@@ -172,10 +173,12 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    path: ROUTES.learning(),
+    path: ROUTES.LEARNING,
     component: (
       <LearningLayout>
-        <LearningPage />
+        <LearningProvider>
+          <LearningPage />
+        </LearningProvider>
       </LearningLayout>
     ),
   },
@@ -189,7 +192,7 @@ const routes: Routes[] = [
     private: true,
   },
   {
-    path: ROUTES.course_dash_redirect(),
+    path: ROUTES.COURSE_DASH_REDIRECT,
     component: <CourseDashRedirestPage />,
     private: true,
   },

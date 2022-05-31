@@ -107,7 +107,7 @@ const learningSlice = createSlice({
   name: "learning",
   initialState,
   reducers: {
-    resetStateLearning: (state) => {
+    resetStateLearning: (state: any) => {
       state.dataCourse = initialState.dataCourse;
       state.myProgress = initialState.myProgress;
       state.sections = initialState.sections;

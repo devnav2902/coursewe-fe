@@ -1,10 +1,10 @@
 import { Dropdown } from "antd";
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useContext, useState } from "react";
 import { AiOutlineFileText } from "react-icons/ai";
 import { BsPlayCircle } from "react-icons/bs";
 import { ImFolderDownload } from "react-icons/im";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProgressApi from "../../../../api/progress.api";
 import ResourceApi from "../../../../api/resource.api";
 import {
@@ -18,6 +18,10 @@ import {
 } from "../../../../redux/slices/learning.slice";
 import { Lecture } from "../../../../ts/types/course.types";
 import { ROUTES } from "../../../../utils/constants";
+<<<<<<< HEAD
+import { LearningContext } from "../../hooks/leaning.hooks";
+=======
+>>>>>>> using_redux_toolkit
 
 type LectureProps = {
   lecture: Lecture;
@@ -26,14 +30,20 @@ type LectureProps = {
 const LectureItem: FC<LectureProps> = ({ lecture }) => {
   const dispatch = useAppDispatch();
   const {
-    dataCourse: { course },
+    dataCourse: { course, loadedCourse },
   } = useTypedSelector((state) => state.learning);
   const { dataCourse } = useTypedSelector((state) => state.learning);
+
+  const { saveLastWatched } = useContext(LearningContext);
+
+  const [videoSaving, setVideoSaving] = useState(false);
 
   const [checked, setChecked] = useState({
     value: lecture?.progress?.progress ? true : false,
     loading: false,
   });
+
+  const navigate = useNavigate();
 
   function handleChecked(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.checked;
@@ -82,6 +92,16 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
     });
   }
 
+  function handleChangeLecture(lectureId: string | number) {
+    if (!videoSaving) {
+      console.log(videoSaving);
+
+      saveLastWatched();
+
+      course &&
+        navigate(ROUTES.learning({ lectureId, course_slug: course?.slug }));
+    }
+  }
   return (
     <li className="curriculum-item {{ $key == 0 && $lecture->order == 1 ? 'is-current' : '' }} d-flex">
       <div className="progress-toggle">
@@ -96,8 +116,19 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
           <span></span>
         </label>
       </div>
+<<<<<<< HEAD
+      <button
+        type="button"
+        onClick={(e) => {
+          console.log(e);
+
+          handleChangeLecture(lecture.id);
+        }}
+      >
+=======
       <Link to={!course?.slug ? "" : ROUTES.learning(course.slug, lecture.id)}>
         {" "}
+>>>>>>> using_redux_toolkit
         <div className="link">
           <div className="text">
             {lecture.order}.&nbsp;{lecture.title}
@@ -155,7 +186,7 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
             )}
           </div>
         </div>
-      </Link>
+      </button>
     </li>
   );
 };
