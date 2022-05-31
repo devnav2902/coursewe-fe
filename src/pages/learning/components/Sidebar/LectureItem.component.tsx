@@ -18,10 +18,7 @@ import {
 } from "../../../../redux/slices/learning.slice";
 import { Lecture } from "../../../../ts/types/course.types";
 import { ROUTES } from "../../../../utils/constants";
-<<<<<<< HEAD
 import { LearningContext } from "../../hooks/leaning.hooks";
-=======
->>>>>>> using_redux_toolkit
 
 type LectureProps = {
   lecture: Lecture;
@@ -116,7 +113,6 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
           <span></span>
         </label>
       </div>
-<<<<<<< HEAD
       <button
         type="button"
         onClick={(e) => {
@@ -125,10 +121,6 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
           handleChangeLecture(lecture.id);
         }}
       >
-=======
-      <Link to={!course?.slug ? "" : ROUTES.learning(course.slug, lecture.id)}>
-        {" "}
->>>>>>> using_redux_toolkit
         <div className="link">
           <div className="text">
             {lecture.order}.&nbsp;{lecture.title}
