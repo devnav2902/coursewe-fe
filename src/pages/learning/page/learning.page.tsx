@@ -11,14 +11,11 @@ import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
 import Sidebar from "../components/Sidebar/Sidebar.component";
 import VideoLearning from "../components/VideoLearning.component";
-import { LearningContext, LearningProvider } from "../hooks/leaning.hooks";
 
 const LearningPage = () => {
   const {
     dataCourse: { course, loadedCourse },
   } = useTypedSelector((state) => state.learning);
-
-  // console.log(lastWatchedSecond);
 
   return (
     <main className="main-content-wrapper">
@@ -31,12 +28,7 @@ const LearningPage = () => {
       <div className="learning-content">
         <div className="video-content">
           <div className="video-player">
-            <VideoLearning
-              thumbnail={""}
-              url={
-                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-              }
-            />
+            <VideoLearning />
           </div>
         </div>
         <Sidebar />
