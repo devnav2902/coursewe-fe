@@ -1,7 +1,5 @@
 import { FC, useContext, useEffect, useState } from "react";
-import { IoMdClose } from "react-icons/io";
 import Loading from "../../../../components/Loading/Loading.component";
-import LoadingOverlay from "../../../../components/Loading/LoadingOverlay.component";
 import {
   useAppDispatch,
   useTypedSelector,
