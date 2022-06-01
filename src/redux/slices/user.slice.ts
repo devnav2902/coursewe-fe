@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import UserApi, { ParamsSignUp } from "../../api/user.api";
 import { User } from "../../ts/types/user.types";
 
@@ -59,7 +60,10 @@ export const login = createAsyncThunk<
 
     return data.user;
   } catch (error) {
-    return rejectWithValue(error);
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(error.response?.data?.error);
+    }
+    return rejectWithValue("Lỗi trong quá trình đăng nhập!");
   }
 });
 
@@ -118,7 +122,7 @@ const userSlice = createSlice({
     });
     builder.addCase(getCurrentUser.rejected, (state, action) => {
       state.error = action.payload;
-      state.loaded = true;
+      state.loaded = false;
     });
     // SIGN UP
     builder.addCase(signUp.pending, (state) => {

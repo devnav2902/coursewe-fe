@@ -7,6 +7,7 @@ import CouponApi from "../../../../api/coupon.api";
 import CourseApi, { CustomCourse } from "../../../../api/course.api";
 import { Coupon } from "../../../../ts/types/coupon.types";
 import { ROUTES } from "../../../../utils/constants";
+import { openNotification } from "../../../../utils/functions";
 import { StyledGoToCourseBtn } from "../../styles/detail-course.styles";
 import ButtonContainer from "./ButtonContainer.component";
 import CouponAndGift, { CouponProps } from "./CouponAndGift.component";
@@ -114,28 +115,36 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
   function applyCoupon() {
     if (refInput.current.value) {
       setDataCoupon((state) => ({ ...state, checkingInput: true }));
-      CouponApi.applyCoupon(refInput.current.value, course.id).then((res) => {
-        const { data } = res;
+      CouponApi.applyCoupon(refInput.current.value, course.id)
+        .then((res) => {
+          const { data } = res;
 
-        if (data.message)
+          if (data.message)
+            setDataCoupon((state) => ({
+              ...state,
+              message: data.message,
+              checkingInput: false,
+            }));
+          else if (data.coupon) {
+            setDataCoupon((state) => ({
+              ...state,
+              message: "",
+              isFreeCoupon: data.isFreeCoupon,
+              coupon: data.coupon,
+              saleOff: data.saleOff,
+              checkingInput: false,
+            }));
+            refInput.current.value = "";
+            setSearchParams({ couponCode: data.coupon.code });
+          }
+        })
+        .catch((error) => {
           setDataCoupon((state) => ({
             ...state,
-            message: data.message,
             checkingInput: false,
+            message: "Lỗi trong quá trình kiểm tra mã giảm giá",
           }));
-        else if (data.coupon) {
-          setDataCoupon((state) => ({
-            ...state,
-            message: "",
-            isFreeCoupon: data.isFreeCoupon,
-            coupon: data.coupon,
-            saleOff: data.saleOff,
-            checkingInput: false,
-          }));
-          refInput.current.value = "";
-          setSearchParams({ couponCode: data.coupon.code });
-        }
-      });
+        });
     }
   }
 

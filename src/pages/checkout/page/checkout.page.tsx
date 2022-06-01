@@ -102,7 +102,9 @@ const CheckoutPage = () => {
                           <div className="card-price">
                             {state?.coupon?.discount_price && (
                               <div className="discount-price">
-                                {state.coupon.discount_price} VNĐ
+                                {state.isFreeCoupon
+                                  ? "Miễn phí"
+                                  : state.coupon.discount_price + " VNĐ"}
                               </div>
                             )}
                             <div
@@ -135,7 +137,11 @@ const CheckoutPage = () => {
                               <div className="card-price">
                                 {course_coupon && (
                                   <div className="discount-price">
-                                    {course_coupon.discount_price} VNĐ
+                                    {parseFloat(
+                                      course_coupon.discount_price
+                                    ) === parseFloat(format_price)
+                                      ? "Miễn phí"
+                                      : course_coupon.discount_price + " VNĐ"}
                                   </div>
                                 )}
                                 <div

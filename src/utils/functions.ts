@@ -27,7 +27,7 @@ const openNotification = (type: "success" | "error", description?: string) => {
     notification[type]({
       message: "Thông báo",
       description: description ? description : "Lưu thành công!",
-      top: 70,
+      top: 75,
       duration: 3,
     });
   }

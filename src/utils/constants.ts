@@ -44,9 +44,9 @@ const ROUTES = {
 
   learning: (params?: LearningParams) => {
     if (params) {
-      return `/khoa-hoc/${params.course_slug}`;
+      return `/hoc-tap/khoa-hoc/${params.course_slug}`;
     }
-    return `/khoa-hoc/:course_slug`;
+    return `/hoc-tap/khoa-hoc/:course_slug`;
   },
 
   intended_learners: (id?: string | number) =>
