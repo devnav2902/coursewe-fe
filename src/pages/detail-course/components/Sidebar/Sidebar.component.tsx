@@ -97,6 +97,7 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
   }, [couponCode, dataCheckPurchase, id, setSearchParams]);
 
   const [offset, setOffset] = useState(0);
+
   useEffect(() => {
     const onScroll = () => setOffset(window.pageYOffset);
     // clean up code
@@ -172,7 +173,10 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
             <Skeleton active className="pd-2" />
           ) : dataCheckPurchase.hasPurchased ? (
             <StyledGoToCourseBtn className="pd-2">
-              <Link to={ROUTES.course_dash_redirect(id)} className="btn w-100">
+              <Link
+                to={ROUTES.learning({ course_slug: slug })}
+                className="btn w-100"
+              >
                 Đi đến khóa học
               </Link>
             </StyledGoToCourseBtn>
