@@ -12,8 +12,8 @@ type SubcategoryParams = {
   sub: string;
 };
 type LearningParams = {
-  course_slug: string;
-  lectureId: number | string;
+  course_slug: string | undefined;
+  lectureId: number | string | undefined;
 };
 
 const ROUTES = {
@@ -50,6 +50,12 @@ const ROUTES = {
       return `/khoahoc/${params.course_slug}/baigiang/${params.lectureId}`;
     }
     return `/khoahoc/:course_slug/baigiang/:lectureId`;
+  },
+  check_video: (params?: LearningParams) => {
+    if (params) {
+      return `/khoahoc/${params.course_slug}/baigiang/${params.lectureId}/draft`;
+    }
+    return `/khoahoc/:course_slug/baigiang/:lectureId/draft`;
   },
 
   intended_learners: (id?: string | number) =>

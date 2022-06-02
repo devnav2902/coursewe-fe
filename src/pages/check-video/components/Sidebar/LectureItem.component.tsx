@@ -11,14 +11,10 @@ import {
   useAppDispatch,
   useTypedSelector,
 } from "../../../../hooks/redux.hooks";
-import {
-  Course,
-  getProgress,
-  getSections,
-} from "../../../../redux/slices/learning.slice";
-import { Lecture } from "../../../../ts/types/course.types";
+import { getSections } from "../../../../redux/slices/curriculum.slice";
+import { getProgress } from "../../../../redux/slices/learning.slice";
+import { Course, Lecture } from "../../../../ts/types/course.types";
 import { ROUTES } from "../../../../utils/constants";
-import { LearningContext } from "../../hooks/leaning.hooks";
 
 type LectureProps = {
   lecture: Lecture;
@@ -30,8 +26,6 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
     dataCourse: { course, loadedCourse },
   } = useTypedSelector((state) => state.learning);
   const { dataCourse } = useTypedSelector((state) => state.learning);
-
-  const { saveLastWatched } = useContext(LearningContext);
 
   const [videoSaving, setVideoSaving] = useState(false);
 
@@ -89,20 +83,10 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
     });
   }
 
-  function handleChangeLecture(lectureId: string | number) {
-    if (!videoSaving) {
-      console.log(videoSaving);
-
-      saveLastWatched();
-
-      course &&
-        navigate(ROUTES.learning({ lectureId, course_slug: course?.slug }));
-    }
-  }
   return (
     <li className="curriculum-item {{ $key == 0 && $lecture->order == 1 ? 'is-current' : '' }} d-flex">
       <div className="progress-toggle">
-        <label htmlFor={`lecture-${lecture.id}`}>
+        {/* <label htmlFor={`lecture-${lecture.id}`}>
           <input
             checked={checked.value}
             type="checkbox"
@@ -111,15 +95,13 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
             disabled={checked.loading ? true : false}
           />
           <span></span>
-        </label>
+        </label> */}
       </div>
-      <button
-        type="button"
-        onClick={(e) => {
-          console.log(e);
-
-          handleChangeLecture(lecture.id);
-        }}
+      <Link
+        to={ROUTES.check_video({
+          course_slug: course?.slug,
+          lectureId: lecture.id,
+        })}
       >
         <div className="link">
           <div className="text">
@@ -178,7 +160,7 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
             )}
           </div>
         </div>
-      </button>
+      </Link>
     </li>
   );
 };

@@ -1,12 +1,15 @@
 import { DownOutlined, SearchOutlined } from "@ant-design/icons";
 import { Table } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import AdminApi from "../../../api/admin-review.api";
-import { BE_URL, ROUTES } from "../../../utils/constants";
+import AdminApi, { ReviewCourses } from "../../../api/admin-review.api";
+import Loading from "../../../components/Loading/Loading.component";
+import { ROUTES } from "../../../utils/constants";
+import { linkThumbnail } from "../../../utils/functions";
 
 const AdminReviewPage = () => {
-  const [dataCourse, setDataCourse] = useState([]);
+  const [dataCourse, setDataCourse] = useState<ReviewCourses[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     AdminApi.getReviewCourses().then((res) => {
@@ -15,19 +18,22 @@ const AdminReviewPage = () => {
       } = res;
 
       setDataCourse(courses);
+      setLoaded(true);
     });
   }, []);
 
-  const item = [];
+  const item: any = [];
   const dataSource = [
     dataCourse.map((data) => {
-      const { course, course_id, id } = data;
+      const { course, course_id, id, updated_at } = data;
+
       item.push({
+        key: id,
         ID: course_id,
         INSTRUCTOR: (
           <img
-            src={BE_URL + "/" + course.author.avatar}
-            alt={course.fullname}
+            src={linkThumbnail(course.author.avatar)}
+            alt={course.author.fullname}
             style={{
               width: "50px",
               height: "50px",
@@ -37,9 +43,9 @@ const AdminReviewPage = () => {
         ),
         TITLE: course.title,
         PRICE: "10 Downing Street",
-        DATE: course.updated_at,
+        DATE: updated_at,
         ACTION: (
-          <Link to={ROUTES.course_draft(course_id)}>
+          <Link to={ROUTES.landing_page_draft(course_id)}>
             <button>view</button>
           </Link>
         ),
@@ -108,7 +114,13 @@ const AdminReviewPage = () => {
           <input type="text" placeholder="Search..." />
         </div>
         <div className="admin-table">
-          <Table dataSource={item} columns={columns} />
+          {!loaded ? (
+            <Loading />
+          ) : !dataCourse.length ? (
+            <Table columns={columns} key={item.id} />
+          ) : (
+            <Table dataSource={item} columns={columns} key={item.id} />
+          )}
         </div>
       </div>
     </div>

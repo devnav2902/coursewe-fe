@@ -11,9 +11,8 @@ import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
 import Sidebar from "../components/Sidebar/Sidebar.component";
 import VideoLearning from "../components/VideoLearning.component";
-import { LearningContext, LearningProvider } from "../hooks/leaning.hooks";
 
-const LearningPage = () => {
+const CheckVideoPage = () => {
   const {
     dataCourse: { course, loadedCourse },
   } = useTypedSelector((state) => state.learning);
@@ -160,4 +159,4 @@ const LearningPage = () => {
     </main>
   );
 };
-export default LearningPage;
+export default CheckVideoPage;

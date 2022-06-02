@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BiCheck } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { Link, useParams } from "react-router-dom";
+import AdminApi from "../../../api/admin-review.api";
 import CourseApi, { CustomCourse } from "../../../api/course.api";
 import Rating from "../../../components/Rating/Rating.component";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
@@ -15,11 +16,12 @@ const { Panel } = Collapse;
 const DraftPage = () => {
   const { profile } = useTypedSelector((state) => state.user);
   const { id } = useParams() as { id: string };
+  console.log(profile?.role.id);
 
   const [dataCourse, setDataCourse] = useState<CustomCourse | null>(null);
 
   useEffect(() => {
-    CourseApi.getCourseOfAuthorById(id).then(({ data }) => {
+    AdminApi.getCourseOfAuthorAndAdminById(id).then(({ data }) => {
       const { course } = data;
 
       setDataCourse(course);

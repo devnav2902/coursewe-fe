@@ -1,10 +1,19 @@
 import React from "react";
-import CourseDashRedirestPage from "../pages/course-dash-redirect/page/course-dash-redirest.page";
+
 import { LearningProvider } from "../pages/learning/hooks/leaning.hooks";
 
 const BasicLayout = React.lazy(() => import("../layouts/basic.layout"));
 const InstructorCourseLayout = React.lazy(
   () => import("../layouts/instructor-course.layout")
+);
+const CourseDashRedirestPage = React.lazy(
+  () => import("../pages/course-dash-redirect/page/course-dash-redirest.page")
+);
+const ReviewCourseLayout = React.lazy(
+  () => import("../layouts/reviewcourse.layout")
+);
+const CheckVideoPage = React.lazy(
+  () => import("../pages/check-video/page/learning.page")
 );
 const InstructorView = React.lazy(
   () => import("../layouts/instructor-view.layout")
@@ -183,6 +192,16 @@ const routes: Routes[] = [
     ),
   },
   {
+    path: ROUTES.check_video(),
+    component: (
+      <ReviewCourseLayout>
+        <CheckVideoPage />
+      </ReviewCourseLayout>
+    ),
+    private: true,
+    admin: true,
+  },
+  {
     path: ROUTES.MY_LEARNING,
     component: (
       <BasicLayout>
@@ -293,6 +312,8 @@ const routes: Routes[] = [
         <LandingPageDraft />
       </BasicLayout>
     ),
+    private: true,
+    admin: true,
   },
   {
     path: ROUTES.CART,
