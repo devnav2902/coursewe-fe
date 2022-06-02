@@ -4,7 +4,8 @@ import { AiOutlineFileText } from "react-icons/ai";
 import { BsPlayCircle } from "react-icons/bs";
 import { ImFolderDownload } from "react-icons/im";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ProgressLogsApi from "../../../../api/progress-logs.api";
 import ProgressApi from "../../../../api/progress.api";
 import ResourceApi from "../../../../api/resource.api";
 import {
@@ -26,14 +27,15 @@ type LectureProps = {
 
 const LectureItem: FC<LectureProps> = ({ lecture }) => {
   const dispatch = useAppDispatch();
-  const {
-    dataCourse: { course, loadedCourse },
-  } = useTypedSelector((state) => state.learning);
+
   const { dataCourse } = useTypedSelector((state) => state.learning);
 
-  const { saveLastWatched } = useContext(LearningContext);
-
-  const [videoSaving, setVideoSaving] = useState(false);
+  const {
+    lectureId: lectureIdParam,
+    videoRef,
+    setVideoSaving,
+    videoSaving,
+  } = useContext(LearningContext);
 
   const [checked, setChecked] = useState({
     value: lecture?.progress?.progress ? true : false,
@@ -89,18 +91,42 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
     });
   }
 
-  function handleChangeLecture(lectureId: string | number) {
+  function handleChangeLecture(lectureId: number) {
     if (!videoSaving) {
-      console.log(videoSaving);
+      setVideoSaving(true);
+      const currentTime = videoRef?.current?.getCurrentTime().toFixed(2);
 
-      saveLastWatched();
+      if (dataCourse.course && lectureIdParam) {
+        ProgressLogsApi.saveLastWatched({
+          course_id: dataCourse.course.id,
+          lecture_id: parseInt(lectureIdParam), // old
+          second: currentTime ? parseInt(currentTime) : 0,
+        }).then(() => {
+          setVideoSaving(false);
 
-      course &&
-        navigate(ROUTES.learning({ lectureId, course_slug: course?.slug }));
+          dataCourse.course?.slug &&
+            navigate(
+              ROUTES.learning({
+                course_slug: dataCourse.course.slug,
+              }) +
+                "?bai-giang=" +
+                lectureId
+            );
+        });
+      }
     }
   }
+
   return (
-    <li className="curriculum-item {{ $key == 0 && $lecture->order == 1 ? 'is-current' : '' }} d-flex">
+    <li
+      className={`curriculum-item d-flex${
+        lectureIdParam
+          ? lecture.id === parseInt(lectureIdParam)
+            ? " is-current"
+            : ""
+          : ""
+      }`}
+    >
       <div className="progress-toggle">
         <label htmlFor={`lecture-${lecture.id}`}>
           <input
@@ -115,9 +141,7 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
       </div>
       <button
         type="button"
-        onClick={(e) => {
-          console.log(e);
-
+        onClick={() => {
           handleChangeLecture(lecture.id);
         }}
       >

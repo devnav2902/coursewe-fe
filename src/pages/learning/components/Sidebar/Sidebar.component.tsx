@@ -1,11 +1,11 @@
-import { FC, useEffect, useState } from "react";
-import { IoMdClose } from "react-icons/io";
+import { FC, useContext, useEffect, useState } from "react";
 import Loading from "../../../../components/Loading/Loading.component";
 import {
   useAppDispatch,
   useTypedSelector,
 } from "../../../../hooks/redux.hooks";
 import { getSections } from "../../../../redux/slices/learning.slice";
+import { LearningContext } from "../../hooks/leaning.hooks";
 import {
   StyledSectionWrapper,
   StyledSidebar,
@@ -17,6 +17,8 @@ const Sidebar: FC = () => {
 
   const { dataCourse, sections } = useTypedSelector((state) => state.learning);
   const dispatch = useAppDispatch();
+
+  const { videoSaving } = useContext(LearningContext);
 
   useEffect(() => {
     if (dataCourse.course) {
@@ -39,13 +41,13 @@ const Sidebar: FC = () => {
   return (
     <StyledSidebar
       position={positionSidebar + "px"}
-      className="sidebar-container"
+      className={`sidebar-container${videoSaving ? " loading-pulse" : ""}`}
     >
       <div className="sidebar-container__header d-flex align-items-center">
         <div className="title">Nội dung khóa học</div>
-        <button type="button" id="sidebar-close-btn">
+        {/* <button type="button" id="sidebar-close-btn">
           <IoMdClose size="20px" />
-        </button>
+        </button> */}
       </div>
       <StyledSectionWrapper className="sections">
         {!sections.loaded ? (

@@ -6,7 +6,6 @@ import {
   CartType,
   CartTypes,
   Course,
-  Courses,
   FormattedCart,
   FormattedCartItem,
   ShoppingCart,
@@ -30,12 +29,12 @@ export const getCart = createAsyncThunk<
     const { data } = await CartApi.get();
 
     return data.shoppingCart.reduce((result, item) => {
-      const { cartType, data, current_price, original_price } = item;
+      const { cartType, data, current_price, original_price, discount } = item;
       const type = cartType.type;
 
       return {
         ...result,
-        [type]: { courses: data, current_price, original_price },
+        [type]: { courses: data, current_price, original_price, discount },
       };
     }, {} as FormattedCart);
   } catch (error) {
@@ -79,6 +78,7 @@ const getItemsByCartType = (
     courses: cartItems.data,
     original_price: cartItems.original_price,
     current_price: cartItems.current_price,
+    discount: cartItems.discount,
   } as FormattedCartItem;
 };
 
@@ -164,7 +164,12 @@ export const moveToCart = createAsyncThunk<
   }
 });
 
-const initialCart = { courses: [], current_price: "0", original_price: "0" };
+const initialCart = {
+  courses: [],
+  current_price: "0",
+  original_price: "0",
+  discount: "0",
+};
 const initialState: CartState = {
   cart: initialCart,
   saved_for_later: initialCart,

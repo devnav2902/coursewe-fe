@@ -21,7 +21,6 @@ export type Course = {
     course_id: number;
     discount_price: string;
     status: 1;
-    purchase_price: string;
   };
 };
 export type Courses = Course[];
@@ -45,6 +44,7 @@ export type FormattedCartItem = {
   courses: Courses;
   current_price: string;
   original_price: string;
+  discount: string;
 };
 export type FormattedCart = {
   [x in keyof CartTypes]: FormattedCartItem;
@@ -55,6 +55,7 @@ export type ShoppingCartResponseItem = {
   cartType: CartType;
   original_price: string;
   current_price: string;
+  discount: string;
 };
 export type ArrayShoppingCartResponse = ShoppingCartResponseItem[];
 export type ShoppingCart = { shoppingCart: ArrayShoppingCartResponse };

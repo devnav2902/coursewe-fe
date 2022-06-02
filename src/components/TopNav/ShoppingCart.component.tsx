@@ -42,13 +42,8 @@ const ShoppingCart = () => {
     if (userLoaded) dispatch(getCart());
   }, [userLoaded, dispatch]);
 
-  const originalTotal = cart.original_price;
-  const appliedCouponTotal = cart.current_price;
-
-  const originalPriceRemovedDot = parseInt(originalTotal.replace(/\./g, ""));
-  const currentPriceRemovedDot = parseInt(
-    appliedCouponTotal.replace(/\./g, "")
-  );
+  const originalPrice = cart.original_price;
+  const currentPrice = cart.current_price;
 
   const content = (
     <StyledListItems>
@@ -63,16 +58,16 @@ const ShoppingCart = () => {
               <div>
                 <div className="total fw-bold mb-1">
                   Tổng cộng:{" "}
-                  {originalPriceRemovedDot === currentPriceRemovedDot ? (
-                    <span>{originalTotal} VNĐ</span>
+                  {parseFloat(originalPrice) === parseFloat(currentPrice) ? (
+                    <span>{originalPrice} VNĐ</span>
                   ) : (
                     <>
-                      <span>{appliedCouponTotal} VNĐ</span>&nbsp;
+                      <span>{currentPrice} VNĐ</span>&nbsp;
                       <span
                         className="line-through"
                         style={{ color: "#6a6f73", fontWeight: "normal" }}
                       >
-                        {originalTotal} VNĐ
+                        {originalPrice} VNĐ
                       </span>
                     </>
                   )}
@@ -113,7 +108,11 @@ const ShoppingCart = () => {
                       ) : (
                         <>
                           <span className="discount">
-                            {item.course_coupon.purchase_price} VNĐ
+                            {parseInt(item.course_coupon.discount_price) ===
+                            parseInt(item.price.format_price)
+                              ? 0
+                              : item.course_coupon.discount_price}{" "}
+                            VNĐ
                           </span>
                           &nbsp;
                           <span

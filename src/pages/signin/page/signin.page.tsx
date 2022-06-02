@@ -1,21 +1,32 @@
 import { Spin } from "antd";
 import axios from "axios";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Input from "../../../components/Input/Input.component";
 import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
 import { login } from "../../../redux/slices/user.slice";
 import { BE_URL, ROUTES } from "../../../utils/constants";
+import { openNotification } from "../../../utils/functions";
 
 const SigninPage = () => {
   const dispatch = useAppDispatch();
-  const { handleSubmit, register } = useForm();
   const { loaded } = useTypedSelector((state) => state.user);
+
+  const { handleSubmit, register } = useForm();
+
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FieldValues> = ({ password, email }) => {
     // initialize CSRF protection
     axios.get(`${BE_URL}/sanctum/csrf-cookie`).then((res) => {
-      dispatch(login({ password, email }));
+      dispatch(login({ password, email }))
+        .unwrap()
+        .then((res) => {
+          navigate(-1);
+        })
+        .catch((error) => {
+          openNotification("error", error);
+        });
     });
   };
 

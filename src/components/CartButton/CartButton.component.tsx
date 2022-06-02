@@ -4,8 +4,8 @@ import { FC } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useTypedSelector } from "../../hooks/redux.hooks";
-import { addToCart } from "../../redux/slices/cart.slice";
+import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
+import { addToCart, getCart } from "../../redux/slices/cart.slice";
 import { Course, Price } from "../../ts/types/course.types";
 import { ROUTES } from "../../utils/constants";
 
@@ -19,12 +19,14 @@ type CartButton = {
 };
 
 const CartButton: FC<CartButton> = ({ course }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const cartData = useTypedSelector((state) => state.cart);
   const user = useTypedSelector((state) => state.user);
 
   function handleAddToCart(id: number) {
-    dispatch(addToCart(id));
+    dispatch(addToCart(id)).then(() => {
+      dispatch(getCart());
+    });
   }
 
   function existedCourseInCart(id: number) {

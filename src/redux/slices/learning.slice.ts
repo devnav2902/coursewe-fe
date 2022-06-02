@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import LearningApi from "../../api/learning.api";
 import ProgressApi from "../../api/progress.api";
 import { LearningProgress, SectionItems } from "../../ts/types/course.types";
@@ -76,18 +77,15 @@ export const getCourse = createAsyncThunk<
   {
     rejectValue: any;
   }
->("learning/getCourse", (slug: string, { rejectWithValue }) => {
-  return new Promise((resolve) => {
-    LearningApi.getCourseBySlug(slug)
-      .then((res) => {
-        const { data } = res;
+>("learning/getCourse", async (slug: string, { rejectWithValue }) => {
+  try {
+    const { data } = await LearningApi.getCourseBySlug(slug);
 
-        resolve(data.course);
-      })
-      .catch((error) => {
-        rejectWithValue(error);
-      });
-  });
+    return data.course;
+  } catch (error) {
+    if (axios.isAxiosError(error)) return rejectWithValue(error.message);
+    return rejectWithValue(error);
+  }
 });
 
 export const getSections = createAsyncThunk<SectionItems, number>(
@@ -153,3 +151,4 @@ const learningSlice = createSlice({
 });
 
 export default learningSlice.reducer;
+export const { resetStateLearning } = learningSlice.actions;

@@ -83,10 +83,7 @@ class Course {
   };
 
   getCourseById = async (id: string | number) => {
-    return axiosClient
-      .get(`/course/${id}`)
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.get<CustomCourse>(`/course/${id}`);
   };
   createCourse = async (title: string) => {
     return axiosClient

@@ -12,8 +12,10 @@ type SubcategoryParams = {
   sub: string;
 };
 type LearningParams = {
-  course_slug: string | undefined;
-  lectureId: number | string | undefined;
+  course_slug: string;
+};
+type CheckVideoParams = {
+  course_id: string | number;
 };
 
 const ROUTES = {
@@ -28,13 +30,11 @@ const ROUTES = {
   USER_BIO: "/user/bio",
   PROFILE: "/user/profile",
   MY_LEARNING: "/hoc-tap/danh-sach-khoa-hoc",
-  LEARNING: "/khoahoc/:course_slug/baigiang/:lectureId",
   ADMIN_REVIEW: "/admin/submission-courses-list",
   CHECKOUT: "/cart/checkout",
   COURSE_DASH_REDIRECT: "/course_dash_redirect",
+  NOT_FOUND: "/404",
 
-  course_dash_redirect: (id?: number) =>
-    `/course_dash_redirect/${id ? "?course_id=" + id : ""}`,
   detail_course: (slug?: string) => `/khoa-hoc/${slug ? slug : ":slug"}`,
 
   instructor_bio: (slug?: string) => `/user/${slug ? slug : ":slug"}`,
@@ -47,15 +47,15 @@ const ROUTES = {
 
   learning: (params?: LearningParams) => {
     if (params) {
-      return `/khoahoc/${params.course_slug}/baigiang/${params.lectureId}`;
+      return `/hoc-tap/khoa-hoc/${params.course_slug}`;
     }
-    return `/khoahoc/:course_slug/baigiang/:lectureId`;
+    return `/hoc-tap/khoa-hoc/:course_slug`;
   },
-  check_video: (params?: LearningParams) => {
+  check_video: (params?: CheckVideoParams) => {
     if (params) {
-      return `/khoahoc/${params.course_slug}/baigiang/${params.lectureId}/draft`;
+      return `/khoa-hoc/${params.course_id}/video/draft`;
     }
-    return `/khoahoc/:course_slug/baigiang/:lectureId/draft`;
+    return `/khoa-hoc/:course_slug/video/draft`;
   },
 
   intended_learners: (id?: string | number) =>

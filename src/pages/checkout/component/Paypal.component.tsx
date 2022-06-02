@@ -1,7 +1,11 @@
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import {
+  PayPalScriptProvider,
+  ScriptProviderProps,
+} from "@paypal/react-paypal-js";
+import { FC } from "react";
 
-function Paypal({ Component, pageProps, children }) {
-  const initialOptions = {
+const Paypal: FC = ({ children }) => {
+  const initialOptions: ScriptProviderProps["options"] = {
     "client-id":
       "ARnOpc5Q0omQOKFfotXJxGsPd71Un_ikaLOTbEbuV_30TQAe25aYrxgIJ8ZWrDzsuWTnrJ87MCJGWr26",
     currency: "USD",
@@ -10,10 +14,12 @@ function Paypal({ Component, pageProps, children }) {
     locale: "en_VN",
     "buyer-country": "VN",
   };
+
   return (
     <PayPalScriptProvider options={initialOptions}>
       {children}
     </PayPalScriptProvider>
   );
-}
+};
+
 export default Paypal;

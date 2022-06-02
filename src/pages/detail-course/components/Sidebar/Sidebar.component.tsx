@@ -7,6 +7,7 @@ import CouponApi from "../../../../api/coupon.api";
 import CourseApi, { CustomCourse } from "../../../../api/course.api";
 import { Coupon } from "../../../../ts/types/coupon.types";
 import { ROUTES } from "../../../../utils/constants";
+import { openNotification } from "../../../../utils/functions";
 import { StyledGoToCourseBtn } from "../../styles/detail-course.styles";
 import ButtonContainer from "./ButtonContainer.component";
 import CouponAndGift, { CouponProps } from "./CouponAndGift.component";
@@ -19,12 +20,13 @@ type SidebarProps = {
 };
 
 export type DataCoupon = {
-  message: string | "" | undefined;
+  message: string | undefined;
   coupon: Coupon | null;
   checkingInput: boolean;
   checkingParams: boolean;
   saleOff: number;
   isFreeCoupon: boolean;
+  discount: string;
 };
 
 const Sidebar: FC<SidebarProps> = ({ course }) => {
@@ -45,12 +47,11 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
     checkingParams: false,
     saleOff: 0,
     isFreeCoupon: false,
+    discount: "",
   });
   const refInput = useRef({ value: "" });
   const [searchParams, setSearchParams] = useSearchParams();
   const couponCode = searchParams.get("couponCode");
-
-  const navigate = useNavigate();
 
   // Kiểm tra trạng thái thanh toán
   useEffect(() => {
@@ -89,6 +90,7 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
             coupon: data.coupon,
             saleOff: data.saleOff,
             checkingParams: false,
+            discount: data.discount,
           }));
         }
       });
@@ -96,6 +98,7 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
   }, [couponCode, dataCheckPurchase, id, setSearchParams]);
 
   const [offset, setOffset] = useState(0);
+
   useEffect(() => {
     const onScroll = () => setOffset(window.pageYOffset);
     // clean up code
@@ -112,33 +115,37 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
   function applyCoupon() {
     if (refInput.current.value) {
       setDataCoupon((state) => ({ ...state, checkingInput: true }));
-      CouponApi.applyCoupon(refInput.current.value, course.id).then((res) => {
-        const { data } = res;
+      CouponApi.applyCoupon(refInput.current.value, course.id)
+        .then((res) => {
+          const { data } = res;
 
-        if (data.message)
+          if (data.message)
+            setDataCoupon((state) => ({
+              ...state,
+              message: data.message,
+              checkingInput: false,
+            }));
+          else if (data.coupon) {
+            setDataCoupon((state) => ({
+              ...state,
+              message: "",
+              isFreeCoupon: data.isFreeCoupon,
+              coupon: data.coupon,
+              saleOff: data.saleOff,
+              checkingInput: false,
+            }));
+            refInput.current.value = "";
+            setSearchParams({ couponCode: data.coupon.code });
+          }
+        })
+        .catch((error) => {
           setDataCoupon((state) => ({
             ...state,
-            message: data.message,
             checkingInput: false,
+            message: "Lỗi trong quá trình kiểm tra mã giảm giá",
           }));
-        else if (data.coupon) {
-          setDataCoupon((state) => ({
-            ...state,
-            message: "",
-            isFreeCoupon: data.isFreeCoupon,
-            coupon: data.coupon,
-            saleOff: data.saleOff,
-            checkingInput: false,
-          }));
-          refInput.current.value = "";
-          setSearchParams({ couponCode: data.coupon.code });
-        }
-      });
+        });
     }
-  }
-
-  function redirectToCheckout() {
-    navigate(ROUTES.CHECKOUT + "?couponCode=" + searchParams.get("couponCode"));
   }
 
   const couponProps: CouponProps = {
@@ -175,7 +182,10 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
             <Skeleton active className="pd-2" />
           ) : dataCheckPurchase.hasPurchased ? (
             <StyledGoToCourseBtn className="pd-2">
-              <Link to={ROUTES.course_dash_redirect(id)} className="btn w-100">
+              <Link
+                to={ROUTES.learning({ course_slug: slug })}
+                className="btn w-100"
+              >
                 Đi đến khóa học
               </Link>
             </StyledGoToCourseBtn>
@@ -187,11 +197,7 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
                 <Price dataCoupon={dataCoupon} price={price} />
               )}
 
-              <ButtonContainer
-                redirectToCheckout={redirectToCheckout}
-                course={course}
-                dataCoupon={dataCoupon}
-              />
+              <ButtonContainer course={course} dataCoupon={dataCoupon} />
 
               <div className="infor-course">
                 <h4>Khóa học này bao gồm:</h4>
