@@ -63,7 +63,7 @@ const ButtonContainer: FC<Props> = ({ course, dataCoupon }) => {
             openNotification(
               "error",
               error.response?.data?.message ??
-                "Đăng kí tham giá khóa học không thành công!"
+                "Đăng kí tham gia khóa học không thành công!"
             );
           } else {
             openNotification(
