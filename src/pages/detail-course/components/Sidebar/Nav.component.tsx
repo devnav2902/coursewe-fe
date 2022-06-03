@@ -1,15 +1,29 @@
 import { StarFilled } from "@ant-design/icons";
 import { Row } from "antd";
+import { FC } from "react";
 import { roundsTheNumber } from "../../../../utils/functions";
 
-const Nav = ({ dataCheckPurchase, navProps, offset }) => {
+export type NavPropsItems = {
+  rating_avg_rating: string;
+  rating_count: number;
+  course_bill_count: number;
+  title: string;
+};
+
+type NavProps = {
+  hasPurchased: boolean;
+  navProps: NavPropsItems;
+  offset: number;
+};
+
+const Nav: FC<NavProps> = ({ hasPurchased, navProps, offset }) => {
   const { title, rating_avg_rating, course_bill_count, rating_count } =
     navProps;
 
   return (
     <nav
       className={`nav-top${
-        offset >= 400 && !dataCheckPurchase.hasPurchased ? " nav-top-fixed" : ""
+        offset >= 400 && !hasPurchased ? " nav-top-fixed" : ""
       }`}
     >
       <Row align="middle" className="h-100">

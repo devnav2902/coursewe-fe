@@ -2,16 +2,14 @@ import { DesktopOutlined, VideoCameraOutlined } from "@ant-design/icons";
 import { Skeleton } from "antd";
 import { FC, useEffect, useRef, useState } from "react";
 import { BiInfinite } from "react-icons/bi";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import CouponApi from "../../../../api/coupon.api";
-import CourseApi, { CustomCourse } from "../../../../api/course.api";
+import { CustomCourse } from "../../../../api/course.api";
 import { Coupon } from "../../../../ts/types/coupon.types";
 import { ROUTES } from "../../../../utils/constants";
-import { openNotification } from "../../../../utils/functions";
-import { StyledGoToCourseBtn } from "../../styles/detail-course.styles";
 import ButtonContainer from "./ButtonContainer.component";
 import CouponAndGift, { CouponProps } from "./CouponAndGift.component";
-import Nav from "./Nav.component";
+import Nav, { NavPropsItems } from "./Nav.component";
 import Price from "./Price.component";
 import Video from "./Video.component";
 
@@ -36,10 +34,6 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
     course;
   const { video_demo } = course;
 
-  const [dataCheckPurchase, setDataCheckPurchase] = useState({
-    loaded: false,
-    hasPurchased: false,
-  });
   const [dataCoupon, setDataCoupon] = useState<DataCoupon>({
     message: "",
     coupon: null,
@@ -53,28 +47,13 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const couponCode = searchParams.get("couponCode");
 
-  // Kiểm tra trạng thái thanh toán
-  useEffect(() => {
-    CourseApi.userHasPurchased(id).then((res) => {
-      const {
-        data: { hasPurchased },
-      } = res;
-
-      setDataCheckPurchase((state) => ({
-        ...state,
-        loaded: true,
-        hasPurchased,
-      }));
-    });
-  }, [id]);
+  const hasPurchased = course.is_purchased ? true : false;
 
   // Kiểm tra mã giảm giá
   useEffect(() => {
     // Chưa thanh toán, nếu có coupon param sẽ check coupon
-    const hasPurchased =
-      dataCheckPurchase.loaded && !dataCheckPurchase.hasPurchased;
 
-    if (couponCode && hasPurchased) {
+    if (couponCode && !hasPurchased) {
       setDataCoupon((state) => ({ ...state, checkingParams: true }));
 
       CouponApi.applyCoupon(couponCode, id).then((res) => {
@@ -95,7 +74,7 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
         }
       });
     }
-  }, [couponCode, dataCheckPurchase, id, setSearchParams]);
+  }, [couponCode, id, setSearchParams, hasPurchased]);
 
   const [offset, setOffset] = useState(0);
 
@@ -156,7 +135,7 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
     setSearchParams,
   };
 
-  const navProps = {
+  const navProps: NavPropsItems = {
     rating_avg_rating,
     rating_count,
     course_bill_count,
@@ -165,30 +144,24 @@ const Sidebar: FC<SidebarProps> = ({ course }) => {
 
   return (
     <>
-      <Nav
-        dataCheckPurchase={dataCheckPurchase}
-        navProps={navProps}
-        offset={offset}
-      />
+      <Nav hasPurchased={hasPurchased} navProps={navProps} offset={offset} />
       <div
         className={`head-sidebar${
-          offset >= 400 && !dataCheckPurchase.hasPurchased ? " fixed" : ""
+          offset >= 400 && !hasPurchased ? " fixed" : ""
         }`}
       >
         <div className="widget-content">
           <Video thumbnail={thumbnail} title={title} video_demo={video_demo} />
 
-          {!dataCheckPurchase.loaded ? (
-            <Skeleton active className="pd-2" />
-          ) : dataCheckPurchase.hasPurchased ? (
-            <StyledGoToCourseBtn className="pd-2">
+          {hasPurchased ? (
+            <div className="pd-2">
               <Link
                 to={ROUTES.learning({ course_slug: slug })}
-                className="btn w-100"
+                className="btn w-100 btn-primary"
               >
                 Đi đến khóa học
               </Link>
-            </StyledGoToCourseBtn>
+            </div>
           ) : (
             <>
               {dataCoupon.checkingParams ? (

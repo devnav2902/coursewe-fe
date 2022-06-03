@@ -7,7 +7,7 @@ import { Col, Collapse, Row, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { BiCheck } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import CourseApi, { CustomCourse } from "../../../api/course.api";
 import Loading from "../../../components/Loading/Loading.component";
 import Rating from "../../../components/Rating/Rating.component";
@@ -22,6 +22,7 @@ const { Panel } = Collapse;
 
 const DetailCoursePage = () => {
   const [course, setCourse] = useState<CustomCourse | null>(null);
+  const [loadedCourse, setLoadedCourse] = useState(false);
   const [graph, setGraph] = useState(null);
 
   const { slug } = useParams() as { slug: string };
@@ -31,20 +32,26 @@ const DetailCoursePage = () => {
       const { data } = res;
 
       setCourse(data.course);
+      setLoadedCourse(true);
       setGraph(data.graph);
     });
   }, [slug]);
 
-  if (!course)
-    return (
-      <Loading>
-        <Spin size="large" />
-      </Loading>
-    );
+  if (!course) {
+    if (!loadedCourse) {
+      return (
+        <Loading>
+          <Spin size="large" />
+        </Loading>
+      );
+    }
 
-  const { title, description, author, subtitle, section } = course;
+    return Navigate({ to: ROUTES.NOT_FOUND });
+  }
+
+  const { title, description, author, subtitle, section, id } = course;
   const { course_requirements, course_outcome } = course;
-  const { rating_count, course_bill_count, rating_avg_rating, rating } = course;
+  const { rating_count, course_bill_count, rating_avg_rating } = course;
 
   return (
     <div className="detail-course">
@@ -184,14 +191,14 @@ const DetailCoursePage = () => {
               <div className="course-info__item">
                 <p>Đánh giá từ học viên</p>
                 <div className="tab active-tab" id="review-box">
-                  {!graph ? null : (
+                  {graph && (
                     <RatingGraph
                       rating_avg_rating={rating_avg_rating}
                       graph={graph}
                     />
                   )}
 
-                  <Review reviews={rating} />
+                  <Review courseId={id} />
                 </div>
               </div>
             </div>
