@@ -1,28 +1,37 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import CourseApi, { CustomCourse } from "../../../api/course.api";
-import PurchaseApi from "../../../api/purchase.api";
+import PurchaseApi, { PurchaseData } from "../../../api/purchase.api";
 import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
 import { getCart } from "../../../redux/slices/cart.slice";
 import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
-import Paypal from "../component/Paypal.component";
-import PaypalButtonContainer from "../component/PaypalButton.component";
-import SelectCurrency from "../component/SelectCurrency.component";
-import Success from "../component/Success.component";
+import PaypalButtonContainer from "../components/PaypalButton.component";
+import SelectCurrency from "../components/SelectCurrency.component";
+import Success from "../components/Success.component";
 import { DataCoupon } from "../../detail-course/components/Sidebar/Sidebar.component";
+import { usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { localeWithCurrency } from "../utils/method";
+import _ from "lodash";
 
 export type CourseData = {
   loaded: boolean;
   data: CustomCourse | null;
 };
 
+export type AmountData = { value: string; loaded: boolean };
+
 export type CouponState = { state: null | DataCoupon };
 
 const CheckoutPage = () => {
+  const [{ options }] = usePayPalScriptReducer();
+
   const { cart, loadedCart } = useTypedSelector((state) => state.cart);
 
-  const [succeeded, setSucceeded] = useState(false);
+  const [amountData, setAmountData] = useState<AmountData>({
+    value: "1",
+    loaded: false,
+  });
   const [details, setDetails] = useState(null);
   const [courseData, setCourseData] = useState<CourseData>({
     loaded: false,
@@ -42,27 +51,72 @@ const CheckoutPage = () => {
     if (!courseId) {
       if (userLoaded && !loadedCart) dispatch(getCart());
     } else {
-      CourseApi.getCourseById(courseId).then(({ data }) => {
-        setCourseData({ data, loaded: true });
-      });
+      CourseApi.getCourseById(courseId)
+        .then(({ data }) => {
+          setCourseData({ data, loaded: true });
+        })
+        .catch(() => {
+          navigate(ROUTES.NOT_FOUND);
+        });
     }
-  }, [userLoaded, dispatch, courseId, loadedCart]);
+  }, [userLoaded, dispatch, courseId, loadedCart, navigate]);
 
   useEffect(() => {
     if (loadedCart && cart.courses.length < 1 && !courseId)
       navigate(ROUTES.CART);
-  }, [loadedCart, cart.courses.length, courseId]);
+  }, [loadedCart, cart.courses.length, courseId, navigate]);
 
-  function handleSucceeded(details) {
-    setSucceeded(true);
+  function handleSucceeded(details: any) {
     setDetails(details);
+
+    let data: PurchaseData = { course_id: [], coupon_code: [] };
+
+    if (courseData.data) {
+      data.course_id = [courseData.data.id];
+      state?.coupon?.code && (data.coupon_code = [state.coupon.code]);
+    } else if (cart.courses.length) {
+      data.course_id = cart.courses.map((course) => course.id);
+
+      let coupons = cart.courses
+        .map((course) => {
+          return course.coupon_code;
+        })
+        .filter((value) => value);
+
+      coupons = _.uniq(coupons);
+
+      data.coupon_code = coupons as string[];
+    }
+
     if (details.status === "COMPLETED") {
-      PurchaseApi.purchase(cart).then((res) => console.log(res));
+      PurchaseApi.purchase(data).then((res) => console.log(res));
     }
   }
 
+  const appliedCoupon = (function () {
+    if (courseData.data) {
+      if (state?.discount) {
+        return parseFloat(state.discount) === 0
+          ? "Miễn phí"
+          : `- ${state.coupon?.discount_price} VNĐ`;
+      }
+    }
+
+    // From cart
+    if (parseFloat(cart.discount) !== 0) return `- ${cart.discount} VNĐ`;
+    return "Không có";
+  })();
+
+  const total = (function () {
+    if (!courseData.data) return cart.current_price + " VNĐ";
+
+    // 1 khóa học (Click vào button mua ngay)
+    if (state?.coupon) return state.coupon.discount_price + " VNĐ";
+    return courseData.data.price.format_price + " VNĐ";
+  })();
+
   return (
-    <Paypal>
+    <>
       <div className="checkout-page">
         <div className="checkout-page__container d-flex">
           <div className="checkout-page-left">
@@ -178,23 +232,28 @@ const CheckoutPage = () => {
               </div>
               <div className="discount-price d-flex align-items-center">
                 <div className="title">Áp dụng mã giảm giá</div>
-                <div className="price">
-                  {courseData.data && state
-                    ? `-${state?.discount} VNĐ`
-                    : `- ${cart.discount} VNĐ`}
-                </div>
+                <div className="price">{appliedCoupon}</div>
               </div>
               <div className="total d-flex align-items-center">
-                <div className="title">Tổng cộng</div>
-                <div className="price fw-bold">
-                  {courseData.data && state
-                    ? state.coupon?.discount_price + " VNĐ"
-                    : cart.current_price + " VNĐ"}
-                </div>
+                <div className="title fw-bold">Tổng cộng</div>
+                <div className="price fw-bold">{total}</div>
               </div>
+              {amountData.loaded && (
+                <div className="exchange-rate d-flex align-items-center">
+                  <div className="title fw-bold">Quy đổi</div>
+                  <div className="price fw-bold">
+                    {localeWithCurrency(
+                      parseFloat(amountData.value),
+                      options.currency as string
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             <PaypalButtonContainer
+              amountData={amountData}
+              setAmountData={setAmountData}
               couponState={state}
               courseData={courseData}
               handleSucceeded={handleSucceeded}
@@ -202,8 +261,14 @@ const CheckoutPage = () => {
           </div>
         </div>
       </div>
-      {succeeded ? <Success details={details} /> : null}
-    </Paypal>
+      {details && (
+        <Success
+          couponState={state}
+          courseData={courseData.data || cart}
+          details={details}
+        />
+      )}
+    </>
   );
 };
 export default CheckoutPage;

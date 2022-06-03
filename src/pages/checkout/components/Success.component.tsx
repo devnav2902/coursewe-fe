@@ -1,7 +1,11 @@
-import React from "react";
+import { FC } from "react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../utils/constants";
 import styled from "styled-components";
+import moment from "moment";
+import { CouponState, CourseData } from "../page/checkout.page";
+import { FormattedCartItem } from "../../../ts/types/cart.types";
+import { CustomCourse } from "../../../api/course.api";
 
 const StyledSuccess = styled.div`
   &.payment {
@@ -18,7 +22,7 @@ const StyledSuccess = styled.div`
     transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
     max-height: calc(100vh - 6rem);
     overflow-y: auto;
-    max-width: 450px;
+    max-width: 600px;
     width: 100%;
     margin: auto;
     padding: 2rem 3rem;
@@ -121,8 +125,14 @@ const StyledSuccess = styled.div`
     }
   }
 `;
-function Success({ details }) {
-  if (!details) return null;
+
+type SuccessProps = {
+  details: any;
+  courseData: CourseData["data"] | FormattedCartItem;
+  couponState: CouponState["state"];
+};
+
+const Success: FC<SuccessProps> = ({ details, courseData, couponState }) => {
   const {
     update_time,
     payer: {
@@ -131,17 +141,53 @@ function Success({ details }) {
     purchase_units,
   } = details;
 
-  let total = 0.0;
-  let shoppingList = "";
+  const currency = purchase_units[0].amount.currency_code;
+  const price = parseFloat(purchase_units[0].amount.value).toLocaleString(
+    "en-US",
+    {
+      style: "currency",
+      currency: currency,
+      minimumFractionDigits: 2,
+    }
+  );
+  const buyTime = moment(update_time).format("DD-MM-YYYY MM:ss A");
 
-  // console.log(sum);
-  // courses.forEach((course) => {
-  //   let purchase = 0.0;
-  //   if (course.coupon) purchase = course.coupon.discount_price;
-  //   else purchase = course.price.price;
+  const dataTable = (() => {
+    function isCart(
+      test: CustomCourse | FormattedCartItem | null
+    ): test is FormattedCartItem {
+      return (test as FormattedCartItem).courses.length > 0;
+    }
 
-  //   shoppingList += ` <tr><td>${course.title}</td><td>$${purchase}</td></tr>`;
-  // });
+    if (isCart(courseData)) {
+      return courseData.courses.map((course) => (
+        <tr>
+          <td title={course.title}>{course.title}</td>
+          <td>
+            {course.course_coupon
+              ? course.course_coupon.discount_price
+              : course.price.format_price}{" "}
+            VNĐ
+          </td>
+        </tr>
+      ));
+    }
+
+    if (courseData) {
+      return (
+        <tr>
+          <td title={courseData.title}>{courseData.title}</td>
+          <td>
+            {couponState?.coupon
+              ? couponState.isFreeCoupon
+                ? "Miễn phí"
+                : couponState.coupon.discount_price + " VNĐ"
+              : courseData.price.format_price + " VNĐ"}
+          </td>
+        </tr>
+      );
+    }
+  })();
 
   return (
     <StyledSuccess className="payment container">
@@ -156,22 +202,19 @@ function Success({ details }) {
           <tbody>
             <tr>
               <td>Thời gian thanh toán</td>
-              <td>{update_time}</td>
+              <td>{buyTime}</td>
             </tr>
             <tr>
-              <td>Customer</td>
+              <td>Khách hàng</td>
               <td>{given_name + " " + surname}</td>
             </tr>
             <tr>
-              <td>Payment Method</td>
+              <td>Phương thức thanh toán</td>
               <td>Paypal</td>
             </tr>
             <tr>
               <td>Số tiền thanh toán</td>
-              <td>
-                {purchase_units[0].amount.currency_code === "USD" && "$"}
-                {total}
-              </td>
+              <td>{price}</td>
             </tr>
           </tbody>
         </table>
@@ -184,7 +227,7 @@ function Success({ details }) {
                 <th>Thanh toán</th>
               </tr>
             </thead>
-            <tbody>{shoppingList}</tbody>
+            <tbody>{dataTable}</tbody>
           </table>
         </div>
 
@@ -199,6 +242,6 @@ function Success({ details }) {
       </div>
     </StyledSuccess>
   );
-}
+};
 
 export default Success;

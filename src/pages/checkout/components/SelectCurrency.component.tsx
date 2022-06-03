@@ -1,12 +1,15 @@
 import { usePayPalScriptReducer } from "@paypal/react-paypal-js";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 const SelectCurrency = () => {
   const [{ options }, dispatch] = usePayPalScriptReducer();
   const [currency, setCurrency] = useState(options.currency);
 
-  function onCurrencyChange({ target: { value } }) {
+  function onCurrencyChange({
+    target: { value },
+  }: ChangeEvent<HTMLSelectElement>) {
     setCurrency(value);
+
     dispatch({
       type: "resetOptions",
       value: {
