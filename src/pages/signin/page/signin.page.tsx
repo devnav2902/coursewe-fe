@@ -1,7 +1,7 @@
 import { Spin } from "antd";
 import axios from "axios";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../../components/Input/Input.component";
 import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
 import { login } from "../../../redux/slices/user.slice";
