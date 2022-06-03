@@ -155,9 +155,12 @@ const Course: FC<CourseProps> = ({ course }) => {
     instructional_level,
     subtitle,
     course_outcome,
+    is_purchased,
+    id,
   } = course;
 
   const isFreeCourse = parseInt(price.original_price) === 0;
+  const isPurchased = is_purchased ? true : false;
 
   const quickViewBox = (
     <StyledQuickViewBox>
@@ -175,8 +178,8 @@ const Course: FC<CourseProps> = ({ course }) => {
         ))}
       </div>
       <div className="quick-view-footer d-flex align-item-center">
-        {isFreeCourse ? (
-          <EnrollButton className="w-100" />
+        {isFreeCourse && !isPurchased ? (
+          <EnrollButton course_id={[id]} course_slug={slug} className="w-100" />
         ) : (
           <CartButton course={course} />
         )}

@@ -1,7 +1,6 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import { FC } from "react";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
@@ -30,8 +29,13 @@ const CartButton: FC<CartButton> = ({ course }) => {
   }
 
   function existedCourseInCart(id: number) {
-    return cartData.cart.courses.some((course) => course.id === id);
+    return cartData.cart.courses.some((course) => course?.id === id);
   }
+
+  const isPurchase = (() => {
+    if (!user.profile || !course.is_purchased) return false;
+    return true;
+  })();
 
   return (
     <StyledCartButton>
@@ -43,6 +47,13 @@ const CartButton: FC<CartButton> = ({ course }) => {
       ) : existedCourseInCart(course.id) ? (
         <Link to={ROUTES.CART} className="btn btn-color-default w-100">
           Xem trong giỏ hàng
+        </Link>
+      ) : isPurchase ? (
+        <Link
+          to={ROUTES.learning({ course_slug: course.slug })}
+          className="btn w-100 btn-primary"
+        >
+          Đi đến khóa học
         </Link>
       ) : (
         <div
