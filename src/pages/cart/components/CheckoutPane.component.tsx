@@ -1,39 +1,61 @@
-import { useRef } from "react";
+import axios from "axios";
+import _ from "lodash";
+import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import CouponApi from "../../../api/coupon.api";
-import { useTypedSelector } from "../../../hooks/redux.hooks";
+import EnrollButton from "../../../components/EnrollButton/EnrollButton.component";
+import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
+import { getCart } from "../../../redux/slices/cart.slice";
 import { ROUTES } from "../../../utils/constants";
 import CouponItem from "./CouponItem.component";
-import _ from "lodash";
 
 const CheckoutPane = () => {
   const { cart } = useTypedSelector((state) => state.cart);
 
+  const dispatch = useAppDispatch();
+
   const originalPrice = cart.original_price;
   const currentPrice = cart.current_price;
 
-  // const originalPriceRemovedDot = parseInt(originalPrice.replace(/\./g, ""));
-  // const currentPriceRemovedDot = parseInt(currentPrice.replace(/\./g, ""));
-
   const refCoupon = useRef<HTMLInputElement>(null);
 
-  let coupons = cart.courses
-    .map((course) => {
-      return course.coupon_code;
-    })
-    .filter((value) => value);
+  const [dataCoupon, setDataCoupon] = useState({
+    message: "",
+  });
 
-  coupons = _.uniq(coupons);
-  // console.log(originalPrice, currentPrice);
+  const arrCourseId = useMemo(
+    () => cart.courses.map((course) => course.id),
+    [cart.courses]
+  );
+  const coupons = useMemo(() => {
+    const coupons = cart.courses
+      .map((course) => {
+        return course.coupon_code;
+      })
+      .filter((value) => value);
+
+    return _.uniq(coupons);
+  }, [cart.courses]);
 
   function applyCoupon() {
     const coursesId = cart.courses.map((course) => course.id);
 
     const code = refCoupon.current?.value;
     if (code && code.trim()) {
-      CouponApi.applyCouponWithCourses(code, coursesId).then((res) => {
-        console.log(res);
-      });
+      CouponApi.applyCouponWithCourses(code, coursesId)
+        .then(() => {
+          dispatch(getCart());
+          setDataCoupon({ message: "" });
+
+          if (refCoupon.current) {
+            refCoupon.current.value = "";
+          }
+        })
+        .catch((error) => {
+          if (axios.isAxiosError(error)) {
+            setDataCoupon({ message: error.response?.data.message });
+          }
+        });
     }
   }
 
@@ -57,14 +79,22 @@ const CheckoutPane = () => {
           </>
         )}
 
-        <Link to={ROUTES.CHECKOUT}>
-          <div className="btn-checkout">Thanh toán</div>
-        </Link>
+        {parseFloat(cart.current_price) === 0 ? (
+          <EnrollButton
+            course_id={arrCourseId}
+            coupons={coupons as string[]}
+            className="btn-color-default w-100 mb-2"
+          />
+        ) : (
+          <Link to={ROUTES.CHECKOUT}>
+            <div className="btn-checkout">Thanh toán</div>
+          </Link>
+        )}
         <div className="promotions">
           <label>Mã giảm giá</label>
 
           {coupons.map((coupon) => (
-            <CouponItem code={coupon as string} />
+            <CouponItem key={coupon} code={coupon as string} />
           ))}
 
           <div className="form-group has-error">
@@ -84,6 +114,14 @@ const CheckoutPane = () => {
                 Áp dụng
               </button>
             </div>
+            {dataCoupon.message && (
+              <p
+                className="warning mt-1 d-block"
+                style={{ fontSize: "1.4rem", color: "#fd5050" }}
+              >
+                {dataCoupon.message}
+              </p>
+            )}
           </div>
         </div>
       </div>
