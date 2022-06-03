@@ -16,13 +16,10 @@ class Coupon {
   };
 
   applyCouponWithCourses = async (code: string, courses: number[]) => {
-    return axiosClient
-      .post(`/coupon/courses/apply-coupon`, {
-        coupon_code: code,
-        courses,
-      })
-      .then((res) => res)
-      .catch((error) => error.response);
+    return axiosClient.post(`/coupon/courses/apply-coupon`, {
+      coupon_code: code,
+      courses,
+    });
   };
 }
 const CouponApi = new Coupon();

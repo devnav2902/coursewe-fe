@@ -1,9 +1,8 @@
 import axiosClient from "../utils/axios";
 
 export type Enroll = {
-  course_id: string | number;
-  coupon?: string;
-  code?: string;
+  course_id: number[];
+  code?: string[];
 };
 
 class FreeEnroll {
