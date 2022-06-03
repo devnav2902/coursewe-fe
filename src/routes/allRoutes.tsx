@@ -1,4 +1,5 @@
 import React from "react";
+import CheckoutLayout from "../layouts/checkout.layout";
 import { LearningProvider } from "../pages/learning/hooks/leaning.hooks";
 import { ROUTES } from "../utils/constants";
 
@@ -277,7 +278,11 @@ const routes: Routes[] = [
   },
   {
     path: ROUTES.CHECKOUT,
-    component: <CheckoutPage />,
+    component: (
+      <CheckoutLayout>
+        <CheckoutPage />
+      </CheckoutLayout>
+    ),
     private: true,
   },
   {
