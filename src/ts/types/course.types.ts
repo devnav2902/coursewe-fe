@@ -52,6 +52,7 @@ export type Rating = {
   content: string;
   rating: number;
   user: User;
+  created_at: string;
 };
 export type Ratings = Rating[];
 export type IntendedItem = { description: string; order: number; id?: number };
@@ -65,12 +66,31 @@ export type Course = {
   slug: string;
   author_id: 2;
   thumbnail: string;
+  is_purchased: null | {
+    user_id: string | number;
+    course_id: string | number;
+  };
 };
 
 export type Courses = Course[];
 export type CoursesPagination<C> = {
   current_page: number;
   data: C;
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  next_page_url: string;
+  per_page: number;
+  prev_page_url: string;
+  to: number;
+  total: number;
+  path: string;
+};
+
+export type RatingPagination = {
+  current_page: number;
+  data: Ratings;
   first_page_url: string;
   from: number;
   last_page: number;
