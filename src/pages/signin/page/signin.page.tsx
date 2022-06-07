@@ -22,7 +22,9 @@ const SigninPage = () => {
       dispatch(login({ password, email }))
         .unwrap()
         .then((res) => {
-          navigate(-1);
+          res.role.name === "admin"
+            ? navigate(ROUTES.home("admin"))
+            : navigate(-1);
         })
         .catch((error) => {
           openNotification("error", error);
