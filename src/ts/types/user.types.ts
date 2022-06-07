@@ -1,3 +1,5 @@
+export type Role = "user" | "admin";
+
 export type User = {
   id: number;
   fullname: string;
@@ -6,7 +8,7 @@ export type User = {
   email: string;
   role: {
     id: string | number;
-    name: "user" | "admin";
+    name: Role;
   };
   headline?: string;
   bio?: string;
