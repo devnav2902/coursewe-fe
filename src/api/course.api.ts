@@ -39,6 +39,12 @@ export type CustomCourse = Omit<CourseType, "lecture"> & {
   subtitle: string;
 };
 class Course {
+  draftCoursePreview = async (courseId: number) => {
+    return axiosClient.get<{ course: CustomCourse }>(
+      `/course/preview/${courseId}`
+    );
+  };
+
   userHasRated = async (courseId: number) => {
     return axiosClient
       .get(`/course/has-rated/${courseId}`)
