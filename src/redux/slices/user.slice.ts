@@ -92,7 +92,8 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     // LOGOUT
     builder.addCase(logout.fulfilled, (state) => {
-      state.profile = null;
+      state.profile = initialState.profile;
+      state.error = initialState.error;
     });
     builder.addCase(logout.rejected, (state, payload) => {
       console.log(payload);
