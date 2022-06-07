@@ -1,6 +1,9 @@
+import _ from "lodash";
 import React from "react";
 import CheckoutLayout from "../layouts/checkout.layout";
+import OverviewLayout from "../layouts/instructor-view.layout";
 import { LearningProvider } from "../pages/learning/hooks/leaning.hooks";
+import SignoutPage from "../pages/signout/pages/signout.page";
 import { ROUTES } from "../utils/constants";
 
 const BasicLayout = React.lazy(() => import("../layouts/basic.layout"));
@@ -74,7 +77,7 @@ const PurchaseHistoryPage = React.lazy(
 const SigninPage = React.lazy(() => import("../pages/signin/page/signin.page"));
 const SignupPage = React.lazy(() => import("../pages/signup/page/signup.page"));
 
-export type Routes = {
+export type Route = {
   exact?: boolean;
   path: string;
   component: JSX.Element;
@@ -83,119 +86,44 @@ export type Routes = {
   private?: boolean;
   admin?: boolean;
 };
+export type Routes = Route[];
 
-const routes: Routes[] = [
+interface RoleAndRoutes {
+  role: "user" | "admin";
+  routes: Routes;
+}
+
+// Các route sử dụng chung cho tất cả role
+const commonRoutes: Routes = [
   {
-    path: "/",
+    path: ROUTES.SIGN_IN,
     component: (
       <BasicLayout>
-        <Home />
+        <SigninPage />
       </BasicLayout>
     ),
+    redirectIfAuthenticated: true,
   },
   {
-    path: ROUTES.subcategories(),
-    component: (
-      <BasicLayout key={ROUTES.subcategories()}>
-        <CategoriesPage />
-      </BasicLayout>
-    ),
-  },
-  {
-    path: ROUTES.topics(),
-    component: (
-      <BasicLayout key={ROUTES.topics()}>
-        <CategoriesPage />
-      </BasicLayout>
-    ),
-  },
-  {
-    path: ROUTES.categories(),
-    component: (
-      <BasicLayout key={ROUTES.categories()}>
-        <CategoriesPage />
-      </BasicLayout>
-    ),
-  },
-  {
-    path: ROUTES.course_basics(),
-    component: (
-      <InstructorCourseLayout key={ROUTES.course_basics()}>
-        {(props: any) => <BasicsPage {...props} />}
-        {/* callback => children() sẽ return <BasicsPage /> */}
-      </InstructorCourseLayout>
-    ),
+    path: ROUTES.SIGN_OUT,
+    component: <SignoutPage />,
     private: true,
   },
   {
-    path: ROUTES.price(),
-    component: (
-      <InstructorCourseLayout key={ROUTES.price()}>
-        {(props: any) => <PricePage {...props} />}
-      </InstructorCourseLayout>
-    ),
+    path: ROUTES.PROFILE,
+    component: <ProfilePage />,
     private: true,
   },
+
   {
-    path: ROUTES.intended_learners(),
-    component: (
-      <InstructorCourseLayout key={ROUTES.intended_learners()}>
-        {(props) => <IntendedLearnersPage {...props} />}
-      </InstructorCourseLayout>
-    ),
-    private: true,
+    path: ROUTES.landing_page_draft(),
+    component: <LandingPageDraft />,
   },
   {
-    path: ROUTES["image_and_preview_video"](),
-    component: (
-      <InstructorCourseLayout key={ROUTES["image_and_preview_video"]()}>
-        {(props: any) => <ImageAndVideoPage {...props} />}
-      </InstructorCourseLayout>
-    ),
-    private: true,
-  },
-  {
-    path: ROUTES.curriculum(),
-    component: (
-      <InstructorCourseLayout key={ROUTES.curriculum()}>
-        {(props: any) => <CurriculumPage {...props} />}
-      </InstructorCourseLayout>
-    ),
-    private: true,
-  },
-  {
-    path: ROUTES.promotions(),
-    component: (
-      <InstructorCourseLayout key={ROUTES.promotions()}>
-        {(props: any) => <PromotionsPage {...props} />}
-      </InstructorCourseLayout>
-    ),
-    private: true,
-  },
-  {
-    path: ROUTES.learning(),
-    component: (
-      <LearningLayout>
-        <LearningProvider>
-          <LearningPage />
-        </LearningProvider>
-      </LearningLayout>
-    ),
-  },
-  {
-    path: ROUTES.MY_LEARNING,
-    component: (
-      <BasicLayout>
-        <MyLearningPage />
-      </BasicLayout>
-    ),
-    private: true,
-  },
-  {
-    path: ROUTES.INSTRUCTOR_COURSES,
+    path: ROUTES.OVERVIEW,
     component: (
       <InstructorView>
-        <InstructorCoursesPage />
+        <OverviewPage />
       </InstructorView>
     ),
     private: true,
@@ -208,107 +136,217 @@ const routes: Routes[] = [
       </BasicLayout>
     ),
   },
-  {
-    path: ROUTES.detail_course(),
-    component: (
-      <BasicLayout>
-        <DetailCoursePage />
-      </BasicLayout>
-    ),
-  },
-  {
-    path: ROUTES.SIGN_IN,
-    component: (
-      <BasicLayout>
-        <SigninPage />
-      </BasicLayout>
-    ),
-    redirectIfAuthenticated: true,
-  },
-  {
-    path: ROUTES.SIGN_UP,
-    component: (
-      <BasicLayout>
-        <SignupPage />
-      </BasicLayout>
-    ),
-    redirectIfAuthenticated: true,
-  },
-  {
-    path: ROUTES.PURCHASE_HISTORY,
-    component: (
-      <BasicLayout>
-        <PurchaseHistoryPage />
-      </BasicLayout>
-    ),
-    private: true,
-  },
-  {
-    path: ROUTES.CREATE_COURSE,
-    component: (
-      <BasicLayout>
-        <CreateCoursePage />
-      </BasicLayout>
-    ),
-    private: true,
-  },
-  {
-    path: ROUTES.OVERVIEW,
-    component: (
-      <InstructorView>
-        <OverviewPage />
-      </InstructorView>
-    ),
-    private: true,
-  },
-  {
-    path: ROUTES.PROFILE,
-    component: <ProfilePage />,
-    private: true,
-  },
-  {
-    path: ROUTES.ADMIN_REVIEW,
-    component: (
-      <InstructorView>
-        <AdminReviewPage />
-      </InstructorView>
-    ),
-    private: true,
-    admin: true,
-  },
-  {
-    path: ROUTES.CHECKOUT,
-    component: (
-      <CheckoutLayout>
-        <CheckoutPage />
-      </CheckoutLayout>
-    ),
-    private: true,
-  },
-  {
-    path: ROUTES.landing_page_draft(),
-    component: (
-      <BasicLayout>
-        <LandingPageDraft />
-      </BasicLayout>
-    ),
-  },
-  {
-    path: ROUTES.CART,
-    component: (
-      <BasicLayout>
-        <CartPage />
-      </BasicLayout>
-    ),
-  },
-  {
-    path: "*",
-    component: (
-      <BasicLayout>
-        <NotFound />
-      </BasicLayout>
-    ),
-  },
 ];
 
-export default routes;
+export const adminRoutes: RoleAndRoutes = {
+  role: "admin",
+  routes: [
+    ...commonRoutes,
+    {
+      path: ROUTES.ADMIN_REVIEW,
+      component: (
+        <InstructorView>
+          <AdminReviewPage />
+        </InstructorView>
+      ),
+      private: true,
+    },
+    {
+      path: "*",
+      component: (
+        <OverviewLayout>
+          <NotFound />
+        </OverviewLayout>
+      ),
+    },
+  ],
+};
+
+export const userRoutes: RoleAndRoutes = {
+  role: "user",
+  routes: [
+    ...commonRoutes,
+    {
+      path: ROUTES.home("user"),
+      component: (
+        <BasicLayout>
+          <Home />
+        </BasicLayout>
+      ),
+    },
+    {
+      path: ROUTES.subcategories(),
+      component: (
+        <BasicLayout key={ROUTES.subcategories()}>
+          <CategoriesPage />
+        </BasicLayout>
+      ),
+    },
+    {
+      path: ROUTES.topics(),
+      component: (
+        <BasicLayout key={ROUTES.topics()}>
+          <CategoriesPage />
+        </BasicLayout>
+      ),
+    },
+    {
+      path: ROUTES.categories(),
+      component: (
+        <BasicLayout key={ROUTES.categories()}>
+          <CategoriesPage />
+        </BasicLayout>
+      ),
+    },
+    {
+      path: ROUTES.course_basics(),
+      component: (
+        <InstructorCourseLayout key={ROUTES.course_basics()}>
+          {(props: any) => <BasicsPage {...props} />}
+          {/* callback => children() sẽ return <BasicsPage /> */}
+        </InstructorCourseLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.price(),
+      component: (
+        <InstructorCourseLayout key={ROUTES.price()}>
+          {(props: any) => <PricePage {...props} />}
+        </InstructorCourseLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.intended_learners(),
+      component: (
+        <InstructorCourseLayout key={ROUTES.intended_learners()}>
+          {(props) => <IntendedLearnersPage {...props} />}
+        </InstructorCourseLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES["image_and_preview_video"](),
+      component: (
+        <InstructorCourseLayout key={ROUTES["image_and_preview_video"]()}>
+          {(props: any) => <ImageAndVideoPage {...props} />}
+        </InstructorCourseLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.curriculum(),
+      component: (
+        <InstructorCourseLayout key={ROUTES.curriculum()}>
+          {(props: any) => <CurriculumPage {...props} />}
+        </InstructorCourseLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.promotions(),
+      component: (
+        <InstructorCourseLayout key={ROUTES.promotions()}>
+          {(props: any) => <PromotionsPage {...props} />}
+        </InstructorCourseLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.learning(),
+      component: (
+        <LearningLayout>
+          <LearningProvider>
+            <LearningPage />
+          </LearningProvider>
+        </LearningLayout>
+      ),
+    },
+    {
+      path: ROUTES.MY_LEARNING,
+      component: (
+        <BasicLayout>
+          <MyLearningPage />
+        </BasicLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.INSTRUCTOR_COURSES,
+      component: (
+        <InstructorView>
+          <InstructorCoursesPage />
+        </InstructorView>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.detail_course(),
+      component: (
+        <BasicLayout>
+          <DetailCoursePage />
+        </BasicLayout>
+      ),
+    },
+    {
+      path: ROUTES.SIGN_UP,
+      component: (
+        <BasicLayout>
+          <SignupPage />
+        </BasicLayout>
+      ),
+      redirectIfAuthenticated: true,
+    },
+    {
+      path: ROUTES.PURCHASE_HISTORY,
+      component: (
+        <BasicLayout>
+          <PurchaseHistoryPage />
+        </BasicLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.CREATE_COURSE,
+      component: (
+        <BasicLayout>
+          <CreateCoursePage />
+        </BasicLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.CHECKOUT,
+      component: (
+        <CheckoutLayout>
+          <CheckoutPage />
+        </CheckoutLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.CART,
+      component: (
+        <BasicLayout>
+          <CartPage />
+        </BasicLayout>
+      ),
+    },
+    {
+      path: "*",
+      component: (
+        <BasicLayout>
+          <NotFound />
+        </BasicLayout>
+      ),
+    },
+  ],
+};
+
+const allRoutes: Routes = _.uniqBy(
+  [...userRoutes.routes, ...adminRoutes.routes],
+  "path"
+);
+
+export default allRoutes;
