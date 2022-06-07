@@ -1,3 +1,5 @@
+import { Role } from "../ts/types/user.types";
+
 const API_URL = "http://127.0.0.1:8000/api";
 const BE_URL = "http://127.0.0.1:8000";
 
@@ -29,8 +31,9 @@ const ROUTES = {
   MY_LEARNING: "/hoc-tap/danh-sach-khoa-hoc",
   ADMIN_REVIEW: "/admin/submission-courses-list",
   CHECKOUT: "/cart/checkout",
-  COURSE_DASH_REDIRECT: "/course_dash_redirect",
   NOT_FOUND: "/404",
+
+  home: (role: Role) => (role === "admin" ? "/quan-ly/tong-quan" : "/"),
 
   detail_course: (slug?: string) => `/khoa-hoc/${slug ? slug : ":slug"}`,
 
