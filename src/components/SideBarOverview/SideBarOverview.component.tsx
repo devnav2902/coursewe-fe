@@ -6,12 +6,15 @@ import { MdVideoSettings } from "react-icons/md";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useTypedSelector } from "../../hooks/redux.hooks";
+import { Role } from "../../ts/types/user.types";
 import { ROUTES } from "../../utils/constants";
 
 const StyledSidebar = styled.div`
   position: fixed;
   height: 100vh;
   z-index: 9999;
+  top: 0;
+
   .menu {
     height: 100vh;
     z-index: 100;
@@ -116,13 +119,14 @@ const StyledSidebar = styled.div`
 
 const SideBarOverview = () => {
   const { profile } = useTypedSelector((state) => state.user);
+  const role = profile?.role.name as Role;
 
   return (
     <StyledSidebar className="sidebar-menu">
       <div className="menu">
         <ul>
           <li>
-            <Link className="logo" to="/">
+            <Link className="logo" to={ROUTES.home(role)}>
               <span>C</span>
             </Link>
           </li>
@@ -131,14 +135,14 @@ const SideBarOverview = () => {
               <BarChartOutlined style={{ fontSize: "22px" }} />
             </Link>
           </li>
-          {profile?.role.name === "user" && (
+          {role === "user" && (
             <li>
               <Link to={ROUTES.INSTRUCTOR_COURSES}>
                 <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
               </Link>
             </li>
           )}
-          {profile?.role.name === "admin" && (
+          {role === "admin" && (
             <li>
               <Link to={ROUTES.ADMIN_REVIEW}>
                 <MdVideoSettings style={{ fontSize: "22px" }} />
@@ -147,7 +151,7 @@ const SideBarOverview = () => {
           )}
           <div className="hover">
             <div className="hover__item">
-              <Link className="logo" to="/">
+              <Link className="logo" to={ROUTES.home(role)}>
                 <div className="logo__container">
                   <span className="first-letter">C</span>
                   <span className="full-text">Coursewe</span>
@@ -160,7 +164,7 @@ const SideBarOverview = () => {
                 <span>Tổng quan</span>
               </Link>
             </div>
-            {profile?.role.name === "user" && (
+            {role === "user" && (
               <div className="hover__item">
                 <Link to={ROUTES.INSTRUCTOR_COURSES}>
                   <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
@@ -169,7 +173,7 @@ const SideBarOverview = () => {
               </div>
             )}
 
-            {profile?.role.name === "admin" && (
+            {role === "admin" && (
               <div className="hover__item">
                 <Link to={ROUTES.ADMIN_REVIEW}>
                   <MdVideoSettings style={{ fontSize: "22px" }} />
