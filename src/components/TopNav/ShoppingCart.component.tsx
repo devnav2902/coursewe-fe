@@ -149,7 +149,7 @@ const ShoppingCart = () => {
         </StyledCart>
       ) : (
         <Popover
-          placement="bottom"
+          placement="bottomRight"
           content={content}
           getPopupContainer={(e) => e}
         >
