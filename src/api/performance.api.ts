@@ -5,7 +5,7 @@ export type RevenueArray = Revenue[];
 export type RevenueResponse = {
   revenueData: RevenueArray;
 };
-type Params =
+export type Params =
   | {
       fromDate: string;
       toDate: string;
