@@ -98,7 +98,7 @@ const AdminReviewPage = () => {
       dataIndex: "course_updated_at",
       key: "course_updated_at",
       render: (text) => (
-        <span>{moment(text, "DD/MM/YYYY HH:mm").fromNow()}</span>
+        <span>{moment(text, "DD/MM/YYYY HH:mm A").fromNow()}</span>
       ),
     },
     {
