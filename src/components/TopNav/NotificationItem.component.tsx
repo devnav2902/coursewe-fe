@@ -1,6 +1,10 @@
 import { List } from "antd";
+import moment from "moment";
+import "moment/locale/vi";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { Link } from "react-router-dom";
+import NotificationApi from "../../api/notification.api";
+import { useTypedSelector } from "../../hooks/redux.hooks";
 import {
   Notification,
   NotificationCourse,
@@ -8,9 +12,6 @@ import {
 } from "../../ts/types/notification.types";
 import { ROUTES } from "../../utils/constants";
 import { linkThumbnail } from "../../utils/functions";
-import moment from "moment";
-import "moment/locale/vi";
-import NotificationApi from "../../api/notification.api";
 import { NotificationData } from "./Notification.component";
 moment.locale("vi");
 
@@ -29,10 +30,13 @@ const NotificationItem: FC<Props> = ({
     notification_entity: { text_start, text_end, type },
     notification_course,
     notification_purchase,
+    notification_quality_review,
     created_at,
     is_seen,
     id,
   } = item;
+
+  const { profile: user } = useTypedSelector((state) => state.user);
 
   const [markAsReadValue, setMarkAsReadValue] = useState(is_seen);
 
@@ -47,8 +51,13 @@ const NotificationItem: FC<Props> = ({
       const title = course.title;
 
       text = title;
-      src = course.thumbnail;
-      path = ROUTES.INSTRUCTOR_COURSES;
+      src = course.thumbnail
+        ? course.thumbnail
+        : "https://s.udemycdn.com/course/200_H/placeholder.jpg";
+      path =
+        type === "quality_review"
+          ? ROUTES.ADMIN_REVIEW
+          : ROUTES.INSTRUCTOR_COURSES;
 
       break;
     }
@@ -63,6 +72,12 @@ const NotificationItem: FC<Props> = ({
 
       break;
     }
+    case !!notification_quality_review: {
+      src = "https://s.udemycdn.com/course/200_H/placeholder.jpg";
+      path = ROUTES.ADMIN_REVIEW;
+
+      break;
+    }
 
     default:
       break;
@@ -74,13 +89,14 @@ const NotificationItem: FC<Props> = ({
         setMarkAsReadValue(1);
         setNotificationData((state) => ({
           ...state,
-          unreadCount: state.unreadCount - 1,
+          unreadCount: state.unreadCount > 0 ? state.unreadCount - 1 : 0,
         }));
       });
     }
   }
 
-  return (
+  return (type === "quality_review" && user?.role.name === "user") ||
+    (type !== "quality_review" && user?.role.name === "admin") ? null : (
     <List.Item>
       <Link
         onClick={markAsRead}
