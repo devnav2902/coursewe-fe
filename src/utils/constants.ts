@@ -51,11 +51,14 @@ const ROUTES = {
     }
     return `/hoc-tap/khoa-hoc/:course_slug`;
   },
+  search: (keyword?: string) =>
+    `/khoa-hoc/tim-kiem/?q=${keyword ? keyword : ":keyword"}`,
+
   check_video: (params?: CheckVideoParams) => {
     if (params) {
       return `/khoa-hoc/${params.course_id}/video/draft`;
     }
-    return `/khoa-hoc/:course_slug/video/draft`;
+    return `/khoa-hoc/:course_id/video/draft`;
   },
 
   intended_learners: (id?: string | number) =>

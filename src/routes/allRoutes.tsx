@@ -1,14 +1,16 @@
 import React from "react";
+import { CheckVideoProvider } from "../pages/check-video/hooks/leaning.hooks";
 import { LearningProvider } from "../pages/learning/hooks/leaning.hooks";
 import { ROUTES } from "../utils/constants";
 
 const BasicLayout = React.lazy(() => import("../layouts/basic.layout"));
+const SearchPage = React.lazy(() => import("../pages/search/page/Search.page"));
 const InstructorCourseLayout = React.lazy(
   () => import("../layouts/instructor-course.layout")
 );
 
 const ReviewCourseLayout = React.lazy(
-  () => import("../layouts/reviewcourse.layout")
+  () => import("../layouts/review-course.layout")
 );
 const CheckVideoPage = React.lazy(
   () => import("../pages/check-video/page/learning.page")
@@ -191,9 +193,11 @@ const routes: Routes[] = [
   {
     path: ROUTES.check_video(),
     component: (
-      <ReviewCourseLayout>
-        <CheckVideoPage />
-      </ReviewCourseLayout>
+      <CheckVideoProvider>
+        <ReviewCourseLayout>
+          <CheckVideoPage />
+        </ReviewCourseLayout>
+      </CheckVideoProvider>
     ),
     private: true,
     admin: true,
@@ -306,6 +310,14 @@ const routes: Routes[] = [
     ),
     private: true,
     admin: true,
+  },
+  {
+    path: ROUTES.search(),
+    component: (
+      <BasicLayout>
+        <SearchPage />
+      </BasicLayout>
+    ),
   },
   {
     path: ROUTES.CART,
