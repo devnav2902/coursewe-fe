@@ -1,6 +1,7 @@
 import { FC } from "react";
-import SideBarOverview from "../components/SideBarOverview/SideBarOverview.component";
 import styled from "styled-components";
+import SideBarOverview from "../components/SideBarOverview/SideBarOverview.component";
+import { NavTop } from "./components/instructor-view.components";
 
 const StyledWrapper = styled.div`
   min-height: 100vh;
@@ -20,7 +21,8 @@ const StyledWrapper = styled.div`
 const OverviewLayout: FC = ({ children }) => {
   return (
     <StyledWrapper>
-      <div className="main-page">
+      <NavTop />
+      <div className="main-page spacing-top-nav">
         <SideBarOverview />
         <main>{children}</main>
       </div>

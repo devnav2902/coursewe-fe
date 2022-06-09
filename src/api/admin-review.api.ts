@@ -1,15 +1,7 @@
-import { CoursesPagination, Price } from "../ts/types/course.types";
+import { Course, Price } from "../ts/types/course.types";
+import { Pagination } from "../ts/types/pagination.types";
 import { User } from "../ts/types/user.types";
 import axiosClient from "../utils/axios";
-import { CustomCourse } from "./course.api";
-
-type Course = {
-  author: User;
-  author_id: number;
-  id: number;
-  price: Price[];
-  title: string;
-};
 
 export type ReviewCourses = {
   course: Course;
@@ -19,17 +11,30 @@ export type ReviewCourses = {
   updated_at: string;
 }[];
 
+interface CustomCourse {
+  description: string;
+  created_at: string;
+  updated_at: string;
+  author: User;
+  price: Price;
+}
+
+interface ReviewCourseItem {
+  id: number | string;
+  course_id: number | string;
+  created_at: string;
+  updated_at: string;
+  course: Course & CustomCourse;
+}
+
+export interface CoursesListResponse {
+  courses: Pagination<ReviewCourseItem[]>;
+}
 class Admin {
   getReviewCourses = async () => {
-    return axiosClient.get<{ courses: CoursesPagination<ReviewCourses> }>(
+    return axiosClient.get<CoursesListResponse>(
       "/admin/submission-courses-list"
     );
-  };
-  getCourseOfAuthorAndAdminById = async (id: number | string) => {
-    return axiosClient
-      .get<{ course: CustomCourse[] }>(`/admin/course/${id}`)
-      .then((res) => res)
-      .catch((error) => error.response);
   };
 }
 const AdminApi = new Admin();

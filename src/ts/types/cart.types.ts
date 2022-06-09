@@ -1,14 +1,13 @@
-import { InstructionalLevel, Price } from "./course.types";
+import {
+  InstructionalLevel,
+  Price,
+  Course as CourseBase,
+} from "./course.types";
 import { User } from "./user.types";
 
-export type Course = {
-  id: number;
-  author_id: number;
+export type Course = CourseBase & {
   price_id: number;
-  slug: string;
-  thumbnail: string;
   instructional_level_id: number;
-  title: string;
   rating_avg_rating: number;
   rating_count: number;
   lecture_count: number;
@@ -21,6 +20,7 @@ export type Course = {
     course_id: number;
     discount_price: string;
     status: 1;
+    coupon_id: string;
   };
 };
 export type Courses = Course[];

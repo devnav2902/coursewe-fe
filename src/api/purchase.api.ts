@@ -4,12 +4,18 @@ import axiosClient from "../utils/axios";
 type PurchaseHistoryResponse = {
   courseBills: CourseBills;
 };
+
+export type PurchaseData = {
+  course_id: (string | number)[];
+  coupon_code?: string[];
+};
 class Purchase {
   purchaseHistory = async () => {
     return axiosClient.get<PurchaseHistoryResponse>("/purchase/history");
   };
-  purchase = async (courses: any) => {
-    return axiosClient.post(`/purchase`, { courses });
+
+  purchase = async (data: PurchaseData) => {
+    return axiosClient.post(`/purchase`, data);
   };
 }
 

@@ -64,16 +64,6 @@ const StyledCouponItem = styled.div`
   }
 `;
 
-const StyledGoToCourseBtn = styled.div`
-  .btn {
-    color: #fff;
-    background-color: var(--color-blue);
-    &:hover {
-      background-color: #4082cf;
-    }
-  }
-`;
-
 const StyledButtonBox = styled.div`
   &.buttons-box {
     text-align: center;
@@ -116,6 +106,5 @@ export {
   StyledBtnItem,
   StyledCouponItem,
   StyledCouponWrapper,
-  StyledGoToCourseBtn,
   StyledButtonBox,
 };

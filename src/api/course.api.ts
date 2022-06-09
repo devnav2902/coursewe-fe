@@ -8,6 +8,7 @@ import {
   Ratings,
   SectionItems,
 } from "../ts/types/course.types";
+import { Pagination } from "../ts/types/pagination.types";
 import { User } from "../ts/types/user.types";
 import { CustomCourse as CourseComponentType } from "../components/Course/Course.component";
 
@@ -16,6 +17,10 @@ export type CoursesOfInstructor = (CourseType & {
   submit_for_review: boolean;
   isPublished: boolean;
 })[];
+
+export type CoursesOfInstructorResponse = {
+  coursesData: Pagination<CoursesOfInstructor>;
+};
 
 type CustomLecture = Omit<Lecture, "resource_count"> & {
   resource_count: number;
@@ -39,6 +44,12 @@ export type CustomCourse = Omit<CourseType, "lecture"> & {
   subtitle: string;
 };
 class Course {
+  draftCoursePreview = async (courseId: number) => {
+    return axiosClient.get<{ course: CustomCourse }>(
+      `/course/preview/${courseId}`
+    );
+  };
+
   userHasRated = async (courseId: number) => {
     return axiosClient
       .get(`/course/has-rated/${courseId}`)
@@ -76,9 +87,9 @@ class Course {
     );
   };
 
-  getCoursesByCurrentUser = async () => {
-    return axiosClient.get<{ coursesData: { data: CoursesOfInstructor } }>(
-      "/user/courses"
+  getCoursesByCurrentUser = async (page?: number) => {
+    return axiosClient.get<CoursesOfInstructorResponse>(
+      `/user/courses${page ? `?page=${page}` : ""}`
     );
   };
 

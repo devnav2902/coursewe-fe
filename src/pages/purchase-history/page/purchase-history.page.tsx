@@ -64,8 +64,8 @@ const PurchaseHistoryPage = () => {
                           {moment(created_at).format("DD-MM-YYYY HH:mm A")}
                         </td>
                         <td>{promo_code ? promo_code : "Không có"}</td>
-                        <td>{parseInt(price).toLocaleString("vi-VN")}đ</td>
-                        <td>{parseInt(purchase).toLocaleString()}đ</td>
+                        <td>{parseInt(price).toLocaleString("vi-VN")} VNĐ</td>
+                        <td>{parseInt(purchase).toLocaleString()} VNĐ</td>
                       </tr>
                     );
                   })}

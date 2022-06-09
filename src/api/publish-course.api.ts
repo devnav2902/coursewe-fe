@@ -14,7 +14,12 @@ export type MissingPublishRequirements = {
 };
 
 type CheckingPublishRequirementsResponse = {
-  missingPublishRequirements: MissingPublishRequirements;
+  missingPublishRequirements: null | MissingPublishRequirements;
+};
+
+type submitForReviewResponse = {
+  message: string;
+  success?: boolean;
 };
 
 class PublishCourse {
@@ -22,6 +27,12 @@ class PublishCourse {
     return axiosClient.get<CheckingPublishRequirementsResponse>(
       `/checking-publish-requirements/${courseId}`
     );
+  };
+
+  submitForReview = async (courseId: number | string) => {
+    return axiosClient.post<submitForReviewResponse>(`/submit-for-review`, {
+      courseId,
+    });
   };
 }
 

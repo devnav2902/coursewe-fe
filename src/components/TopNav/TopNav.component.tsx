@@ -1,6 +1,5 @@
-import { BellOutlined, SearchOutlined } from "@ant-design/icons";
-import { Dropdown, Spin } from "antd";
-import { useState } from "react";
+import { SearchOutlined } from "@ant-design/icons";
+import { Dropdown } from "antd";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
@@ -9,9 +8,10 @@ import { ROUTES } from "../../utils/constants";
 import { linkThumbnail } from "../../utils/functions";
 import Categories from "./Categories.component";
 import PostFiltersForm from "./component/PostFiltersForm.component";
+import Notification from "./Notification.component";
 import ShoppingCart from "./ShoppingCart.component";
 
-const UserImage: FC = () => {
+export const UserImage: FC = () => {
   const { profile } = useTypedSelector((state) => state.user);
 
   return (
@@ -39,10 +39,9 @@ const UserImage: FC = () => {
 
 const TopNav: FC = () => {
   const user = useTypedSelector((state) => state.user);
-  const { cart } = useTypedSelector((state) => state.cart);
 
-  const [cartTemp, setCartTemp] = useState(0);
   const { fullname, email, role } = user.profile ?? {};
+
   const dispatch = useAppDispatch();
 
   function handleLogout() {
@@ -61,13 +60,11 @@ const TopNav: FC = () => {
         <PostFiltersForm />
 
         {!user.profile ? (
-          !user.loaded ? (
-            <Spin />
-          ) : (
+          !user.loaded ? null : (
             <>
-              <Link className="instructor" to={ROUTES.INSTRUCTOR_COURSES}>
+              <a className="instructor" href={ROUTES.INSTRUCTOR_COURSES}>
                 Giảng dạy trên Coursewe
-              </Link>
+              </a>
               <ShoppingCart />
               <Link className="btn-style-two login-button" to={ROUTES.SIGN_IN}>
                 Đăng nhập
@@ -89,31 +86,7 @@ const TopNav: FC = () => {
               <Link to={ROUTES.OVERVIEW}>Dashboard</Link>
             )}
             <div className="notification">
-              <div className="icon-notification">
-                {/* <div className="icon-notification @if (count($globalNotificationCourse)) has @endif"> */}
-                <BellOutlined style={{ fontSize: 18 }} />
-              </div>
-              <div className="wrapper-notification">
-                <div className="header-notification d-flex">
-                  <h6>Thông báo</h6>
-                  {/* <a href="{{ route('notification') }}">Xem tất cả</a> */}
-                </div>
-
-                {/* @if (!count($globalNotificationCourse))
-                          <div className="notification-tab-pane center">
-                              Không có thông báo mới.
-                          </div>
-                      @else
-                          <div className="notification-tab-pane">
-                              @foreach ($globalNotificationCourse as $courses)
-                                  @foreach ($courses->notification_course as $notifi)
-                                      @include('components.notification-item',
-                                      ['notifi'=>$notifi])
-                                  @endforeach
-                              @endforeach
-                          </div>
-                      @endif */}
-              </div>
+              <Notification />
             </div>
 
             <div className="user-dropdown">
@@ -152,9 +125,7 @@ const TopNav: FC = () => {
                         <Link to={ROUTES.PROFILE}>Thông tin cá nhân</Link>
                       </li>
                       <li>
-                        <Link to="/" onClick={handleLogout}>
-                          Đăng xuất
-                        </Link>
+                        <a href={ROUTES.SIGN_OUT}>Đăng xuất</a>
                       </li>
                     </ul>
                   </div>

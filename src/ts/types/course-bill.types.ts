@@ -1,4 +1,7 @@
 export type Bill = {
+  id: number;
+  user_id: number;
+  course_id: number;
   price: string;
   title: string;
   thumbnail: string;
