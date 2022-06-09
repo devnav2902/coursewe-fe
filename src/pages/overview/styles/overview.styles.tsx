@@ -58,18 +58,6 @@ export const StyledOverviewWrapper = styled.div`
     .containerChart {
       padding: 0 1rem 2rem;
     }
-    .instructor-analytics--chart-footer {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      border-top: 1px solid #6a6f73;
-      padding: 5px 0;
-      .export {
-        cursor: pointer;
-        padding: 6px 10px;
-        font-size: 16px;
-      }
-    }
   }
 
   .main-overview-content {

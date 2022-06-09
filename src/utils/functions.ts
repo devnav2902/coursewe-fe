@@ -17,7 +17,8 @@ const roundsTheNumber = (value: string | number, fractionDigits: number) => {
     : value.toFixed(fractionDigits);
 };
 
-const isUrl = (link: string) => (link.indexOf("http") > -1 ? true : false);
+const isUrl = (link: string | null) =>
+  link && link.indexOf("http") > -1 ? true : false;
 
 const linkThumbnail = (link: string) =>
   isUrl(link) ? link : BE_URL + "/" + link;

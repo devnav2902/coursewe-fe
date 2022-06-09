@@ -78,8 +78,6 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
     errors.topic,
   ]);
 
-  console.log("re-render layout");
-
   const arrRoutes = [ROUTES.course_basics(id), ROUTES.intended_learners(id)];
   const isRouteWithButtonSave = arrRoutes.includes(pathname);
 
@@ -161,7 +159,7 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     // const data = formHandler.getValues();
-    console.log(errors);
+    // console.log(errors);
 
     switch (pathname) {
       case ROUTES.course_basics(id):
