@@ -1,10 +1,13 @@
-import { Select } from "antd";
+import { Button, Row, Select, Space } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { ImFileExcel } from "react-icons/im";
-import PerformanceApi, { EnrollmentArray } from "../../../api/performance.api";
+import PerformanceApi, {
+  EnrollmentArray,
+  Params,
+} from "../../../api/performance.api";
 import { Period } from "./RevenueChart.component";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { ChartOptions } from "chart.js";
@@ -18,6 +21,8 @@ const StudentChart = () => {
   }>({ loaded: false, data: [] });
   const [dateRange, setDateRange] = useState<string[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState<Period>(7);
+  const [downloading, setDownloading] = useState(false);
+
   const currentMonth = new Date().getMonth() + 1;
 
   useEffect(() => {
@@ -153,43 +158,63 @@ const StudentChart = () => {
     setSelectedPeriod(value);
   }
 
+  function handleExportData() {
+    let params: Params = { LTM: true };
+
+    if (selectedPeriod === 7 || selectedPeriod === 30) {
+      const toDate = moment(new Date()).format("YYYY-MM-DD");
+      const fromDate = moment(toDate)
+        .subtract(selectedPeriod, "day")
+        .format("YYYY-MM-DD");
+
+      params = { fromDate, toDate };
+    }
+
+    setDownloading(true);
+
+    // ExportApi.revenueExport(params)
+    //   .then((res) => {
+    //     setDownloading(false);
+    //     openNotification("success", "Tải file thành công!");
+    //   })
+    //   .catch((error) => {
+    //     setDownloading(false);
+    //     openNotification("error", "Lỗi trong quá trình tải dữ liệu!");
+    //   });
+  }
+
   return (
     <div className="tab-content">
-      <div className="tab-pane">
-        <div className="instructor-analytics--chart d-flex flex-column">
-          <div className="date-range ml-auto d-flex align-items-center">
-            <div className="txt d-flex align-items-center">
-              <AiTwotoneCalendar style={{ fontSize: 18 }} />
-              &nbsp;
-              <b>Thời gian:</b>{" "}
-            </div>
-            <Select
-              onChange={changePeriod}
-              value={selectedPeriod}
-              style={{ width: 150 }}
-              bordered={false}
-            >
-              <Option value={7}>7 ngày qua</Option>
-              <Option value={30}>30 ngày qua</Option>
-              <Option value={12}>12 tháng qua</Option>
-              <Option value="all">Tất cả</Option>
-            </Select>
-          </div>
-          <div className="containerChart activeChart">
-            <Line
-              plugins={[ChartDataLabels]}
-              options={options}
-              data={chartData}
-            />
-          </div>
-        </div>
-        <div className="instructor-analytics--chart-footer">
-          <div className="export d-flex align-items-center">
-            <ImFileExcel style={{ fontSize: 18 }} />
-            &nbsp;
-            <b>Xuất báo cáo</b>
-          </div>
-        </div>
+      <Row justify="end">
+        <Space size={25}>
+          <Button loading={downloading} onClick={handleExportData}>
+            <Space align="center" size={10}>
+              <ImFileExcel style={{ fontSize: 18 }} />
+              <b>Xuất báo cáo</b>
+            </Space>
+          </Button>
+
+          <Space align="center" size={10}>
+            <AiTwotoneCalendar style={{ fontSize: 18 }} />
+            <b>Thời gian:</b>
+          </Space>
+        </Space>
+
+        <Select
+          onChange={changePeriod}
+          value={selectedPeriod}
+          style={{ width: 150 }}
+          bordered={false}
+        >
+          <Option value={7}>7 ngày qua</Option>
+          <Option value={30}>30 ngày qua</Option>
+          <Option value={12}>12 tháng qua</Option>
+          <Option value="all">Tất cả</Option>
+        </Select>
+      </Row>
+
+      <div className="containerChart activeChart">
+        <Line plugins={[ChartDataLabels]} options={options} data={chartData} />
       </div>
     </div>
   );

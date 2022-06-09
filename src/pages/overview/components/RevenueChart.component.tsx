@@ -1,12 +1,17 @@
-import { Select } from "antd";
+import { Button, Row, Select, Space } from "antd";
 import { ChartOptions } from "chart.js";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { ImFileExcel } from "react-icons/im";
-import PerformanceApi, { RevenueArray } from "../../../api/performance.api";
+import PerformanceApi, {
+  Params,
+  RevenueArray,
+} from "../../../api/performance.api";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import ExportApi from "../../../api/export.api";
+import { openNotification } from "../../../utils/functions";
 
 const { Option } = Select;
 
@@ -21,12 +26,12 @@ const RevenueChart = () => {
     data: RevenueArray;
   }>({ loaded: false, data: [] });
   const [dateRange, setDateRange] = useState<string[]>([]);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     if (selectedPeriod === 12) {
       PerformanceApi.getRevenue({ LTM: true }).then(({ data }) => {
         const { revenueData } = data;
-        console.log(revenueData);
 
         const dateRange = revenueData.map((item) =>
           moment(item.date).format("MM-YYYY")
@@ -44,11 +49,9 @@ const RevenueChart = () => {
       const fromDate = moment(toDate)
         .subtract(selectedPeriod, "day")
         .format("YYYY-MM-DD");
-      console.log(toDate, fromDate);
 
       PerformanceApi.getRevenue({ fromDate, toDate }).then(({ data }) => {
         const { revenueData } = data;
-        console.log(revenueData);
 
         const dateRange = revenueData.map((item) => {
           if (revenueData.length >= 30)
@@ -110,7 +113,7 @@ const RevenueChart = () => {
         align: "top",
         anchor: "end",
         formatter: (value, context) => {
-          if (context.dataset.data.length >= 30) return null;
+          if (context.dataset.data.length >= 12) return null;
           return value === 0 ? "" : value.toLocaleString("vi-VN");
         },
       },
@@ -158,43 +161,62 @@ const RevenueChart = () => {
     setSelectedPeriod(value);
   }
 
+  function handleExportData() {
+    let params: Params = { LTM: true };
+
+    if (selectedPeriod === 7 || selectedPeriod === 30) {
+      const toDate = moment(new Date()).format("YYYY-MM-DD");
+      const fromDate = moment(toDate)
+        .subtract(selectedPeriod, "day")
+        .format("YYYY-MM-DD");
+
+      params = { fromDate, toDate };
+    }
+
+    setDownloading(true);
+
+    ExportApi.revenueExport(params)
+      .then((res) => {
+        setDownloading(false);
+        openNotification("success", "Tải file thành công!");
+      })
+      .catch((error) => {
+        setDownloading(false);
+        openNotification("error", "Lỗi trong quá trình tải dữ liệu!");
+      });
+  }
+
   return (
     <div className="tab-content">
-      <div className="tab-pane">
-        <div className="instructor-analytics--chart d-flex flex-column">
-          <div className="date-range ml-auto d-flex align-items-center">
-            <div className="txt d-flex align-items-center">
-              <AiTwotoneCalendar style={{ fontSize: 18 }} />
-              &nbsp;
-              <b>Thời gian:</b>{" "}
-            </div>
-            <Select
-              onChange={changePeriod}
-              value={selectedPeriod}
-              style={{ width: 150 }}
-              bordered={false}
-            >
-              <Option value={7}>7 ngày qua</Option>
-              <Option value={30}>30 ngày qua</Option>
-              <Option value={12}>12 tháng qua</Option>
-              <Option value="all">Tất cả</Option>
-            </Select>
-          </div>
-          <div className="containerChart activeChart">
-            <Line
-              plugins={[ChartDataLabels]}
-              options={options}
-              data={chartData}
-            />
-          </div>
-        </div>
-        <div className="instructor-analytics--chart-footer">
-          <div className="export d-flex align-items-center">
-            <ImFileExcel style={{ fontSize: 18 }} />
-            &nbsp;
-            <b>Xuất báo cáo</b>
-          </div>
-        </div>
+      <Row justify="end">
+        <Space size={25}>
+          <Button loading={downloading} onClick={handleExportData}>
+            <Space align="center" size={10}>
+              <ImFileExcel style={{ fontSize: 18 }} />
+              <b>Xuất báo cáo</b>
+            </Space>
+          </Button>
+
+          <Space align="center" size={10}>
+            <AiTwotoneCalendar style={{ fontSize: 18 }} />
+            <b>Thời gian:</b>
+          </Space>
+        </Space>
+
+        <Select
+          onChange={changePeriod}
+          value={selectedPeriod}
+          style={{ width: 150 }}
+          bordered={false}
+        >
+          <Option value={7}>7 ngày qua</Option>
+          <Option value={30}>30 ngày qua</Option>
+          <Option value={12}>12 tháng qua</Option>
+          <Option value="all">Tất cả</Option>
+        </Select>
+      </Row>
+      <div className="containerChart">
+        <Line plugins={[ChartDataLabels]} options={options} data={chartData} />
       </div>
     </div>
   );
