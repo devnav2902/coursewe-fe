@@ -1,5 +1,6 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
 import { Modal, Spin } from "antd";
+import axios from "axios";
 import { FC, useState } from "react";
 import { BsFileRichtext, BsInfoCircle } from "react-icons/bs";
 import { FaLaptopHouse } from "react-icons/fa";
@@ -10,6 +11,7 @@ import PublishCourseApi, {
   MissingPublishRequirements,
 } from "../../api/publish-course.api";
 import { ROUTES } from "../../utils/constants";
+import { openNotification } from "../../utils/functions";
 
 type PagesAndRequirementsItem = {
   url: string;
@@ -38,9 +40,34 @@ export const Sidebar: FC<{
 
     PublishCourseApi.checkingPublishRequirements(id).then(({ data }) => {
       const { missingPublishRequirements } = data;
-      console.log(missingPublishRequirements);
 
       if (!missingPublishRequirements) {
+        setPagesAndRequirements((state) => ({
+          ...state,
+          data: null,
+          loaded: false,
+        }));
+
+        PublishCourseApi.submitForReview(id)
+          .then(({ data }) => {
+            setVisiblePublishRequirements(false);
+
+            if (data.success) {
+              openNotification("success", data.message);
+
+              setTimeout(() => {
+                window.location.href = ROUTES.INSTRUCTOR_COURSES;
+              }, 1500);
+            }
+          })
+          .catch((error) => {
+            setVisiblePublishRequirements(false);
+
+            const txt = "Lỗi trong khóa trình xét duyệt khóa học!";
+            if (axios.isAxiosError(error))
+              openNotification("error", error.response?.data?.message ?? txt);
+            else openNotification("error", txt);
+          });
       } else {
         const pagesAndRequirements: PagesAndRequirements = {
           "Thông tin khóa học": {
@@ -85,7 +112,7 @@ export const Sidebar: FC<{
         for (const key in missingPublishRequirements) {
           const name = key as keyof MissingPublishRequirements;
           const element = missingPublishRequirements[name]; // array
-          console.log(name, element);
+          // console.log(name, element);
 
           Object.keys(pagesAndRequirements).forEach((item) => {
             const items = pagesAndRequirements[item]["items"];
@@ -203,7 +230,7 @@ export const Sidebar: FC<{
                     key
                   ] as PagesAndRequirementsItem;
 
-                  console.log(missing);
+                  // console.log(missing);
 
                   return !missing.length ? null : (
                     <div key={index}>
