@@ -1,16 +1,18 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { List } from "antd";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import SearchApi from "../../../api/search.api";
-import { routesWithParams } from "../../../utils/constants";
+import { Link, useNavigate } from "react-router-dom";
+import SearchApi, { ArraySearchCourses } from "../../../api/search.api";
+import { ROUTES } from "../../../utils/constants";
 
 function PostFiltersForm() {
   // const [searchTerm, setSearchTerm] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [valueSearch, setValueSearch] = useState([]);
+  const [valueSearch, setValueSearch] = useState<ArraySearchCourses | []>([]);
 
-  const typingTimeoutRef = useRef(null);
+  const typingTimeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (inputValue.length < 2) {
@@ -22,26 +24,28 @@ function PostFiltersForm() {
     }
   }, [inputValue]);
 
-  function handleSearchTermChange(e) {
+  function handleSearchTermChange(e: any) {
     const value = e.target.value;
 
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
     }
-
     typingTimeoutRef.current = setTimeout(() => {
       setInputValue(value);
     }, 300);
   }
+
   function handCleanInput() {
     setInputValue("");
+  }
+  function handleClick() {
+    navigate(ROUTES.search(inputValue));
   }
   return (
     <form action="" className="search-bar">
       <div className="icon">
-        <SearchOutlined style={{ fontSize: 18 }} />
+        <SearchOutlined style={{ fontSize: 18 }} onClick={handleClick} />
       </div>
-
       <input
         type="text"
         placeholder="Chào bạn! hôm nay bạn muốn học gì?"
@@ -64,8 +68,8 @@ function PostFiltersForm() {
                 renderItem={(item) => (
                   <List.Item onClick={handCleanInput} className="result-item">
                     {
-                      <Link to={routesWithParams.detail_course(item.slug)}>
-                        <div class="img">
+                      <Link to={ROUTES.detail_course(item.slug)}>
+                        <div className="img">
                           <img src={item.thumbnail} alt="" />
                         </div>
                         <div className="title">{item.title}</div>

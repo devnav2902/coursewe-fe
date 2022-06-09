@@ -1,9 +1,21 @@
 import axiosClient from "../utils/axios";
 
+export type SearchCourse = {
+  title: string;
+  id: number;
+  slug: string;
+  thumbnail: string;
+};
+export type ArraySearchCourses = SearchCourse[];
+export type SearchCoursesResponse = {
+  data: ArraySearchCourses;
+};
 class Search {
   search = async (value: string) => {
     return axiosClient
-      .post(`/autocomplete/search`, { inputSearch: value })
+      .post<SearchCoursesResponse>(`/autocomplete/search`, {
+        inputSearch: value,
+      })
       .then((response) => response)
       .catch((error) => error.response);
   };

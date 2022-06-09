@@ -8,6 +8,7 @@ import { logout } from "../../redux/slices/user.slice";
 import { ROUTES } from "../../utils/constants";
 import { linkThumbnail } from "../../utils/functions";
 import Categories from "./Categories.component";
+import PostFiltersForm from "./component/PostFiltersForm.component";
 import ShoppingCart from "./ShoppingCart.component";
 
 const UserImage: FC = () => {
@@ -57,30 +58,7 @@ const TopNav: FC = () => {
         <div className="category-link">
           <Categories />
         </div>
-        <form action="" className="search-bar">
-          <div className="icon">
-            <SearchOutlined style={{ fontSize: 18 }} />
-          </div>
-
-          <input
-            type="text"
-            placeholder="Chào bạn! hôm nay bạn muốn học gì?"
-            autoComplete="off"
-            className="input-search"
-            name="input-search"
-          />
-
-          <div className="search">
-            <div className="search-result">
-              <div className="result-search"></div>
-              <div className="see-more">
-                <button type="submit" className="btn btn-form a-see-more">
-                  Xem thêm...
-                </button>
-              </div>
-            </div>
-          </div>
-        </form>
+        <PostFiltersForm />
 
         {!user.profile ? (
           !user.loaded ? (
