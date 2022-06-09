@@ -15,6 +15,7 @@ import { getSections } from "../../../../redux/slices/curriculum.slice";
 import { getProgress } from "../../../../redux/slices/learning.slice";
 import { Course, Lecture } from "../../../../ts/types/course.types";
 import { ROUTES } from "../../../../utils/constants";
+import { CheckVideoContext } from "../../hooks/leaning.hooks";
 
 type LectureProps = {
   lecture: Lecture;
@@ -22,10 +23,6 @@ type LectureProps = {
 
 const LectureItem: FC<LectureProps> = ({ lecture }) => {
   const dispatch = useAppDispatch();
-  const {
-    dataCourse: { course, loadedCourse },
-  } = useTypedSelector((state) => state.learning);
-  const { dataCourse } = useTypedSelector((state) => state.learning);
 
   const [videoSaving, setVideoSaving] = useState(false);
 
@@ -36,52 +33,32 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
 
   const navigate = useNavigate();
 
-  function handleChecked(e: ChangeEvent<HTMLInputElement>) {
-    const value = e.target.checked;
-    setChecked((state) => ({
-      ...state,
-      loading: true,
-    }));
+  const {
+    dataCourse: { data },
+    course_id,
+  } = useContext(CheckVideoContext);
 
-    ProgressApi.updateProgress({
-      lectureId: lecture.id,
-      progress: value,
-    }).then(() => {
-      const {
-        course: { id },
-      } = dataCourse as { course: Course };
-      setChecked((state) => ({
-        ...state,
-        value,
-        loading: false,
-      }));
+  // function downloadFile(
+  //   lectureId: number,
+  //   ResourceId: number,
+  //   filename: string
+  // ) {
+  //   const {
+  //     course: { id: courseId },
+  //   } = dataCourse as { course: Course };
+  //   ResourceApi.download(lectureId, courseId, ResourceId).then((res) => {
+  //     const blobFile = res.data;
+  //     const fileUrl = URL.createObjectURL(blobFile);
 
-      dispatch(getProgress(id));
-      dispatch(getSections(id));
-    });
-  }
+  //     const link = document.createElement("a");
 
-  function downloadFile(
-    lectureId: number,
-    ResourceId: number,
-    filename: string
-  ) {
-    const {
-      course: { id: courseId },
-    } = dataCourse as { course: Course };
-    ResourceApi.download(lectureId, courseId, ResourceId).then((res) => {
-      console.log(res);
-      const blobFile = res.data;
-      const fileUrl = URL.createObjectURL(blobFile);
+  //     link.href = fileUrl;
+  //     link.setAttribute("download", filename);
 
-      const link = document.createElement("a");
-
-      link.href = fileUrl;
-      link.setAttribute("download", filename);
-
-      link.click();
-    });
-  }
+  //     link.click();
+  //   });
+  // }
+  console.log(lecture.id);
 
   return (
     <li className="curriculum-item {{ $key == 0 && $lecture->order == 1 ? 'is-current' : '' }} d-flex">
@@ -98,10 +75,13 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
         </label> */}
       </div>
       <Link
-        to={ROUTES.check_video({
-          course_slug: course?.slug,
-          lectureId: lecture.id,
-        })}
+        to={
+          ROUTES.check_video({
+            course_id: course_id,
+          }) +
+          "?bai-giang=" +
+          lecture.id
+        }
       >
         <div className="link">
           <div className="text">
@@ -126,13 +106,13 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
 
                         return (
                           <li
-                            onClick={() =>
-                              downloadFile(
-                                lectureId,
-                                resourceid,
-                                resource.original_filename
-                              )
-                            }
+                            // onClick={() =>
+                            //   downloadFile(
+                            //     lectureId,
+                            //     resourceid,
+                            //     resource.original_filename
+                            //   )
+                            // }
                             key={i}
                             className="cursor-pointer d-flex download-btn align-items-center"
                           >

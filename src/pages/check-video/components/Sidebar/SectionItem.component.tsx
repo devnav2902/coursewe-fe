@@ -11,9 +11,6 @@ type SectionProps = {
 };
 
 const SectionItem: FC<SectionProps> = ({ section }) => {
-  const {
-    dataCourse: { course },
-  } = useTypedSelector((state) => state.learning);
   return (
     <div className="section">
       <div className="accordion-panel {{ $section->order == 1 ? '' : 'd-none' }}">
@@ -36,7 +33,6 @@ const SectionItem: FC<SectionProps> = ({ section }) => {
                       <span className="count">
                         {section.progress_in_lectures_count}
                       </span>
-                      /{section.lecture_count}
                     </span>
                     {/* |<span className="duration">40min</span> */}
                   </div>

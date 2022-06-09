@@ -1,5 +1,6 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
+import LearningApi from "../../../../api/learning.api";
 import Loading from "../../../../components/Loading/Loading.component";
 
 import {
@@ -7,6 +8,7 @@ import {
   useTypedSelector,
 } from "../../../../hooks/redux.hooks";
 import { getSections } from "../../../../redux/slices/learning.slice";
+import { CheckVideoContext } from "../../hooks/leaning.hooks";
 import {
   StyledSectionWrapper,
   StyledSidebar,
@@ -16,15 +18,10 @@ import SectionItem from "./SectionItem.component";
 const Sidebar: FC = () => {
   const [offset, setOffset] = useState<number>(0);
 
-  const { dataCourse, sections } = useTypedSelector((state) => state.learning);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (dataCourse.course) {
-      const { id } = dataCourse.course;
-      dispatch(getSections(id));
-    }
-  }, [dataCourse.loadedCourse, dispatch, dataCourse.course]);
+  const {
+    dataCourse: { data, loaded },
+    course_id,
+  } = useContext(CheckVideoContext);
 
   useEffect(() => {
     const onScroll = () => setOffset(window.pageYOffset);
@@ -49,10 +46,10 @@ const Sidebar: FC = () => {
         </button>
       </div>
       <StyledSectionWrapper className="sections">
-        {!sections.loaded ? (
+        {!loaded ? (
           <Loading />
         ) : (
-          sections.data.map((section) => (
+          data?.section.map((section) => (
             <SectionItem key={section.id} section={section} />
           ))
         )}

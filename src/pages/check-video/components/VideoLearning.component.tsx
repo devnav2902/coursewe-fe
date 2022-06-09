@@ -1,8 +1,10 @@
-import { FC, memo, useEffect, useRef, useState } from "react";
+import { FC, memo, useContext, useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player/lazy";
 import { useParams } from "react-router-dom";
+import CourseApi, { CustomCourse } from "../../../api/course.api";
 import LearningApi from "../../../api/learning.api";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
+import { CheckVideoContext } from "../hooks/leaning.hooks";
 
 type VideoLearningProps = {
   thumbnail: string;
@@ -17,30 +19,30 @@ const VideoLearning: FC<VideoLearningProps> = memo(
     const [handleVideo, setHandleVideo] = useState({
       playingVideo: true,
     });
-
-    const { course, loadedCourse } = useTypedSelector(
-      (state) => state.learning.dataCourse
-    );
+    const { dataCourse } = useContext(CheckVideoContext);
+    // const { course, loadedCourse } = useTypedSelector(
+    //   (state) => state.learning.dataCourse
+    // );
 
     const playerRef = useRef();
 
     const [video, setVideo] = useState(null);
 
-    const { lectureId, course_slug } = useParams() as {
-      lectureId: string;
-      course_slug: string;
-    };
-
     useEffect(() => {
       async function getVideo() {
+        const { data, loaded } = dataCourse;
         try {
-          if (loadedCourse) {
-            const {
-              data: {
-                lecture: { src },
-              },
-            } = await LearningApi.getVideo(course_slug, parseInt(lectureId));
-            setVideo(src);
+          if (loaded && data) {
+            if (data.lecture.length) {
+              const lectureId = data.lecture[0].id;
+
+              const {
+                data: {
+                  lecture: { src },
+                },
+              } = await LearningApi.getVideo(data.slug, lectureId);
+              setVideo(src);
+            }
           }
         } catch (error) {
           // axios.isAxiosError(error);
@@ -52,7 +54,7 @@ const VideoLearning: FC<VideoLearningProps> = memo(
       // return () => {
       //   window.removeEventListener("scroll", handleScroll);
       // };
-    }, [course_slug, lectureId, loadedCourse]);
+    }, [dataCourse.loaded]);
 
     // console.log(second);
 

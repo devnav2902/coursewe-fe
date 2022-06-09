@@ -19,18 +19,17 @@ const ButtonContainer = () => {
 
   const { id } = useParams() as { id: string };
 
-  useEffect(() => {
-    ProgressLogsApi.getDataLastWatched(id).then((res) => {
-      setDataCourse(res.data);
-    });
-  }, [id]);
+  // useEffect(() => {
+  //   ProgressLogsApi.getDataLastWatched(id).then((res) => {
+  //     setDataCourse(res.data);
+  //   });
+  // }, [id]);
 
   return (
     <StyledButtonBox className="buttons-box">
       <Link
         to={ROUTES.check_video({
-          course_slug: dataCourse?.dataLastWatched.course.slug,
-          lectureId: dataCourse?.dataLastWatched.lecture_id,
+          course_id: id,
         })}
         className="theme-btn btn-style-one"
       >

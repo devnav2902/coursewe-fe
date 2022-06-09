@@ -4,15 +4,19 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AdminApi, { ReviewCourses } from "../../../api/admin-review.api";
 import Loading from "../../../components/Loading/Loading.component";
+import { CoursesPagination } from "../../../ts/types/course.types";
 import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
 
 const AdminReviewPage = () => {
-  const [dataCourse, setDataCourse] = useState<ReviewCourses[]>([]);
+  const [dataCourse, setDataCourse] =
+    useState<CoursesPagination<ReviewCourses> | null>(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     AdminApi.getReviewCourses().then((res) => {
+      console.log(res);
+
       const {
         data: { courses },
       } = res;
@@ -24,7 +28,7 @@ const AdminReviewPage = () => {
 
   const item: any = [];
   const dataSource = [
-    dataCourse.map((data) => {
+    dataCourse?.data.map((data) => {
       const { course, course_id, id, updated_at } = data;
 
       item.push({
@@ -116,7 +120,7 @@ const AdminReviewPage = () => {
         <div className="admin-table">
           {!loaded ? (
             <Loading />
-          ) : !dataCourse.length ? (
+          ) : !dataCourse.data.length ? (
             <Table columns={columns} key={item.id} />
           ) : (
             <Table dataSource={item} columns={columns} key={item.id} />
