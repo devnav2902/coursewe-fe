@@ -23,7 +23,7 @@ export type NotificationCourse = {
     author_id: number;
     id: number;
     title: string;
-    thumbnail: string;
+    thumbnail: string | null;
     is_purchased: Purchased;
   };
 };
@@ -35,6 +35,12 @@ export type NotificationPurchase = {
   course_bill: Bill;
 };
 
+export type NotificationQualityReview = {
+  admin_id: number;
+  id: number;
+  notification_id: number;
+};
+
 export type Notification = {
   id: number;
   notification_entity_id: number;
@@ -44,4 +50,5 @@ export type Notification = {
   notification_entity: NotificationEntity;
   notification_course: null | NotificationCourse;
   notification_purchase: null | NotificationPurchase;
+  notification_quality_review: null | NotificationQualityReview;
 };
