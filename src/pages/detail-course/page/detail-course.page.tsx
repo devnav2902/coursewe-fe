@@ -7,8 +7,8 @@ import { Col, Collapse, Row, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { BiCheck } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
-import { Link, Navigate, useParams } from "react-router-dom";
-import CourseApi, { CustomCourse } from "../../../api/course.api";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import CourseApi, { CustomCourse, RatingArray } from "../../../api/course.api";
 import Loading from "../../../components/Loading/Loading.component";
 import Rating from "../../../components/Rating/Rating.component";
 import { ROUTES } from "../../../utils/constants";
@@ -17,25 +17,36 @@ import CurriculumItem from "../components/CurriculumItem.component";
 import RatingGraph from "../components/RatingGraph.component";
 import Review from "../components/Review.component";
 import Sidebar from "../components/Sidebar/Sidebar.component";
+import {
+  StyledCourseContent,
+  StyledDetailCourseMain,
+  StyledDetailCourseWrapper,
+  StyledInfoBoxed,
+  StyledMainContent,
+} from "../styles/detail-course.styles";
 
 const { Panel } = Collapse;
 
 const DetailCoursePage = () => {
   const [course, setCourse] = useState<CustomCourse | null>(null);
   const [loadedCourse, setLoadedCourse] = useState(false);
-  const [graph, setGraph] = useState(null);
+  const [graph, setGraph] = useState<RatingArray>([]);
 
   const { slug } = useParams() as { slug: string };
 
-  useEffect(() => {
-    CourseApi.getCourseBySlug(slug).then((res) => {
-      const { data } = res;
+  const navigate = useNavigate();
 
-      setCourse(data.course);
-      setLoadedCourse(true);
-      setGraph(data.graph);
-    });
-  }, [slug]);
+  useEffect(() => {
+    CourseApi.getCourseBySlug(slug)
+      .then(({ data }) => {
+        setCourse(data.course);
+        setLoadedCourse(true);
+        setGraph(data.graph);
+      })
+      .catch((error) => {
+        navigate(ROUTES.NOT_FOUND);
+      });
+  }, [slug, navigate]);
 
   if (!course) {
     if (!loadedCourse) {
@@ -54,10 +65,10 @@ const DetailCoursePage = () => {
   const { rating_count, course_bill_count, rating_avg_rating } = course;
 
   return (
-    <div className="detail-course">
-      <div className="main-lesson">
-        <div className="main-lesson__content">
-          <div className="main-lesson__head d-flex">
+    <StyledDetailCourseWrapper>
+      <StyledDetailCourseMain>
+        <div className="linear-gradient head-wrapper">
+          <div className="head d-flex">
             <div className="head-content">
               <div className="title">
                 <h1>{title}</h1>
@@ -79,7 +90,7 @@ const DetailCoursePage = () => {
                 <span>{course_bill_count} Học viên</span>
               </div>
 
-              <div className="video-info-boxed">
+              <StyledInfoBoxed>
                 <div className="pull-left">
                   <h6>Giảng viên</h6>
                   <div className="info-author">
@@ -110,15 +121,15 @@ const DetailCoursePage = () => {
                     </li>
                   </ul>
                 </div>
-              </div>
+              </StyledInfoBoxed>
             </div>
 
             <Sidebar course={course} />
           </div>
         </div>
 
-        <div className="main-content">
-          <div className="course-content">
+        <StyledMainContent>
+          <StyledCourseContent>
             <div className="course-info">
               {!course_outcome.length ? null : (
                 <div className="course-info__item pd-2 border">
@@ -202,10 +213,10 @@ const DetailCoursePage = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </StyledCourseContent>
+        </StyledMainContent>
+      </StyledDetailCourseMain>
+    </StyledDetailCourseWrapper>
   );
 };
 

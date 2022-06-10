@@ -1,4 +1,5 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
+import { Row } from "antd";
 import { FC } from "react";
 import { secondsToHMS } from "../../../utils/functions";
 
@@ -12,15 +13,15 @@ const CurriculumItem: FC<CurriculumItemProps> = ({
   playtime_seconds,
 }) => {
   return (
-    <div className="curriculum-item d-flex align-items-center">
-      <div className="pull-left">
+    <Row align="middle" justify="space-between">
+      <div className="pull-left pd-r-2">
         <PlayCircleOutlined style={{ marginRight: "1rem" }} />
         {title}
       </div>
-      <div className="pull-right ml-auto">
+      <div className="pull-right">
         <div className="duration">{secondsToHMS(playtime_seconds)}</div>
       </div>
-    </div>
+    </Row>
   );
 };
 export default CurriculumItem;

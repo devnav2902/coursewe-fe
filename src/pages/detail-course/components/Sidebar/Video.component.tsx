@@ -3,6 +3,7 @@ import { FC, useState } from "react";
 import ReactPlayer from "react-player/lazy";
 import { BE_URL } from "../../../../utils/constants";
 import { isUrl, linkThumbnail } from "../../../../utils/functions";
+import { StyledVideoDemo } from "../../styles/detail-course.styles";
 
 export type VideoProps = {
   thumbnail: string;
@@ -45,7 +46,7 @@ const Video: FC<VideoProps> = ({ thumbnail, title, video_demo }) => {
         <h4>Xem thử</h4>
       </div>
       {handleVideo.displayVideo && (
-        <div className="video-demo">
+        <StyledVideoDemo>
           <div className="video-container">
             <div className="video">
               <div className="video-top">
@@ -74,7 +75,7 @@ const Video: FC<VideoProps> = ({ thumbnail, title, video_demo }) => {
               </div>
             </div>
           </div>
-        </div>
+        </StyledVideoDemo>
       )}
     </>
   );
