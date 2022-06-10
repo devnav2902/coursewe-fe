@@ -3,6 +3,7 @@ import React from "react";
 import CheckoutLayout from "../layouts/checkout.layout";
 import OverviewLayout from "../layouts/instructor-view.layout";
 import { LearningProvider } from "../pages/learning/hooks/leaning.hooks";
+
 import SignoutPage from "../pages/signout/pages/signout.page";
 import { ROUTES } from "../utils/constants";
 
@@ -10,13 +11,6 @@ const BasicLayout = React.lazy(() => import("../layouts/basic.layout"));
 const SearchPage = React.lazy(() => import("../pages/search/page/Search.page"));
 const InstructorCourseLayout = React.lazy(
   () => import("../layouts/instructor-course.layout")
-);
-
-const ReviewCourseLayout = React.lazy(
-  () => import("../layouts/review-course.layout")
-);
-const CheckVideoPage = React.lazy(
-  () => import("../pages/check-video/page/learning.page")
 );
 const InstructorView = React.lazy(
   () => import("../layouts/instructor-view.layout")
@@ -179,6 +173,14 @@ export const userRoutes: RoleAndRoutes = {
       component: (
         <BasicLayout>
           <Home />
+        </BasicLayout>
+      ),
+    },
+    {
+      path: ROUTES.search(),
+      component: (
+        <BasicLayout>
+          <SearchPage />
         </BasicLayout>
       ),
     },

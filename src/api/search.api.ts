@@ -1,4 +1,5 @@
 import axiosClient from "../utils/axios";
+import { CoursesByCategoryResponse } from "./categories.api";
 
 export type SearchCourse = {
   title: string;
@@ -12,18 +13,14 @@ export type SearchCoursesResponse = {
 };
 class Search {
   search = async (value: string) => {
-    return axiosClient
-      .post<SearchCoursesResponse>(`/autocomplete/search`, {
-        inputSearch: value,
-      })
-      .then((response) => response)
-      .catch((error) => error.response);
+    return axiosClient.post<SearchCoursesResponse>(`/autocomplete/search`, {
+      inputSearch: value,
+    });
   };
-  getSearch = async () => {
-    return axiosClient
-      .get(`/search`)
-      .then((res) => res)
-      .catch((error) => error);
+  getSearch = async (value: string, page: string) => {
+    return axiosClient.get<CoursesByCategoryResponse>(`/search?page=${page}`, {
+      params: { inputSearch: value },
+    });
   };
 }
 const SearchApi = new Search();

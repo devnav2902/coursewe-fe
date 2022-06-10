@@ -1,13 +1,8 @@
-import { Dropdown, Menu, Progress, Spin } from "antd";
-import { FC, useContext, useEffect } from "react";
-import { FaAngleDown } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { FC, useContext } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "../components/Footer/Footer.component";
-import { useAppDispatch, useTypedSelector } from "../hooks/redux.hooks";
 import { CheckVideoContext } from "../pages/check-video/hooks/leaning.hooks";
-import { resetStateLearning } from "../redux/actions/learning.actions";
-import { getCourse, getProgress } from "../redux/slices/learning.slice";
 import { ROUTES } from "../utils/constants";
 
 const ReviewCourseLayout: FC = ({ children }) => {

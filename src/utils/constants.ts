@@ -54,8 +54,7 @@ const ROUTES = {
     }
     return `/hoc-tap/khoa-hoc/:course_slug`;
   },
-  search: (keyword?: string) =>
-    `/khoa-hoc/tim-kiem/?q=${keyword ? keyword : ":keyword"}`,
+  search: () => `/tim-kiem/khoa-hoc/`,
 
   check_video: (params?: CheckVideoParams) => {
     if (params) {
