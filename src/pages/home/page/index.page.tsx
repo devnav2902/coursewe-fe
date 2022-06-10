@@ -1,11 +1,13 @@
 import { FC } from "react";
+import { ROUTES } from "../../../utils/constants";
 import BestSellingCourses from "../components/BestSellingCourses.component";
 import LatestCourses from "../components/LatestCourses.component";
 import TopCategories from "../components/TopCategories.component";
+import { StyledWrapper } from "../styles/home.styles";
 
 const Home: FC = () => {
   return (
-    <div className="main-home">
+    <StyledWrapper className="main-home">
       <div className="main-home__content">
         <div className="banner-content">
           <img
@@ -15,11 +17,11 @@ const Home: FC = () => {
             alt=""
           />
           <div className="content-box">
-            <h1 className="short-title">Khóa học tại Devco</h1>
-            <p className="subtitle">
-              Tất cả kiến thức tại Devco đều được review bởi đội ngũ chuyên gia
-              có kinh nghiệm. Hãy chọn instructor mà bạn tin tưởng & bắt đầu
-              trải nghiệm.
+            <h1 className="short-title">Khóa học tại Coursewe</h1>
+            <p className="subtitle mb-0">
+              Tất cả kiến thức tại Coursewe đều được review bởi đội ngũ chuyên
+              gia có kinh nghiệm. <br /> Hãy chọn giảng viên mà bạn tin tưởng &
+              bắt đầu trải nghiệm.
             </p>
           </div>
         </div>
@@ -40,23 +42,20 @@ const Home: FC = () => {
             height="400"
           />
           <div className="">
-            <h3 className="header">Become an instructor</h3>
+            <h3 className="header">Trở thành giảng viên</h3>
             <p className="content">
-              Trở thành giảng viên tại Devco, chia sẻ kiến thức & nhận lại không
-              giới hạn giá trị.
+              Trở thành giảng viên tại Coursewe, chia sẻ kiến thức & nhận lại
+              không giới hạn giá trị.
             </p>
             <div className="link">
-              <a
-                href="{{ route('instructor-courses') }}"
-                className="btn-style-two"
-              >
+              <a href={ROUTES.INSTRUCTOR_COURSES} className="btn-primary btn">
                 Bắt đầu ngay
               </a>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </StyledWrapper>
   );
 };
 

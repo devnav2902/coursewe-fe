@@ -7,6 +7,7 @@ import { FaLaptopHouse } from "react-icons/fa";
 import { IoMdPricetags } from "react-icons/io";
 import { RiBookmark3Line } from "react-icons/ri";
 import { Link, useParams } from "react-router-dom";
+import styled from "styled-components";
 import PublishCourseApi, {
   MissingPublishRequirements,
 } from "../../api/publish-course.api";
@@ -22,6 +23,82 @@ type PagesAndRequirementsItem = {
 type PagesAndRequirements = {
   [key: string]: PagesAndRequirementsItem;
 };
+
+const StyledSidebar = styled.div`
+  padding-top: 5rem;
+  width: var(--width-sidebar);
+  z-index: 1000;
+  background: var(--color-white);
+  padding-left: 3rem;
+  padding-right: 3rem;
+  padding-bottom: 5rem;
+  .navbar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  li {
+    padding-bottom: 2rem;
+  }
+  .navbar li .navbar-link {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+  strong {
+    margin-bottom: 2.5rem;
+    display: inline-block;
+    font-size: 2rem;
+  }
+  .icon {
+    background-color: rgba(255, 255, 255, 0.04);
+    width: 4rem;
+    color: var(--color-dark);
+    height: 4rem;
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 4rem;
+    position: relative;
+    display: inline-block;
+  }
+  .navbar-link {
+    padding-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    color: var(--color-dark);
+    position: relative;
+    z-index: 10;
+    background-color: transparent;
+
+    svg {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+    }
+
+    &.active {
+      background-color: var(--color-muted);
+      color: #fff;
+      i {
+        color: #fff;
+      }
+    }
+  }
+
+  .submit {
+    min-width: 260px;
+    width: 100%;
+    white-space: normal;
+    color: #fff;
+    background-color: #a435f0;
+    border: 1px solid transparent;
+    padding: 16px 10px;
+    font-size: 15px;
+    line-height: 1.35135;
+    &:hover {
+      background-color: rgba(155, 44, 230, 0.8);
+    }
+  }
+`;
 
 export const Sidebar: FC<{
   handleRedirect: (route: string) => void;
@@ -138,7 +215,7 @@ export const Sidebar: FC<{
   }
 
   return (
-    <div className="sidebar">
+    <StyledSidebar>
       <div className="navbar">
         <strong>Tạo nội dung khóa học</strong>
 
@@ -260,6 +337,6 @@ export const Sidebar: FC<{
           )}
         </Modal>
       </div>
-    </div>
+    </StyledSidebar>
   );
 };

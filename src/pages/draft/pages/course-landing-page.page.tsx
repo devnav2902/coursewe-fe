@@ -10,6 +10,13 @@ import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { Role } from "../../../ts/types/user.types";
 import { ROUTES } from "../../../utils/constants";
 import CurriculumItem from "../../detail-course/components/CurriculumItem.component";
+import {
+  StyledCourseContent,
+  StyledDetailCourseMain,
+  StyledDetailCourseWrapper,
+  StyledInfoBoxed,
+  StyledMainContent,
+} from "../../detail-course/styles/detail-course.styles";
 import Sidebar from "../Sidebar/Sidebar.component";
 
 const { Panel } = Collapse;
@@ -69,10 +76,10 @@ const DraftPage = () => {
           </div>
         </div>
       </nav>
-      <div className="detail-course spacing-top-nav">
-        <div className="main-lesson">
-          <div className="main-lesson__content">
-            <div className="main-lesson__head d-flex">
+      <StyledDetailCourseWrapper className="spacing-top-nav">
+        <StyledDetailCourseMain>
+          <div className="linear-gradient head-wrapper">
+            <div className="head d-flex">
               <div className="head-content">
                 <div className="title">
                   <h1>{title}</h1>
@@ -89,7 +96,7 @@ const DraftPage = () => {
                   <span>0 Học viên</span>
                 </div>
 
-                <div className="video-info-boxed">
+                <StyledInfoBoxed>
                   <div className="pull-left">
                     <h6>Giảng viên</h6>
                     <div className="info-author">
@@ -102,7 +109,7 @@ const DraftPage = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </StyledInfoBoxed>
 
                 <Row>
                   <Col span={24}>
@@ -129,8 +136,8 @@ const DraftPage = () => {
             </div>
           </div>
 
-          <div className="main-content">
-            <div className="course-content">
+          <StyledMainContent>
+            <StyledCourseContent>
               <div className="course-info">
                 {!course_outcome.length ? null : (
                   <div className="course-info__item pd-2 border">
@@ -207,10 +214,10 @@ const DraftPage = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </StyledCourseContent>
+          </StyledMainContent>
+        </StyledDetailCourseMain>
+      </StyledDetailCourseWrapper>
     </>
   );
 };
