@@ -1,17 +1,35 @@
-import { Tabs } from "antd";
+import { HomeOutlined, UserOutlined } from "@ant-design/icons";
+import { Breadcrumb, Tabs } from "antd";
+import { FC } from "react";
+import { useTypedSelector } from "../../../hooks/redux.hooks";
+import { ROUTES } from "../../../utils/constants";
 import Picture from "../components/Picture.component";
 import Profile from "../components/Profile.component";
+import { StyledBanner, StyledProfile } from "../styles/profile.styles";
 
 const { TabPane } = Tabs;
 
-const ProfilePage = () => {
+const ProfilePage: FC = () => {
+  const { profile: user } = useTypedSelector((state) => state.user);
   return (
-    <div className="profile-page">
-      <div className="profile-banner transparent-bgr">
+    <StyledProfile>
+      <StyledBanner>
         <div className="banner-wrap">
+          <Breadcrumb>
+            <Breadcrumb.Item
+              href={ROUTES.home(user?.role.name === "admin" ? "admin" : "user")}
+            >
+              <HomeOutlined />
+              <span>Trang chủ</span>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href={ROUTES.PROFILE}>
+              <UserOutlined />
+              <span>Thông tin cá nhân</span>
+            </Breadcrumb.Item>
+          </Breadcrumb>
           <div className="title">Thông tin cá nhân</div>
         </div>
-      </div>
+      </StyledBanner>
       <div className="profile-page__main">
         <Tabs defaultActiveKey="1">
           <TabPane tab="Profile" key="1">
@@ -43,7 +61,7 @@ const ProfilePage = () => {
           </TabPane> */}
         </Tabs>
       </div>
-    </div>
+    </StyledProfile>
   );
 };
 export default ProfilePage;

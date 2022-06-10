@@ -1,6 +1,45 @@
 import styled from "styled-components";
 
-const StyledCourse = styled.div`
+export const StyledWrapper = styled.div`
+  .header-bar {
+    color: #fff;
+    h1 {
+      padding: 5rem 5rem 2rem;
+    }
+    .bar {
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 5rem;
+      span {
+        padding-bottom: 6px;
+        display: inline-block;
+        border-bottom: 5px solid rgb(199, 199, 199);
+      }
+    }
+  }
+  .txt {
+    padding: 7rem 2rem 2rem;
+    height: 360px;
+    text-align: center;
+
+    p {
+      font-size: 17px;
+      margin-bottom: 2rem;
+    }
+    a {
+      color: #5624d0;
+      font-weight: 700;
+    }
+  }
+
+  .courses {
+    max-width: 1200px;
+    margin: auto;
+    padding: 3rem 5rem;
+  }
+`;
+
+export const StyledCourse = styled.div`
   &.course {
     display: flex;
     flex-direction: column;
@@ -61,5 +100,3 @@ const StyledCourse = styled.div`
     }
   }
 `;
-
-export { StyledCourse };
