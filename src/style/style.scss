@@ -74,31 +74,18 @@ button {
 @import "./utils/helpers";
 @import "./components/nav-top";
 @import "./components/header-bar";
-@import "./components/pagination";
 @import "./components/ratings";
 @import "./components/loading";
 
 @import "./layout/curriculum";
-@import "./layout/footer";
 
-@import "./alertBox";
-@import "./pages/course-lesson";
-@import "./pages/my-learning";
 @import "./pages/learning";
 @import "./pages/categories";
 @import "./pages/shopping-cart";
 @import "./pages/checkout";
-@import "./pages/home-page";
 @import "./pages/instructor-course";
-@import "./pages/profile";
-@import "./pages/notifications";
 @import "./pages/purchase-history";
 @import "./pages/login";
-
-// @import "./components/loading";
-
-// admin
-@import "./style-admin/admin";
 
 @import "./custom-library/antd/input";
 @import "./custom-library/quill/quill";
