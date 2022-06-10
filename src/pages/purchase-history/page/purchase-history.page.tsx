@@ -28,7 +28,7 @@ const PurchaseHistoryPage = () => {
     <StyledPurchaseHistoryContainer>
       <div className="title">Lịch sử thanh toán</div>
       <div className="bars">
-        <div className="bar__item">Courses</div>
+        <div className="bar__item">Danh sách khóa học</div>
       </div>
 
       {!courseBillsData.loaded ? (

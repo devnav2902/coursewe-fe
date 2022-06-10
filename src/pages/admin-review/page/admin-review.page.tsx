@@ -1,12 +1,16 @@
-import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, Menu, Space, Table, Tag } from "antd";
+import { DownOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import { Dropdown, Menu, Modal, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/lib/table";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import AdminApi, { CoursesListResponse } from "../../../api/admin-review.api";
+import { NotificationType } from "../../../ts/types/notification.types";
 import { ROUTES } from "../../../utils/constants";
+import { openNotification } from "../../../utils/functions";
 import { StyledWrapper } from "../styles/admin-review.styles";
-import moment from "moment";
 moment.locale("vi");
+
+const { confirm } = Modal;
 
 interface DataType {
   key: string;
@@ -134,10 +138,16 @@ const AdminReviewPage = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">
+                <Menu.Item
+                  key="1"
+                  onClick={() => showConfirm(record, "approved")}
+                >
                   <Tag color="green">Đồng ý</Tag>
                 </Menu.Item>
-                <Menu.Item key="2">
+                <Menu.Item
+                  key="2"
+                  onClick={() => showConfirm(record, "unapproved")}
+                >
                   <Tag color="geekblue">Cần chỉnh sửa thêm</Tag>
                 </Menu.Item>
               </Menu>
@@ -152,6 +162,41 @@ const AdminReviewPage = () => {
       ),
     },
   ];
+
+  function showConfirm(record: DataType, type: NotificationType) {
+    confirm({
+      title:
+        type === "approved"
+          ? `Bạn có chắc đồng ý cho khóa học "${record.title}" mở bán công khai?`
+          : `Thông báo cho người dùng khóa học "${record.title}" chưa đủ yêu cầu mở bán công khai?`,
+      icon: <ExclamationCircleOutlined />,
+
+      async onOk() {
+        try {
+          return await new Promise((resolve, reject) => {
+            AdminApi.qualityReview(record.course_id, type)
+              .then((res) => {
+                resolve(res);
+                openNotification("success", "Xét duyệt khóa học thành công!");
+              })
+              .catch((error) => {
+                reject(error);
+                openNotification(
+                  "error",
+                  error?.response?.message ??
+                    "Lỗi trong quá trình xét duyệt khóa học!"
+                );
+              });
+          });
+        } catch {
+          return;
+        }
+      },
+      onCancel() {},
+      okText: "Đồng ý",
+      cancelText: "Hủy bỏ",
+    });
+  }
 
   return (
     <StyledWrapper className="admin">

@@ -26,7 +26,7 @@ const CheckoutPage = React.lazy(
   () => import("../pages/checkout/page/checkout.page")
 );
 const CreateCoursePage = React.lazy(
-  () => import("../pages/create-course/page/createCourse.page")
+  () => import("../pages/create-course/page/create-course.page")
 );
 const DetailCoursePage = React.lazy(
   () => import("../pages/detail-course/page/detail-course.page")
