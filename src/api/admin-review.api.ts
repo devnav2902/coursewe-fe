@@ -1,4 +1,9 @@
 import { Course, Price } from "../ts/types/course.types";
+import {
+  Notification,
+  NotificationEntity,
+  NotificationType,
+} from "../ts/types/notification.types";
 import { Pagination } from "../ts/types/pagination.types";
 import { User } from "../ts/types/user.types";
 import axiosClient from "../utils/axios";
@@ -27,6 +32,13 @@ class Admin {
     return axiosClient.get<CoursesListResponse>(
       "/admin/submission-courses-list"
     );
+  };
+
+  qualityReview = async (courseId: number | string, type: NotificationType) => {
+    return axiosClient.post<CoursesListResponse>("/admin/quality-review", {
+      courseId,
+      type,
+    });
   };
 }
 const AdminApi = new Admin();

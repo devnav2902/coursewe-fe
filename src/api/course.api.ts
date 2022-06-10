@@ -43,6 +43,13 @@ export type CustomCourse = Omit<CourseType, "lecture"> & {
   rating_count: number;
   subtitle: string;
 };
+
+export interface GraphItem {
+  rating: number;
+  percent: number;
+}
+
+export type RatingArray = GraphItem[];
 class Course {
   draftCoursePreview = async (courseId: number) => {
     return axiosClient.get<{ course: CustomCourse }>(
@@ -77,7 +84,7 @@ class Course {
   };
 
   getCourseBySlug = async (slug: string) => {
-    return axiosClient.get<{ course: CustomCourse; graph: any }>(
+    return axiosClient.get<{ course: CustomCourse; graph: RatingArray }>(
       `/course/get/${slug}`
     );
   };

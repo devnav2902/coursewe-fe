@@ -1,4 +1,5 @@
-import { Course, Courses, Ratings } from "../ts/types/course.types";
+import { Course, Ratings } from "../ts/types/course.types";
+import { Pagination } from "../ts/types/pagination.types";
 import { User } from "../ts/types/user.types";
 import axiosClient from "../utils/axios";
 
@@ -10,9 +11,9 @@ export type CustomCourse = Course & {
 
 export type ArrayCustomCourses = CustomCourse[];
 class MyLearning {
-  getCourses = async () => {
-    return axiosClient.get<{ courses: { data: ArrayCustomCourses } }>(
-      "/my-learning"
+  getCourses = async (page?: number) => {
+    return axiosClient.get<{ courses: Pagination<ArrayCustomCourses> }>(
+      `/my-learning${page ? "?page=" + page : ""}`
     );
   };
 }
