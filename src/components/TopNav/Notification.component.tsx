@@ -189,6 +189,7 @@ const Notification = () => {
           count={markAllAsReadValue ? 0 : notificationData.unreadCount}
           offset={[5, 2]}
           overflowCount={9}
+          showZero={false}
         >
           <BellOutlined className="cursor-pointer" style={{ fontSize: 20 }} />
         </Badge>

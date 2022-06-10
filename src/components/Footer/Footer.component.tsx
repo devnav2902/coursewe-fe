@@ -1,16 +1,64 @@
 import { FC } from "react";
+import styled from "styled-components";
+
+const StyledFooter = styled.div`
+  background: #1c1d1f;
+  padding: 5rem 0;
+  color: #fff;
+  border-top: 1px solid #dcdacb;
+  .footer-content {
+    padding: 0 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    .col:nth-child(1) {
+      flex: 0 1 40%;
+      margin-right: var(--spacing-2);
+    }
+    .col:nth-child(2) {
+      margin-right: var(--spacing-2);
+      margin-left: auto;
+    }
+    .col:nth-child(3) {
+      margin-left: auto;
+    }
+  }
+  .col {
+    h4 {
+      color: #fff;
+    }
+    h4,
+    p {
+      margin-bottom: var(--spacing-1);
+    }
+    a {
+      color: var(--color-blue);
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .footer {
+      .footer-content {
+        flex-direction: column;
+      }
+      .col {
+        flex: 1 1 100% !important;
+        margin: 0 0 var(--spacing-2) !important;
+      }
+    }
+  }
+`;
 
 const Footer: FC = () => {
   return (
-    <footer className="footer">
+    <StyledFooter>
       <div className="footer-content">
         <div className="col">
-          <h4>Devco</h4>
+          <h4>Coursewe</h4>
           <p>
-            <a href="#">Devco Business</a>
+            <a href="#">Coursewe Business</a>
           </p>
           <p>
-            <a href="#">Teach on Devo</a>
+            <a href="#">Giảng dạy tại Coursewe</a>
           </p>
           <p>
             <a href="#">Tutorials</a>
@@ -51,7 +99,7 @@ const Footer: FC = () => {
           </p>
         </div>
       </div>
-    </footer>
+    </StyledFooter>
   );
 };
 

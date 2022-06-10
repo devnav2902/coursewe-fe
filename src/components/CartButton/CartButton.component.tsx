@@ -37,6 +37,8 @@ const CartButton: FC<CartButton> = ({ course }) => {
     return true;
   })();
 
+  const isAuthor = course.author_id === user.profile?.id;
+
   return (
     <StyledCartButton>
       {/* Kiểm tra user đăng nhập, nếu đăng nhập sẽ sử dụng giỏ hàng từ database */}
@@ -54,6 +56,13 @@ const CartButton: FC<CartButton> = ({ course }) => {
           className="btn w-100 btn-primary"
         >
           Đi đến khóa học
+        </Link>
+      ) : isAuthor ? (
+        <Link
+          to={ROUTES.detail_course(course.slug)}
+          className="btn w-100 btn-color-default"
+        >
+          Đến trang thông tin khóa học
         </Link>
       ) : (
         <div
