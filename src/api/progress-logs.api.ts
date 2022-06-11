@@ -12,7 +12,7 @@ type DataLastWatched = {
   };
 };
 
-type LastWatchedResponse = {
+export type LastWatchedResponse = {
   dataLastWatched: DataLastWatched;
 };
 

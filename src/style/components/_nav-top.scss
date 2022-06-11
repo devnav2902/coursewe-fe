@@ -60,11 +60,20 @@
       font-size: 1.6rem;
     }
   }
+  .nav-content-left {
+    display: flex;
+    align-items: center;
+  }
+  .nav-content-right {
+    display: flex;
+    align-items: center;
+  }
   .nav-content {
     flex: 1;
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
   .search-bar {
     margin-right: auto;

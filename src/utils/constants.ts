@@ -16,6 +16,9 @@ type SubcategoryParams = {
 type LearningParams = {
   course_slug: string;
 };
+type CheckVideoParams = {
+  course_id: string | number;
+};
 
 const ROUTES = {
   SIGN_IN: "/dang-nhap",
@@ -50,6 +53,14 @@ const ROUTES = {
       return `/hoc-tap/khoa-hoc/${params.course_slug}`;
     }
     return `/hoc-tap/khoa-hoc/:course_slug`;
+  },
+  search: () => `/tim-kiem/khoa-hoc/`,
+
+  check_video: (params?: CheckVideoParams) => {
+    if (params) {
+      return `/khoa-hoc/${params.course_id}/video/draft`;
+    }
+    return `/khoa-hoc/:course_id/video/draft`;
   },
 
   intended_learners: (id?: string | number) =>
