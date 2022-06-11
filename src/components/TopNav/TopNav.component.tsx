@@ -88,10 +88,10 @@ const TopNav: FC = () => {
                 Giảng dạy trên Coursewe
               </a>
               <ShoppingCart />
-              <Link className="btn-style-two login-button" to={ROUTES.SIGN_IN}>
+              <Link className="btn login-button" to={ROUTES.SIGN_IN}>
                 Đăng nhập
               </Link>
-              <Link className="btn-style-two signup-button" to={ROUTES.SIGN_UP}>
+              <Link className="btn btn-primary border-btn" to={ROUTES.SIGN_UP}>
                 Đăng ký
               </Link>
             </>
