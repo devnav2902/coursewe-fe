@@ -1,43 +1,55 @@
-import { Spin } from "antd";
+import { Button } from "antd";
 import axios from "axios";
+import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../../components/Input/Input.component";
-import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
+import { useAppDispatch } from "../../../hooks/redux.hooks";
 import { login } from "../../../redux/slices/user.slice";
 import { BE_URL, ROUTES } from "../../../utils/constants";
 import { openNotification } from "../../../utils/functions";
+const bgr = require("../../../assets/images/login.jpg");
 
 const SigninPage = () => {
   const dispatch = useAppDispatch();
-  const { loaded } = useTypedSelector((state) => state.user);
 
   const { handleSubmit, register } = useForm();
+
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FieldValues> = ({ password, email }) => {
     // initialize CSRF protection
+    setLoading(true);
+
     axios.get(`${BE_URL}/sanctum/csrf-cookie`).then((res) => {
       dispatch(login({ password, email }))
         .unwrap()
         .then((res) => {
+          setLoading(false);
+
           res.role.name === "admin"
             ? navigate(ROUTES.home("admin"))
             : navigate(-1);
         })
         .catch((error) => {
-          openNotification("error", error);
+          setLoading(false);
+
+          openNotification("error", "Lỗi trong quá trình đăng nhập!");
         });
     });
   };
 
   return (
-    <div className="login container">
+    <div
+      className="login container"
+      style={{ background: `url(${bgr}) center/cover` }}
+    >
       <div className="login-wrap">
         <div className="login-body">
           <div className="form-body">
-            <Link to="/" className="logo">
+            <Link to={ROUTES.home("user")} className="logo">
               Coursewe
             </Link>
 
@@ -75,13 +87,14 @@ const SigninPage = () => {
               </div>
 
               <div className="submit">
-                {!loaded ? (
-                  <Spin />
-                ) : (
-                  <button type="submit" className="sign-in">
-                    Đăng nhập
-                  </button>
-                )}
+                <Button
+                  loading={loading}
+                  htmlType="submit"
+                  className="btn sign-in"
+                  type="default"
+                >
+                  Đăng nhập
+                </Button>
               </div>
             </form>
             <div className="style-space-page OR">
