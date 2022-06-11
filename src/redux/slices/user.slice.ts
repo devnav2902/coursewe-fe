@@ -6,13 +6,13 @@ import { User } from "../../ts/types/user.types";
 export interface UserState {
   loaded: boolean;
   profile: User | null;
-  error: any;
+  error: string;
 }
 
 const initialState: UserState = {
   loaded: false,
   profile: null,
-  error: null,
+  error: "",
 };
 
 export const logout = createAsyncThunk("user/logout", async () => {
@@ -40,7 +40,12 @@ export const signUp = createAsyncThunk<User, ParamsSignUp>(
 
       return data.user;
     } catch (error) {
-      return rejectWithValue(error);
+      const errorMessage = "Lỗi trong quá trình đăng kí tài khoản!";
+
+      if (axios.isAxiosError(error))
+        return rejectWithValue(error.response?.data?.message ?? errorMessage);
+
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -97,7 +102,7 @@ const userSlice = createSlice({
     });
     builder.addCase(logout.rejected, (state, payload) => {
       console.log(payload);
-      state.error = payload.error;
+      state.error = payload.error as string;
     });
 
     // LOGIN
@@ -134,7 +139,7 @@ const userSlice = createSlice({
       state.loaded = true;
     });
     builder.addCase(signUp.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action.payload as string;
       state.loaded = true;
     });
   },
