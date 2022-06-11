@@ -92,17 +92,25 @@ const LearningPage = () => {
                         {course?.author?.linkedin && (
                           <div className="socical-link">
                             <div className="my-link">
-                              <Link to={location}>
+                              <a
+                                target="_blank"
+                                href={course.author.linkedin}
+                                style={{ color: "#fff" }}
+                              >
                                 <LinkedinOutlined />
-                              </Link>
+                              </a>
                             </div>
                           </div>
                         )}
                         {course?.author?.twitter && (
                           <div className="socical-link">
                             <div className="my-link">
-                              <a target="_blank" href={course.author.twitter}>
-                                <TwitterOutlined />
+                              <a
+                                target="_blank"
+                                href={course.author.twitter}
+                                style={{ color: "#fff" }}
+                              >
+                                <TwitterOutlined color="#fff" />
                               </a>
                             </div>
                           </div>
@@ -115,6 +123,7 @@ const LearningPage = () => {
                                   "http://www.facebook.com/" +
                                   course.author.facebook
                                 }
+                                style={{ color: "#fff" }}
                                 target="_blank"
                               >
                                 <FacebookOutlined />
@@ -125,7 +134,10 @@ const LearningPage = () => {
                         {course?.author?.youtube && (
                           <div className="socical-link">
                             <div className="my-link">
-                              <a href="{{ $author->bio->youtube }}">
+                              <a
+                                href="{{ $author->bio->youtube }}"
+                                style={{ color: "#fff" }}
+                              >
                                 <YoutubeOutlined />
                               </a>
                             </div>

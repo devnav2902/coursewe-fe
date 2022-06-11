@@ -176,56 +176,52 @@ const CurriculumPage: FC = () => {
       <h6>Chương trình học tập</h6>
 
       <div className="edit-course-form">
-        {sections?.length > 0 && (
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="sections" type="SECTIONS">
-              {(provided) => (
-                <div
-                  className="curriculum-list"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {sections.map((sectionItem, i) => (
-                    <Draggable
-                      isDragDisabled={
-                        lectureOrderIsUpdating.state ? true : false
-                      }
-                      draggableId={`section-${sectionItem.id}`}
-                      index={i} // Must be unique within a <Droppable /> (no duplicates) Must be consecutive. [0, 1, 2] and not [1, 2, 8]
-                      key={`section-${sectionItem.id}`}
-                    >
-                      {(provided) => (
-                        <SectionItem
-                          lectureOrderIsUpdating={lectureOrderIsUpdating.state}
-                          nthSection={i + 1}
-                          innerRef={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          sectionItem={sectionItem}
-                        />
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="sections" type="SECTIONS">
+            {(provided) => (
+              <div
+                className="curriculum-list"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {sections.map((sectionItem, i) => (
+                  <Draggable
+                    isDragDisabled={lectureOrderIsUpdating.state ? true : false}
+                    draggableId={`section-${sectionItem.id}`}
+                    index={i} // Must be unique within a <Droppable /> (no duplicates) Must be consecutive. [0, 1, 2] and not [1, 2, 8]
+                    key={`section-${sectionItem.id}`}
+                  >
+                    {(provided) => (
+                      <SectionItem
+                        lectureOrderIsUpdating={lectureOrderIsUpdating.state}
+                        nthSection={i + 1}
+                        innerRef={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        sectionItem={sectionItem}
+                      />
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
 
-                  {!sections.length && (
-                    <div className="curriculum-item curriculum-list__section curriculum-item__add">
-                      <div className="curriculum-content section-content section-editor">
-                        <FormEditTitle title="" type="section" edit={false} />
-                      </div>
+                {!sections.length && (
+                  <div className="curriculum-item curriculum-list__section curriculum-item__add">
+                    <div className="curriculum-content section-content section-editor">
+                      <FormEditTitle title="" type="section" edit={false} />
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  {displayCreateSection && (
-                    <FormEditTitle title="" type="section" edit={false} />
-                  )}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        )}
+                {displayCreateSection && (
+                  <FormEditTitle title="" type="section" edit={false} />
+                )}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
 
-        {sections.length && !displayCreateSection && (
+        {sections.length > 0 && !displayCreateSection && (
           <div className="wrapper-section">
             <div className="curriculum-add-item">
               <button
