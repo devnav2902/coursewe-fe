@@ -1,3 +1,5 @@
+import { Button } from "antd";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import CourseApi from "../../../api/course.api";
@@ -13,10 +15,15 @@ const CreateCoursePage = () => {
   } = useForm({ defaultValues: { title: "" } });
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = handleSubmit((data) => {
     const { title } = data;
 
+    setLoading(true);
+
     CourseApi.createCourse(title).then(({ data }) => {
+      setLoading(false);
       navigate(ROUTES.course_basics(data.id));
     });
   });
@@ -51,9 +58,14 @@ const CreateCoursePage = () => {
         >
           Trở về
         </Link>
-        <button type="submit" className="btn-primary">
+        <Button
+          type="default"
+          htmlType="submit"
+          loading={loading}
+          className="btn btn-primary"
+        >
           Tạo khóa học
-        </button>
+        </Button>
       </div>
     </StyledWrapper>
   );
