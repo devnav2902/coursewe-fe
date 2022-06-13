@@ -1,13 +1,5 @@
 import { FC, useContext, useEffect, useState } from "react";
-import { IoMdClose } from "react-icons/io";
-import LearningApi from "../../../../api/learning.api";
 import Loading from "../../../../components/Loading/Loading.component";
-
-import {
-  useAppDispatch,
-  useTypedSelector,
-} from "../../../../hooks/redux.hooks";
-import { getSections } from "../../../../redux/slices/learning.slice";
 import { CheckVideoContext } from "../../hooks/leaning.hooks";
 import {
   StyledSectionWrapper,
@@ -20,7 +12,6 @@ const Sidebar: FC = () => {
 
   const {
     dataCourse: { data, loaded },
-    course_id,
   } = useContext(CheckVideoContext);
 
   useEffect(() => {

@@ -1,12 +1,9 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import ProgressLogsApi, {
-  LastWatchedResponse,
-} from "../../../api/progress-logs.api";
-import { useTypedSelector } from "../../../hooks/redux.hooks";
-import { ROUTES } from "../../../utils/constants";
+import { LastWatchedResponse } from "../../../../api/progress-logs.api";
+import { ROUTES } from "../../../../utils/constants";
 
-import { StyledButtonBox } from "../../detail-course/styles/detail-course.styles";
+import { StyledButtonBox } from "../../../detail-course/styles/detail-course.styles";
 
 const ButtonContainer = () => {
   const [dataCourse, setDataCourse] =

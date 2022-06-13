@@ -17,7 +17,7 @@ import {
   StyledInfoBoxed,
   StyledMainContent,
 } from "../../detail-course/styles/detail-course.styles";
-import Sidebar from "../Sidebar/Sidebar.component";
+import Sidebar from "../components/course-landing-page/Sidebar.component";
 
 const { Panel } = Collapse;
 
@@ -101,9 +101,13 @@ const DraftPage = () => {
                     <h6>Giảng viên</h6>
                     <div className="info-author">
                       <div className="authors">
-                        {profile && (
-                          <Link to={ROUTES.instructor_bio(profile.slug)}>
-                            {profile.fullname}
+                        {dataCourse.course && (
+                          <Link
+                            to={ROUTES.instructor_bio(
+                              dataCourse.course.author.slug
+                            )}
+                          >
+                            {dataCourse.course.author.fullname}
                           </Link>
                         )}
                       </div>
@@ -119,8 +123,12 @@ const DraftPage = () => {
                           <h6>Khóa học này đang trong chế độ xét duyệt.</h6>
                           <span className="contact">
                             Để biết thêm thông tin, vui lòng liên hệ&nbsp;
-                            <Link to={ROUTES.instructor_bio(profile?.slug)}>
-                              {profile?.fullname}
+                            <Link
+                              to={ROUTES.instructor_bio(
+                                dataCourse.course.author.slug
+                              )}
+                            >
+                              {dataCourse.course.author.fullname}
                             </Link>
                           </span>
                         </>

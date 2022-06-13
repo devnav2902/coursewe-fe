@@ -1,6 +1,7 @@
 import { createContext, FC, useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import CourseApi, { CustomCourse } from "../../../api/course.api";
+import { ROUTES } from "../../../utils/constants";
 
 type LearningContext = {
   dataCourse: {
@@ -8,11 +9,13 @@ type LearningContext = {
     data: CustomCourse | null;
   };
   course_id: string | number;
+  lectureId: null | string;
 };
 
 const initialLearningContext: LearningContext = {
   dataCourse: { data: null, loaded: false },
   course_id: "",
+  lectureId: "",
 };
 
 export const CheckVideoContext = createContext(initialLearningContext);
@@ -29,20 +32,29 @@ export const CheckVideoProvider: FC = ({ children }) => {
     data: null,
   });
 
-  useEffect(() => {
-    CourseApi.getDraftCourseById(course_id).then((res) => {
-      console.log(res);
-
-      setDataCourse((state) => ({ ...state, data: res.data, loaded: true }));
-    });
-  }, []);
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
   const lectureId = searchParams.get("bai-giang");
 
+  useEffect(() => {
+    CourseApi.draftCoursePreview(course_id)
+      .then(({ data }) => {
+        setDataCourse((state) => ({
+          ...state,
+          data: data.course,
+          loaded: true,
+        }));
+      })
+      .catch(() => {
+        navigate(ROUTES.NOT_FOUND);
+      });
+  }, [course_id, navigate]);
+
   const value: LearningContext = {
     course_id,
     dataCourse,
+    lectureId,
   };
 
   return (

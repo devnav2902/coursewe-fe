@@ -1,7 +1,7 @@
 import { DesktopOutlined, VideoCameraOutlined } from "@ant-design/icons";
 import { FC, useEffect, useState } from "react";
 import { BiInfinite } from "react-icons/bi";
-import { CustomCourse } from "../../../api/course.api";
+import { CustomCourse } from "../../../../api/course.api";
 import ButtonContainer from "./ButtonContainer.component";
 import Nav from "./Nav.component";
 import Price from "./Price.component";

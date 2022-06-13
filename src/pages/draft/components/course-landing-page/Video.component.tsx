@@ -1,9 +1,9 @@
 import { CaretRightOutlined, CloseOutlined } from "@ant-design/icons";
 import { FC, useState } from "react";
 import ReactPlayer from "react-player/lazy";
-import { linkThumbnail } from "../../../utils/functions";
-import { VideoProps } from "../../detail-course/components/Sidebar/Video.component";
-import { StyledVideoDemo } from "../../detail-course/styles/detail-course.styles";
+import { linkThumbnail } from "../../../../utils/functions";
+import { VideoProps } from "../../../detail-course/components/Sidebar/Video.component";
+import { StyledVideoDemo } from "../../../detail-course/styles/detail-course.styles";
 
 const Video: FC<VideoProps> = ({ thumbnail, title, video_demo }) => {
   const [handleVideo, setHandleVideo] = useState({

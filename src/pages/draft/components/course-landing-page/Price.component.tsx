@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Price as PriceType } from "../../../ts/types/course.types";
+import { Price as PriceType } from "../../../../ts/types/course.types";
 
 type PriceProps = {
   price: PriceType;
