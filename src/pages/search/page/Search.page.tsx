@@ -1,25 +1,17 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Empty, Pagination, Row, Spin } from "antd";
 import { memo, useEffect, useState } from "react";
-import { MdFilterList } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
 import { CoursesByCategory } from "../../../api/categories.api";
 import SearchApi from "../../../api/search.api";
-import { ArrayCustomCourses } from "../../../components/Course/Course.component";
-import { useAppDispatch, useTypedSelector } from "../../../hooks/redux.hooks";
-import CourseCardLarge from "../component/CourseCardLarge.component";
-import LoadingOverlay from "../component/LoadingOverlay.component";
-import { StyledFilter } from "../styles/categories.styles";
+import CourseCardLarge from "../../categories/components/CourseCardLarge.component";
+import LoadingOverlay from "../../categories/components/LoadingOverlay.component";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [filterLoading, setFilterLoading] = useState(false); // Sử dụng khi click filter
-  const [coursesData, setCoursesData] = useState<CoursesByCategory>(); // Sử dụng khi click filter: ;
-  // const {
-  //   courses: { loaded: loadedCourses, data: coursesData },
-  //   discoveryUnits: { loaded: loadedDiscoveryUnits, data: discoveryUnitsData },
-  // } = useTypedSelector(({ categories }) => categories);
+  const [filterLoading, setFilterLoading] = useState(false);
+  const [coursesData, setCoursesData] = useState<CoursesByCategory>();
 
   const inputValue = searchParams.get("q") as string;
   const page = searchParams.get("page") as string;
@@ -40,7 +32,7 @@ const SearchPage = () => {
   return (
     <div className="main-categories">
       {/* first loading */}
-      {!coursesData?.data ? (
+      {filterLoading ? (
         <div className="pd-2 d-flex justify-content-center">
           <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} />} />
         </div>
@@ -56,7 +48,8 @@ const SearchPage = () => {
               >
                 <div className="result-search ">
                   <h1>
-                    {coursesData?.total} results for "{inputValue}"
+                    {coursesData?.total} kết quả tìm kiếm cho từ khóa "
+                    {inputValue}"
                   </h1>
                 </div>
                 {!coursesData?.total ? (
@@ -71,13 +64,15 @@ const SearchPage = () => {
                   </div>
                 )}
 
-                {coursesData && coursesData.total > 0 && (
+                {coursesData && (
                   <Pagination
                     className="mt-auto ml-auto"
                     pageSize={coursesData.per_page}
                     current={coursesData.current_page}
                     onChange={onChangePage}
                     total={coursesData.total}
+                    showSizeChanger={false}
+                    hideOnSinglePage
                   />
                 )}
               </div>
