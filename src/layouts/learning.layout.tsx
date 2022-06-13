@@ -26,7 +26,7 @@ const LearningLayout: FC = ({ children }) => {
     return () => {
       dispatch(resetStateLearning());
     };
-  }, [course_slug, dispatch]);
+  }, [course_slug, dispatch, navigate]);
 
   return (
     <>
@@ -37,7 +37,7 @@ const LearningLayout: FC = ({ children }) => {
   );
 };
 
-const StyledHeader = styled.div`
+export const StyledHeader = styled.div`
   height: 56px;
   color: #fff;
   padding: 0 20px;
