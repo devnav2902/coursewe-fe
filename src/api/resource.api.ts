@@ -38,7 +38,7 @@ class Resource {
 
   download = async (
     lectureId: number,
-    courseId: number,
+    courseId: number | string,
     resourceId: number
   ) => {
     return axiosClient

@@ -1,3 +1,4 @@
+import { User } from "../ts/types/user.types";
 import axiosClient from "../utils/axios";
 import { CoursesByCategoryResponse } from "./categories.api";
 
@@ -6,6 +7,7 @@ export type SearchCourse = {
   id: number;
   slug: string;
   thumbnail: string;
+  author: Omit<User, "role">;
 };
 export type ArraySearchCourses = SearchCourse[];
 export type SearchCoursesResponse = {

@@ -22,11 +22,11 @@ export type CoursesOfInstructorResponse = {
   coursesData: Pagination<CoursesOfInstructor>;
 };
 
-type CustomLecture = Omit<Lecture, "resource_count"> & {
+export type CustomLecture = Omit<Lecture, "resource"> & {
   resource_count: number;
 };
 
-export type CustomCourse = Omit<CourseType, "lecture"> & {
+export type CustomCourse = CourseType & {
   course_outcome: CourseOutcome[];
   course_requirements: CourseRequirements[];
   course_bill_count: number;
@@ -51,7 +51,7 @@ export interface GraphItem {
 
 export type RatingArray = GraphItem[];
 class Course {
-  draftCoursePreview = async (courseId: number) => {
+  draftCoursePreview = async (courseId: number | string) => {
     return axiosClient.get<{ course: CustomCourse }>(
       `/course/preview/${courseId}`
     );
