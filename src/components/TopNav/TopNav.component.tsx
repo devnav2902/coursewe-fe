@@ -42,12 +42,6 @@ const TopNav: FC = () => {
 
   const { fullname, email, role } = user.profile ?? {};
 
-  const dispatch = useAppDispatch();
-
-  function handleLogout() {
-    dispatch(logout());
-  }
-
   return (
     <nav className="nav-top">
       <div className="nav-content">
@@ -68,14 +62,11 @@ const TopNav: FC = () => {
                   Giảng dạy trên Coursewe
                 </a>
                 <ShoppingCart />
-                <Link
-                  className="btn-style-two login-button"
-                  to={ROUTES.SIGN_IN}
-                >
+                <Link className="btn login-button" to={ROUTES.SIGN_IN}>
                   Đăng nhập
                 </Link>
                 <Link
-                  className="btn-style-two signup-button"
+                  className="btn btn-primary signup-button"
                   to={ROUTES.SIGN_UP}
                 >
                   Đăng ký
