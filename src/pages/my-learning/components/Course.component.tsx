@@ -1,18 +1,23 @@
-import { Progress } from "antd";
-import { FC } from "react";
+import { Button, Progress, Row } from "antd";
+import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import { CustomCourse } from "../../../api/my-learning.api";
 import Rating from "../../../components/Rating/Rating.component";
 import { ROUTES } from "../../../utils/constants";
 import { linkThumbnail } from "../../../utils/functions";
 import { StyledCourse } from "../styles/my-learning.styles";
+import RatingModal from "./Rating.component";
 
 type CourseProps = {
   course: CustomCourse;
+  getCourses: () => void;
 };
 
-const Course: FC<CourseProps> = ({ course }) => {
+const Course: FC<CourseProps> = ({ course, getCourses }) => {
   const { author, count_progress, slug, thumbnail, title, rating, id } = course;
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   return (
     <StyledCourse className="course">
       <Link
@@ -55,7 +60,7 @@ const Course: FC<CourseProps> = ({ course }) => {
               </div>
             </div>
 
-            <div className="course-rating">
+            <Row justify="space-between" align="middle">
               {rating?.length ? (
                 <>
                   <Rating value={rating[0].rating} size="14px" />
@@ -64,12 +69,22 @@ const Course: FC<CourseProps> = ({ course }) => {
               ) : (
                 <>
                   <Rating value={0} />
-                  <a href="{{ route('course', ['url' => $course->slug]) }}">
+                  <Button
+                    type="default"
+                    onClick={() => setIsModalVisible(true)}
+                  >
                     Để lại đánh giá
-                  </a>
+                  </Button>
+
+                  <RatingModal
+                    getCourses={getCourses}
+                    courseId={id}
+                    isModalVisible={isModalVisible}
+                    setIsModalVisible={setIsModalVisible}
+                  />
                 </>
               )}
-            </div>
+            </Row>
           </div>
         )}
       </div>

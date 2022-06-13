@@ -77,13 +77,6 @@ export const StyledCourse = styled.div`
           color: #5959ff;
         }
       }
-      .course-rating {
-        display: flex;
-        align-items: center;
-        i {
-          font-size: 1.4rem;
-        }
-      }
     }
     .image-course {
       aspect-ratio: 16/9;

@@ -1,5 +1,5 @@
 import { Col, Row, Pagination } from "antd";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MyLearningApi, {
   ArrayCustomCourses,
@@ -19,8 +19,13 @@ const MyLearningPage: FC = () => {
     courses: null,
   });
 
-  useEffect(() => {
-    MyLearningApi.getCourses().then(({ data }) => {
+  const getCourses = useCallback((page?: number) => {
+    setDataLearning((state) => ({
+      ...state,
+      loadedCourses: false,
+    }));
+
+    MyLearningApi.getCourses(page).then(({ data }) => {
       const { courses } = data;
 
       setDataLearning((state) => ({
@@ -31,19 +36,10 @@ const MyLearningPage: FC = () => {
     });
   }, []);
 
-  function onChangePage(page: number) {
-    setDataLearning((state) => ({
-      ...state,
-      loadedCourses: false,
-    }));
+  useEffect(getCourses, [getCourses]);
 
-    MyLearningApi.getCourses(page).then(({ data }) => {
-      setDataLearning((state) => ({
-        ...state,
-        loadedCourses: true,
-        courses: data.courses,
-      }));
-    });
+  function onChangePage(page: number) {
+    getCourses(page);
   }
 
   return (
@@ -72,7 +68,11 @@ const MyLearningPage: FC = () => {
           <Row gutter={[15, 15]} className="mb-3">
             {dataLearning.courses.data.map((course) => (
               <Col key={course.id} span={6}>
-                <Course key={course.id} course={course} />
+                <Course
+                  getCourses={getCourses}
+                  key={course.id}
+                  course={course}
+                />
               </Col>
             ))}
           </Row>
