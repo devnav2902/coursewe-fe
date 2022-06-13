@@ -1,32 +1,88 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { List, Select } from "antd";
+import { Row, Select, Space, Spin } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import SearchApi, { ArraySearchCourses } from "../../api/search.api";
 import { ROUTES } from "../../utils/constants";
+import { linkThumbnail } from "../../utils/functions";
 const { Option } = Select;
+
+const StyledFilterResult = styled.div`
+  .title {
+    font-size: 16px;
+    color: var(--color-dark);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    white-space: normal;
+  }
+  .img {
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border-radius: 5px;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .see-more {
+    z-index: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 1rem;
+    button {
+      display: flex;
+      justify-content: center;
+      border-top: 1px solid rgb(236, 236, 236);
+      width: 100%;
+      background-color: transparent;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+  }
+`;
+
+const StyledSelect = styled.div`
+  .ant-select-selector {
+    border-radius: 30px !important;
+  }
+`;
+
 function PostFiltersForm() {
-  // const [searchTerm, setSearchTerm] = useState("");
-  const [inputValue, setInputValue] = useState("");
-  const [valueSearch, setValueSearch] = useState<ArraySearchCourses | []>([]);
+  const [inputValue, setInputValue] = useState<string | undefined>(undefined);
+  const [valueSearch, setValueSearch] = useState<{
+    loaded: boolean;
+    items: ArraySearchCourses | [];
+  }>({ items: [], loaded: false });
   const typingTimeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    if (inputValue.length < 2) {
-      setValueSearch([]);
-    } else {
+    if (inputValue && inputValue.length >= 2) {
+      setValueSearch(() => ({
+        items: [],
+        loaded: false,
+      }));
+
       SearchApi.search(inputValue).then((res) => {
-        console.log(res);
-        setValueSearch(res.data.data);
+        setValueSearch((state) => ({
+          ...state,
+          loaded: true,
+          items: res.data.data,
+        }));
       });
     }
   }, [inputValue]);
 
-  function handleSearchTermChange(value: any) {
-    console.log(value);
-
+  function handleSearchTermChange(value: string) {
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
     }
@@ -35,93 +91,74 @@ function PostFiltersForm() {
     }, 300);
   }
 
-  function handCleanInput() {
-    setInputValue("");
-  }
-  function handleClick() {
-    navigate(ROUTES.search() + "?q=" + inputValue);
-  }
+  const options = valueSearch.items.map((course) => (
+    <Option key={course.id}>
+      <StyledFilterResult>
+        <a
+          className="result-item d-flex"
+          href={ROUTES.detail_course(course.slug)}
+        >
+          <Space align="start" size={12}>
+            <div className="img">
+              <img src={linkThumbnail(course.thumbnail)} alt={course.title} />
+            </div>
 
-  // const handleSearch = (newValue: string) => {
-  //   if (newValue) {
-  //     fetch(newValue, setData);
-  //   } else {
-  //     setData([]);
-  //   }
-  // };
-
-  // const handleChange = (newValue: string) => {
-  //   setValue(newValue);
-  // };
-
-  const options = valueSearch.map((d) => (
-    <Option key={d.id}>
-      <Link to={ROUTES.detail_course(d.slug)}>
-        {/* <div className="img">
-          <img src={item.thumbnail} alt="" />
-        </div> */}
-        <div className="title">{d.title}</div>
-      </Link>
+            <div className="info">
+              <div className="title">{course.title}</div>
+              <div className="author">{course.author.fullname}</div>
+            </div>
+          </Space>
+        </a>
+      </StyledFilterResult>
     </Option>
   ));
 
-  return (
-    // <form action={ROUTES.search()} className="search-bar">
-    //   <div className="icon">
-    //     <SearchOutlined style={{ fontSize: 18 }} onClick={handleClick} />
-    //   </div>
-    <Select
-      showSearch
-      // placeholder={props.placeholder}
-      defaultActiveFirstOption={false}
-      value={inputValue}
-      showArrow={false}
-      filterOption={false}
-      style={{ width: "45rem", zIndex: "9999 !important", margin: "1rem" }}
-      onSearch={(value) => {
-        handleSearchTermChange(value);
-      }}
-      notFoundContent={null}
-    >
-      {options}
-    </Select>
-    // {/* <input
-    //   type="text"
-    //   placeholder="Chào bạn! hôm nay bạn muốn học gì?"
-    //   autoComplete="off"
-    //   className="input-search"
-    //   name="q"
-    //   defaultValue={inputValue}
-    //   onChange={handleSearchTermChange}
-    // /> */}
+  if (valueSearch.items.length) {
+    options.push(
+      <Option key={"more"}>
+        <StyledFilterResult>
+          <a
+            className="result-item d-flex justify-content-center"
+            href={ROUTES.search() + "?q=" + inputValue}
+          >
+            Xem thêm
+          </a>
+        </StyledFilterResult>
+      </Option>
+    );
+  }
 
-    //   <div
-    //     className={valueSearch.length && inputValue ? "search show" : "search"}
-    //   >
-    //     <div className="search-result">
-    //       <div className="result-search">
-    //         {!valueSearch.length ? null : (
-    //           <List
-    //             itemLayout="horizontal"
-    //             dataSource={valueSearch}
-    //             renderItem={(item) => (
-    //               <List.Item onClick={handCleanInput} className="result-item">
-    //                 {
-    //                   <Link to={ROUTES.detail_course(item.slug)}>
-    //                     <div className="img">
-    //                       <img src={item.thumbnail} alt="" />
-    //                     </div>
-    //                     <div className="title">{item.title}</div>
-    //                   </Link>
-    //                 }
-    //               </List.Item>
-    //             )}
-    //           />
-    //         )}
-    //       </div>
-    //     </div>
-    //   </div>
-    // </form>
+  return (
+    <StyledSelect>
+      <Select
+        showSearch
+        placeholder={
+          <div>
+            <SearchOutlined /> Chào bạn! Hôm nay bạn muốn học gì?
+          </div>
+        }
+        defaultActiveFirstOption={false}
+        value={inputValue}
+        showArrow={false}
+        filterOption={false}
+        style={{ width: "45rem", borderRadius: 30 }}
+        dropdownStyle={{ zIndex: 9901 }}
+        onSearch={(value) => {
+          handleSearchTermChange(value);
+        }}
+        notFoundContent={
+          !valueSearch.loaded && inputValue?.length ? (
+            <Row align="middle" justify="center">
+              <Spin />
+            </Row>
+          ) : valueSearch.items.length ? (
+            <div>Không tìm thấy khóa học phù hợp!</div>
+          ) : null
+        }
+      >
+        {options}
+      </Select>
+    </StyledSelect>
   );
 }
 
