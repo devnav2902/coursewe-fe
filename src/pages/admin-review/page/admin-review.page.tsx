@@ -39,7 +39,7 @@ const AdminReviewPage = () => {
 
       setDataCourse((state) => ({ ...state, data: courses, loaded: true }));
     });
-  }, []);
+  }, [dataCourse.loaded]);
 
   const data: DataType[] = !dataCourse.data
     ? []
@@ -124,7 +124,14 @@ const AdminReviewPage = () => {
                     Trang chi tiết khóa học
                   </a>
                 </Menu.Item>
-                <Menu.Item key="2">Trang nội dung bài giảng</Menu.Item>
+                <Menu.Item key="2">
+                  <a
+                    target="_blank"
+                    href={ROUTES.check_video({ course_id: record.course_id })}
+                  >
+                    Trang nội dung bài giảng
+                  </a>
+                </Menu.Item>
               </Menu>
             }
           >
@@ -178,6 +185,7 @@ const AdminReviewPage = () => {
               .then((res) => {
                 resolve(res);
                 openNotification("success", "Xét duyệt khóa học thành công!");
+                setDataCourse((state) => ({ ...state, loaded: false }));
               })
               .catch((error) => {
                 reject(error);
@@ -214,6 +222,7 @@ const AdminReviewPage = () => {
                 </div>
               );
             }}
+            pagination={{ current: dataCourse.data?.current_page }}
             dataSource={data}
             columns={columns}
           />
