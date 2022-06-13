@@ -2,6 +2,8 @@ import _ from "lodash";
 import React from "react";
 import CheckoutLayout from "../layouts/checkout.layout";
 import OverviewLayout from "../layouts/instructor-view.layout";
+import { CheckVideoProvider } from "../pages/draft/hooks/leaning.hooks";
+import CheckVideoPage from "../pages/draft/pages/learning.page";
 import { LearningProvider } from "../pages/learning/hooks/leaning.hooks";
 
 import SignoutPage from "../pages/signout/pages/signout.page";
@@ -136,6 +138,14 @@ const commonRoutes: Routes = [
       <BasicLayout>
         <InstructorBioPage />
       </BasicLayout>
+    ),
+  },
+  {
+    path: ROUTES.check_video(),
+    component: (
+      <CheckVideoProvider>
+        <CheckVideoPage />
+      </CheckVideoProvider>
     ),
   },
 ];
