@@ -95,7 +95,11 @@ const CourseCardLarge: FC<CourseCardLargeProps> = ({ course }) => {
             </div>
           </div>
           <div className="content__right">
-            <div className="price">{price.format_price} đ</div>
+            <div className="price">
+              {parseFloat(price.original_price) === 0
+                ? "Miễn phí"
+                : price.format_price + " VNĐ"}
+            </div>
           </div>
         </div>
       </StyledCourseCardLarge>

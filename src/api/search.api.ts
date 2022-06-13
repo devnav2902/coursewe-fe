@@ -15,14 +15,18 @@ export type SearchCoursesResponse = {
 };
 class Search {
   search = async (value: string) => {
-    return axiosClient.post<SearchCoursesResponse>(`/autocomplete/search`, {
-      inputSearch: value,
-    });
-  };
-  getSearch = async (value: string, page: string) => {
-    return axiosClient.get<CoursesByCategoryResponse>(`/search?page=${page}`, {
+    return axiosClient.get<SearchCoursesResponse>(`/autocomplete/search`, {
       params: { inputSearch: value },
     });
+  };
+
+  getSearch = async (value: string, page?: string) => {
+    return axiosClient.get<CoursesByCategoryResponse>(
+      `/search${page ? "?page=" + page : ""}`,
+      {
+        params: { inputSearch: value },
+      }
+    );
   };
 }
 const SearchApi = new Search();
