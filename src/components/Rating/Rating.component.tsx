@@ -2,7 +2,7 @@ import { Rate } from "antd";
 import styled from "styled-components";
 import { FC } from "react";
 
-const RatingWrapper = styled.div<{ size: string }>`
+export const RatingWrapper = styled.div<{ size: string }>`
   display: inline-block;
   line-height: 0;
   .ant-rate {
