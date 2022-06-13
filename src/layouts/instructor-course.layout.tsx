@@ -220,6 +220,8 @@ const InstructorCourseLayout: FC<LayoutProps> = ({ children }) => {
               to={
                 pathname === ROUTES.course_basics(id)
                   ? ROUTES.landing_page_draft(id)
+                  : pathname === ROUTES.curriculum(id)
+                  ? ROUTES.check_video({ course_id: id })
                   : ""
               }
               className="preview"
