@@ -220,13 +220,13 @@ const RatingChart = () => {
             />
           </div>
         </div>
-        <div className="instructor-analytics--chart-footer">
+        {/* <div className="instructor-analytics--chart-footer">
           <div className="export d-flex align-items-center">
             <ImFileExcel style={{ fontSize: 18 }} />
             &nbsp;
             <b>Xuất báo cáo</b>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
