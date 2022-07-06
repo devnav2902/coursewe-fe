@@ -40,6 +40,8 @@ export const CheckVideoProvider: FC = ({ children }) => {
   useEffect(() => {
     CourseApi.draftCoursePreview(course_id)
       .then(({ data }) => {
+        console.log(data);
+
         setDataCourse((state) => ({
           ...state,
           data: data.course,

@@ -63,13 +63,14 @@ const PricePage: FC<PriceProps> = () => {
 
       dispatch(
         updateCoursePrice({
-          courseId: currentPrice.id,
+          courseId: courseId,
           priceId: currentPriceId,
         })
       )
         .then((res) => {
           if (typeof res.payload === "object") {
             dispatch(setCoursePrice(res.payload));
+            message.destroy();
             message.success("Đã lưu thành công!", 2.5);
           }
         })

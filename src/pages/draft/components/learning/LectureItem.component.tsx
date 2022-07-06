@@ -50,6 +50,7 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
       }`}
     >
       <Link
+        className="w-100"
         to={
           ROUTES.check_video({
             course_id: course_id,
@@ -69,7 +70,7 @@ const LectureItem: FC<LectureProps> = ({ lecture }) => {
             </div>
 
             {lecture.resource.length > 0 && (
-              <div className="resource-list">
+              <div className="resource-list ml-auto">
                 <Dropdown
                   placement="bottomRight"
                   getPopupContainer={(e) => e}

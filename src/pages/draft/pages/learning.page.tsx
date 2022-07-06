@@ -176,7 +176,10 @@ const CheckVideoPage = () => {
                                 <a
                                   style={{ color: "#fff" }}
                                   target="_blank"
-                                  href={data?.author.twitter}
+                                  href={
+                                    "https://www.linkedin.com/" +
+                                    data?.author.twitter
+                                  }
                                 >
                                   <TwitterOutlined />
                                 </a>
@@ -205,7 +208,10 @@ const CheckVideoPage = () => {
                                 <a
                                   style={{ color: "#fff" }}
                                   target="_blank"
-                                  href={data?.author.youtube}
+                                  href={
+                                    "http://www.youtube.com/c/" +
+                                    data?.author.youtube
+                                  }
                                 >
                                   <YoutubeOutlined />
                                 </a>

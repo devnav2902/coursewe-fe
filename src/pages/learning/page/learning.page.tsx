@@ -107,7 +107,10 @@ const LearningPage = () => {
                             <div className="my-link">
                               <a
                                 target="_blank"
-                                href={course.author.twitter}
+                                href={
+                                  "https://www.linkedin.com/" +
+                                  course.author.twitter
+                                }
                                 style={{ color: "#fff" }}
                               >
                                 <TwitterOutlined color="#fff" />
@@ -135,7 +138,10 @@ const LearningPage = () => {
                           <div className="socical-link">
                             <div className="my-link">
                               <a
-                                href="{{ $author->bio->youtube }}"
+                                href={
+                                  "http://www.youtube.com/c/  " +
+                                  course.author.youtube
+                                }
                                 style={{ color: "#fff" }}
                               >
                                 <YoutubeOutlined />

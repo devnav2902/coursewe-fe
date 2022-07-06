@@ -156,7 +156,7 @@ const Success: FC<SuccessProps> = ({ details, courseData, couponState }) => {
     function isCart(
       test: CustomCourse | FormattedCartItem | null
     ): test is FormattedCartItem {
-      return (test as FormattedCartItem).courses.length > 0;
+      return (test as FormattedCartItem)?.courses?.length > 0;
     }
 
     if (isCart(courseData)) {

@@ -78,13 +78,18 @@ const DetailCoursePage = () => {
 
               <div className="rating-content d-flex align-items-center">
                 {rating_avg_rating && (
-                  <span>{roundsTheNumber(rating_avg_rating, 1)}</span>
+                  <>
+                    <span>{roundsTheNumber(rating_avg_rating, 1)}</span>
+                  </>
                 )}
-
-                <Rating
-                  value={roundsTheNumber(rating_avg_rating, 1)}
-                  size="14px"
-                />
+                {rating_avg_rating ? (
+                  <Rating
+                    value={roundsTheNumber(rating_avg_rating, 1)}
+                    size="14px"
+                  />
+                ) : (
+                  <Rating count={1} value={1} size="14px" />
+                )}
 
                 <span className="rating-count">({rating_count} Đánh giá)</span>
                 <span>{course_bill_count} Học viên</span>
