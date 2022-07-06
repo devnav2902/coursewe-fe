@@ -11,6 +11,7 @@ import PerformanceApi, {
 import { Period } from "./RevenueChart.component";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { ChartOptions } from "chart.js";
+import { openNotification } from "../../../utils/functions";
 
 const { Option } = Select;
 
@@ -170,7 +171,8 @@ const StudentChart = () => {
       params = { fromDate, toDate };
     }
 
-    setDownloading(true);
+    // setDownloading(true);
+    openNotification("success", "Tính năng đang phát triển!");
 
     // ExportApi.revenueExport(params)
     //   .then((res) => {

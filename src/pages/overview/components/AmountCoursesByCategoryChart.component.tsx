@@ -10,6 +10,7 @@ import PerformanceApi, {
   AmountCoursesByCategoryArray,
   Params,
 } from "../../../api/performance.api";
+import { openNotification } from "../../../utils/functions";
 
 const { Option } = Select;
 
@@ -188,7 +189,8 @@ const AmountCoursesByCategoryChart = () => {
       params = { fromDate, toDate };
     }
 
-    setDownloading(true);
+    // setDownloading(true);
+    openNotification("success", "Tính năng đang phát triển!");
 
     // ExportApi.revenueExport(params)
     //   .then((res) => {
