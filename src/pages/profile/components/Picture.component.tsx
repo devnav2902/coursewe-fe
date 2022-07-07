@@ -1,15 +1,14 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
-import { UploadFile } from "antd/lib/upload/interface";
+import { UploadChangeParam, UploadFile } from "antd/lib/upload/interface";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import ProfileApi from "../../../api/profile.api";
 import Loading from "../../../components/Loading/Loading.component";
 import { useTypedSelector } from "../../../hooks/redux.hooks";
 import { User } from "../../../ts/types/user.types";
 import { linkThumbnail } from "../../../utils/functions";
 
 const Picture = () => {
-  const { control } = useForm();
   const { profile, loaded } = useTypedSelector((state) => state.user);
 
   const [state, setState] = useState({
@@ -55,37 +54,37 @@ const Picture = () => {
   );
   const { previewVisible, previewImage, previewTitle } = state;
 
+  const handleOnChange = (e: UploadChangeParam<File>) => {
+    ProfileApi.updateAvatar(e.file).then(() => {
+      console.log("success");
+    });
+  };
+
   if (!loaded) return <Loading />;
   const { avatar } = profile as User;
 
   return (
     <div className="user">
       <div className="edit-avatar">
-        <Controller
-          control={control}
-          name="image"
-          render={({ field }) => (
-            <Upload
-              accept=".png, .jpg, .jpeg"
-              listType="picture-card"
-              maxCount={1}
-              beforeUpload={() => false}
-              showUploadList={{ showRemoveIcon: false }}
-              defaultFileList={[
-                {
-                  uid: avatar,
-                  name: avatar,
-                  url: linkThumbnail(avatar),
-                },
-              ]}
-              onPreview={handlePreview}
-              {...field}
-              // onChange={field.onChange(handleOnChange)}
-            >
-              {uploadButton}
-            </Upload>
-          )}
-        />
+        <Upload
+          accept=".png, .jpg, .jpeg"
+          listType="picture-card"
+          maxCount={1}
+          beforeUpload={() => false}
+          showUploadList={{ showRemoveIcon: false }}
+          defaultFileList={[
+            {
+              uid: avatar,
+              name: avatar,
+              url: linkThumbnail(avatar),
+            },
+          ]}
+          onPreview={handlePreview}
+          onChange={handleOnChange}
+        >
+          {uploadButton}
+        </Upload>
+
         <Modal
           visible={previewVisible}
           title={previewTitle}

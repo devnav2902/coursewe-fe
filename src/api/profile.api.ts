@@ -18,6 +18,12 @@ class Profile {
   updateProfile = async (data: object) => {
     return axiosClient.patch("/change-profile", data);
   };
+  updateAvatar = async (file: File) => {
+    const formData = new FormData();
+    formData.append("thumbnail", file);
+
+    return axiosClient.post("/change-avatar", formData);
+  };
 
   checkInstructorProfileBeforePublishCourse = async () => {
     return axiosClient.get<CheckInstructorProfileResponse>(
