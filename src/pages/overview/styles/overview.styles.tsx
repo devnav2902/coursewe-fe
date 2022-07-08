@@ -4,11 +4,12 @@ export const StyledOverviewWrapper = styled.div`
   .overview-title {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     h2 {
       font-family: "Times New Roman", Times, serif;
       font-size: 3.5rem;
       font-weight: 800;
+      margin-bottom: 0;
     }
   }
   .date-range {
