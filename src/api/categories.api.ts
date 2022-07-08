@@ -94,7 +94,14 @@ export type CoursesBeginnerResponse = {
   coursesBeginner: CoursesBeginner;
 };
 
+export interface CategoriesListResponse {
+  items: { category_id: number; title: string }[];
+}
 class Categories {
+  getList = async () => {
+    return axiosClient.get<CategoriesListResponse>("/categories/get-list");
+  };
+
   get = async () => {
     return axiosClient.get<CategoriesResponse>("/categories");
   };
