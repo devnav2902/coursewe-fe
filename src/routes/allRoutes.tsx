@@ -80,6 +80,9 @@ const PurchaseHistoryPage = React.lazy(
 );
 const SigninPage = React.lazy(() => import("../pages/signin/page/signin.page"));
 const SignupPage = React.lazy(() => import("../pages/signup/page/signup.page"));
+const QualityReviewPage = React.lazy(
+  () => import("../pages/quality-review/pages/quality-review.page")
+);
 
 export type Route = {
   exact?: boolean;
@@ -159,6 +162,15 @@ export const adminRoutes: RoleAndRoutes = {
       component: (
         <InstructorView>
           <AdminReviewPage />
+        </InstructorView>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.QUALITY_REVIEW,
+      component: (
+        <InstructorView>
+          <QualityReviewPage />
         </InstructorView>
       ),
       private: true,
