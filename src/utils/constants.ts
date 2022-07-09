@@ -35,6 +35,9 @@ const ROUTES = {
   ADMIN_REVIEW: "/admin/submission-courses-list",
   CHECKOUT: "/cart/checkout",
   NOT_FOUND: "/404",
+  QUALITY_REVIEW: "/quan-ly/doi-ngu-chuyen-mon",
+  USER_MANAGE: "/quan-ly/nguoi-dung",
+  INSTRUCTOR_MANAGE: "/quan-ly/giang-vien",
 
   home: (role: Role) => (role === "admin" ? "/quan-ly/tong-quan" : "/"),
 
