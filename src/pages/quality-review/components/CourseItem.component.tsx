@@ -1,13 +1,12 @@
 import {
-  AntDesignOutlined,
   BarChartOutlined,
   ClockCircleOutlined,
   EllipsisOutlined,
+  FieldTimeOutlined,
   QuestionOutlined,
   TrophyFilled,
   TrophyOutlined,
   TrophyTwoTone,
-  UserOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -19,19 +18,21 @@ import {
   Popover,
   Rate,
   Row,
-  Skeleton,
   Space,
   Tag,
-  Tooltip,
 } from "antd";
 import Text from "antd/lib/typography/Text";
 import Title from "antd/lib/typography/Title";
-import { ICourse } from "api/rating-quality.api";
+import RatingQualityApi, { ICourse } from "api/rating-quality.api";
 import moment from "moment";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import styled from "styled-components";
 import { ROUTES } from "utils/constants";
-import { linkThumbnail, roundsTheNumber } from "utils/functions";
+import {
+  linkThumbnail,
+  openNotification,
+  roundsTheNumber,
+} from "utils/functions";
 
 const StyledCourseItem = styled.div`
   border-radius: 16px;
@@ -43,29 +44,51 @@ const StyledCourseItem = styled.div`
 
 interface IProps {
   data: ICourse;
+  getListCourses: () => void;
 }
 
-const CourseItem: FC<IProps> = ({ data }) => {
+const CourseItem: FC<IProps> = ({ data, getListCourses }) => {
   const [loading, setLoading] = useState(false);
   const [visibleRate, setVisibleRate] = useState(false);
+  const [valueRating, setValueRating] = useState(0);
 
   const showModalRate = () => {
-    setVisibleRate(true);
+    if (!data.rated) setVisibleRate(true);
   };
 
   const handleOkRate = () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setVisibleRate(false);
-    }, 3000);
+
+    RatingQualityApi.rate(valueRating, data.id)
+      .then(() => {
+        setLoading(false);
+        setVisibleRate(false);
+        openNotification("success", "Đánh giá chất lượng khóa học thành công!");
+        getListCourses();
+      })
+      .catch((_) => {
+        setLoading(false);
+        setVisibleRate(false);
+        openNotification(
+          "error",
+          "Lỗi trong quá trình đánh giá chất lượng khóa học!"
+        );
+      });
   };
 
   const handleCancelRate = () => {
     setVisibleRate(false);
   };
 
-  function handleRate() {}
+  const restOfTheTime = useMemo(() => {
+    const currentTime = moment(new Date());
+    const sendedTime = moment(data.updated_at, "DD/MM/YYYY HH:mm A");
+    const deadline = moment(sendedTime).add(7, "days");
+
+    const value = currentTime.diff(sendedTime);
+
+    return deadline.subtract(value).fromNow(true);
+  }, [data.updated_at]);
 
   return (
     <>
@@ -103,110 +126,113 @@ const CourseItem: FC<IProps> = ({ data }) => {
             </Popover>,
           ]}
         >
-          <Skeleton loading={false} active>
-            <Row
-              justify="space-between"
-              align="top"
-              wrap={false}
-              gutter={[5, 5]}
-              className="mb-1"
+          <Row
+            justify="space-between"
+            align="top"
+            wrap={false}
+            gutter={[5, 5]}
+            className="mb-1"
+          >
+            <Title
+              level={5}
+              style={{ marginBottom: 0 }}
+              ellipsis={{ rows: 2 }}
+              title={data.title}
             >
-              <Title
-                level={5}
-                style={{ marginBottom: 0 }}
-                ellipsis={{ rows: 2 }}
-                title={data.title}
-              >
-                {data.title}
-              </Title>
-              <Space align="center" className="flex-shrink-0">
-                <ClockCircleOutlined />
-                <Text>
-                  {moment(data.updated_at, "DD/MM/YYYY HH:mm A")
-                    .locale("vi_VN")
-                    .fromNow()}
-                </Text>
-              </Space>
-            </Row>
-            <Row gutter={[5, 5]} className="mb-2">
-              {data.categories.map((category) => (
-                <Tag key={category.category_id} style={{ borderRadius: 15 }}>
-                  {category.title}
-                </Tag>
-              ))}
-            </Row>
+              {data.title}
+            </Title>
+            <Space align="center" className="flex-shrink-0">
+              <ClockCircleOutlined />
+              <Text>
+                {moment(data.updated_at, "DD/MM/YYYY HH:mm A")
+                  .locale("vi_VN")
+                  .fromNow()}
+              </Text>
+            </Space>
+          </Row>
+          <Row gutter={[5, 5]} className="mb-2">
+            {data.categories.map((category) => (
+              <Tag key={category.category_id} style={{ borderRadius: 15 }}>
+                {category.title}
+              </Tag>
+            ))}
+          </Row>
+          <Row className="mb-1" align="middle">
+            <FieldTimeOutlined style={{ fontSize: 18, marginRight: 5 }} />{" "}
+            <Text strong>
+              Thời gian xét duyệt còn lại:&nbsp; {restOfTheTime}
+            </Text>
+          </Row>
+          <Row>
+            <Col span={12}>
+              <Text strong>Đánh giá chất lượng</Text>
+              <Space direction="horizontal">
+                <TrophyFilled
+                  style={{ marginBottom: 0, fontSize: 25, color: "#fadb14" }}
+                />
 
-            <Row>
-              <Col span={12}>
-                <Text strong>Đánh giá chất lượng</Text>
-                <Space direction="horizontal">
-                  <TrophyFilled
-                    style={{ marginBottom: 0, fontSize: 25, color: "#fadb14" }}
-                  />
-
-                  <Space direction="vertical">
-                    <Text>
-                      Đánh giá:{" "}
-                      <Text strong style={{ fontSize: 17 }}>
-                        {data.rating_quality_avg_rating
-                          ? roundsTheNumber(data.rating_quality_avg_rating, 1)
-                          : "0.0"}
-                      </Text>
-                      &nbsp;/&nbsp;10
+                <Space direction="vertical">
+                  <Text>
+                    Đánh giá:{" "}
+                    <Text strong style={{ fontSize: 17 }}>
+                      {data.rating_quality_avg_rating
+                        ? roundsTheNumber(data.rating_quality_avg_rating, 1)
+                        : "0.0"}
                     </Text>
+                    &nbsp;/&nbsp;10
+                  </Text>
 
-                    {data.rating_quality.length < 1 ? (
-                      <Text>Chưa có đánh giá</Text>
-                    ) : (
-                      <Avatar.Group
-                        maxCount={3}
-                        maxPopoverTrigger="click"
-                        size="small"
-                        maxStyle={{
-                          color: "#f56a00",
-                          backgroundColor: "#fde3cf",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {data.rating_quality.map((item) => (
-                          <Avatar src={linkThumbnail(item.user.avatar)} />
-                        ))}
-                      </Avatar.Group>
-                    )}
-                  </Space>
-                </Space>
-              </Col>
-              <Col span={12} style={{ textAlign: "right" }}>
-                <Space direction="vertical" align="center" size={0}>
-                  <Text strong>Đánh giá từ bạn</Text>
-                  {!data.rated ? (
-                    <Space direction="vertical" align="center" size={0}>
-                      <TrophyTwoTone style={{ fontSize: 25 }} />
-                      <Text>Bạn chưa đánh giá</Text>
-                    </Space>
+                  {data.rating_quality.length < 1 ? (
+                    <Text>Chưa có đánh giá</Text>
                   ) : (
-                    <div>
-                      <TrophyTwoTone style={{ fontSize: 25 }} />
-                      &nbsp;&nbsp;
-                      <Text strong>
-                        {roundsTheNumber(data.rated.rating, 1)}
-                      </Text>
-                    </div>
+                    <Avatar.Group
+                      maxCount={3}
+                      maxPopoverTrigger="click"
+                      size="small"
+                      maxStyle={{
+                        color: "#f56a00",
+                        backgroundColor: "#fde3cf",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {data.rating_quality.map((item) => (
+                        <Avatar src={linkThumbnail(item.user.avatar)} />
+                      ))}
+                    </Avatar.Group>
                   )}
                 </Space>
-              </Col>
-            </Row>
-          </Skeleton>
+              </Space>
+            </Col>
+            <Col span={12} style={{ textAlign: "right" }}>
+              <Space direction="vertical" align="center" size={0}>
+                <Text strong className="mb-1 d-block">
+                  Đánh giá từ bạn
+                </Text>
+                {!data.rated ? (
+                  <Space direction="vertical" align="center" size={0}>
+                    <TrophyTwoTone style={{ fontSize: 25 }} />
+                    <Text>Bạn chưa đánh giá</Text>
+                  </Space>
+                ) : (
+                  <div>
+                    <TrophyTwoTone style={{ fontSize: 25 }} />
+                    &nbsp;&nbsp;
+                    <Text strong>{roundsTheNumber(data.rated.rating, 1)}</Text>
+                  </div>
+                )}
+              </Space>
+            </Col>
+          </Row>
         </Card>
       </StyledCourseItem>
       <Modal
         visible={visibleRate}
-        onOk={handleOkRate}
         onCancel={handleCancelRate}
         width={480}
         footer={
           <Row justify="center">
             <Button
+              disabled={!valueRating}
               key="submit"
               type="primary"
               loading={loading}
@@ -258,6 +284,8 @@ const CourseItem: FC<IProps> = ({ data }) => {
           count={10}
           character={<TrophyOutlined />}
           style={{ fontSize: 26 }}
+          value={valueRating}
+          onChange={(value) => setValueRating(value)}
         />
       </Modal>
     </>

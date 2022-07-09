@@ -1,13 +1,35 @@
-import { DownOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { Dropdown, Menu, Modal, Space, Table, Tag } from "antd";
+import {
+  DownOutlined,
+  ExclamationCircleOutlined,
+  ExclamationCircleTwoTone,
+  SettingTwoTone,
+} from "@ant-design/icons";
+import {
+  Avatar,
+  Dropdown,
+  Menu,
+  Modal,
+  Popover,
+  Progress,
+  Space,
+  Table,
+  Tag,
+} from "antd";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import AdminApi, { CoursesListResponse } from "../../../api/admin-review.api";
-import { NotificationType } from "../../../ts/types/notification.types";
-import { ROUTES } from "../../../utils/constants";
-import { openNotification } from "../../../utils/functions";
+import AdminApi, { CoursesListResponse } from "api/admin-review.api";
+import { NotificationType } from "ts/types/notification.types";
+import { ROUTES } from "utils/constants";
+import {
+  linkThumbnail,
+  openNotification,
+  roundsTheNumber,
+} from "utils/functions";
 import { StyledWrapper } from "../styles/admin-review.styles";
+import { RatingQualityType } from "ts/types/rating-quality.types";
+import styled from "styled-components";
+import Text from "antd/lib/typography/Text";
 moment.locale("vi");
 
 const { confirm } = Modal;
@@ -19,8 +41,23 @@ interface DataType {
   course_updated_at: string | number;
   author: { fullname: string; slug: string };
   course_id: number | string;
-  created_at: string;
+  rating_quality: RatingQualityType[];
+  rating_quality_avg_rating: string | null;
 }
+
+const StyledTable = styled.div`
+  box-shadow: rgb(145 158 171 / 20%) 0px 0px 2px 0px,
+    rgb(145 158 171 / 12%) 0px 12px 24px -4px;
+  border-radius: 16px;
+  padding: 20px;
+  background-color: #fff;
+
+  table {
+    td {
+      vertical-align: top;
+    }
+  }
+`;
 
 interface CourseData {
   loaded: boolean;
@@ -44,24 +81,31 @@ const AdminReviewPage = () => {
   const data: DataType[] = !dataCourse.data
     ? []
     : dataCourse.data.data.map((item) => {
-        const { course, created_at } = item;
-
-        console.log(item);
+        const {
+          price,
+          author,
+          title,
+          id,
+          updated_at,
+          rating_quality,
+          rating_quality_avg_rating,
+        } = item;
 
         return {
           key: item.id.toString(),
           price:
-            parseFloat(course.price.original_price) === 0
+            parseFloat(price.original_price) === 0
               ? "Miễn phí"
-              : course.price.format_price + " VNĐ",
-          title: course.title,
-          course_updated_at: course.updated_at,
+              : price.format_price + " VNĐ",
+          title: title,
+          course_updated_at: updated_at,
           author: {
-            fullname: course.author.fullname,
-            slug: course.author.slug,
+            fullname: author.fullname,
+            slug: author.slug,
           },
-          course_id: course.id,
-          created_at,
+          course_id: id,
+          rating_quality,
+          rating_quality_avg_rating,
         };
       });
 
@@ -71,34 +115,65 @@ const AdminReviewPage = () => {
       dataIndex: "title",
       key: "title",
       render: (text) => <a>{text}</a>,
-      width: 260,
+      width: 240,
       ellipsis: true,
     },
     {
-      title: "Người tạo",
-      dataIndex: ["author", "fullname"],
-      key: "fullname",
-      render: (text, record) => {
+      title: "Thời hạn đánh giá",
+      dataIndex: "course_updated_at",
+      key: "deadline",
+      render: (date, record) => {
+        const restOfTheTime = (() => {
+          const currentTime = moment(new Date());
+          const sendedTime = moment(date, "DD/MM/YYYY HH:mm A");
+          const deadline = moment(sendedTime).add(7, "days");
+
+          const value = currentTime.diff(sendedTime);
+
+          return deadline.subtract(value).fromNow(true);
+        })();
+
+        const percent =
+          ((restOfTheTime.split(" ")[0] as unknown as number) / 7) * 100;
+
         return (
-          <a target="_blank" href={ROUTES.instructor_bio(record.author.slug)}>
-            {text}
-          </a>
+          <Space direction="vertical">
+            <Text>Còn lại: {restOfTheTime}</Text>
+            <Progress
+              percent={percent}
+              status={percent <= 20 ? "exception" : "active"}
+              showInfo={false}
+            />
+          </Space>
         );
       },
     },
     {
-      title: "Giá bán",
-      dataIndex: "price",
-      key: "price",
+      title: "Thành viên đã đánh giá",
+      dataIndex: "rating_quality",
+      key: "rating_quality",
+      render: (value: RatingQualityType[], record) => {
+        return value.length ? (
+          <Avatar.Group>
+            {value.map((item) => (
+              <Avatar src={linkThumbnail(item.user.avatar)} />
+            ))}
+          </Avatar.Group>
+        ) : (
+          <div>Hiện chưa có đánh giá nào!</div>
+        );
+      },
     },
     {
-      title: "Ngày gửi yêu cầu",
-      dataIndex: "created_at",
-      key: "created_at",
-      render: (text) => <span>{moment(text, "YYYY-MM-DD").fromNow()}</span>,
+      title: "Điểm số chất lượng hiện tại",
+      dataIndex: "rating_quality_avg_rating",
+      key: "rating_quality_avg_rating",
+      render: (value, record) => {
+        return value ? roundsTheNumber(value, 1) : "Chưa đánh giá";
+      },
     },
     {
-      title: "Ngày cập nhật",
+      title: "Thời gian",
       dataIndex: "course_updated_at",
       key: "course_updated_at",
       render: (text) => (
@@ -108,13 +183,15 @@ const AdminReviewPage = () => {
     {
       title: "Hành động",
       key: "action",
-      width: 250,
+      width: 120,
+      className: "center",
       render: (_, record) => (
         <>
-          <Dropdown
-            className="mb-1 cursor-pointer"
+          <Popover
+            title="Xem chi tiết trang"
             trigger={["click"]}
-            overlay={
+            placement="bottom"
+            content={
               <Menu>
                 <Menu.Item key="1">
                   <a
@@ -135,15 +212,16 @@ const AdminReviewPage = () => {
               </Menu>
             }
           >
-            <Space>
-              Xem chi tiết trang
-              <DownOutlined />
-            </Space>
-          </Dropdown>
-          <Dropdown
-            className="cursor-pointer"
+            <ExclamationCircleTwoTone
+              style={{ fontSize: 22 }}
+              className="mr-1"
+            />
+          </Popover>
+          <Popover
+            title="Lựa chọn xét duyệt"
             trigger={["click"]}
-            overlay={
+            placement="bottom"
+            content={
               <Menu>
                 <Menu.Item
                   key="1"
@@ -160,11 +238,8 @@ const AdminReviewPage = () => {
               </Menu>
             }
           >
-            <Space>
-              Lựa chọn xét duyệt
-              <DownOutlined />
-            </Space>
-          </Dropdown>
+            <SettingTwoTone style={{ fontSize: 22 }} />
+          </Popover>
         </>
       ),
     },
@@ -211,22 +286,20 @@ const AdminReviewPage = () => {
       <h2>Xét duyệt khóa học</h2>
 
       <div className="admin__review">
-        <div className="admin-table">
+        <StyledTable>
           <Table
             loading={!dataCourse.loaded}
             bordered
-            title={() => {
-              return (
-                <div className="d-flex justify-content-between align-item-center">
-                  <h3>Danh sách khóa học</h3>
-                </div>
-              );
-            }}
             pagination={{ current: dataCourse.data?.current_page }}
             dataSource={data}
             columns={columns}
+            expandable={{
+              expandedRowRender: (record) => (
+                <p style={{ margin: 0 }}>{record.author.fullname}</p>
+              ),
+            }}
           />
-        </div>
+        </StyledTable>
       </div>
     </StyledWrapper>
   );

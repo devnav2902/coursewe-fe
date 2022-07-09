@@ -11,6 +11,20 @@ import { ROUTES } from "utils/constants";
 const StyledLayoutWrapper = styled.div`
   background-color: #f5f5f5;
   min-height: 100vh;
+
+  /* .ant-menu-title-content {
+    display: none;
+  } */
+
+  li.ant-menu-item {
+    .ant-menu-title-content {
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
 `;
 
 const StyledNavTop = styled.nav`
@@ -55,7 +69,7 @@ const StyledNavTop = styled.nav`
   }
 `;
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 
 const QualityReviewLayout: FC = ({ children }) => {
   const { profile } = useTypedSelector((state) => state.user);
@@ -63,8 +77,6 @@ const QualityReviewLayout: FC = ({ children }) => {
   return (
     <StyledLayoutWrapper>
       <Layout>
-        {/* <Header className="header"></Header> */}
-
         <Sider
           style={{
             background: "transparent",
@@ -87,12 +99,16 @@ const QualityReviewLayout: FC = ({ children }) => {
             <Menu.Item
               style={{ marginTop: "50px", marginBottom: "50px" }}
               key="1"
-              icon={<FileProtectOutlined style={{ fontSize: 32 }} />}
-            />
-            <Menu.Item
-              key="2"
-              icon={<PieChartOutlined style={{ fontSize: 32 }} />}
-            />
+            >
+              <Link to={ROUTES.QUALITY_COURSE_REVIEW}>
+                <FileProtectOutlined style={{ fontSize: 32 }} />
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to={ROUTES.QUALITY_COURSE_REVIEW}>
+                <PieChartOutlined style={{ fontSize: 32 }} />
+              </Link>
+            </Menu.Item>
           </Menu>
         </Sider>
 
