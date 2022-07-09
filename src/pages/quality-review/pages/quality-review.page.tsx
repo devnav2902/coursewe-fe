@@ -21,15 +21,13 @@ import Title from "antd/lib/typography/Title";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import CategoriesApi, {
-  CategoriesListResponse,
-} from "../../../api/categories.api";
+import CategoriesApi, { CategoriesListResponse } from "api/categories.api";
 import QualityReviewTeamApi, {
   GetQualityReviewTeamResponse,
   IQualityReviewTeam,
   StatisticResponse,
-} from "../../../api/quality-review-team.api";
-import { openNotification } from "../../../utils/functions";
+} from "api/quality-review-team.api";
+import { openNotification } from "utils/functions";
 import Chart from "react-apexcharts";
 import _ from "lodash";
 
