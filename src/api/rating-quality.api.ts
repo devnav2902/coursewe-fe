@@ -28,6 +28,13 @@ class RatingQuality {
       `/rating-quality/list-courses${page ? "?page=" + page : ""}`
     );
   };
+
+  rate = async (rating: number, course_id: number) => {
+    return axiosClient.post(`/rating-quality/me/rate`, {
+      rating,
+      course_id,
+    });
+  };
 }
 
 const RatingQualityApi = new RatingQuality();
