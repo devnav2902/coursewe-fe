@@ -11,6 +11,7 @@ import { useAppDispatch, useTypedSelector } from "./hooks/redux.hooks";
 import { getCurrentUser } from "./redux/slices/user.slice";
 import allRoutes, {
   adminRoutes,
+  qualityReviewRoutes,
   Route as RouteType,
   userRoutes,
 } from "./routes/allRoutes";
@@ -56,6 +57,9 @@ function App(): JSX.Element {
     case "user":
       routes = userRoutes.routes;
       break;
+    case "quality_review":
+      routes = qualityReviewRoutes.routes;
+      break;
 
     default:
       break;
@@ -64,7 +68,11 @@ function App(): JSX.Element {
   function routeCreated(route: RouteType, idx: number) {
     if (route.redirectIfAuthenticated && user.profile) {
       const path =
-        role === "admin" ? ROUTES.home("admin") : ROUTES.home("user");
+        role === "admin"
+          ? ROUTES.home("admin")
+          : role === "quality_review"
+          ? ROUTES.home("quality_review")
+          : ROUTES.home("user");
 
       return (
         <Route key={idx} path={route.path} element={<Navigate to={path} />} />

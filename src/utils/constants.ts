@@ -38,8 +38,14 @@ const ROUTES = {
   QUALITY_REVIEW: "/quan-ly/doi-ngu-chuyen-mon",
   USER_MANAGE: "/quan-ly/nguoi-dung",
   INSTRUCTOR_MANAGE: "/quan-ly/giang-vien",
+  QUALITY_COURSE_REVIEW: "/quan-ly/danh-gia-chat-luong-khoa-hoc",
 
-  home: (role: Role) => (role === "admin" ? "/quan-ly/tong-quan" : "/"),
+  home: (role: Role) =>
+    role === "admin"
+      ? "/quan-ly/tong-quan"
+      : role === "quality_review"
+      ? "/quan-ly/danh-gia-chat-luong-khoa-hoc"
+      : "/",
 
   detail_course: (slug?: string) => `/khoa-hoc/${slug ? slug : ":slug"}`,
 

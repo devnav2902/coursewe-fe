@@ -2,6 +2,7 @@ import _ from "lodash";
 import React from "react";
 import CheckoutLayout from "../layouts/checkout.layout";
 import OverviewLayout from "../layouts/instructor-view.layout";
+import QualityReviewLayout from "../layouts/quality-review.layout";
 import { CheckVideoProvider } from "../pages/draft/hooks/leaning.hooks";
 import CheckVideoPage from "../pages/draft/pages/learning.page";
 import { LearningProvider } from "../pages/learning/hooks/leaning.hooks";
@@ -83,6 +84,9 @@ const SignupPage = React.lazy(() => import("../pages/signup/page/signup.page"));
 const QualityReviewPage = React.lazy(
   () => import("../pages/quality-review/pages/quality-review.page")
 );
+const QualityCourseReviewPage = React.lazy(
+  () => import("../pages/quality-review/pages/quality-course-review.page")
+);
 
 export type Route = {
   exact?: boolean;
@@ -96,7 +100,7 @@ export type Route = {
 export type Routes = Route[];
 
 interface RoleAndRoutes {
-  role: "user" | "admin";
+  role: "user" | "admin" | "quality_review";
   routes: Routes;
 }
 
@@ -127,15 +131,6 @@ const commonRoutes: Routes = [
     component: <LandingPageDraft />,
   },
   {
-    path: ROUTES.OVERVIEW,
-    component: (
-      <InstructorView>
-        <OverviewPage />
-      </InstructorView>
-    ),
-    private: true,
-  },
-  {
     path: ROUTES.instructor_bio(),
     component: (
       <BasicLayout>
@@ -157,6 +152,15 @@ export const adminRoutes: RoleAndRoutes = {
   role: "admin",
   routes: [
     ...commonRoutes,
+    {
+      path: ROUTES.OVERVIEW,
+      component: (
+        <InstructorView>
+          <OverviewPage />
+        </InstructorView>
+      ),
+      private: true,
+    },
     {
       path: ROUTES.ADMIN_REVIEW,
       component: (
@@ -186,10 +190,43 @@ export const adminRoutes: RoleAndRoutes = {
   ],
 };
 
+export const qualityReviewRoutes: RoleAndRoutes = {
+  role: "quality_review",
+  routes: [
+    ...commonRoutes,
+    {
+      path: ROUTES.QUALITY_COURSE_REVIEW,
+      component: (
+        <QualityReviewLayout>
+          <QualityCourseReviewPage />
+        </QualityReviewLayout>
+      ),
+      private: true,
+    },
+    {
+      path: "*",
+      component: (
+        <QualityReviewLayout>
+          <NotFound />
+        </QualityReviewLayout>
+      ),
+    },
+  ],
+};
+
 export const userRoutes: RoleAndRoutes = {
   role: "user",
   routes: [
     ...commonRoutes,
+    {
+      path: ROUTES.OVERVIEW,
+      component: (
+        <InstructorView>
+          <OverviewPage />
+        </InstructorView>
+      ),
+      private: true,
+    },
     {
       path: ROUTES.home("user"),
       component: (
@@ -377,7 +414,7 @@ export const userRoutes: RoleAndRoutes = {
 };
 
 const allRoutes: Routes = _.uniqBy(
-  [...userRoutes.routes, ...adminRoutes.routes],
+  [...userRoutes.routes, ...adminRoutes.routes, ...qualityReviewRoutes.routes],
   "path"
 );
 
