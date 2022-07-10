@@ -1,15 +1,21 @@
-import { Pagination, Row } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Button, Col, Input, Pagination, Row, Select } from "antd";
+import CourseApi, { CoursesOfInstructorResponse } from "api/course.api";
+import Loading from "components/Loading/Loading.component";
 import { FC, useEffect, useState } from "react";
-import { BiSearch } from "react-icons/bi";
-import { FiClock } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import CourseApi, {
-  CoursesOfInstructorResponse,
-} from "../../../api/course.api";
-import Loading from "../../../components/Loading/Loading.component";
-import { ROUTES } from "../../../utils/constants";
-import { linkThumbnail } from "../../../utils/functions";
+import styled from "styled-components";
+import { ROUTES } from "utils/constants";
+import Course from "../components/Course.component";
 import { StyledWrapper } from "../styles/instructor-courses.styles";
+
+const StyledInput = styled(Input)`
+  .ant-input,
+  .ant-input-group > span {
+    height: auto;
+    border-color: #d9d9d9;
+  }
+`;
 
 const InstructorCoursesPage: FC = () => {
   const [coursesData, setCoursesData] = useState<{
@@ -70,86 +76,35 @@ const InstructorCoursesPage: FC = () => {
         <div className="menu-courses">
           <h2>Khóa học của bạn</h2>
 
-          <div className="menu-courses-wrapper">
-            <div className="search">
-              <input type="text" placeholder="Tìm khóa học" />
-              <div className="icon d-flex align-items-center justify-content-center cursor-pointer">
-                <BiSearch />
-              </div>
+          <Row align="middle" className="mb-3">
+            <div className="mr-1">
+              <StyledInput
+                addonAfter={<SearchOutlined />}
+                placeholder="Tìm kiếm khóa học..."
+              />
             </div>
 
-            <select name="" id="">
-              <option value="">Mới nhất</option>
-              <option value="">A-Z</option>
-            </select>
+            <Select placeholder="Sắp xếp theo">
+              <Select.Option>Mới nhất</Select.Option>
+              <Select.Option>A-Z</Select.Option>
+            </Select>
 
-            <Link
-              to={ROUTES.CREATE_COURSE}
-              className="h-100 btn btn-color-default ml-auto"
-            >
-              Tạo khóa học mới
-            </Link>
+            <Button className="ml-auto" type="primary">
+              <Link to={ROUTES.CREATE_COURSE}>Tạo khóa học mới</Link>
+            </Button>
+          </Row>
+
+          <div>
+            <Row gutter={[20, 20]}>
+              {coursesData.courses?.data.map((course) => {
+                return (
+                  <Col key={course.id} span={8} sm={24} md={8}>
+                    <Course course={course} />
+                  </Col>
+                );
+              })}
+            </Row>
           </div>
-
-          <ul>
-            {coursesData.courses?.data.map((course) => {
-              return (
-                <li key={course.id}>
-                  <div className="img-courses">
-                    <img
-                      style={{ objectFit: "cover" }}
-                      alt={course.title}
-                      src={
-                        course.thumbnail
-                          ? linkThumbnail(course.thumbnail)
-                          : "https://s.udemycdn.com/course/200_H/placeholder.jpg"
-                      }
-                    />
-                  </div>
-                  <div
-                    className={
-                      !course.submit_for_review ? "info info-hover" : "info"
-                    }
-                  >
-                    <h5>{course.title}</h5>
-                    <time>{course.updated_at}</time>
-                    <div className="status">
-                      {course.isPublished ? (
-                        <div>
-                          <strong className="mr-1">Công khai</strong>
-                          <span>Bản nháp</span>
-                        </div>
-                      ) : (
-                        <div>
-                          <span className="mr-1">Công khai</span>
-                          <strong>Bản nháp</strong>
-                        </div>
-                      )}
-                    </div>
-                    {!course.submit_for_review && (
-                      <Link
-                        className="view"
-                        to={ROUTES.course_basics(course.id)}
-                      >
-                        Quản lý khóa học
-                      </Link>
-                    )}
-                  </div>
-                  {!!course.submit_for_review && (
-                    <div className="in-review">
-                      <div className="in-review__content">
-                        <div className="in-review-top d-flex align-items-center">
-                          <FiClock />
-                          <span className="ml-1">Đang được xem xét</span>
-                        </div>
-                        <span>Ngày yêu cầu xét duyệt: {course.updated_at}</span>
-                      </div>
-                    </div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
 
           <Row justify="end">
             <Pagination
