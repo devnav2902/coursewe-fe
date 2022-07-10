@@ -14,10 +14,11 @@ interface CustomCourse {
   price: Price;
 }
 
-interface ReviewCourseItem extends Course, CustomCourse {
+export interface ReviewCourseItem extends Course, CustomCourse {
   categories: Category[];
   rating_quality: RatingQualityType[];
   rating_quality_avg_rating: null | string;
+  ratings: { rating: number; votes: number }[];
 }
 
 export interface CoursesListResponse {
