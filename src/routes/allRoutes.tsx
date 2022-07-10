@@ -1,4 +1,6 @@
+import AdminLayout from "layouts/admin-view.layout";
 import _ from "lodash";
+import InstructorRevenuePage from "pages/instructor-revenue/pages/instructor-revenue.page";
 import React from "react";
 import CheckoutLayout from "../layouts/checkout.layout";
 import OverviewLayout from "../layouts/instructor-view.layout";
@@ -87,6 +89,9 @@ const QualityReviewPage = React.lazy(
 const QualityCourseReviewPage = React.lazy(
   () => import("../pages/quality-review/pages/quality-course-review.page")
 );
+const ReviewFilterPage = React.lazy(
+  () => import("../pages/review-filter/pages/review-filter.page")
+);
 
 export type Route = {
   exact?: boolean;
@@ -155,36 +160,36 @@ export const adminRoutes: RoleAndRoutes = {
     {
       path: ROUTES.OVERVIEW,
       component: (
-        <InstructorView>
+        <AdminLayout>
           <OverviewPage />
-        </InstructorView>
+        </AdminLayout>
       ),
       private: true,
     },
     {
       path: ROUTES.ADMIN_REVIEW,
       component: (
-        <InstructorView>
+        <AdminLayout>
           <AdminReviewPage />
-        </InstructorView>
+        </AdminLayout>
       ),
       private: true,
     },
     {
       path: ROUTES.QUALITY_REVIEW,
       component: (
-        <InstructorView>
+        <AdminLayout>
           <QualityReviewPage />
-        </InstructorView>
+        </AdminLayout>
       ),
       private: true,
     },
     {
       path: "*",
       component: (
-        <OverviewLayout>
+        <AdminLayout>
           <NotFound />
-        </OverviewLayout>
+        </AdminLayout>
       ),
     },
   ],
@@ -400,6 +405,22 @@ export const userRoutes: RoleAndRoutes = {
         <BasicLayout>
           <CartPage />
         </BasicLayout>
+      ),
+    },
+    {
+      path: ROUTES.REVIEW_FILTER,
+      component: (
+        <InstructorView>
+          <ReviewFilterPage />
+        </InstructorView>
+      ),
+    },
+    {
+      path: ROUTES.INSTRUCTOR_REVENUE,
+      component: (
+        <InstructorView>
+          <InstructorRevenuePage />
+        </InstructorView>
       ),
     },
     {

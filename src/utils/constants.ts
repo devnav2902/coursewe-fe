@@ -39,6 +39,8 @@ const ROUTES = {
   USER_MANAGE: "/quan-ly/nguoi-dung",
   INSTRUCTOR_MANAGE: "/quan-ly/giang-vien",
   QUALITY_COURSE_REVIEW: "/quan-ly/danh-gia-chat-luong-khoa-hoc",
+  REVIEW_FILTER: "/quan-ly/danh-gia-tu-hoc-vien",
+  INSTRUCTOR_REVENUE: "/quan-ly/doanh-thu-khoa-hoc",
 
   home: (role: Role) =>
     role === "admin"

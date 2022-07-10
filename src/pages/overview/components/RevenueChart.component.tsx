@@ -116,6 +116,7 @@ const RevenueChart = () => {
           if (context.dataset.data.length >= 12) return null;
           return value === 0 ? "" : value.toLocaleString("vi-VN");
         },
+        display: false,
       },
     },
     scales: {
