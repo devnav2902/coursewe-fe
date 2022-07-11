@@ -4,9 +4,11 @@ import CheckoutLayout from "../layouts/checkout.layout";
 import OverviewLayout from "../layouts/instructor-view.layout";
 import { CheckVideoProvider } from "../pages/draft/hooks/leaning.hooks";
 import CheckVideoPage from "../pages/draft/pages/learning.page";
+
 import { LearningProvider } from "../pages/learning/hooks/leaning.hooks";
 
 import SignoutPage from "../pages/signout/pages/signout.page";
+
 import { ROUTES } from "../utils/constants";
 
 const BasicLayout = React.lazy(() => import("../layouts/basic.layout"));
@@ -82,6 +84,12 @@ const SigninPage = React.lazy(() => import("../pages/signin/page/signin.page"));
 const SignupPage = React.lazy(() => import("../pages/signup/page/signup.page"));
 const QualityReviewPage = React.lazy(
   () => import("../pages/quality-review/pages/quality-review.page")
+);
+const InstructorManagementPage = React.lazy(
+  () => import("../pages/instructor-management/pages/quality-review.page")
+);
+const UserManagementPage = React.lazy(
+  () => import("../pages/user-management/pages/quality-review.page")
 );
 
 export type Route = {
@@ -162,6 +170,24 @@ export const adminRoutes: RoleAndRoutes = {
       component: (
         <InstructorView>
           <AdminReviewPage />
+        </InstructorView>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.Instructor_Management,
+      component: (
+        <InstructorView>
+          <InstructorManagementPage />
+        </InstructorView>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.User_Management,
+      component: (
+        <InstructorView>
+          <UserManagementPage />
         </InstructorView>
       ),
       private: true,

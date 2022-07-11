@@ -124,8 +124,12 @@ const OverviewLayout: FC = ({ children }) => {
                     </span>
                   }
                 >
-                  <Menu.Item key="4">Học viên</Menu.Item>
-                  <Menu.Item key="5">Giảng viên</Menu.Item>
+                  <Menu.Item key="4">
+                    <Link to={ROUTES.User_Management}>Học viên</Link>
+                  </Menu.Item>
+                  <Menu.Item key="5">
+                    <Link to={ROUTES.Instructor_Management}>Giảng viên</Link>
+                  </Menu.Item>
                   <Menu.Item key="6">
                     <Link to={ROUTES.QUALITY_REVIEW}>Đội ngũ chuyên môn</Link>
                   </Menu.Item>

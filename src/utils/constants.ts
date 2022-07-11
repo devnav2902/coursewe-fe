@@ -36,6 +36,8 @@ const ROUTES = {
   CHECKOUT: "/cart/checkout",
   NOT_FOUND: "/404",
   QUALITY_REVIEW: "/quan-ly/doi-ngu-chuyen-mon",
+  Instructor_Management: "/quan-ly/giang-vien",
+  User_Management: "/quan-ly/hoc-vien",
   USER_MANAGE: "/quan-ly/nguoi-dung",
   INSTRUCTOR_MANAGE: "/quan-ly/giang-vien",
 
