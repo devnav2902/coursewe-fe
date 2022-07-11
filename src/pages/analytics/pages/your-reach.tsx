@@ -162,8 +162,8 @@ const YourReachPage = () => {
                 <div>
                   {locationData.length > 0 ? (
                     <div>
-                      <CommentOutlined className="mr-1" /> {totalLanguages} ngôn
-                      ngữ
+                      <CommentOutlined className="mr-1" /> {locationData.length}{" "}
+                      ngôn ngữ
                     </div>
                   ) : (
                     "Ngôn ngữ"
