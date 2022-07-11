@@ -4,14 +4,11 @@ import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { AiTwotoneCalendar } from "react-icons/ai";
 import { ImFileExcel } from "react-icons/im";
-import PerformanceApi, {
-  EnrollmentArray,
-  Params,
-} from "../../../api/performance.api";
+import PerformanceApi, { EnrollmentArray, Params } from "api/performance.api";
 import { Period } from "./RevenueChart.component";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { ChartOptions } from "chart.js";
-import { openNotification } from "../../../utils/functions";
+import { openNotification } from "utils/functions";
 
 const { Option } = Select;
 
@@ -73,7 +70,7 @@ const StudentChart = () => {
     datasets: {
       line: {
         pointStyle: "circle",
-        tension: 0,
+        tension: 0.3,
         pointHoverRadius: 6,
         pointHoverBorderWidth: 6,
         pointRadius: 3,
@@ -110,10 +107,11 @@ const StudentChart = () => {
         font: { size: 16, weight: "bold" },
         align: "top",
         anchor: "end",
-        formatter: (value, context) => {
-          if (context.dataset.data.length >= 30) return null;
-          return value === 0 ? "" : value;
-        },
+        display: false,
+        // formatter: (value, context) => {
+        //   if (context.dataset.data.length >= 30) return null;
+        //   return value === 0 ? "" : value;
+        // },
       },
     },
     scales: {

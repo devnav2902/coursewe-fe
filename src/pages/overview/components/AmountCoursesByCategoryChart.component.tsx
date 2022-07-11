@@ -9,8 +9,8 @@ import { ImFileExcel } from "react-icons/im";
 import PerformanceApi, {
   AmountCoursesByCategoryArray,
   Params,
-} from "../../../api/performance.api";
-import { openNotification } from "../../../utils/functions";
+} from "api/performance.api";
+import { openNotification } from "utils/functions";
 
 const { Option } = Select;
 
@@ -61,7 +61,7 @@ const AmountCoursesByCategoryChart = () => {
       line: {
         backgroundColor: "transparent",
         pointStyle: "circle",
-        tension: 0,
+        tension: 0.3,
         pointHoverRadius: 6,
         pointHoverBorderWidth: 6,
         pointRadius: 3,
@@ -108,6 +108,7 @@ const AmountCoursesByCategoryChart = () => {
           if (context.dataset.type === "bar") return null;
           return value === 0 ? null : value.toLocaleString("vi-VN");
         },
+        display: false,
       },
     },
     scales: {

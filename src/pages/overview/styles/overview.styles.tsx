@@ -4,28 +4,16 @@ export const StyledOverviewWrapper = styled.div`
   .overview-title {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 2rem;
-    h2 {
-      font-family: "Times New Roman", Times, serif;
-      font-size: 3.5rem;
-      font-weight: 800;
-      margin-bottom: 0;
-    }
   }
   .date-range {
     padding: 2rem 2rem 0;
   }
   .metrics-content {
     .overview-body {
-      border-color: #ddd;
       margin-bottom: 21px;
       background-color: #fff;
-      border: 1px solid rgb(209, 198, 198);
-
-      margin-top: 30px;
-      &:hover {
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-      }
+      border-radius: 16px;
+      box-shadow: 0 0 2px 0 #ddd6d6, 0 12px 24px -4px #ebe5e5;
     }
 
     .nav-tabs {

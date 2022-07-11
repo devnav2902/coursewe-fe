@@ -3,10 +3,9 @@ import { ChartOptions } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { Chart, Line } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
 import { AiTwotoneCalendar } from "react-icons/ai";
-import { ImFileExcel } from "react-icons/im";
-import PerformanceApi, { RatingArray } from "../../../api/performance.api";
+import PerformanceApi, { RatingArray } from "api/performance.api";
 import { Period } from "./RevenueChart.component";
 
 const { Option } = Select;
@@ -28,7 +27,6 @@ const RatingChart = () => {
     if (selectedPeriod === 12) {
       PerformanceApi.getRating({ LTM: true }).then(({ data }) => {
         const { chartRatingData } = data;
-        console.log(chartRatingData);
 
         const dateRange = chartRatingData.map((item) =>
           moment(item.date).format("MM-YYYY")

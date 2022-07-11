@@ -59,7 +59,7 @@ const YourReachPage = () => {
       });
 
     return arrayLanguagesData;
-  }, [language.data]);
+  }, [language.data, totalLanguages]);
 
   const totalStudents = useMemo(
     () => location.data.reduce((total, current) => (total += current.total), 0),
@@ -97,7 +97,7 @@ const YourReachPage = () => {
       });
 
     return arrayCountryData;
-  }, [location.data]);
+  }, [location.data, totalStudents]);
 
   return (
     <div>

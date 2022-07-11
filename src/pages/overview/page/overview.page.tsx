@@ -1,8 +1,8 @@
 import { Tabs } from "antd";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { useEffect, useState } from "react";
-import OverviewApi from "../../../api/overview.api";
-import { useTypedSelector } from "../../../hooks/redux.hooks";
+import OverviewApi from "api/overview.api";
+import { useTypedSelector } from "hooks/redux.hooks";
 import RatingChart from "../components/RatingChart.component";
 import AmountCoursesByCategoryChart from "../components/AmountCoursesByCategoryChart.component";
 import RevenueChart from "../components/RevenueChart.component";
@@ -48,32 +48,14 @@ const OverviewPage = () => {
         <div className="metrics-content">
           <div className="overview-body">
             <div className="nav-overview-container">
-              <ul className="nav-tabs">
-                {profile?.role.name === "admin" ? (
-                  <>
-                    <li className="">
-                      <div className="instructor-analytics">
-                        <div>Tổng số giảng viên</div>
-                        <div className="lg-text">{allInstructors}</div>
-                      </div>
-                    </li>
-                  </>
-                ) : (
-                  <li className="">
-                    <div className="instructor-analytics">
-                      <div>Khóa học của bạn</div>
-                      <div className="lg-text">{allCoursesByInstructor}</div>
-                    </div>
-                  </li>
-                )}
-              </ul>
-
               <Tabs defaultActiveKey="1">
                 {profile?.role.name === "admin" ? (
                   <TabPane
                     tab={
                       <div className="instructor-analytics">
-                        <div>Tổng số khóa học</div>
+                        <div>
+                          Tổng số khóa học ({allInstructors} giảng viên)
+                        </div>
                         <div className="lg-text">{allCourses}</div>
                         <div>{allCoursesInMonth} khóa học tháng này</div>
                       </div>
@@ -86,7 +68,9 @@ const OverviewPage = () => {
                   <TabPane
                     tab={
                       <div className="instructor-analytics">
-                        <div>Tổng doanh thu</div>
+                        <div>
+                          Tổng doanh thu ({allCoursesByInstructor} khóa học)
+                        </div>
                         <div className="lg-text">{totalRevenue} VNĐ</div>
                         <div>{totalRevenueInMonth} VNĐ tháng này</div>
                       </div>

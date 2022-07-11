@@ -75,7 +75,7 @@ const RevenueChart = () => {
     datasets: {
       line: {
         pointStyle: "circle",
-        tension: 0,
+        tension: 0.5,
         pointHoverRadius: 6,
         pointHoverBorderWidth: 6,
         pointRadius: 3,
