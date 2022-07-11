@@ -6,7 +6,7 @@ import {
 import { Breadcrumb, Dropdown, Layout, Menu } from "antd";
 import SubMenu from "antd/lib/menu/SubMenu";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Notification from "../components/TopNav/Notification.component";
 import { UserImage } from "../components/TopNav/TopNav.component";
@@ -64,8 +64,14 @@ const StyledLogo = styled.div`
   padding: 10px;
 `;
 
-const AdminLayout: FC = ({ children }) => {
+interface Props {
+  breadcrumb?: (string | JSX.Element)[];
+}
+
+const AdminLayout: FC<Props> = ({ children, breadcrumb }) => {
   const { Content, Sider } = Layout;
+
+  const location = useLocation();
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -90,15 +96,19 @@ const AdminLayout: FC = ({ children }) => {
               <span>Coursewe</span>
             </Link>
           </StyledLogo>
-          <Menu theme="dark" mode="inline">
-            <Menu.Item key="1">
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={[location.pathname]}
+          >
+            <Menu.Item key={ROUTES.OVERVIEW}>
               <Link to={ROUTES.OVERVIEW}>
                 <BarChartOutlined style={{ fontSize: "22px" }} />
                 <span>Tổng quan</span>
               </Link>
             </Menu.Item>
 
-            <Menu.Item key="3">
+            <Menu.Item key={ROUTES.ADMIN_REVIEW}>
               <Link to={ROUTES.ADMIN_REVIEW}>
                 <VideoCameraOutlined style={{ fontSize: "22px" }} />
                 <span>Xét duyệt khóa học</span>
@@ -116,7 +126,7 @@ const AdminLayout: FC = ({ children }) => {
             >
               <Menu.Item key="4">Học viên</Menu.Item>
               <Menu.Item key="5">Giảng viên</Menu.Item>
-              <Menu.Item key="6">
+              <Menu.Item key={ROUTES.QUALITY_REVIEW}>
                 <Link to={ROUTES.QUALITY_REVIEW}>Đội ngũ chuyên môn</Link>
               </Menu.Item>
             </SubMenu>
@@ -126,10 +136,13 @@ const AdminLayout: FC = ({ children }) => {
           <div>
             <StyledNavTop className="dashboard-nav">
               <div className="nav-content">
-                <Breadcrumb style={{ margin: "16px 0" }}>
-                  <Breadcrumb.Item>User</Breadcrumb.Item>
-                  <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                </Breadcrumb>
+                {breadcrumb && (
+                  <Breadcrumb style={{ margin: "16px 0" }}>
+                    {breadcrumb.map((item) => (
+                      <Breadcrumb.Item>{item}</Breadcrumb.Item>
+                    ))}
+                  </Breadcrumb>
+                )}
 
                 <div className="user">
                   <div className="notification">

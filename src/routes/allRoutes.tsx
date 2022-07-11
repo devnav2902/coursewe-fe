@@ -165,7 +165,9 @@ export const adminRoutes: RoleAndRoutes = {
     {
       path: ROUTES.OVERVIEW,
       component: (
-        <AdminLayout>
+        <AdminLayout
+          breadcrumb={["Quản lý", <Link to={ROUTES.OVERVIEW}>Tổng quan</Link>]}
+        >
           <OverviewPage />
         </AdminLayout>
       ),
@@ -174,7 +176,12 @@ export const adminRoutes: RoleAndRoutes = {
     {
       path: ROUTES.ADMIN_REVIEW,
       component: (
-        <AdminLayout>
+        <AdminLayout
+          breadcrumb={[
+            "Quản lý",
+            <Link to={ROUTES.ADMIN_REVIEW}>Khóa học cần xét duyệt</Link>,
+          ]}
+        >
           <AdminReviewPage />
         </AdminLayout>
       ),
@@ -183,7 +190,12 @@ export const adminRoutes: RoleAndRoutes = {
     {
       path: ROUTES.QUALITY_REVIEW,
       component: (
-        <AdminLayout>
+        <AdminLayout
+          breadcrumb={[
+            "Quản lý",
+            <Link to={ROUTES.QUALITY_REVIEW}>Đội ngũ chuyên môn</Link>,
+          ]}
+        >
           <QualityReviewPage />
         </AdminLayout>
       ),
@@ -238,7 +250,9 @@ export const userRoutes: RoleAndRoutes = {
     {
       path: ROUTES.OVERVIEW,
       component: (
-        <InstructorView>
+        <InstructorView
+          breadcrumb={["Quản lý", <Link to={ROUTES.OVERVIEW}>Tổng quan</Link>]}
+        >
           <OverviewPage />
         </InstructorView>
       ),
@@ -361,7 +375,12 @@ export const userRoutes: RoleAndRoutes = {
     {
       path: ROUTES.INSTRUCTOR_COURSES,
       component: (
-        <InstructorView>
+        <InstructorView
+          breadcrumb={[
+            "Quản lý",
+            <Link to={ROUTES.INSTRUCTOR_COURSES}>Khóa học</Link>,
+          ]}
+        >
           <InstructorCoursesPage />
         </InstructorView>
       ),
@@ -422,7 +441,12 @@ export const userRoutes: RoleAndRoutes = {
     {
       path: ROUTES.REVIEW_FILTER,
       component: (
-        <InstructorView>
+        <InstructorView
+          breadcrumb={[
+            "Quản lý",
+            <Link to={ROUTES.REVIEW_FILTER}>Đánh giá từ học viên</Link>,
+          ]}
+        >
           <ReviewFilterPage />
         </InstructorView>
       ),
@@ -430,7 +454,12 @@ export const userRoutes: RoleAndRoutes = {
     {
       path: ROUTES.INSTRUCTOR_REVENUE,
       component: (
-        <InstructorView>
+        <InstructorView
+          breadcrumb={[
+            "Quản lý",
+            <Link to={ROUTES.INSTRUCTOR_REVENUE}>Doanh thu khóa học</Link>,
+          ]}
+        >
           <InstructorRevenuePage />
         </InstructorView>
       ),
@@ -438,7 +467,12 @@ export const userRoutes: RoleAndRoutes = {
     {
       path: ROUTES.YOUR_REACH,
       component: (
-        <InstructorView>
+        <InstructorView
+          breadcrumb={[
+            "Giảng viên",
+            <Link to={ROUTES.YOUR_REACH}>Phạm vi tiếp cận</Link>,
+          ]}
+        >
           <YourReachPage />
         </InstructorView>
       ),

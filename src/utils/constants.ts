@@ -32,7 +32,7 @@ const ROUTES = {
   USER_BIO: "/user/bio",
   PROFILE: "/user/profile",
   MY_LEARNING: "/hoc-tap/danh-sach-khoa-hoc",
-  ADMIN_REVIEW: "/admin/submission-courses-list",
+  ADMIN_REVIEW: "/quan-ly/khoa-hoc-can-xet-duyet",
   CHECKOUT: "/cart/checkout",
   NOT_FOUND: "/404",
   QUALITY_REVIEW: "/quan-ly/doi-ngu-chuyen-mon",

@@ -4,7 +4,7 @@ import Notification from "components/TopNav/Notification.component";
 import { UserImage } from "components/TopNav/TopNav.component";
 import { useTypedSelector } from "hooks/redux.hooks";
 import { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { ROUTES } from "utils/constants";
 
@@ -78,6 +78,8 @@ interface Props {
 const QualityReviewLayout: FC<Props> = ({ children, breadcrumb }) => {
   const { profile } = useTypedSelector((state) => state.user);
 
+  const location = useLocation();
+
   return (
     <StyledLayoutWrapper>
       <Layout>
@@ -91,8 +93,7 @@ const QualityReviewLayout: FC<Props> = ({ children, breadcrumb }) => {
         >
           <Menu
             mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
+            defaultSelectedKeys={[location.pathname]}
             style={{
               height: "100%",
               borderRight: 0,
@@ -102,13 +103,13 @@ const QualityReviewLayout: FC<Props> = ({ children, breadcrumb }) => {
           >
             <Menu.Item
               style={{ marginTop: "50px", marginBottom: "50px" }}
-              key="1"
+              key={ROUTES.QUALITY_COURSE_REVIEW}
             >
               <Link to={ROUTES.QUALITY_COURSE_REVIEW}>
                 <FileProtectOutlined style={{ fontSize: 32 }} />
               </Link>
             </Menu.Item>
-            <Menu.Item key="2">
+            <Menu.Item key={"nothing"}>
               <Link to={ROUTES.QUALITY_COURSE_REVIEW}>
                 <PieChartOutlined style={{ fontSize: 32 }} />
               </Link>

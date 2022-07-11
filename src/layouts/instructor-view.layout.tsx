@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Breadcrumb, Dropdown, Layout, Menu } from "antd";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Notification from "components/TopNav/Notification.component";
 import { UserImage } from "components/TopNav/TopNav.component";
@@ -74,9 +74,14 @@ const StyledMain = styled.main`
   min-height: 100vh;
 `;
 
-const OverviewLayout: FC = ({ children }) => {
+interface Props {
+  breadcrumb?: (string | JSX.Element)[];
+}
+
+const OverviewLayout: FC<Props> = ({ children, breadcrumb }) => {
   const { Content, Sider } = Layout;
 
+  const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
 
   const { profile } = useTypedSelector((state) => state.user);
@@ -99,36 +104,40 @@ const OverviewLayout: FC = ({ children }) => {
             <span>Coursewe</span>
           </Link>
         </StyledLogo>
-        <Menu theme="dark" mode="inline">
-          <Menu.Item key="1">
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={[location.pathname]}
+        >
+          <Menu.Item key={ROUTES.OVERVIEW}>
             <Link to={ROUTES.OVERVIEW}>
               <BarChartOutlined style={{ fontSize: "22px" }} />
               <span>Tổng quan</span>
             </Link>
           </Menu.Item>
 
-          <Menu.Item key="2">
+          <Menu.Item key={ROUTES.INSTRUCTOR_COURSES}>
             <Link to={ROUTES.INSTRUCTOR_COURSES}>
               <FundProjectionScreenOutlined style={{ fontSize: "22px" }} />
               <span>Quản lý khóa học</span>
             </Link>
           </Menu.Item>
 
-          <Menu.Item key="3">
+          <Menu.Item key={ROUTES.INSTRUCTOR_REVENUE}>
             <Link to={ROUTES.INSTRUCTOR_REVENUE}>
               <DollarCircleOutlined style={{ fontSize: "22px" }} />
               <span>Doanh thu khóa học</span>
             </Link>
           </Menu.Item>
 
-          <Menu.Item key="4">
+          <Menu.Item key={ROUTES.REVIEW_FILTER}>
             <Link to={ROUTES.REVIEW_FILTER}>
               <CommentOutlined style={{ fontSize: "22px" }} />
               <span>Học viên đánh giá</span>
             </Link>
           </Menu.Item>
 
-          <Menu.Item key="5">
+          <Menu.Item key={ROUTES.YOUR_REACH}>
             <Link to={ROUTES.YOUR_REACH}>
               <FundOutlined style={{ fontSize: "22px" }} />
               <span>Phạm vi tiếp cận</span>
@@ -140,10 +149,13 @@ const OverviewLayout: FC = ({ children }) => {
         <div className="mb-2">
           <StyledNavTop className="dashboard-nav">
             <div className="nav-content">
-              <Breadcrumb style={{ margin: "16px 0" }}>
-                <Breadcrumb.Item>User</Breadcrumb.Item>
-                <Breadcrumb.Item>Bill</Breadcrumb.Item>
-              </Breadcrumb>
+              {breadcrumb && (
+                <Breadcrumb style={{ margin: "16px 0" }}>
+                  {breadcrumb.map((item) => (
+                    <Breadcrumb.Item>{item}</Breadcrumb.Item>
+                  ))}
+                </Breadcrumb>
+              )}
 
               <div className="user">
                 <div className="notification">
