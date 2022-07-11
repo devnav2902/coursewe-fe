@@ -141,7 +141,7 @@ const YourReachPage = () => {
                             {i + 1}. {item.name}
                           </div>
                           <div>
-                            {item.percent}%{" "}
+                            {roundsTheNumber(item.percent, 1)}%{" "}
                             <span style={{ color: "#978585" }}>
                               ({item.value})
                             </span>
@@ -182,7 +182,7 @@ const YourReachPage = () => {
                             {i + 1}. {item.language}
                           </div>
                           <div>
-                            {item.percent}%{" "}
+                            {roundsTheNumber(item.percent, 1)}%{" "}
                             <span style={{ color: "#978585" }}>
                               ({item.value})
                             </span>
