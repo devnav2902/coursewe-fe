@@ -71,7 +71,11 @@ const StyledNavTop = styled.nav`
 
 const { Content, Sider } = Layout;
 
-const QualityReviewLayout: FC = ({ children }) => {
+interface Props {
+  breadcrumb?: (string | JSX.Element)[];
+}
+
+const QualityReviewLayout: FC<Props> = ({ children, breadcrumb }) => {
   const { profile } = useTypedSelector((state) => state.user);
 
   return (
@@ -116,10 +120,13 @@ const QualityReviewLayout: FC = ({ children }) => {
           <div>
             <StyledNavTop className="dashboard-nav">
               <div className="nav-content">
-                <Breadcrumb style={{ margin: "16px 0" }}>
-                  <Breadcrumb.Item>User</Breadcrumb.Item>
-                  <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                </Breadcrumb>
+                {breadcrumb && (
+                  <Breadcrumb style={{ margin: "16px 0" }}>
+                    {breadcrumb.map((item) => (
+                      <Breadcrumb.Item>{item}</Breadcrumb.Item>
+                    ))}
+                  </Breadcrumb>
+                )}
 
                 <div className="user">
                   <div className="notification">

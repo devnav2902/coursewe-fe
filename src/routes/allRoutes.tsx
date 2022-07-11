@@ -1,6 +1,7 @@
 import AdminLayout from "layouts/admin-view.layout";
 import _ from "lodash";
 import React from "react";
+import { Link } from "react-router-dom";
 import CheckoutLayout from "../layouts/checkout.layout";
 import QualityReviewLayout from "../layouts/quality-review.layout";
 import { CheckVideoProvider } from "../pages/draft/hooks/leaning.hooks";
@@ -206,7 +207,14 @@ export const qualityReviewRoutes: RoleAndRoutes = {
     {
       path: ROUTES.QUALITY_COURSE_REVIEW,
       component: (
-        <QualityReviewLayout>
+        <QualityReviewLayout
+          breadcrumb={[
+            "Quản lý",
+            <Link to={ROUTES.QUALITY_COURSE_REVIEW}>
+              Kiểm duyệt chất lượng khóa học
+            </Link>,
+          ]}
+        >
           <QualityCourseReviewPage />
         </QualityReviewLayout>
       ),
