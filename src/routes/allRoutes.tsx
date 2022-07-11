@@ -1,9 +1,7 @@
 import AdminLayout from "layouts/admin-view.layout";
 import _ from "lodash";
-import InstructorRevenuePage from "pages/instructor-revenue/pages/instructor-revenue.page";
 import React from "react";
 import CheckoutLayout from "../layouts/checkout.layout";
-import OverviewLayout from "../layouts/instructor-view.layout";
 import QualityReviewLayout from "../layouts/quality-review.layout";
 import { CheckVideoProvider } from "../pages/draft/hooks/leaning.hooks";
 import CheckVideoPage from "../pages/draft/pages/learning.page";
@@ -91,6 +89,12 @@ const QualityCourseReviewPage = React.lazy(
 );
 const ReviewFilterPage = React.lazy(
   () => import("../pages/review-filter/pages/review-filter.page")
+);
+const YourReachPage = React.lazy(
+  () => import("pages/analytics/pages/your-reach")
+);
+const InstructorRevenuePage = React.lazy(
+  () => import("pages/instructor-revenue/pages/instructor-revenue.page")
 );
 
 export type Route = {
@@ -420,6 +424,14 @@ export const userRoutes: RoleAndRoutes = {
       component: (
         <InstructorView>
           <InstructorRevenuePage />
+        </InstructorView>
+      ),
+    },
+    {
+      path: ROUTES.YOUR_REACH,
+      component: (
+        <InstructorView>
+          <YourReachPage />
         </InstructorView>
       ),
     },

@@ -2,6 +2,7 @@ import {
   BarChartOutlined,
   CommentOutlined,
   DollarCircleOutlined,
+  FundOutlined,
   FundProjectionScreenOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Dropdown, Layout, Menu } from "antd";
@@ -124,6 +125,13 @@ const OverviewLayout: FC = ({ children }) => {
             <Link to={ROUTES.REVIEW_FILTER}>
               <CommentOutlined style={{ fontSize: "22px" }} />
               <span>Học viên đánh giá</span>
+            </Link>
+          </Menu.Item>
+
+          <Menu.Item key="5">
+            <Link to={ROUTES.YOUR_REACH}>
+              <FundOutlined style={{ fontSize: "22px" }} />
+              <span>Phạm vi tiếp cận</span>
             </Link>
           </Menu.Item>
         </Menu>

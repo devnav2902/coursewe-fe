@@ -30,7 +30,7 @@ const Course: FC<Props> = ({ course }) => {
       <Card
         cover={
           <img
-            style={{ aspectRatio: "16/9" }}
+            style={{ aspectRatio: "16/9", objectFit: "cover" }}
             alt={course.title}
             src={
               course.thumbnail

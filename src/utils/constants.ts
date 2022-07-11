@@ -41,6 +41,7 @@ const ROUTES = {
   QUALITY_COURSE_REVIEW: "/quan-ly/danh-gia-chat-luong-khoa-hoc",
   REVIEW_FILTER: "/quan-ly/danh-gia-tu-hoc-vien",
   INSTRUCTOR_REVENUE: "/quan-ly/doanh-thu-khoa-hoc",
+  YOUR_REACH: "/giang-vien/pham-vi-tiep-can",
 
   home: (role: Role) =>
     role === "admin"
