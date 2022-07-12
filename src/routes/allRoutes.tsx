@@ -94,7 +94,10 @@ const ReviewFilterPage = React.lazy(
   () => import("../pages/review-filter/pages/review-filter.page")
 );
 const YourReachPage = React.lazy(
-  () => import("pages/analytics/pages/your-reach")
+  () => import("pages/analytics/pages/your-reach.page")
+);
+const AnalyticsAdminPage = React.lazy(
+  () => import("pages/analytics/pages/analytics-admin.page")
 );
 const InstructorRevenuePage = React.lazy(
   () => import("pages/instructor-revenue/pages/instructor-revenue.page")
@@ -233,6 +236,20 @@ export const adminRoutes: RoleAndRoutes = {
           ]}
         >
           <QualityReviewPage />
+        </AdminLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.ANALYTICS_ADMIN,
+      component: (
+        <AdminLayout
+          breadcrumb={[
+            "Quản lý",
+            <Link to={ROUTES.ANALYTICS_ADMIN}>Phạm vi tiếp cận</Link>,
+          ]}
+        >
+          <AnalyticsAdminPage />
         </AdminLayout>
       ),
       private: true,

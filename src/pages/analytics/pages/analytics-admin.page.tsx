@@ -2,10 +2,10 @@ import { CommentOutlined, GlobalOutlined } from "@ant-design/icons";
 import { Card, Col, Divider, Row } from "antd";
 import AnalyticsApi, { LocationAndLanguageResponse } from "api/analytics";
 import { useEffect, useMemo, useState } from "react";
-import WorldMap from "react-svg-worldmap";
+import Chart from "react-google-charts";
 import { roundsTheNumber } from "utils/functions";
 
-const YourReachPage = () => {
+const AnalyticsAdminPage = () => {
   const [location, setLocation] = useState<{
     loaded: boolean;
     data: LocationAndLanguageResponse["locationData"];
@@ -16,7 +16,7 @@ const YourReachPage = () => {
   }>({ loaded: false, data: [] });
 
   useEffect(function getLocationData() {
-    AnalyticsApi.get()
+    AnalyticsApi.getByAdmin()
       .then(({ data }) => {
         setLocation({ data: data.locationData, loaded: true });
         setLanguage({ data: data.languageData, loaded: true });
@@ -67,51 +67,48 @@ const YourReachPage = () => {
   );
 
   const locationData = useMemo(() => {
-    const arrayCountryData: {
-      country: string;
-      value: number;
-      percent: number;
-      name: string;
-      language: string;
-    }[] = [];
+    const arrayCountryData: [
+      { v: string; f: string; percent: number },
+      number
+    ][] = [];
 
     location.data
       .sort((a, b) => b.total - a.total)
       .forEach((item, i) => {
-        arrayCountryData.push({
-          country: item.country_code,
-          name: item.country,
-          language: item.language,
-          value: item.total,
-          percent:
-            i < location.data.length - 1
-              ? parseFloat(
-                  roundsTheNumber((item.total / totalStudents) * 100, 1)
-                )
-              : 100 -
-                arrayCountryData.reduce(
-                  (total, current) => (total += current.percent),
-                  0
-                ),
-        });
+        arrayCountryData.push([
+          {
+            v: item.country_code,
+            f: item.country,
+            percent:
+              i < location.data.length - 1
+                ? parseFloat(
+                    roundsTheNumber((item.total / totalStudents) * 100, 1)
+                  )
+                : 100 -
+                  arrayCountryData.reduce(
+                    (total, current) => (total += current[0].percent),
+                    0
+                  ),
+          },
+          item.total,
+        ]);
       });
 
     return arrayCountryData;
   }, [location.data, totalStudents]);
 
+  const data = [["Country", "Số học viên"], ...locationData];
+
   return (
     <div>
       <h2>Phạm vi tiếp cận</h2>
       <div className="center">
-        <WorldMap
-          color="#4c38ff"
-          title="Số học viên theo từng quốc gia"
-          value-suffix="học viên"
-          size={900}
-          data={locationData}
-          tooltipTextFunction={(value) =>
-            value.countryName + ": " + value.countryValue + " học viên"
-          }
+        <Chart
+          chartType="GeoChart"
+          width="100%"
+          height="600px"
+          options={{ title: "Phạm vi tiếp cận" }}
+          data={data}
         />
       </div>
       <div className="detail">
@@ -138,12 +135,12 @@ const YourReachPage = () => {
                       <div>
                         <Row justify="space-between">
                           <div>
-                            {i + 1}. {item.name}
+                            {i + 1}. {item[0].f}
                           </div>
                           <div>
-                            {roundsTheNumber(item.percent, 1)}%{" "}
+                            {roundsTheNumber(item[0].percent, 1)}%{" "}
                             <span style={{ color: "#978585" }}>
-                              ({item.value})
+                              ({item[1]})
                             </span>
                           </div>
                         </Row>
@@ -202,4 +199,4 @@ const YourReachPage = () => {
   );
 };
 
-export default YourReachPage;
+export default AnalyticsAdminPage;

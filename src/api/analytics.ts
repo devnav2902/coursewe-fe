@@ -14,8 +14,12 @@ export interface LocationAndLanguageResponse {
 }
 
 class Analytics {
-  get = async () => {
+  getByInstructor = async () => {
     return axiosClient.get<LocationAndLanguageResponse>("/students/analytics");
+  };
+
+  getByAdmin = async () => {
+    return axiosClient.get<LocationAndLanguageResponse>("/admin/analytics");
   };
 }
 

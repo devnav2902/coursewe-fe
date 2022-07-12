@@ -1,5 +1,6 @@
 import {
   BarChartOutlined,
+  FundOutlined,
   UsergroupAddOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
@@ -112,6 +113,13 @@ const AdminLayout: FC<Props> = ({ children, breadcrumb }) => {
               <Link to={ROUTES.ADMIN_REVIEW}>
                 <VideoCameraOutlined style={{ fontSize: "22px" }} />
                 <span>Xét duyệt khóa học</span>
+              </Link>
+            </Menu.Item>
+
+            <Menu.Item key={ROUTES.ANALYTICS_ADMIN}>
+              <Link to={ROUTES.ANALYTICS_ADMIN}>
+                <FundOutlined style={{ fontSize: "22px" }} />
+                <span>Phạm vi tiếp cận</span>
               </Link>
             </Menu.Item>
 

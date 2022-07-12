@@ -44,6 +44,7 @@ const ROUTES = {
   REVIEW_FILTER: "/quan-ly/danh-gia-tu-hoc-vien",
   INSTRUCTOR_REVENUE: "/quan-ly/doanh-thu-khoa-hoc",
   YOUR_REACH: "/giang-vien/pham-vi-tiep-can",
+  ANALYTICS_ADMIN: "/quan-ly/pham-vi-tiep-can",
 
   home: (role: Role) =>
     role === "admin"
