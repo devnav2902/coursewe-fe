@@ -124,8 +124,12 @@ const AdminLayout: FC<Props> = ({ children, breadcrumb }) => {
                 </span>
               }
             >
-              <Menu.Item key="4">Học viên</Menu.Item>
-              <Menu.Item key="5">Giảng viên</Menu.Item>
+              <Menu.Item key={ROUTES.STUDENT_MANAGEMENT}>
+                <Link to={ROUTES.STUDENT_MANAGEMENT}>Học viên</Link>
+              </Menu.Item>
+              <Menu.Item key={ROUTES.INSTRUCTOR_MANAGEMENT}>
+                <Link to={ROUTES.INSTRUCTOR_MANAGEMENT}>Giảng viên</Link>
+              </Menu.Item>
               <Menu.Item key={ROUTES.QUALITY_REVIEW}>
                 <Link to={ROUTES.QUALITY_REVIEW}>Đội ngũ chuyên môn</Link>
               </Menu.Item>

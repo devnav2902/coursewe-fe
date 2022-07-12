@@ -102,8 +102,8 @@ const InstructorRevenuePage = React.lazy(
 const InstructorManagementPage = React.lazy(
   () => import("../pages/instructor-management/pages/quality-review.page")
 );
-const UserManagementPage = React.lazy(
-  () => import("../pages/user-management/pages/quality-review.page")
+const StudentManagementPage = React.lazy(
+  () => import("../pages/user-management/pages/student-management.page")
 );
 
 export type Route = {
@@ -196,20 +196,30 @@ export const adminRoutes: RoleAndRoutes = {
       private: true,
     },
     {
-      path: ROUTES.Instructor_Management,
+      path: ROUTES.INSTRUCTOR_MANAGEMENT,
       component: (
-        <InstructorView>
+        <AdminLayout
+          breadcrumb={[
+            "Quản lý",
+            <Link to={ROUTES.INSTRUCTOR_MANAGEMENT}>Giảng viên</Link>,
+          ]}
+        >
           <InstructorManagementPage />
-        </InstructorView>
+        </AdminLayout>
       ),
       private: true,
     },
     {
-      path: ROUTES.User_Management,
+      path: ROUTES.STUDENT_MANAGEMENT,
       component: (
-        <InstructorView>
-          <UserManagementPage />
-        </InstructorView>
+        <AdminLayout
+          breadcrumb={[
+            "Quản lý",
+            <Link to={ROUTES.STUDENT_MANAGEMENT}>Học viên</Link>,
+          ]}
+        >
+          <StudentManagementPage />
+        </AdminLayout>
       ),
       private: true,
     },
