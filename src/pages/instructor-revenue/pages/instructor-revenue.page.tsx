@@ -86,7 +86,11 @@ const InstructorRevenuePage = () => {
             title="Khóa học bán nhiều nhất"
             data={[8, 20, 14, 9, 12, 11, 25]}
             color="#e45ba6"
-            revenue={revenueData.bestRevenueCourse.toLocaleString("vi-VN")}
+            revenue={
+              revenueData.bestRevenueCourse
+                ? revenueData.bestRevenueCourse.toLocaleString("vi-VN")
+                : "0"
+            }
             icon={<GiPieChart />}
           />
         </Col>
