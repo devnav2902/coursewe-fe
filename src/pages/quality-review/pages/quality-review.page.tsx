@@ -83,13 +83,17 @@ const QualityReviewPage: FC = () => {
     data: [],
   });
 
+  const [nation, setNation] = useState([]);
+
   const formCreateUserHandler = useForm({
-    defaultValues: { fullname: "", categories: [], email: "" },
+    defaultValues: { fullname: "", categories: [], email: "", nation: "" },
   });
 
   const getTeam = useCallback(() => {
     QualityReviewTeamApi.get()
       .then(({ data }) => {
+        console.log(data.items.data);
+
         setTeamData({ loaded: true, data: data.items });
       })
       .catch((_) => {
@@ -103,6 +107,14 @@ const QualityReviewPage: FC = () => {
     CategoriesApi.getList().then(({ data }) => {
       setCategories({ loaded: true, items: data.items });
     });
+  }, []);
+
+  useEffect(() => {
+    fetch("https://restcountries.com/v2/all")
+      .then((res) => res.json())
+      .then((data) => {
+        setNation(data);
+      });
   }, []);
 
   useEffect(function getStatistic() {
@@ -445,6 +457,45 @@ const QualityReviewPage: FC = () => {
                       >
                         <div className="demo-option-label-item">
                           {item.title}
+                        </div>
+                      </Option>
+                    ))}
+                  </Select>
+                  {error && (
+                    <Alert
+                      style={{ marginTop: 3, fontSize: 13 }}
+                      message={error.message}
+                      type="warning"
+                      showIcon
+                    />
+                  )}
+                </>
+              )}
+            />
+          </Col>
+          <Col span={24}>
+            <Controller
+              control={formCreateUserHandler.control}
+              name="nation"
+              rules={{
+                validate: (value) =>
+                  value.length > 0 ||
+                  "Chọn ít nhất một chuyên môn cho người này!",
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Select
+                    style={{ width: "100%" }}
+                    placeholder="Quốc gia"
+                    optionLabelProp="label"
+                    optionFilterProp="label"
+                    {...field}
+                    showSearch
+                  >
+                    {nation.map((item: any, index: number) => (
+                      <Option key={index} value={item.name} label={item.name}>
+                        <div className="demo-option-label-item">
+                          {item.name}
                         </div>
                       </Option>
                     ))}

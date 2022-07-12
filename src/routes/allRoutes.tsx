@@ -6,9 +6,11 @@ import CheckoutLayout from "../layouts/checkout.layout";
 import QualityReviewLayout from "../layouts/quality-review.layout";
 import { CheckVideoProvider } from "../pages/draft/hooks/leaning.hooks";
 import CheckVideoPage from "../pages/draft/pages/learning.page";
+
 import { LearningProvider } from "../pages/learning/hooks/leaning.hooks";
 
 import SignoutPage from "../pages/signout/pages/signout.page";
+
 import { ROUTES } from "../utils/constants";
 
 const BasicLayout = React.lazy(() => import("../layouts/basic.layout"));
@@ -97,6 +99,12 @@ const YourReachPage = React.lazy(
 const InstructorRevenuePage = React.lazy(
   () => import("pages/instructor-revenue/pages/instructor-revenue.page")
 );
+const InstructorManagementPage = React.lazy(
+  () => import("../pages/instructor-management/pages/quality-review.page")
+);
+const UserManagementPage = React.lazy(
+  () => import("../pages/user-management/pages/quality-review.page")
+);
 
 export type Route = {
   exact?: boolean;
@@ -184,6 +192,24 @@ export const adminRoutes: RoleAndRoutes = {
         >
           <AdminReviewPage />
         </AdminLayout>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.Instructor_Management,
+      component: (
+        <InstructorView>
+          <InstructorManagementPage />
+        </InstructorView>
+      ),
+      private: true,
+    },
+    {
+      path: ROUTES.User_Management,
+      component: (
+        <InstructorView>
+          <UserManagementPage />
+        </InstructorView>
       ),
       private: true,
     },
