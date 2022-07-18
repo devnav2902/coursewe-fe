@@ -1,10 +1,9 @@
 import { Dropdown } from "antd";
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useTypedSelector } from "../../hooks/redux.hooks";
-import { logout } from "../../redux/slices/user.slice";
-import { ROUTES } from "../../utils/constants";
-import { linkThumbnail } from "../../utils/functions";
+import { useTypedSelector } from "hooks/redux.hooks";
+import { ROUTES } from "utils/constants";
+import { linkThumbnail } from "utils/functions";
 import Categories from "./Categories.component";
 
 import Notification from "./Notification.component";

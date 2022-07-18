@@ -1,11 +1,13 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { Row, Select, Space, Spin } from "antd";
+import CategoriesApi from "api/categories.api";
+import didYouMean from "didyoumean";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import SearchApi, { ArraySearchCourses } from "../../api/search.api";
-import { ROUTES } from "../../utils/constants";
-import { linkThumbnail } from "../../utils/functions";
+import SearchApi, { ArraySearchCourses } from "api/search.api";
+import { ROUTES } from "utils/constants";
+import { linkThumbnail } from "utils/functions";
+
 const { Option } = Select;
 
 const StyledFilterResult = styled.div`
@@ -63,16 +65,44 @@ function PostFiltersForm() {
     loaded: boolean;
     items: ArraySearchCourses | [];
   }>({ items: [], loaded: false });
+  const [categories, setCategories] = useState<{
+    loaded: boolean;
+    items: string[];
+  }>({ loaded: false, items: [] });
+
   const typingTimeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
 
+  useEffect(function getCategoriesList() {
+    CategoriesApi.getList().then(({ data }) => {
+      setCategories({
+        loaded: true,
+        items: data.items.map((value) => value.title),
+      });
+    });
+  }, []);
+
   useEffect(() => {
-    if (inputValue && inputValue.length >= 2) {
+    if (inputValue && inputValue.length >= 2 && categories.loaded) {
+      didYouMean.threshold = 0.5;
+      const word = didYouMean(inputValue, [
+        "css",
+        "html",
+        ...categories.items,
+        "Tiếng hàn",
+        "Tự học",
+        "Tiếng trung",
+        "Cá nhân",
+        "piano",
+        "guitar",
+      ]);
+
       setValueSearch(() => ({
         items: [],
         loaded: false,
       }));
 
-      SearchApi.search(inputValue).then((res) => {
+      const wordMatch = (word as string) ? (word as string) : inputValue;
+      SearchApi.search(wordMatch).then((res) => {
         setValueSearch((state) => ({
           ...state,
           loaded: true,
@@ -80,12 +110,11 @@ function PostFiltersForm() {
         }));
       });
     }
-  }, [inputValue]);
+  }, [inputValue, categories]);
 
   function handleSearchTermChange(value: string) {
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
     typingTimeoutRef.current = setTimeout(() => {
       setInputValue(value);
     }, 300);

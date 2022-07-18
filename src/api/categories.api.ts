@@ -1,10 +1,7 @@
-import {
-  ArrayCustomCourses,
-  CustomCourse,
-} from "../components/Course/Course.component";
-import { FeaturedCategories } from "../ts/types/categories.types";
-import { CoursesPagination } from "../ts/types/course.types";
-import axiosClient from "../utils/axios";
+import { ArrayCustomCourses } from "components/Course/Course.component";
+import { FeaturedCategories } from "ts/types/categories.types";
+import { CoursesPagination } from "ts/types/course.types";
+import axiosClient from "utils/axios";
 
 export type CoursesByCategory = CoursesPagination<ArrayCustomCourses>;
 export type CoursesByCategoryResponse = {
