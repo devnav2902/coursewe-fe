@@ -1,10 +1,11 @@
+import LearningApi from "api/learning.api";
+import ProgressLogsApi from "api/progress-logs.api";
 import axios from "axios";
+import { useTypedSelector } from "hooks/redux.hooks";
 import { FC, memo, useContext, useEffect, useState } from "react";
 import ReactPlayer from "react-player/lazy";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import LearningApi from "../../../api/learning.api";
-import ProgressLogsApi from "../../../api/progress-logs.api";
-import { useTypedSelector } from "../../../hooks/redux.hooks";
+import { BE_URL } from "utils/constants";
 import { LearningContext } from "../hooks/leaning.hooks";
 
 const VideoLearning: FC = memo(() => {
@@ -19,6 +20,7 @@ const VideoLearning: FC = memo(() => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [srcVideo, setSrcVideo] = useState("");
+  const [lastWatchSecond, setLastWatchSecond] = useState(0);
 
   useEffect(() => {
     if (course && !lectureId) {
@@ -40,13 +42,12 @@ const VideoLearning: FC = memo(() => {
           const {
             data: {
               lecture: { src },
-              dataLastWatched: { last_watched_second },
+              dataLastWatched,
             },
           } = await LearningApi.getVideo(course_slug, parseInt(lectureId));
 
           setSrcVideo(src);
-
-          videoRef?.current?.seekTo(last_watched_second, "seconds");
+          setLastWatchSecond(dataLastWatched?.last_watched_second ?? 0);
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -56,22 +57,26 @@ const VideoLearning: FC = memo(() => {
     }
 
     getVideo();
-  }, [course_slug, lectureId, loadedCourse, navigate, videoRef]);
+  }, [course_slug, lectureId, loadedCourse, navigate]);
+
+  useEffect(() => {
+    videoRef?.current?.seekTo(lastWatchSecond, "seconds");
+  }, [videoRef?.current, lastWatchSecond]);
 
   return (
     <div className="video-content">
       <div className="video-player">
-        <ReactPlayer
-          ref={videoRef}
-          // light={linkThumbnail(thumbnail)}
-          width="100%"
-          height="100%"
-          controls
-          url={
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-          }
-          // url={BE_URL + "/" + srcVideo}
-        />
+        {srcVideo && (
+          <ReactPlayer
+            key={srcVideo + lectureId}
+            ref={videoRef}
+            // light={linkThumbnail(thumbnail)}
+            width="100%"
+            height="100%"
+            controls
+            url={BE_URL + "/" + srcVideo}
+          />
+        )}
       </div>
     </div>
   );
